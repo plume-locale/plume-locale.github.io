@@ -1,0 +1,411 @@
+/* ============================================================
+   synonyms.css - Styles pour le dictionnaire de synonymes
+   ============================================================ */
+
+/* Modal overlay - Matches app modal style */
+.synonyms-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(var(--bg-accent-rgb), 0.6);
+    backdrop-filter: blur(4px);
+    z-index: 10000;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.synonyms-modal.synonyms-modal-open {
+    display: flex;
+    opacity: 1;
+}
+
+/* Modal content */
+.synonyms-modal-content {
+    background: var(--bg-primary);
+    border-radius: 12px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 8px 32px var(--shadow);
+    border: 2px solid var(--border-color);
+    animation: synonyms-slide-in 0.2s ease;
+}
+
+@keyframes synonyms-slide-in {
+    from {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Header */
+.synonyms-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 24px;
+    border-bottom: 2px solid var(--accent-blue);
+}
+
+.synonyms-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+    font-family: 'Noto Serif JP', serif;
+    color: var(--text-primary);
+}
+
+.synonyms-close-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+    color: var(--text-muted);
+    border-radius: 6px;
+    transition: all 0.15s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.synonyms-close-btn:hover {
+    color: var(--accent-red);
+    background: rgba(var(--accent-red-rgb), 0.1);
+}
+
+/* Search box */
+.synonyms-search-box {
+    position: relative;
+    padding: 16px 24px;
+}
+
+.synonyms-search-box input {
+    width: 100%;
+    padding: 12px 16px 12px 44px;
+    font-size: 1rem;
+    font-family: 'Crimson Pro', serif;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    outline: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    box-sizing: border-box;
+}
+
+.synonyms-search-box input::placeholder {
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+.synonyms-search-box input:focus {
+    border-color: var(--accent-blue);
+    background: var(--bg-primary);
+    box-shadow: 0 0 0 3px rgba(var(--accent-blue-rgb), 0.15);
+}
+
+.synonyms-search-icon {
+    position: absolute;
+    left: 38px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    pointer-events: none;
+}
+
+/* Tabs */
+.synonyms-tabs {
+    display: flex;
+    gap: 8px;
+    padding: 0 24px 12px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.synonyms-tab {
+    flex: 1;
+    padding: 8px 12px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all 0.15s ease;
+    font-family: 'Crimson Pro', serif;
+}
+
+.synonyms-tab:hover {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+}
+
+.synonyms-tab.active {
+    background: var(--accent-blue);
+    color: white; /* Always white on accent color usually */
+}
+
+/* Status */
+.synonyms-status {
+    display: none;
+    padding: 12px 24px;
+    font-size: 0.9rem;
+    text-align: center;
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+.synonyms-status-loading {
+    color: var(--accent-blue);
+    font-style: normal;
+}
+
+.synonyms-status-loading::after {
+    content: '';
+    animation: synonyms-dots 1.5s infinite;
+}
+
+@keyframes synonyms-dots {
+    0%, 20% { content: '.'; }
+    40% { content: '..'; }
+    60%, 100% { content: '...'; }
+}
+
+.synonyms-status-error {
+    color: var(--error-color);
+}
+
+.synonyms-status-empty {
+    color: var(--text-muted);
+}
+
+/* Results */
+.synonyms-results {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px 24px;
+    min-height: 150px;
+    max-height: 400px;
+}
+
+.synonyms-category {
+    margin-bottom: 20px;
+}
+
+.synonyms-category:last-child {
+    margin-bottom: 0;
+}
+
+.synonyms-category-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+    padding-left: 2px;
+}
+
+.synonyms-words {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.synonyms-word-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: var(--bg-secondary);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    border: 1px solid var(--border-color);
+}
+
+.synonyms-word-item:hover {
+    background: var(--bg-tertiary);
+    border-color: var(--accent-blue);
+    transform: translateY(-1px);
+}
+
+.synonyms-word {
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    font-family: 'Crimson Pro', serif;
+}
+
+.synonyms-score {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    background: var(--bg-primary); /* Was score-bg */
+    padding: 2px 6px;
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
+}
+
+.synonyms-word-actions {
+    display: none;
+    gap: 4px;
+    margin-left: 6px;
+    padding-left: 6px;
+    border-left: 1px solid var(--border-color);
+}
+
+.synonyms-word-item:hover .synonyms-word-actions {
+    display: flex;
+    animation: fade-in 0.2s ease;
+}
+
+@keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.synonyms-action-btn {
+    background: none;
+    border: none;
+    padding: 2px;
+    cursor: pointer;
+    color: var(--text-muted);
+    border-radius: 4px;
+    transition: all 0.15s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.synonyms-action-btn:hover {
+    color: var(--primary-color);
+    background: rgba(var(--primary-color-rgb), 0.1);
+}
+
+/* Recent searches */
+.synonyms-recent {
+    padding: 12px 24px;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    background: var(--bg-secondary);
+    border-radius: 0 0 12px 12px;
+}
+
+.synonyms-recent-label {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    flex-shrink: 0;
+    font-weight: 500;
+}
+
+.synonyms-recent-list {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    flex: 1;
+}
+
+.synonyms-recent-item {
+    font-size: 0.85rem;
+    padding: 4px 10px;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    font-family: 'Crimson Pro', serif;
+}
+
+.synonyms-recent-item:hover {
+    background: var(--bg-primary);
+    border-color: var(--accent-blue);
+    color: var(--text-primary);
+}
+
+.synonyms-recent-empty {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+/* Toast notification */
+.synonyms-toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 12px 24px;
+    background: var(--bg-accent);
+    color: var(--bg-primary); /* Inverted text */
+    border-radius: 8px;
+    font-size: 0.9rem;
+    z-index: 10001;
+    box-shadow: 0 4px 12px var(--shadow);
+    animation: synonyms-toast-in 0.2s ease;
+    font-weight: 500;
+}
+
+@keyframes synonyms-toast-in {
+    from {
+        transform: translateX(-50%) translateY(10px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(-50%) translateY(0);
+        opacity: 1;
+    }
+}
+
+.synonyms-toast-fade {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+/* Scrollbar styling */
+.synonyms-results::-webkit-scrollbar {
+    width: 6px;
+}
+
+.synonyms-results::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.synonyms-results::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 3px;
+}
+
+.synonyms-results::-webkit-scrollbar-thumb:hover {
+    background: var(--text-muted);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .synonyms-modal-content {
+        width: 95%;
+        max-height: 90vh;
+        margin: 20px;
+    }
+
+    .synonyms-tabs {
+        flex-wrap: wrap;
+    }
+
+    .synonyms-tab {
+        flex: 1 1 45%;
+    }
+}

@@ -1,0 +1,3307 @@
+/* ============================================
+   ARC BOARD - Canvas Style (Milanote-inspired)
+   ============================================ */
+
+/* ============================================
+   SIDEBAR TREEVIEW
+   ============================================ */
+
+.sidebar-tree-category {
+    margin-bottom: 4px;
+}
+
+.sidebar-tree-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: background 0.15s ease;
+}
+
+.sidebar-tree-header:hover {
+    background: var(--bg-secondary);
+}
+
+.sidebar-tree-toggle {
+    width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+}
+
+.sidebar-tree-toggle svg {
+    width: 14px;
+    height: 14px;
+}
+
+.sidebar-tree-icon {
+    width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sidebar-tree-icon svg {
+    width: 16px;
+    height: 16px;
+}
+
+.sidebar-tree-label {
+    flex: 1;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.sidebar-tree-count {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    color: var(--text-muted);
+    background: var(--bg-tertiary);
+    padding: 2px 6px;
+    border-radius: 10px;
+}
+
+.sidebar-tree-children {
+    margin-left: 24px;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+}
+
+.sidebar-tree-children.collapsed {
+    max-height: 0;
+    opacity: 0;
+}
+
+.sidebar-tree-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: background 0.15s ease;
+    margin-bottom: 2px;
+}
+
+.sidebar-tree-item:hover {
+    background: var(--bg-secondary);
+}
+
+.sidebar-tree-item.active {
+    background: var(--primary-color);
+}
+
+.sidebar-tree-item.active .sidebar-tree-item-title {
+    color: white;
+}
+
+.sidebar-tree-item.active .sidebar-tree-item-menu {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.sidebar-tree-item-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.sidebar-tree-item-title {
+    flex: 1;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sidebar-tree-item-menu {
+    width: 24px;
+    height: 24px;
+    border: none;
+    background: transparent;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    opacity: 0;
+    transition: opacity 0.15s ease;
+}
+
+.sidebar-tree-item:hover .sidebar-tree-item-menu {
+    opacity: 1;
+}
+
+.sidebar-tree-item-menu:hover {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+}
+
+.sidebar-tree-item-menu svg {
+    width: 14px;
+    height: 14px;
+}
+
+.sidebar-tree-add {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    cursor: pointer;
+    color: var(--text-muted);
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    border-radius: 6px;
+    margin-top: 8px;
+    border: 1px dashed var(--border-color);
+    transition: all 0.15s ease;
+}
+
+.sidebar-tree-add:hover {
+    background: var(--bg-secondary);
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.sidebar-tree-add svg {
+    width: 16px;
+    height: 16px;
+}
+
+/* Card add button inside column */
+.arc-card-add {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 12px;
+    color: var(--text-muted);
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    cursor: pointer;
+    border: 1px dashed var(--border-color);
+    border-radius: 6px;
+    transition: all 0.15s ease;
+    margin-top: 4px;
+}
+
+.arc-card-add:hover {
+    background: var(--bg-secondary);
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.arc-card-add svg {
+    width: 14px;
+    height: 14px;
+}
+
+/* ============================================
+   LAYOUT PRINCIPAL
+   ============================================ */
+
+.arc-board-container {
+    display: flex;
+    flex: 1;
+    height: 100%;
+    overflow: hidden;
+    background: var(--bg-secondary);
+}
+
+.arc-board-main {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+}
+
+.arc-board-body {
+    display: flex;
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+}
+
+/* ============================================
+   TOOLBAR GAUCHE (Outils de création)
+   ============================================ */
+
+.arc-board-toolbar {
+    width: 56px;
+    background: var(--bg-primary);
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 12px 0;
+    gap: 4px;
+    flex-shrink: 0;
+    z-index: 100;
+}
+
+.arc-toolbar-btn {
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: transparent;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.arc-toolbar-btn:hover {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+}
+
+.arc-toolbar-btn.active {
+    background: var(--primary-color);
+    color: white;
+}
+
+.arc-toolbar-btn svg {
+    width: 20px;
+    height: 20px;
+}
+
+.arc-toolbar-btn[data-tooltip]::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    left: calc(100% + 8px);
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--bg-accent);
+    color: white;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-family: 'Inter', sans-serif;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+    z-index: 1000;
+}
+
+.arc-toolbar-btn:hover[data-tooltip]::after {
+    opacity: 1;
+}
+
+.arc-toolbar-separator {
+    width: 32px;
+    height: 1px;
+    background: var(--border-color);
+    margin: 8px 0;
+}
+
+/* ============================================
+   CANVAS PRINCIPAL
+   ============================================ */
+
+.arc-board-canvas-wrapper {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    background: var(--bg-secondary);
+}
+
+.arc-board-canvas {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    cursor: grab;
+    /* Grille de fond style Milanote */
+    background-image:
+        radial-gradient(circle, var(--border-color) 1px, transparent 1px);
+    background-size: 24px 24px;
+    background-position: 0 0;
+}
+
+.arc-board-canvas.dragging {
+    cursor: grabbing;
+}
+
+.arc-board-canvas.connecting {
+    cursor: crosshair;
+}
+
+.arc-board-content {
+    position: relative;
+    min-width: 3000px;
+    min-height: 2000px;
+    padding: 40px;
+    transform-origin: 0 0;
+}
+
+/* Layer SVG pour les connexions */
+.arc-connections-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 2000;
+}
+
+.arc-connections-layer svg {
+    width: 100%;
+    height: 100%;
+}
+
+.arc-connection-line {
+    stroke: var(--text-muted);
+    stroke-width: 2;
+    fill: none;
+    pointer-events: stroke;
+    cursor: pointer;
+}
+
+.arc-connection-line:hover {
+    stroke: var(--primary-color);
+    stroke-width: 3;
+}
+
+.arc-connection-line.selected {
+    stroke: var(--primary-color);
+    stroke-width: 3;
+}
+
+.arc-connection-arrow {
+    fill: var(--text-muted);
+}
+
+.arc-connection-temp {
+    stroke: var(--primary-color);
+    stroke-width: 2;
+    stroke-dasharray: 8 4;
+    fill: none;
+}
+
+/* ============================================
+   COLONNES (Boards)
+   ============================================ */
+
+.arc-column {
+    position: absolute;
+    background: var(--bg-primary);
+    border-radius: 12px;
+    box-shadow: 0 2px 8px var(--shadow), 0 0 0 1px var(--border-color);
+    min-width: 200px;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    z-index: 10;
+    transition: box-shadow 0.2s ease;
+}
+
+.arc-column:hover {
+    box-shadow: 0 4px 16px var(--shadow), 0 0 0 1px var(--border-color);
+}
+
+.arc-column.selected {
+    box-shadow: 0 4px 16px var(--shadow), 0 0 0 2px var(--primary-color);
+}
+
+.arc-column.dragging {
+    opacity: 0.9;
+    z-index: 1000;
+    cursor: grabbing;
+}
+
+.arc-column-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border-color);
+    cursor: grab;
+    background: var(--bg-primary);
+    border-radius: 12px 12px 0 0;
+}
+
+.arc-column-header:active {
+    cursor: grabbing;
+}
+
+.arc-column-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    flex: 1;
+    border: none;
+    background: transparent;
+    outline: none;
+    padding: 4px 0;
+}
+
+.arc-column-title:focus {
+    background: var(--bg-secondary);
+    padding: 4px 8px;
+    margin: -4px -8px;
+    border-radius: 4px;
+}
+
+.arc-column-meta {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-left: 8px;
+}
+
+.arc-column-arrow {
+    color: var(--text-muted);
+    margin-left: 12px;
+}
+
+.arc-column-arrow svg {
+    width: 16px;
+    height: 16px;
+}
+
+.arc-column-body {
+    flex: 1;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    overflow-y: auto;
+    max-height: 600px;
+}
+
+/* Resize handle */
+.arc-column-resize {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 8px;
+    cursor: ew-resize;
+    background: transparent;
+}
+
+.arc-column-resize:hover {
+    background: linear-gradient(to right, transparent, rgba(255, 140, 66, 0.2));
+}
+
+/* ============================================
+   CARTES (Items dans les colonnes)
+   ============================================ */
+
+.arc-card {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 12px 12px 12px 36px;
+    /* Extra padding left for drag handle */
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.arc-card:hover {
+    border-color: var(--primary-color);
+    box-shadow: 0 2px 8px var(--shadow);
+}
+
+.arc-card.selected {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(255, 140, 66, 0.2);
+}
+
+.arc-card.dragging {
+    opacity: 0.7;
+    transform: rotate(2deg);
+}
+
+/* Poignée de drag - visible au hover */
+.arc-card-drag-handle {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 28px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: grab;
+    opacity: 0;
+    transition: opacity 0.2s ease, background 0.2s ease;
+    background: transparent;
+    border-radius: 8px 0 0 8px;
+    z-index: 1;
+}
+
+.arc-card:hover .arc-card-drag-handle {
+    opacity: 1;
+    background: linear-gradient(to right, rgba(255, 140, 66, 0.08), transparent);
+}
+
+.arc-card-drag-handle:hover {
+    background: linear-gradient(to right, rgba(255, 140, 66, 0.15), transparent);
+}
+
+.arc-card-drag-handle:active {
+    cursor: grabbing;
+}
+
+.arc-card-drag-handle svg,
+.arc-card-drag-handle i {
+    width: 16px;
+    height: 16px;
+    color: var(--text-muted);
+    pointer-events: none;
+}
+
+/* Poignée de drag pour les éléments flottants sur le canvas */
+.arc-floating-drag-handle {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    z-index: 2;
+}
+
+.arc-floating-item:hover .arc-floating-drag-handle {
+    opacity: 1;
+}
+
+.arc-drag-move,
+.arc-drag-to-column {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: grab;
+    background: rgba(255, 140, 66, 0.12);
+    border-radius: 6px;
+    transition: background 0.2s ease;
+}
+
+.arc-drag-move:hover {
+    background: rgba(255, 140, 66, 0.25);
+}
+
+.arc-drag-to-column:hover {
+    background: rgba(100, 180, 255, 0.25);
+}
+
+.arc-drag-move:active,
+.arc-drag-to-column:active {
+    cursor: grabbing;
+}
+
+.arc-drag-move svg,
+.arc-drag-move i,
+.arc-drag-to-column svg,
+.arc-drag-to-column i {
+    width: 14px;
+    height: 14px;
+    color: var(--text-muted);
+    pointer-events: none;
+}
+
+.arc-drag-to-column i {
+    color: var(--accent-color, #64b4ff);
+}
+
+/* Bouton de suppression de carte */
+.arc-card-delete {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 22px;
+    height: 22px;
+    border: none;
+    background: var(--bg-secondary);
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    opacity: 0;
+    transition: all 0.15s ease;
+    z-index: 10;
+}
+
+.arc-card:hover .arc-card-delete {
+    opacity: 1;
+}
+
+.arc-card-delete:hover {
+    background: var(--error-color);
+    color: white;
+}
+
+.arc-card-delete svg {
+    width: 14px;
+    height: 14px;
+}
+
+/* Card type: Note/Text */
+.arc-card-note .arc-card-content {
+    font-family: 'Crimson Pro', serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text-primary);
+    min-height: 40px;
+}
+
+.arc-card-note .arc-card-content:empty::before {
+    content: 'Commencez à écrire...';
+    color: var(--text-muted);
+}
+
+.arc-card-note .arc-card-content[contenteditable="true"]:focus {
+    outline: none;
+}
+
+/* Card type: Image */
+.arc-card-image {
+    padding: 0;
+    overflow: hidden;
+}
+
+.arc-card-image img {
+    width: 100%;
+    display: block;
+    border-radius: 7px;
+}
+
+.arc-card-image .arc-card-upload {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 16px;
+    color: var(--text-muted);
+    gap: 8px;
+}
+
+.arc-card-image .arc-card-upload svg {
+    width: 32px;
+    height: 32px;
+    opacity: 0.5;
+}
+
+.arc-card-image .arc-card-caption {
+    padding: 8px 12px;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    color: var(--text-secondary);
+    border-top: 1px solid var(--border-color);
+}
+
+/* Card type: Link */
+.arc-card-link {
+    padding: 0;
+}
+
+.arc-card-link .arc-link-input {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px;
+    color: var(--text-muted);
+}
+
+.arc-card-link .arc-link-input svg {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+}
+
+.arc-card-link .arc-link-input input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    color: var(--text-primary);
+    outline: none;
+}
+
+.arc-card-link .arc-link-input input::placeholder {
+    color: var(--text-muted);
+}
+
+.arc-card-link .arc-link-preview {
+    display: flex;
+    flex-direction: column;
+}
+
+.arc-card-link .arc-link-preview-image {
+    height: 120px;
+    background: var(--bg-secondary);
+    background-size: cover;
+    background-position: center;
+    border-radius: 7px 7px 0 0;
+}
+
+.arc-card-link .arc-link-preview-info {
+    padding: 12px;
+}
+
+.arc-card-link .arc-link-preview-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+}
+
+.arc-card-link .arc-link-preview-url {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+/* Card type: To-do */
+.arc-card-todo .arc-card-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 12px;
+    border: none;
+    background: transparent;
+    width: 100%;
+    outline: none;
+}
+
+.arc-card-todo .arc-todo-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.arc-card-todo .arc-todo-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.arc-card-todo .arc-todo-checkbox {
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--border-color);
+    border-radius: 4px;
+    cursor: pointer;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2px;
+    transition: all 0.2s ease;
+}
+
+.arc-card-todo .arc-todo-checkbox:hover {
+    border-color: var(--primary-color);
+}
+
+.arc-card-todo .arc-todo-checkbox.checked {
+    background: var(--accent-green);
+    border-color: var(--accent-green);
+}
+
+.arc-card-todo .arc-todo-checkbox.checked svg {
+    color: white;
+    width: 12px;
+    height: 12px;
+}
+
+.arc-card-todo .arc-todo-text {
+    flex: 1;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    color: var(--text-primary);
+    border: none;
+    background: transparent;
+    outline: none;
+    line-height: 1.5;
+}
+
+.arc-card-todo .arc-todo-text.completed {
+    text-decoration: line-through;
+    color: var(--text-muted);
+}
+
+.arc-card-todo .arc-todo-add {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-muted);
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    cursor: pointer;
+    padding: 4px 0;
+    margin-top: 4px;
+}
+
+.arc-card-todo .arc-todo-add:hover {
+    color: var(--primary-color);
+}
+
+.arc-card-todo .arc-todo-assign {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    color: var(--text-muted);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 4px 8px;
+    background: transparent;
+    cursor: pointer;
+    margin-top: 8px;
+}
+
+.arc-card-todo .arc-todo-assign:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+/* Card type: Comment */
+.arc-card-comment {
+    background: #fffde7;
+    border-color: #fff59d;
+}
+
+.arc-card-comment .arc-card-content {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--text-primary);
+}
+
+/* Card type: Table */
+.arc-card-table {
+    padding: 0;
+    overflow: hidden;
+}
+
+.arc-card-table table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+}
+
+.arc-card-table th,
+.arc-card-table td {
+    padding: 8px 12px;
+    border: 1px solid var(--border-color);
+    text-align: left;
+}
+
+.arc-card-table th {
+    background: var(--bg-secondary);
+    font-weight: 600;
+}
+
+.arc-card-table td[contenteditable="true"]:focus {
+    background: var(--bg-secondary);
+    outline: none;
+}
+
+/* Card type: Audio embed */
+.arc-card-audio {
+    padding: 12px;
+}
+
+.arc-card-audio .arc-audio-placeholder {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--text-muted);
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+}
+
+.arc-card-audio .arc-audio-placeholder svg {
+    width: 24px;
+    height: 24px;
+    color: #1DB954;
+}
+
+/* Card type: Separator/Divider */
+.arc-card-divider {
+    padding: 16px 12px;
+    text-align: center;
+}
+
+.arc-card-divider hr {
+    border: none;
+    border-top: 2px solid var(--border-color);
+}
+
+/* Card type: Scene */
+.arc-card-scene {
+    background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+    border-left: 3px solid var(--primary-color);
+}
+
+.arc-card-scene:hover {
+    border-left-color: var(--accent-color);
+}
+
+.arc-card-scene-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.arc-card-scene-header svg {
+    width: 16px;
+    height: 16px;
+    color: var(--primary-color);
+    flex-shrink: 0;
+    align-self: flex-start;
+    margin-top: 2px;
+}
+
+.arc-card-scene-title-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.arc-card-scene-breadcrumb {
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    line-height: 1;
+}
+
+.arc-card-scene-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.3;
+}
+
+.arc-card-scene-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.arc-card-scene-intensity,
+.arc-card-scene-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.arc-card-scene-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    min-width: 70px;
+}
+
+.arc-card-scene-value {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.arc-card-scene-notes {
+    margin-top: 4px;
+    padding: 8px;
+    background: var(--bg-tertiary);
+    border-radius: 4px;
+    font-family: 'Crimson Pro', serif;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--text-secondary);
+    font-style: italic;
+}
+
+.arc-card-scene-open {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-primary);
+    border-radius: 6px;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--primary-color);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: all 0.2s ease;
+}
+
+.arc-card-scene-open:hover {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.arc-card-scene-open svg {
+    width: 14px;
+    height: 14px;
+}
+
+/* ============================================
+   ITEMS FLOTTANTS (hors colonnes)
+   ============================================ */
+
+.arc-floating-item {
+    position: absolute;
+    z-index: 5;
+    cursor: move;
+}
+
+.arc-floating-item.selected {
+    z-index: 50;
+}
+
+.arc-floating-note {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 16px;
+    min-width: 200px;
+    max-width: 400px;
+    box-shadow: 0 2px 8px var(--shadow);
+}
+
+.arc-floating-note:hover,
+.arc-floating-note.selected {
+    border-color: var(--primary-color);
+}
+
+.arc-floating-image {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px var(--shadow);
+}
+
+.arc-floating-image img {
+    display: block;
+    max-width: 400px;
+}
+
+/* ============================================
+   PANNEAU CONTEXTUEL (droite)
+   ============================================ */
+
+.arc-board-context-panel {
+    width: 280px;
+    background: var(--bg-primary);
+    border-left: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    transition: width 0.3s ease;
+    overflow: hidden;
+}
+
+.arc-board-context-panel.collapsed {
+    width: 0;
+    border-left: none;
+}
+
+.arc-context-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.arc-context-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.arc-context-title svg {
+    width: 16px;
+    height: 16px;
+    color: var(--primary-color);
+}
+
+.arc-context-close {
+    width: 28px;
+    height: 28px;
+    border: none;
+    background: transparent;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+}
+
+.arc-context-close:hover {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+}
+
+.arc-context-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+}
+
+/* Context tools */
+.arc-context-section {
+    margin-bottom: 20px;
+}
+
+.arc-context-section-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+}
+
+.arc-context-tools {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.arc-context-tool {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: var(--bg-primary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    width: calc(50% - 4px);
+}
+
+.arc-context-tool:hover {
+    border-color: var(--primary-color);
+    background: var(--bg-secondary);
+}
+
+.arc-context-tool svg {
+    width: 20px;
+    height: 20px;
+    color: var(--text-secondary);
+}
+
+.arc-context-tool span {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    color: var(--text-secondary);
+}
+
+/* Text formatting tools */
+.arc-context-format-bar {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+}
+
+.arc-format-btn {
+    width: 32px;
+    height: 32px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-primary);
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+    transition: all 0.2s ease;
+}
+
+.arc-format-btn:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.arc-format-btn.active {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+}
+
+.arc-format-btn svg {
+    width: 16px;
+    height: 16px;
+}
+
+/* Color picker in context */
+.arc-context-colors {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.arc-color-swatch {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.arc-color-swatch:hover {
+    transform: scale(1.1);
+}
+
+.arc-color-swatch.selected {
+    border-color: var(--text-primary);
+}
+
+/* Delete button */
+.arc-context-delete {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px;
+    border: 1px solid var(--error-color);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--error-color);
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    width: 100%;
+    transition: all 0.2s ease;
+}
+
+.arc-context-delete:hover {
+    background: var(--error-color);
+    color: white;
+}
+
+/* ============================================
+   ZOOM CONTROLS
+   ============================================ */
+
+.arc-zoom-controls {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 4px;
+    box-shadow: 0 2px 8px var(--shadow);
+    z-index: 100;
+}
+
+.arc-zoom-btn {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: transparent;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+}
+
+.arc-zoom-btn:hover {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+}
+
+.arc-zoom-btn svg {
+    width: 18px;
+    height: 18px;
+}
+
+.arc-zoom-level {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    color: var(--text-secondary);
+    padding: 0 8px;
+    min-width: 50px;
+    text-align: center;
+}
+
+/* ============================================
+   MINIMAP
+   ============================================ */
+
+.arc-minimap {
+    position: absolute;
+    bottom: 70px;
+    right: 20px;
+    width: 150px;
+    height: 100px;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px var(--shadow);
+    z-index: 100;
+}
+
+.arc-minimap-content {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.arc-minimap-item {
+    position: absolute;
+    background: var(--primary-color);
+    border-radius: 2px;
+    opacity: 0.6;
+}
+
+.arc-minimap-viewport {
+    position: absolute;
+    border: 2px solid var(--primary-color);
+    background: rgba(255, 140, 66, 0.1);
+    border-radius: 2px;
+}
+
+/* ============================================
+   EMPTY STATE
+   ============================================ */
+
+.arc-board-empty {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: var(--text-muted);
+    pointer-events: none;
+}
+
+.arc-board-empty-icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 16px;
+    opacity: 0.3;
+}
+
+.arc-board-empty-icon svg {
+    width: 100%;
+    height: 100%;
+}
+
+.arc-board-empty-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--text-secondary);
+}
+
+.arc-board-empty-text {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+/* ============================================
+   SELECTION BOX (multi-select)
+   ============================================ */
+
+.arc-selection-box {
+    position: absolute;
+    border: 2px dashed var(--primary-color);
+    background: rgba(255, 140, 66, 0.1);
+    pointer-events: none;
+    z-index: 1000;
+}
+
+/* ============================================
+   DRAG & DROP BIDIRECTIONNEL
+   ============================================ */
+
+/* Zone de drop sur les colonnes */
+.arc-column-body.drop-target {
+    background: rgba(255, 140, 66, 0.05);
+    border: 2px dashed var(--primary-color);
+    border-radius: 8px;
+    min-height: 100px;
+}
+
+.arc-column-body.drop-hover {
+    background: rgba(255, 140, 66, 0.15);
+    border-color: var(--primary-color);
+    box-shadow: inset 0 0 20px rgba(255, 140, 66, 0.1);
+}
+
+/* Zone de drop sur le canvas (pour sortir les cartes) */
+.arc-board-canvas.drop-hover {
+    background:
+        radial-gradient(circle at center, rgba(255, 140, 66, 0.1) 0%, transparent 70%),
+        radial-gradient(circle, var(--border-color) 1px, transparent 1px);
+    background-size: 100% 100%, 24px 24px;
+}
+
+/* Éléments flottants en cours de drag */
+.arc-floating-item.dragging {
+    opacity: 0.6;
+    transform: rotate(2deg);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+}
+
+/* Cartes en cours de drag */
+.arc-card.dragging {
+    opacity: 0.6;
+    transform: rotate(2deg);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* Indication visuelle sur les éléments draggables */
+.arc-floating-item[draggable="true"],
+.arc-card[draggable="true"] {
+    cursor: grab;
+}
+
+.arc-floating-item[draggable="true"]:active,
+.arc-card[draggable="true"]:active {
+    cursor: grabbing;
+}
+
+/* ============================================
+   CONNECTION MODE
+   ============================================ */
+
+.arc-board-canvas.connection-mode {
+    cursor: crosshair;
+}
+
+.arc-connection-mode-hint {
+    position: absolute;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--bg-accent);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    z-index: 200;
+}
+
+.arc-connection-mode-hint svg {
+    width: 18px;
+    height: 18px;
+    color: var(--primary-color);
+}
+
+.arc-connection-mode-hint button {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    color: white;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.arc-connection-mode-hint button:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.arc-connection-mode-hint button svg {
+    width: 14px;
+    height: 14px;
+    color: white;
+}
+
+/* Éléments connectables */
+.arc-column.connectable,
+.arc-floating-item.connectable {
+    cursor: crosshair;
+    box-shadow: 0 0 0 2px var(--primary-color), 0 4px 16px var(--shadow);
+}
+
+.arc-column.connection-source,
+.arc-floating-item.connection-source {
+    box-shadow: 0 0 0 3px var(--accent-green), 0 4px 16px var(--shadow);
+}
+
+.arc-column.connection-target,
+.arc-floating-item.connection-target {
+    cursor: crosshair;
+}
+
+.arc-column.connection-target:hover,
+.arc-floating-item.connection-target:hover {
+    box-shadow: 0 0 0 3px var(--primary-color), 0 4px 16px rgba(255, 140, 66, 0.3);
+}
+
+/* ============================================
+   CONNECTION POINTS (removed - using click system now)
+   ============================================ */
+
+/* ============================================
+   CONTEXT MENU
+   ============================================ */
+
+.arc-context-menu {
+    position: fixed;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    box-shadow: 0 4px 16px var(--shadow);
+    padding: 8px 0;
+    min-width: 180px;
+    z-index: 10000;
+}
+
+.arc-context-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 16px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.arc-context-menu-item:hover {
+    background: var(--bg-secondary);
+}
+
+.arc-context-menu-item svg {
+    width: 16px;
+    height: 16px;
+    color: var(--text-secondary);
+}
+
+.arc-context-menu-item.danger {
+    color: var(--error-color);
+}
+
+.arc-context-menu-item.danger svg {
+    color: var(--error-color);
+}
+
+.arc-context-menu-separator {
+    height: 1px;
+    background: var(--border-color);
+    margin: 8px 0;
+}
+
+/* ============================================
+   DRAG GHOST
+   ============================================ */
+
+.arc-drag-ghost {
+    position: fixed;
+    pointer-events: none;
+    z-index: 10000;
+    opacity: 0.8;
+    transform: rotate(3deg);
+}
+
+/* ============================================
+   MENU DE SÉLECTION DE TYPE DE CARTE
+   ============================================ */
+
+.arc-card-type-menu {
+    position: fixed;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    box-shadow: 0 8px 32px var(--shadow), 0 0 0 1px rgba(0, 0, 0, 0.05);
+    padding: 8px;
+    z-index: 10000;
+    min-width: 200px;
+    animation: arcMenuAppear 0.15s ease-out;
+}
+
+@keyframes arcMenuAppear {
+    from {
+        opacity: 0;
+        transform: translateY(-8px) scale(0.96);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.arc-card-type-menu-header {
+    padding: 8px 12px 12px;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 8px;
+}
+
+.arc-card-type-menu-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 4px;
+}
+
+.arc-card-type-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 12px 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    background: transparent;
+    border: 1px solid transparent;
+}
+
+.arc-card-type-option:hover {
+    background: var(--bg-secondary);
+    border-color: var(--primary-color);
+}
+
+.arc-card-type-option svg,
+.arc-card-type-option i {
+    width: 20px;
+    height: 20px;
+    color: var(--text-secondary);
+    transition: color 0.15s ease;
+}
+
+.arc-card-type-option:hover svg,
+.arc-card-type-option:hover i {
+    color: var(--primary-color);
+}
+
+.arc-card-type-option span {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    color: var(--text-secondary);
+    transition: color 0.15s ease;
+}
+
+.arc-card-type-option:hover span {
+    color: var(--text-primary);
+}
+
+/* ============================================
+   TOOLBAR DRAG & DROP
+   ============================================ */
+
+.arc-toolbar-btn.arc-toolbar-draggable {
+    cursor: grab;
+}
+
+.arc-toolbar-btn.arc-toolbar-draggable:active {
+    cursor: grabbing;
+}
+
+.arc-toolbar-btn.arc-toolbar-draggable.dragging {
+    opacity: 0.4;
+    cursor: grabbing;
+}
+
+/* Ghost de drag depuis la toolbar */
+.arc-toolbar-drag-ghost {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    background: var(--bg-primary);
+    border: 2px solid var(--primary-color);
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-primary);
+    pointer-events: none;
+    white-space: nowrap;
+}
+
+.arc-toolbar-drag-ghost svg,
+.arc-toolbar-drag-ghost i {
+    width: 16px;
+    height: 16px;
+    color: var(--primary-color);
+}
+
+/* Indication visuelle lors du drag depuis la toolbar */
+.arc-board-canvas.drop-zone-active {
+    outline: 2px dashed var(--primary-color);
+    outline-offset: -10px;
+}
+
+
+
+/* ============================================
+   FORMULAIRES INLINE SIDEBAR
+   Ajouter à la fin de arc-board.css
+   ============================================ */
+
+.sidebar-inline-form {
+    background: var(--bg-primary);
+    border: 1px solid var(--primary-color);
+    border-radius: 8px;
+    margin-bottom: 12px;
+    overflow: hidden;
+    animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.sidebar-inline-form-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-color);
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.sidebar-inline-form-header>i,
+.sidebar-inline-form-header>svg {
+    width: 16px;
+    height: 16px;
+    color: var(--primary-color);
+}
+
+.sidebar-inline-form-header span {
+    flex: 1;
+}
+
+.sidebar-inline-form-close {
+    width: 24px;
+    height: 24px;
+    border: none;
+    background: transparent;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    transition: all 0.15s ease;
+}
+
+.sidebar-inline-form-close:hover {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+}
+
+.sidebar-inline-form-close svg {
+    width: 14px;
+    height: 14px;
+}
+
+.sidebar-inline-form-body {
+    padding: 12px;
+}
+
+.sidebar-inline-form-group {
+    margin-bottom: 12px;
+}
+
+.sidebar-inline-form-group:last-of-type {
+    margin-bottom: 0;
+}
+
+.sidebar-inline-form-group label {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+}
+
+.sidebar-inline-input {
+    width: 100%;
+    padding: 8px 10px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    color: var(--text-primary);
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    transition: all 0.15s ease;
+}
+
+.sidebar-inline-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(255, 140, 66, 0.1);
+}
+
+.sidebar-inline-input.error {
+    border-color: var(--error-color);
+    box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+    animation: shake 0.3s ease;
+}
+
+@keyframes shake {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-4px);
+    }
+
+    75% {
+        transform: translateX(4px);
+    }
+}
+
+.sidebar-inline-input::placeholder {
+    color: var(--text-muted);
+}
+
+.sidebar-inline-select {
+    width: 100%;
+    padding: 8px 10px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    color: var(--text-primary);
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.sidebar-inline-select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(255, 140, 66, 0.1);
+}
+
+.sidebar-inline-color-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.sidebar-inline-color {
+    width: 36px;
+    height: 36px;
+    padding: 2px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    cursor: pointer;
+    background: var(--bg-secondary);
+}
+
+.sidebar-inline-color::-webkit-color-swatch-wrapper {
+    padding: 2px;
+}
+
+.sidebar-inline-color::-webkit-color-swatch {
+    border-radius: 4px;
+    border: none;
+}
+
+.sidebar-inline-color-hex {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.sidebar-inline-form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border-color);
+}
+
+/* Boutons compacts pour la sidebar */
+.btn-sm {
+    padding: 6px 12px;
+    font-size: 12px;
+    border-radius: 6px;
+}
+
+.btn-sm svg,
+.btn-sm i {
+    width: 14px;
+    height: 14px;
+}
+
+.btn-secondary.btn-sm {
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-color);
+}
+
+.btn-secondary.btn-sm:hover {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+}
+
+.btn-primary.btn-sm {
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.btn-primary.btn-sm:hover {
+    background: var(--primary-hover);
+}
+
+
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 768px) {
+    .arc-board-toolbar {
+        width: 48px;
+        padding: 8px 0;
+    }
+
+    .arc-toolbar-btn {
+        width: 36px;
+        height: 36px;
+    }
+
+    .arc-board-context-panel {
+        position: absolute;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        z-index: 200;
+        box-shadow: -4px 0 16px var(--shadow);
+    }
+
+    .arc-zoom-controls {
+        bottom: 10px;
+        right: 10px;
+    }
+
+    .arc-minimap {
+        display: none;
+    }
+}
+
+/* ============================================
+   ZONE NON ATTRIBUÉ (Unassigned Sidebar)
+   ============================================ */
+
+.arc-unassigned-zone {
+    width: 280px;
+    background: var(--bg-primary);
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    height: 100%;
+    overflow: hidden;
+}
+
+.arc-unassigned-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border-color);
+    background: var(--bg-primary);
+    flex-shrink: 0;
+}
+
+.arc-unassigned-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.arc-unassigned-title i,
+.arc-unassigned-title svg {
+    width: 16px;
+    height: 16px;
+    color: var(--text-muted);
+}
+
+.arc-unassigned-count {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    color: var(--text-muted);
+    background: var(--bg-secondary);
+    padding: 3px 8px;
+    border-radius: 10px;
+    font-weight: 500;
+}
+
+.arc-unassigned-body {
+    flex: 1;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.arc-unassigned-body.drag-over {
+    background: rgba(255, 140, 66, 0.05);
+}
+
+.arc-unassigned-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 32px 16px;
+    color: var(--text-muted);
+    text-align: center;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+/* Cards dans la zone non attribué */
+.arc-unassigned-body .arc-card {
+    margin: 0;
+    cursor: pointer;
+}
+
+.arc-unassigned-body .arc-card-scene {
+    padding: 10px 10px 10px 32px;
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+
+@keyframes arcItemAppear {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.arc-column,
+.arc-floating-item {
+    animation: arcItemAppear 0.2s ease;
+}
+
+/* ============================================
+   PRINT STYLES
+   ============================================ */
+
+@media print {
+
+    .arc-board-toolbar,
+    .arc-board-context-panel,
+    .arc-zoom-controls,
+    .arc-minimap {
+        display: none !important;
+    }
+
+    .arc-board-canvas {
+        background: white !important;
+    }
+}
+
+/* ============================================
+   MULTI-ARCS - Barre compacte sur une ligne
+   ============================================ */
+
+.arc-multi-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 4px 12px;
+    background: var(--bg-primary);
+    border-bottom: 1px solid var(--border-light);
+    flex-shrink: 0;
+    min-height: 32px;
+}
+
+.arc-multi-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.arc-multi-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.arc-multi-select {
+    padding: 4px 8px;
+    border: 1px solid var(--border-light);
+    border-radius: 4px;
+    background: var(--bg-primary);
+    font-size: 12px;
+    color: var(--text-primary);
+    cursor: pointer;
+}
+
+/* Mode buttons */
+.arc-multi-modes {
+    display: flex;
+    background: var(--bg-tertiary);
+    border-radius: 4px;
+    padding: 2px;
+}
+
+.arc-multi-modes button {
+    padding: 4px 10px;
+    border: none;
+    background: none;
+    border-radius: 3px;
+    font-size: 11px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.arc-multi-modes button:hover {
+    color: var(--text-primary);
+}
+
+.arc-multi-modes button.active {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+/* Ghost arcs section */
+.arc-multi-ghosts {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex: 1;
+}
+
+/* Ghost arc tags */
+.arc-multi-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 4px 2px 8px;
+    background: var(--bg-primary);
+    border: 1px solid var(--tag-color, var(--border-light));
+    border-radius: 12px;
+    font-size: 11px;
+    color: var(--text-primary);
+}
+
+.arc-multi-tag button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 14px;
+    height: 14px;
+    padding: 0;
+    background: none;
+    border: none;
+    border-radius: 50%;
+    color: var(--text-muted);
+    cursor: pointer;
+}
+
+.arc-multi-tag button:hover {
+    background: var(--bg-danger-light);
+    color: var(--text-danger);
+}
+
+.arc-multi-tag button i {
+    width: 10px;
+    height: 10px;
+}
+
+.arc-multi-add {
+    padding: 2px 6px;
+    border: 1px solid var(--border-light);
+    border-radius: 4px;
+    background: var(--bg-primary);
+    font-size: 11px;
+    color: var(--text-secondary);
+    cursor: pointer;
+}
+
+.arc-multi-opacity {
+    width: 60px;
+    height: 3px;
+    -webkit-appearance: none;
+    background: var(--border-medium);
+    border-radius: 2px;
+    cursor: pointer;
+}
+
+.arc-multi-opacity::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 10px;
+    height: 10px;
+    background: var(--accent-color);
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.arc-multi-btn-exit {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 8px;
+    background: none;
+    border: 1px solid var(--border-light);
+    border-radius: 4px;
+    font-size: 11px;
+    color: var(--text-secondary);
+    cursor: pointer;
+}
+
+.arc-multi-btn-exit:hover {
+    background: var(--bg-danger-light);
+    color: var(--text-danger);
+    border-color: var(--border-danger);
+}
+
+.arc-multi-btn-exit i {
+    width: 12px;
+    height: 12px;
+}
+
+/* ============================================
+   MULTI-ARCS - Ghost Layers (Mode Compare)
+   ============================================ */
+
+.arc-ghost-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 2;
+}
+
+/* Ghost columns */
+.arc-ghost-column {
+    position: absolute;
+    background: var(--bg-secondary);
+    border: 2px dashed var(--ghost-color, var(--border-medium));
+    border-radius: 12px;
+    pointer-events: auto;
+    cursor: pointer;
+}
+
+.arc-ghost-column-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px;
+    border-bottom: 1px dashed var(--border-light);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+
+.arc-ghost-card-count {
+    font-size: 11px;
+    padding: 2px 6px;
+    background: var(--bg-tertiary);
+    border-radius: 10px;
+    color: var(--text-muted);
+}
+
+.arc-ghost-column-body {
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.arc-ghost-card {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    background: var(--bg-primary);
+    border-radius: 6px;
+    font-size: 11px;
+    color: var(--text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.arc-ghost-card i {
+    width: 12px;
+    height: 12px;
+    opacity: 0.6;
+    flex-shrink: 0;
+}
+
+.arc-ghost-more {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-align: center;
+    padding: 4px;
+}
+
+/* Ghost floating items */
+.arc-ghost-item {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    background: var(--bg-secondary);
+    border: 2px dashed var(--ghost-color, var(--border-medium));
+    border-radius: 8px;
+    color: var(--text-muted);
+    pointer-events: auto;
+    cursor: pointer;
+}
+
+.arc-ghost-item i {
+    width: 20px;
+    height: 20px;
+}
+
+/* Ghost connections */
+.arc-ghost-connections {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: visible;
+}
+
+.arc-ghost-connection-line {
+    fill: none;
+    stroke: var(--ghost-color, var(--border-medium));
+    stroke-width: 2;
+    stroke-dasharray: 8 4;
+    opacity: 0.6;
+}
+
+/* ============================================
+   MULTI-ARCS - Split Mode
+   ============================================ */
+
+.arc-split-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+}
+
+.arc-split-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 4px 8px;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-light);
+    flex-shrink: 0;
+}
+
+.arc-split-bar-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.arc-split-add-select {
+    padding: 4px 8px;
+    font-size: 12px;
+    border: 1px solid var(--border-light);
+    border-radius: 4px;
+    background: var(--bg-primary);
+    color: var(--text-secondary);
+    cursor: pointer;
+}
+
+.arc-split-exit {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    font-size: 12px;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-light);
+    border-radius: 4px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.arc-split-exit:hover {
+    background: var(--bg-danger-light);
+    color: var(--text-danger);
+    border-color: var(--bg-danger-light);
+}
+
+.arc-split-exit i {
+    width: 14px;
+    height: 14px;
+}
+
+.arc-split-layout-toggle {
+    display: flex;
+    background: var(--bg-tertiary);
+    border-radius: 4px;
+    padding: 2px;
+}
+
+.arc-split-layout-toggle button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 22px;
+    padding: 0;
+    background: none;
+    border: none;
+    border-radius: 3px;
+    color: var(--text-muted);
+    cursor: pointer;
+}
+
+.arc-split-layout-toggle button:hover {
+    color: var(--text-primary);
+}
+
+.arc-split-layout-toggle button.active {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+}
+
+.arc-split-layout-toggle button i {
+    width: 14px;
+    height: 14px;
+}
+
+/* Split Panels Container */
+.arc-split-panels {
+    flex: 1;
+    display: flex;
+    gap: 1px;
+    background: var(--border-light);
+    min-height: 0;
+}
+
+.arc-split-vertical {
+    flex-direction: row;
+}
+
+.arc-split-horizontal {
+    flex-direction: column;
+}
+
+/* Individual Split Panel */
+.arc-split-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: var(--bg-primary);
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.arc-split-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4px 8px;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-light);
+    flex-shrink: 0;
+}
+
+.arc-split-panel-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.arc-split-select {
+    padding: 4px 8px;
+    border: 1px solid var(--border-light);
+    border-radius: 6px;
+    background: var(--bg-primary);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-primary);
+    cursor: pointer;
+}
+
+.arc-split-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    background: none;
+    border: none;
+    border-radius: 4px;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.arc-split-close:hover {
+    background: var(--bg-danger-light);
+    color: var(--text-danger);
+}
+
+.arc-split-close i {
+    width: 16px;
+    height: 16px;
+}
+
+/* Split Canvas */
+.arc-split-canvas {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    background-color: var(--bg-tertiary);
+    background-image:
+        linear-gradient(var(--border-light) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border-light) 1px, transparent 1px);
+    background-size: 24px 24px;
+}
+
+.arc-split-content {
+    position: relative;
+    min-width: 2000px;
+    min-height: 1500px;
+    transform-origin: 0 0;
+}
+
+.arc-split-column {
+    pointer-events: none;
+}
+
+.arc-split-connections {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: visible;
+}
+
+.arc-split-zoom {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 3px 8px;
+    background: var(--bg-secondary);
+    border-top: 1px solid var(--border-light);
+    font-size: 11px;
+    color: var(--text-muted);
+    flex-shrink: 0;
+}
+
+.arc-split-zoom button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-light);
+    border-radius: 3px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.arc-split-zoom button:hover {
+    background: var(--bg-hover);
+    color: var(--text-primary);
+}
+
+.arc-split-zoom button i {
+    width: 12px;
+    height: 12px;
+}
+
+/* ============================================
+   MULTI-ARCS - Inter-Arc Connections Panel
+   ============================================ */
+
+.arc-interarc-panel {
+    display: flex;
+    flex-direction: column;
+    background: var(--bg-secondary);
+    border-top: 1px solid var(--border-light);
+    max-height: 200px;
+}
+
+.arc-interarc-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border-light);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.arc-interarc-header i {
+    width: 16px;
+    height: 16px;
+    color: var(--accent-color);
+}
+
+.arc-interarc-count {
+    font-size: 11px;
+    padding: 2px 8px;
+    background: var(--bg-tertiary);
+    border-radius: 10px;
+    color: var(--text-muted);
+    font-weight: normal;
+}
+
+.arc-interarc-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 8px;
+}
+
+.arc-interarc-empty {
+    text-align: center;
+    padding: 20px;
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+.arc-interarc-empty small {
+    display: block;
+    margin-top: 4px;
+    font-size: 11px;
+    opacity: 0.8;
+}
+
+.arc-interarc-connection {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 12px;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    margin-bottom: 6px;
+}
+
+.arc-interarc-from,
+.arc-interarc-to {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.arc-interarc-from i,
+.arc-interarc-to i {
+    width: 12px;
+    height: 12px;
+    opacity: 0.5;
+}
+
+.arc-interarc-type {
+    flex-shrink: 0;
+}
+
+.arc-interarc-type select {
+    padding: 4px 8px;
+    border: 1px solid var(--accent-color);
+    border-radius: 12px;
+    background: var(--bg-accent-light);
+    font-size: 11px;
+    color: var(--accent-color);
+    cursor: pointer;
+}
+
+.arc-interarc-delete {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    background: none;
+    border: none;
+    border-radius: 4px;
+    color: var(--text-muted);
+    cursor: pointer;
+    margin-left: auto;
+    transition: all 0.15s ease;
+}
+
+.arc-interarc-delete:hover {
+    background: var(--bg-danger-light);
+    color: var(--text-danger);
+}
+
+.arc-interarc-delete i {
+    width: 14px;
+    height: 14px;
+}
+
+.arc-interarc-footer {
+    padding: 8px 12px;
+    border-top: 1px solid var(--border-light);
+}
+
+.arc-interarc-add {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    width: 100%;
+    padding: 8px;
+    background: var(--bg-tertiary);
+    border: 1px dashed var(--border-medium);
+    border-radius: 6px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.arc-interarc-add:hover {
+    background: var(--bg-hover);
+    border-color: var(--accent-color);
+    color: var(--accent-color);
+}
+
+.arc-interarc-add i {
+    width: 14px;
+    height: 14px;
+}
+
+/* Connection source highlight */
+.connection-source {
+    outline: 3px solid var(--accent-color) !important;
+    outline-offset: 2px;
+}
+
+/* ============================================
+   MODE COMPARE - Canvas unique avec arcs empilés
+   ============================================ */
+
+/* Contrôles du mode Compare dans la barre multi-arcs */
+.arc-compare-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: 12px;
+}
+
+/* Tags des arcs en comparaison */
+.arc-compare-tag {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 8px;
+    background: color-mix(in srgb, var(--tag-color, var(--primary-color)) 15%, var(--bg-primary));
+    border: 1px solid color-mix(in srgb, var(--tag-color, var(--primary-color)) 30%, var(--border-color));
+    border-radius: 14px;
+    font-size: 11px;
+    color: var(--text-primary);
+}
+
+.arc-compare-tag.main {
+    font-weight: 600;
+}
+
+.arc-compare-tag-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.arc-compare-tag button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 14px;
+    height: 14px;
+    padding: 0;
+    background: none;
+    border: none;
+    border-radius: 50%;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.arc-compare-tag button:hover {
+    background: var(--error-color);
+    color: white;
+}
+
+.arc-compare-tag button i {
+    width: 10px;
+    height: 10px;
+}
+
+/* Dropdown pour ajouter un arc */
+.arc-compare-add {
+    padding: 4px 8px;
+    font-size: 11px;
+    border: 1px dashed var(--border-color);
+    border-radius: 14px;
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.arc-compare-add:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+/* Bouton lien inter-arcs */
+.arc-compare-link-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    background: var(--primary-color);
+    border: none;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.arc-compare-link-btn:hover {
+    background: var(--primary-hover);
+}
+
+.arc-compare-link-btn i {
+    width: 14px;
+    height: 14px;
+}
+
+/* Tags des connexions inter-arcs */
+.arc-interarc-tags {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: 8px;
+    padding-left: 8px;
+    border-left: 1px solid var(--border-color);
+}
+
+.arc-interarc-tag {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 8px;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 500;
+    box-shadow: 0 1px 3px var(--shadow);
+    z-index: 100;
+    position: relative;
+}
+
+.arc-interarc-tag-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.arc-interarc-tag-name {
+    color: var(--text-secondary);
+    max-width: 80px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.arc-interarc-tag i {
+    width: 10px;
+    height: 10px;
+    color: var(--text-muted);
+}
+
+.arc-interarc-tag button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 12px;
+    height: 12px;
+    padding: 0;
+    background: none;
+    border: none;
+    border-radius: 50%;
+    color: var(--text-muted);
+    cursor: pointer;
+}
+
+.arc-interarc-tag button:hover {
+    background: var(--error-color);
+    color: white;
+}
+
+.arc-interarc-tag button i {
+    width: 8px;
+    height: 8px;
+}
+
+.arc-compare-header-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.arc-compare-header-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.arc-compare-header-count {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-left: auto;
+}
+
+/* Colonnes en mode Compare (avec accent coloré) */
+.arc-column.arc-column-compare {
+    border-top: 3px solid var(--column-accent, var(--primary-color));
+}
+
+.arc-column.arc-column-compare .arc-column-header {
+    cursor: pointer;
+}
+
+.arc-column.arc-column-compare:hover {
+    box-shadow: 0 4px 16px var(--shadow), 0 0 0 2px var(--column-accent, var(--primary-color));
+}
+
+/* Connexions internes en mode Compare */
+.arc-connection-line[data-arc-id] {
+    stroke-width: 2;
+    opacity: 0.6;
+}
+
+/* Connexions inter-arcs (tiretées) */
+.arc-interarc-connection {
+    stroke: var(--primary-color) !important;
+    stroke-width: 2.5 !important;
+    stroke-dasharray: 8 4;
+    opacity: 0.9;
+}
+
+.arc-interarc-connection:hover {
+    stroke-width: 4 !important;
+    opacity: 1;
+}
+
+/* ============================================
+   MODE COMPARE - Poignée de redimensionnement vertical
+   ============================================ */
+
+/* Conteneur d'un arc en mode Compare */
+.arc-compare-section {
+    position: absolute;
+    left: 0;
+    right: 0;
+    overflow: visible;
+    border-bottom: 1px solid var(--border-color);
+    background: var(--bg-secondary);
+}
+
+/* Zone de contenu des items d'un arc */
+.arc-compare-content {
+    position: relative;
+    overflow: visible;
+}
+
+/* Poignée de redimensionnement en bas de chaque arc */
+.arc-compare-resize-handle {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 8px;
+    cursor: ns-resize;
+    background: transparent;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s ease;
+}
+
+.arc-compare-resize-handle:hover {
+    background: linear-gradient(to bottom, transparent, rgba(255, 140, 66, 0.15));
+}
+
+.arc-compare-resize-handle:active {
+    background: linear-gradient(to bottom, transparent, rgba(255, 140, 66, 0.25));
+}
+
+/* Indicateur visuel de la poignée */
+.arc-compare-resize-handle::before {
+    content: '';
+    width: 40px;
+    height: 4px;
+    background: var(--border-color);
+    border-radius: 2px;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+}
+
+.arc-compare-resize-handle:hover::before {
+    opacity: 1;
+    background: var(--primary-color);
+}
+
+/* Style de l'en-tête avec poignée de drag vertical */
+.arc-compare-header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 20px;
+    background: linear-gradient(to right, color-mix(in srgb, var(--arc-color, var(--primary-color)) 20%, var(--bg-primary)), var(--bg-primary));
+    border-bottom: 3px solid var(--arc-color, var(--primary-color));
+    z-index: 10;
+}
+
+/* Indicateur de hauteur minimale/maximale */
+.arc-compare-section.min-height .arc-compare-resize-handle::after {
+    content: 'Hauteur minimale';
+    position: absolute;
+    bottom: 12px;
+    font-size: 10px;
+    color: var(--text-muted);
+    background: var(--bg-primary);
+    padding: 2px 8px;
+    border-radius: 4px;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.arc-compare-section.min-height .arc-compare-resize-handle:hover::after {
+    opacity: 1;
+}
+
+/* ============================================
+   MODE COMPARE - Contrôle d'opacité
+   ============================================ */
+
+/* Conteneur du contrôle d'opacité dans le header */
+.arc-compare-opacity-control {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: 12px;
+    padding-left: 12px;
+    border-left: 1px solid color-mix(in srgb, var(--arc-color, var(--primary-color)) 30%, transparent);
+}
+
+.arc-compare-opacity-icon {
+    width: 14px;
+    height: 14px;
+    color: var(--text-muted);
+    flex-shrink: 0;
+}
+
+/* Slider de transparence */
+.arc-compare-opacity-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 80px;
+    height: 4px;
+    border-radius: 2px;
+    background: linear-gradient(to right,
+        rgba(255, 255, 255, 0.3),
+        var(--arc-color, var(--primary-color)));
+    cursor: pointer;
+    outline: none;
+}
+
+.arc-compare-opacity-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--bg-primary);
+    border: 2px solid var(--arc-color, var(--primary-color));
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.arc-compare-opacity-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+    box-shadow: 0 0 8px color-mix(in srgb, var(--arc-color, var(--primary-color)) 50%, transparent);
+}
+
+.arc-compare-opacity-slider::-moz-range-thumb {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--bg-primary);
+    border: 2px solid var(--arc-color, var(--primary-color));
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.arc-compare-opacity-slider::-moz-range-thumb:hover {
+    transform: scale(1.2);
+}
+
+/* Affichage de la valeur */
+.arc-compare-opacity-value {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    min-width: 36px;
+    text-align: right;
+}
+
+/* Section d'arc en mode Compare - fond transparent pour voir les arcs en dessous */
+.arc-compare-section {
+    background: transparent;
+}
+
+/* Contenu avec transparence via color-mix (évite de créer un stacking context) */
+/* L'opacité n'affecte que le fond, pas les colonnes/cartes/liens */
+.arc-compare-content {
+    background: color-mix(in srgb, var(--bg-secondary) calc(var(--arc-opacity, 1) * 100%), transparent);
+}
+
+/* Colonnes en mode Compare - z-index élevé pour passer au-dessus des headers des arcs suivants */
+.arc-compare-content .arc-column {
+    z-index: 1000;
+}

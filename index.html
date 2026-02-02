@@ -1,0 +1,1883 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Plume - Outil d'écriture pour auteurs">
+    <title>Plume - Outil d'écriture</title>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@300;400;600;700&family=Noto+Serif+JP:wght@300;500;700&family=Source+Code+Pro:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Export Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/docx/7.8.2/docx.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <!-- IndexedDB wrapper for easier usage -->
+    <script src="https://cdn.jsdelivr.net/npm/idb@7/build/umd.js"></script>
+    <!-- Excel Support -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <!-- Mammoth.js for DOCX import -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+    <!-- Lucide Icons - Modern line icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <!-- Driver.js - Product Tour Library (bundled in CSS and JS) -->
+    
+    <!-- Vendor CSS -->
+    <link rel="stylesheet" href="./vendor/driver.css">
+    
+    <!-- Application CSS -->
+    <link rel="stylesheet" href="./css/01.variables.css">
+    <link rel="stylesheet" href="./css/02.base.css">
+    <link rel="stylesheet" href="./css/03.header.css">
+    <link rel="stylesheet" href="./css/04.sidebar.css">
+    <link rel="stylesheet" href="./css/05.modals.css">
+    <link rel="stylesheet" href="./css/06.editor.css">
+    <link rel="stylesheet" href="./css/07.characters.css">
+    <link rel="stylesheet" href="./css/08.visualizations.css">
+    <link rel="stylesheet" href="./css/09.utilities.css">
+    <link rel="stylesheet" href="./css/10.mobile.css">
+    <link rel="stylesheet" href="./css/12.arc-board.css">
+    <link rel="stylesheet" href="./css/14.word-repetition.css">
+    <link rel="stylesheet" href="./css/14.product-tour.css">
+    
+    <!-- Module CSS -->
+    <link rel="stylesheet" href="./js-refactor/synonyms/synonyms.css">
+</head>
+<body>
+    <div class="mobile-menu-handle" onclick="toggleMobileSidebar()"></div> <!-- Mobile Sidebar Overlay -->
+    <div class="sidebar-overlay" onclick="toggleMobileSidebar()"></div>
+    <!-- Mobile Navigation Dropdown (déplacé hors du grid) -->
+    <div class="mobile-nav-dropdown" id="mobileNavDropdown">
+        <div class="mobile-nav-section">
+            <div class="mobile-nav-section-title"><i data-lucide="pen-tool"></i> écriture</div>
+            <button class="mobile-nav-item active" onclick="switchViewMobile('editor')" data-view="editor">
+                <span class="mobile-nav-item-icon"><i data-lucide="pen-line"></i></span>
+                <span>Structure</span>
+            </button>
+            <button class="mobile-nav-item" onclick="switchViewMobile('corkboard')" data-view="corkboard">
+                <span class="mobile-nav-item-icon"><i data-lucide="layout-grid"></i></span>
+                <span>Tableau</span>
+            </button>
+            <button class="mobile-nav-item" onclick="switchViewMobile('plot')" data-view="plot">
+                <span class="mobile-nav-item-icon"><i data-lucide="trending-up"></i></span>
+                <span>Intrigue</span>
+            </button>
+            <button class="mobile-nav-item" onclick="switchViewMobile('arcs')" data-view="arcs">
+                <span class="mobile-nav-item-icon"><i data-lucide="git-commit-horizontal"></i></span>
+                <span>Arcs Narratifs</span>
+            </button>
+        </div>
+
+        <div class="mobile-nav-section">
+            <div class="mobile-nav-section-title"><i data-lucide="database"></i> Base de données</div>
+            <button class="mobile-nav-item" onclick="switchViewMobile('characters')" data-view="characters">
+                <span class="mobile-nav-item-icon"><i data-lucide="users"></i></span>
+                <span>Personnages</span>
+            </button>
+            <button class="mobile-nav-item" onclick="switchViewMobile('world')" data-view="world">
+                <span class="mobile-nav-item-icon"><i data-lucide="globe"></i></span>
+                <span>Univers</span>
+            </button>
+            <button class="mobile-nav-item" onclick="switchViewMobile('codex')" data-view="codex">
+                <span class="mobile-nav-item-icon"><i data-lucide="book-open"></i></span>
+                <span>Codex</span>
+            </button>
+            <button class="mobile-nav-item" onclick="switchViewMobile('notes')" data-view="notes">
+                <span class="mobile-nav-item-icon"><i data-lucide="sticky-note"></i></span>
+                <span>Notes</span>
+            </button>
+        </div>
+
+        <div class="mobile-nav-section">
+            <div class="mobile-nav-section-title"><i data-lucide="eye"></i> Visualisation</div>
+            <button class="mobile-nav-item" onclick="switchViewMobile('mindmap')" data-view="mindmap">
+                <span class="mobile-nav-item-icon"><i data-lucide="git-branch"></i></span>
+                <span>Mindmap</span>
+            </button>
+            <button class="mobile-nav-item" onclick="switchViewMobile('relations')" data-view="relations">
+                <span class="mobile-nav-item-icon"><i data-lucide="link"></i></span>
+                <span>Relations</span>
+            </button>
+            <button class="mobile-nav-item" onclick="switchViewMobile('map')" data-view="map">
+                <span class="mobile-nav-item-icon"><i data-lucide="map"></i></span>
+                <span>Carte</span>
+            </button>
+            <button class="mobile-nav-item" onclick="switchViewMobile('timelineviz')" data-view="timelineviz">
+                <span class="mobile-nav-item-icon"><i data-lucide="clock"></i></span>
+                <span>Timeline</span>
+            </button>
+        </div>
+
+        <div class="mobile-nav-section">
+            <div class="mobile-nav-section-title"><i data-lucide="wrench"></i> Outils</div>
+            <button class="mobile-nav-item" onclick="switchViewMobile('stats')" data-view="stats">
+                <span class="mobile-nav-item-icon"><i data-lucide="bar-chart-3"></i></span>
+                <span>Stats</span>
+            </button>
+            <button class="mobile-nav-item" onclick="switchViewMobile('analysis')" data-view="analysis">
+                <span class="mobile-nav-item-icon"><i data-lucide="scan-search"></i></span>
+                <span>Analyse</span>
+            </button>
+        </div>
+
+        <div class="mobile-nav-section">
+            <div class="mobile-nav-section-title"><i data-lucide="history"></i> Historique</div>
+            <button class="mobile-nav-item" onclick="switchViewMobile('versions')" data-view="versions">
+                <span class="mobile-nav-item-icon"><i data-lucide="history"></i></span>
+                <span>Snapshots</span>
+            </button>
+        </div>
+
+        <div class="mobile-nav-section">
+            <div class="mobile-nav-section-title"><i data-lucide="settings"></i> Actions</div>
+            <button class="mobile-nav-item" onclick="openProjectsModal(); toggleMobileNav();">
+                <span class="mobile-nav-item-icon"><i data-lucide="folder-open"></i></span>
+                <span>Mes Projets</span>
+            </button>
+            <button class="mobile-nav-item" onclick="openThemeManager(); toggleMobileNav();">
+                <span class="mobile-nav-item-icon"><i data-lucide="palette"></i></span>
+                <span>Thèmes</span>
+            </button>
+            <button class="mobile-nav-item" onclick="undo(); toggleMobileNav();" id="mobileUndoBtn">
+                <span class="mobile-nav-item-icon"><i data-lucide="undo-2"></i></span>
+                <span>Annuler</span>
+            </button>
+            <button class="mobile-nav-item" onclick="redo(); toggleMobileNav();" id="mobileRedoBtn">
+                <span class="mobile-nav-item-icon"><i data-lucide="redo-2"></i></span>
+                <span>Rétablir</span>
+            </button>
+            <button class="mobile-nav-item" onclick="showBackupMenu(); toggleMobileNav();">
+                <span class="mobile-nav-item-icon"><i data-lucide="download"></i></span>
+                <span>Sauvegarde/Export</span>
+            </button>
+        </div>
+    </div> <!-- Barre de progression d'écriture (mode focus) - hors du grid -->
+    <div class="writing-progress-bar">
+        <div class="writing-progress-fill" id="writingProgressFill"></div>
+        <div class="writing-progress-text" id="positionIndicator"> Mot 0 / 0 </div>
+    </div>
+    <div class="app-container"> <!-- Top Header -->
+        <div class="app-header">
+            <div class="app-logo" onclick="renameProject()" style="cursor: pointer;" title="Cliquer pour renommer le projet">
+                <span class="app-logo-icon"><i data-lucide="feather"></i></span>
+                <span id="headerProjectTitle">Plume</span>
+                <i data-lucide="pencil" style="width: 12px; height: 12px; opacity: 0.5; margin-left: 4px;"></i>
+            </div>
+            <button class="mobile-nav-toggle-btn" onclick="toggleMobileNav()" id="mobileNavToggleBtn">
+                <i data-lucide="menu"></i>
+            </button>
+            <nav class="header-nav">
+                <div class="nav-group">
+                    <button class="nav-btn active" onclick="switchView('editor')" id="header-tab-editor">
+                        <span class="nav-btn-icon"><i data-lucide="pen-line"></i></span>
+                        <span class="nav-btn-text">Structure</span>
+                    </button>
+                    <button class="nav-btn" onclick="switchView('corkboard')" id="header-tab-corkboard">
+                        <span class="nav-btn-icon"><i data-lucide="layout-grid"></i></span>
+                        <span class="nav-btn-text">Tableau</span>
+                    </button>
+                    <button class="nav-btn" onclick="switchView('plot')" id="header-tab-plot">
+                        <span class="nav-btn-icon"><i data-lucide="trending-up"></i></span>
+                        <span class="nav-btn-text">Intrigue</span>
+                    </button>
+                    <button class="nav-btn" onclick="switchView('arcs')" id="header-tab-arcs">
+                        <span class="nav-btn-icon"><i data-lucide="git-commit-horizontal"></i></span>
+                        <span class="nav-btn-text">Arcs</span>
+                    </button>
+                </div>
+                <div class="nav-group">
+                    <button class="nav-btn" onclick="switchView('characters')" id="header-tab-characters">
+                        <span class="nav-btn-icon"><i data-lucide="users"></i></span>
+                        <span class="nav-btn-text">Personnages</span>
+                    </button>
+                    <button class="nav-btn" onclick="switchView('world')" id="header-tab-world">
+                        <span class="nav-btn-icon"><i data-lucide="globe"></i></span>
+                        <span class="nav-btn-text">Univers</span>
+                    </button>
+                    <button class="nav-btn" onclick="switchView('codex')" id="header-tab-codex">
+                        <span class="nav-btn-icon"><i data-lucide="book-open"></i></span>
+                        <span class="nav-btn-text">Codex</span>
+                    </button>
+                    <button class="nav-btn" onclick="switchView('notes')" id="header-tab-notes">
+                        <span class="nav-btn-icon"><i data-lucide="sticky-note"></i></span>
+                        <span class="nav-btn-text">Notes</span>
+                    </button>
+                </div>
+                <div class="nav-group">
+                    <button class="nav-btn" onclick="switchView('mindmap')" id="header-tab-mindmap">
+                        <span class="nav-btn-icon"><i data-lucide="git-branch"></i></span>
+                        <span class="nav-btn-text">Mindmap</span>
+                    </button>
+                    <button class="nav-btn" onclick="switchView('relations')" id="header-tab-relations">
+                        <span class="nav-btn-icon"><i data-lucide="link"></i></span>
+                        <span class="nav-btn-text">Relations</span>
+                    </button>
+                    <button class="nav-btn" onclick="switchView('map')" id="header-tab-map">
+                        <span class="nav-btn-icon"><i data-lucide="map"></i></span>
+                        <span class="nav-btn-text">Carte</span>
+                    </button>
+                    <button class="nav-btn" onclick="switchView('timelineviz')" id="header-tab-timeline-viz">
+                        <span class="nav-btn-icon"><i data-lucide="clock"></i></span>
+                        <span class="nav-btn-text">Timeline</span>
+                    </button>
+                </div>
+                <div class="nav-group">
+                    <button class="nav-btn" onclick="switchView('stats')" id="header-tab-stats">
+                        <span class="nav-btn-icon"><i data-lucide="bar-chart-3"></i></span>
+                        <span class="nav-btn-text">Stats</span>
+                    </button>
+                    <button class="nav-btn" onclick="switchView('analysis')" id="header-tab-analysis">
+                        <span class="nav-btn-icon"><i data-lucide="scan-search"></i></span>
+                        <span class="nav-btn-text">Analyse</span>
+                    </button>
+                </div>
+                <div class="nav-group">
+                    <button class="nav-btn" onclick="switchView('versions')" id="header-tab-versions">
+                        <span class="nav-btn-icon"><i data-lucide="history"></i></span>
+                        <span class="nav-btn-text">Snapshots</span>
+                    </button>
+                </div>
+            </nav>
+            <!-- Actions à droite -->
+            <div class="header-actions">
+                <div id="headerStatsContainer" style="font-size: 0.85rem; color: var(--text-muted); margin-right: 0.5rem;">
+                    <span id="headerTotalWords">0 mots</span>
+                    <span id="headerStatsSeparator"> / </span>
+                    <span id="headerTotalChapters">0 chapitres</span>
+                </div>
+                <button class="split-mode-toggle" onclick="toggleSplitView()" id="splitModeToggle" title="Activer/désactiver le mode split">
+                    <i data-lucide="columns-2" style="width:14px;height:14px;"></i>
+                    <span>Split</span>
+                </button>
+                <div class="storage-badge-header status-ok" id="storage-badge" onclick="showStorageDetails()" title="Espace de stockage">
+                    <span class="storage-icon"><i data-lucide="hard-drive"></i></span>
+                    <span id="storage-percentage">...</span>
+                </div>
+                <button class="header-action-btn" onclick="undo()" id="headerUndoBtn" title="Annuler (Ctrl+Z)" disabled>
+                    <i data-lucide="undo-2"></i>
+                </button>
+                <button class="header-action-btn" onclick="redo()" id="headerRedoBtn" title="Rétablir (Ctrl+Y)" disabled>
+                    <i data-lucide="redo-2"></i>
+                </button>
+                <button class="header-action-btn" onclick="togglePomodoroPopup()" id="pomodoroHeaderBtn" title="Timer Pomodoro">
+                    <i data-lucide="timer"></i>
+                </button>
+                <button class="header-action-btn" onclick="openImportChapterModal()" title="Importer un texte">
+                    <i data-lucide="file-up"></i>
+                </button>
+                <button class="header-action-btn" onclick="showBackupMenu()" title="Sauvegardes et exports">
+                    <i data-lucide="download"></i>
+                </button>
+                <button class="header-action-btn" onclick="openThemeManager()" title="Gérer les thèmes">
+                    <i data-lucide="palette"></i>
+                </button>
+                <button class="header-action-btn" onclick="openProjectsModal()" title="Gérer les projets">
+                    <i data-lucide="folder-open"></i>
+                </button>
+            </div>
+        </div>
+        <!-- Pomodoro Popup -->
+        <div class="pomodoro-popup" id="pomodoroPopup">
+            <div class="pomodoro-popup-header">
+                <span>Pomodoro</span>
+                <span class="pomodoro-popup-close" onclick="togglePomodoroPopup()"><i data-lucide="x"
+                        style="width:14px;height:14px;"></i></span>
+            </div>
+            <div class="pomodoro-popup-content">
+                <div class="pomodoro-display" id="pomodoroDisplay">25:00</div>
+                <div class="pomodoro-controls">
+                    <button class="btn btn-small" onclick="startPomodoro()"><i data-lucide="play"
+                            style="width:14px;height:14px;"></i></button>
+                    <button class="btn btn-small" onclick="pausePomodoro()"><i data-lucide="pause"
+                            style="width:14px;height:14px;"></i></button>
+                    <button class="btn btn-small" onclick="resetPomodoro()"><i data-lucide="rotate-ccw"
+                            style="width:14px;height:14px;"></i></button>
+                </div>
+                <div class="pomodoro-stats">
+                    <div class="pomodoro-stat">
+                        <span class="pomodoro-stat-value" id="pomodorosCompleted">0</span>
+                        <span class="pomodoro-stat-label">sessions</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Conteneur principal (sidebar + versions + éditeur) -->
+        <div class="app-content">
+            <!-- Sidebar Navigation -->
+            <div class="sidebar">
+                <!-- Poignée de redimensionnement -->
+                <div class="sidebar-resize-handle" id="sidebarResizeHandle">
+                    <div class="resize-handle-line"></div>
+                </div>
+                <div class="sidebar-header">
+                    <div class="search-container">
+                        <input type="text" class="search-input" id="globalSearch"
+                            placeholder="Rechercher dans tout le projet..." oninput="performGlobalSearch(this.value)"
+                            onfocus="this.select()">
+                        <i data-lucide="search" class="search-icon"></i>
+                        <div class="search-results" id="searchResults"></div>
+                    </div>
+                </div>
+                <!-- Barre de progression globale -->
+                <div class="project-progress-bar" id="projectProgressBar">
+                    <div class="progress-stats">
+                        <span id="progressStatsText">0 scènes</span>
+                        <span id="progressPercent">0%</span>
+                    </div>
+                    <div class="progress-track">
+                        <div class="progress-segment complete" id="progressComplete" style="width: 0%"></div>
+                        <div class="progress-segment review" id="progressReview" style="width: 0%"></div>
+                        <div class="progress-segment progress" id="progressProgress" style="width: 0%"></div>
+                        <div class="progress-segment draft" id="progressDraft" style="width: 0%"></div>
+                    </div>
+                </div>
+                <!-- Filtres de statut -->
+                <div class="status-filters" id="statusFilters">
+                    <button class="status-filter-btn draft active" onclick="toggleStatusFilter('draft')"
+                        data-status="draft">
+                        <span class="status-filter-dot draft"></span>
+                        <span>Brouillon</span>
+                        <span class="status-filter-count" id="countDraft">0</span>
+                    </button>
+                    <button class="status-filter-btn progress active" onclick="toggleStatusFilter('progress')"
+                        data-status="progress">
+                        <span class="status-filter-dot progress"></span>
+                        <span>En cours</span>
+                        <span class="status-filter-count" id="countProgress">0</span>
+                    </button>
+                    <button class="status-filter-btn complete active" onclick="toggleStatusFilter('complete')"
+                        data-status="complete">
+                        <span class="status-filter-dot complete"></span>
+                        <span>Terminé</span>
+                        <span class="status-filter-count" id="countComplete">0</span>
+                    </button>
+                    <button class="status-filter-btn review active" onclick="toggleStatusFilter('review')"
+                        data-status="review">
+                        <span class="status-filter-dot review"></span>
+                        <span>À réviser</span>
+                        <span class="status-filter-count" id="countReview">0</span>
+                    </button>
+                </div>
+                <!-- Outils de scène -->
+                <div class="scene-tools" id="sceneTools">
+                    <button class="scene-tool-btn" onclick="toggleVersionsSidebar()" id="headerVersionsToggle"
+                        title="Afficher/masquer les versions de scène">
+                        <i data-lucide="git-branch"></i>
+                        <span>Versions</span>
+                    </button>
+                    <button class="scene-tool-btn" onclick="toggleAnnotationsPanel()" id="sidebarAnnotationsBtn"
+                        title="Afficher/masquer les annotations">
+                        <i data-lucide="message-square"></i>
+                        <span>Annotations</span>
+                        <span class="scene-tool-badge" id="annotationsBadge" style="display: none;">0</span>
+                    </button>
+                    <button class="scene-tool-btn" onclick="toggleTodosPanel()" id="sidebarTodosBtn"
+                        title="Afficher/masquer les TODOs">
+                        <i data-lucide="check-square"></i>
+                        <span>TODOs</span>
+                        <span class="scene-tool-badge" id="todosBadge" style="display: none;">0</span>
+                    </button>
+                    <button class="scene-tool-btn" onclick="toggleArcScenePanel()" id="sidebarArcsBtn"
+                        title="Afficher/masquer les Arcs Narratifs">
+                        <i data-lucide="git-commit-horizontal"></i>
+                        <span>Arcs</span>
+                    </button>
+                    <button class="scene-tool-btn" onclick="PlotGridUI.toggleSidebar()" id="sidebarPlotBtn"
+                        title="Afficher/masquer l'Intrigue">
+                        <i data-lucide="trending-up"></i>
+                        <span>Intrigue</span>
+                    </button>
+                </div>
+                <!-- Boutons déplier/replier tout -->
+                <div class="tree-collapse-toolbar" id="treeCollapseToolbar">
+                    <button class="tree-collapse-btn" onclick="expandAllTree()" title="Tout déplier">
+                        <i data-lucide="unfold-vertical" style="width:12px;height:12px;"></i>
+                        <span>Déplier</span>
+                    </button>
+                    <button class="tree-collapse-btn" onclick="collapseAllTree()" title="Tout replier">
+                        <i data-lucide="fold-vertical" style="width:12px;height:12px;"></i>
+                        <span>Replier</span>
+                    </button>
+                    <button class="tree-collapse-btn" onclick="openStructureOrganizer()" title="Réorganiser la structure (vue globale)">
+                        <i data-lucide="layout-list" style="width:12px;height:12px;"></i>
+                        <span>Organiser</span>
+                    </button>
+                </div>
+                <div class="chapters-list" id="chaptersList">
+                    <!-- Structure will be dynamically inserted here -->
+                </div>
+                <div class="database-list" id="charactersList" style="display: none;">
+                    <!-- Characters will be dynamically inserted here -->
+                </div>
+                <div class="database-list" id="worldList" style="display: none;">
+                    <!-- World elements will be dynamically inserted here -->
+                </div>
+                <div class="database-list" id="timelineList" style="display: none;">
+                    <!-- Timeline events will be dynamically inserted here -->
+                </div>
+                <div class="database-list" id="notesList" style="display: none;">
+                    <!-- Notes will be dynamically inserted here -->
+                </div>
+                <div class="database-list" id="codexList" style="display: none;">
+                    <!-- Codex entries will be dynamically inserted here -->
+                </div>
+                <div class="database-list" id="arcsList" style="display: none;">
+                    <!-- Narrative arcs will be dynamically inserted here -->
+                </div>
+                <div class="database-list" id="statsList" style="display: none;">
+                    <!-- Statistics will be dynamically inserted here -->
+                </div>
+                <div class="database-list" id="versionsList" style="display: none;">
+                    <!-- Versions will be dynamically inserted here -->
+                </div>
+                <div class="database-list" id="analysisList" style="display: none;">
+                    <!-- Analysis will be dynamically inserted here -->
+                </div>
+                <div class="database-list" id="corkboardList" style="display: none;">
+                    <!-- Cork Board info will be here -->
+                </div>
+                <div class="database-list" id="mindmapList" style="display: none;">
+                    <!-- Mindmap will be here -->
+                </div>
+                <div class="database-list" id="plotList" style="display: none;">
+                    <!-- Plot graph will be here -->
+                </div>
+                <div class="database-list" id="relationsList" style="display: none;">
+                    <!-- Relations graph will be here -->
+                </div>
+                <div class="database-list" id="mapList" style="display: none;">
+                    <!-- World map will be here -->
+                </div>
+                <div class="database-list" id="timelineVizList" style="display: none;">
+                    <!-- Visual timeline will be here -->
+                </div>
+                <div class="database-list" id="todosList" style="display: none;">
+                    <!-- TODOs list will be here -->
+                </div>
+                <div class="database-list" id="thrillerList" style="display: none;">
+                    <!-- Thriller elements will be here -->
+                </div>
+                <div class="database-list" id="noSidebarMessage" style="display: none;">
+                    <!-- Message for views without sidebar -->
+                </div>
+                <div class="sidebar-actions" id="sidebarActions">
+                    <button class="btn btn-primary" onclick="openAddActModal()">+ Acte</button>
+                    <button class="btn btn-primary" onclick="openAddChapterModal()">+ Chapitre</button>
+                    <button class="btn btn-primary" onclick="openAddSceneModalQuick()">+ Scène</button>
+                </div>
+            </div>
+            <!-- Vertical Tools Sidebar -->
+            <div class="tools-sidebar" id="toolsSidebar">
+                <button class="tool-btn" onclick="toggleVersionsSidebar()" id="toolVersionsBtn"
+                    title="Versions de scène">
+                    <i data-lucide="git-branch"></i>
+                </button>
+                <button class="tool-btn" onclick="toggleAnnotationsPanel()" id="toolAnnotationsBtn" title="Annotations">
+                    <i data-lucide="message-square"></i>
+                    <span class="tool-badge" id="toolAnnotationsBadge" style="display: none;">0</span>
+                </button>
+                <button class="tool-btn" onclick="toggleTodosPanel()" id="toolTodosBtn" title="TODOs">
+                    <i data-lucide="check-square"></i>
+                    <span class="tool-badge" id="toolTodosBadge" style="display: none;">0</span>
+                </button>
+                <button class="tool-btn" onclick="toggleArcScenePanel()" id="toolArcsBtn" title="Arcs Narratifs">
+                    <i data-lucide="git-commit-horizontal"></i>
+                </button>
+                <button class="tool-btn" onclick="PlotGridUI.toggleSidebar()" id="toolPlotBtn" title="Plot Grid">
+                    <i data-lucide="layout-grid"></i>
+                </button>
+                <div style="width: 100%; height: 1px; background: var(--border-color); margin: 0.5rem 0;"></div>
+                <button class="tool-btn" onclick="toggleLinksPanelVisibility()" id="toolLinksPanelBtn"
+                    title="Afficher/Masquer les liens (Personnages, Univers, Timeline)">
+                    <i data-lucide="link-2"></i>
+                </button>
+                <button class="tool-btn" onclick="toggleWordRepetitionPanel()" id="toolRepetitionBtn"
+                    title="Analyseur de répétitions de mots">
+                    <i data-lucide="repeat"></i>
+                </button>
+            </div>
+            <!-- Sidebar Versions (pour les versions de scènes) -->
+            <div class="sidebar-versions hidden" id="sidebarVersions">
+                <div class="sidebar-versions-header">
+                    <div class="sidebar-versions-title">
+                        <h3><i data-lucide="git-branch"
+                                style="width:16px;height:16px;vertical-align:middle;margin-right:6px;"></i>Versions</h3>
+                        <button class="sidebar-versions-toggle" onclick="toggleVersionsSidebar()" title="Masquer"><i
+                                data-lucide="x" style="width:14px;height:14px;"></i></button>
+                    </div>
+                    <div class="sidebar-versions-scene" id="versionsSceneName">Aucune scène sélectionnée</div>
+                </div>
+                <div class="sidebar-versions-actions" id="versionsActionsArea">
+                    <button class="btn-new-version" onclick="createSceneVersion()" id="btnNewVersion" disabled>
+                        + Nouvelle version
+                    </button>
+                </div>
+                <div class="sidebar-versions-list" id="sceneVersionsList">
+                    <div class="versions-no-scene">
+                        <div class="versions-no-scene-icon"><i data-lucide="file-text"></i></div>
+                        <div class="versions-no-scene-text">
+                            Sélectionnez une scène<br>dans la structure<br>pour voir ses versions
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Sidebar Plot (Dabble Style) -->
+            <div class="sidebar-plot hidden" id="sidebarPlot">
+                <div class="sidebar-plot-header">
+                    <div class="sidebar-plot-title">
+                        <h3><i data-lucide="layout-grid"
+                                style="width:16px;height:16px;vertical-align:middle;margin-right:6px;"></i>Plot Grid
+                        </h3>
+                        <button class="sidebar-plot-toggle" onclick="PlotGridUI.toggleSidebar()" title="Masquer"><i
+                                data-lucide="x" style="width:14px;height:14px;"></i></button>
+                    </div>
+                    <div class="sidebar-plot-scene" id="plotSidebarSceneName">Aucune scène sélectionnée</div>
+                </div>
+                <div class="sidebar-plot-list" id="plotSidebarList">
+                    <!-- Plot cards will be inserted here -->
+                </div>
+            </div>
+            <!-- Annotations Panel -->
+            <div class="annotations-panel hidden" id="annotationsPanel">
+                <div class="annotations-panel-spacer"></div>
+                <div class="annotations-panel-content" id="annotationsPanelContent"></div>
+            </div>
+            <!-- TODOs Panel -->
+            <div class="annotations-panel hidden" id="todosPanel">
+                <div class="annotations-panel-spacer"></div>
+                <div class="annotations-panel-content" id="todosPanelContent"></div>
+            </div>
+            <!-- Arc Scene Panel -->
+            <div id="arcScenePanel" class="arc-scene-panel hidden">
+                <div class="arc-scene-panel-header">
+                    <h3>Arcs dans cette scène</h3>
+                    <button class="arc-panel-close" onclick="toggleArcScenePanel()"><i data-lucide="x"
+                            style="width:14px;height:14px;"></i></button>
+                </div>
+                <div id="arcScenePanelContent" class="arc-scene-panel-content">
+                    <!-- Contenu dynamique -->
+                </div>
+            </div>
+            <!-- Links Panel (Sidebar) -->
+            <div id="linksPanel" class="links-panel-sidebar hidden">
+                <div class="links-panel-header">
+                    <h3><i data-lucide="link-2"
+                            style="width:16px;height:16px;vertical-align:middle;margin-right:6px;"></i>Liens</h3>
+                    <button class="links-panel-close" onclick="toggleLinksPanelVisibility()"><i data-lucide="x"
+                            style="width:14px;height:14px;"></i></button>
+                </div>
+                <div id="linksPanelContent" class="links-panel-content">
+                    <!-- Contenu dynamique -->
+                </div>
+            </div>
+            <!-- Word Repetition Sidebar (Right Panel) -->
+            <div id="wordRepetitionSidebar" class="word-rep-sidebar hidden">
+                <div class="word-rep-sidebar-resize" id="wordRepSidebarResize"></div>
+                <div class="word-rep-sidebar-header">
+                    <div class="word-rep-sidebar-title">
+                        <h3><i data-lucide="repeat" style="width:16px;height:16px;vertical-align:middle;margin-right:6px;"></i>Répétitions</h3>
+                        <button class="word-rep-sidebar-close" onclick="toggleWordRepetitionPanel()" title="Fermer">
+                            <i data-lucide="x" style="width:14px;height:14px;"></i>
+                        </button>
+                    </div>
+                    <div class="word-rep-sidebar-controls">
+                        <button class="btn btn-small" onclick="WordRepetitionHandlers.onRefresh()" title="Analyser">
+                            <i data-lucide="refresh-cw" style="width:12px;height:12px;"></i> Analyser
+                        </button>
+                        <button class="btn btn-icon btn-small" onclick="WordRepetitionHandlers.onToggleSettings()" title="Paramètres">
+                            <i data-lucide="settings" style="width:14px;height:14px;"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="word-rep-sidebar-content" id="wordRepetitionContainer">
+                    <!-- Word repetition panel will be dynamically inserted here -->
+                </div>
+            </div>
+            <!-- Main Editor -->
+            <div class="editor-container" id="editorView">
+                <div class="empty-state">
+                    <div class="empty-state-icon"><i data-lucide="pen-tool"></i></div>
+                    <div class="empty-state-title">Commencez votre histoire</div>
+                    <div class="empty-state-text">
+                        Créez votre premier chapitre pour commencer à écrire.
+                    </div>
+                    <button class="btn btn-primary" onclick="openAddChapterModal()">+ Créer un chapitre</button>
+                </div>
+            </div>
+        </div><!-- Fin app-content -->
+        <!-- Focus Mode Toggle Button -->
+        <button class="focus-toggle-btn" onclick="toggleFocusPanel()"><i data-lucide="settings"></i> Paramètres
+            Focus</button>
+        <!-- Focus Mode Panel (inside app-container for fullscreen) -->
+        <div class="focus-mode-panel" id="focusPanel">
+            <div class="focus-panel-header">
+                <div class="focus-panel-title"><i data-lucide="brain"></i> Mode Focus</div>
+            </div>
+            <div class="focus-panel-content">
+                <!-- Pomodoro Timer -->
+                <div class="focus-section">
+                    <div class="focus-section-title"><i data-lucide="timer"></i> Timer Pomodoro</div>
+                    <div class="pomodoro-timer">
+                        <div class="pomodoro-display" id="pomodoroDisplay">25:00</div>
+                        <div class="pomodoro-controls">
+                            <button class="btn btn-small" onclick="startPomodoro()"><i data-lucide="play"></i>
+                                Démarrer</button>
+                            <button class="btn btn-small" onclick="pausePomodoro()"><i data-lucide="pause"></i>
+                                Pause</button>
+                            <button class="btn btn-small" onclick="resetPomodoro()"><i data-lucide="rotate-ccw"></i>
+                                Reset</button>
+                        </div>
+                        <div class="focus-stats">
+                            <div class="focus-stat-box">
+                                <div class="focus-stat-value" id="pomodorosCompleted">0</div>
+                                <div class="focus-stat-label">Pomodoros</div>
+                            </div>
+                            <div class="focus-stat-box">
+                                <div class="focus-stat-value" id="focusWordCount">0</div>
+                                <div class="focus-stat-label">Mots</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Focus Settings -->
+                <div class="focus-section">
+                    <div class="focus-section-title">Paramètres</div>
+                    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                        <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                            <input type="checkbox" id="hideToolbar" onchange="toggleToolbar()">
+                            <span>Masquer la barre d'outils</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                            <input type="checkbox" id="hideLinksPanel" onchange="toggleLinksPanelVisibility()">
+                            <span>Masquer le panneau de liens</span>
+                        </label>
+                    </div>
+                </div>
+                <!-- Exit Focus Mode -->
+                <div class="focus-section">
+                    <button class="btn btn-primary" style="width: 100%;" onclick="toggleFocusMode()">
+                        <i data-lucide="arrow-left"></i> Quitter le mode Focus
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div><!-- Fin app-container -->
+    <!-- Diff Modal -->
+    <div class="diff-modal" id="diffModal" style="display: none;">
+        <div class="diff-modal-content">
+            <div class="diff-modal-header">
+                <div class="diff-modal-title">
+                    <span><i data-lucide="repeat"></i></span>
+                    <span>Comparaison des versions</span>
+                </div>
+                <button class="diff-modal-close" onclick="closeDiffModal()"><i data-lucide="x"
+                        style="width:18px;height:18px;"></i></button>
+            </div>
+            <div class="diff-toolbar">
+                <div class="diff-version-selector">
+                    <span>Comparer</span>
+                    <select class="diff-version-select" id="diffVersionOld" onchange="updateDiff()">
+                    </select>
+                    <span>avec</span>
+                    <select class="diff-version-select" id="diffVersionNew" onchange="updateDiff()">
+                    </select>
+                </div>
+                <div class="diff-stats" id="diffStats">
+                    <span class="diff-stat added">+0 ajoutés</span>
+                    <span class="diff-stat removed">−0 supprimés</span>
+                </div>
+                <div class="diff-view-toggle">
+                    <button class="diff-view-btn active" onclick="setDiffView('unified')"
+                        id="btnDiffUnified">Unifié</button>
+                    <button class="diff-view-btn" onclick="setDiffView('side')" id="btnDiffSide">Côte à côte</button>
+                </div>
+            </div>
+            <div class="diff-content" id="diffContent">
+                <!-- Diff content will be inserted here -->
+            </div>
+        </div>
+    </div>
+    <!-- Add Act Modal -->
+    <!-- Storage Details Modal -->
+    <div class="modal storage-details-modal" id="storage-modal">
+        <div class="modal-content" style="max-width: 500px;">
+            <div class="modal-header">
+                <h2><i data-lucide="save"></i> Espace de stockage</h2>
+                <button class="modal-close" onclick="closeModal('storage-modal')"><i data-lucide="x"
+                        style="width:18px;height:18px;"></i></button>
+            </div>
+            <div class="storage-info">
+                <div class="storage-bar">
+                    <div class="storage-bar-fill ok" id="storage-bar-fill" style="width: 0%">
+                        <span id="storage-bar-text">0%</span>
+                    </div>
+                </div>
+                <div class="storage-stats">
+                    <div class="storage-stat">
+                        <div class="storage-stat-label">Utilisé</div>
+                        <div class="storage-stat-value" id="storage-used">0 MB</div>
+                    </div>
+                    <div class="storage-stat">
+                        <div class="storage-stat-label">Disponible</div>
+                        <div class="storage-stat-value" id="storage-available">5 MB</div>
+                    </div>
+                </div>
+                <!-- Section repliable pour les recommandations -->
+                <details id="storage-recommendations-details" style="margin-top: 1rem;">
+                    <summary style="cursor: pointer; font-weight: 600; color: var(--accent-green); font-size: 0.9rem;">
+                        <i data-lucide="check-circle"
+                            style="width:14px;height:14px;vertical-align:middle;margin-right:6px;"></i> Espace suffisant
+                    </summary>
+                    <div id="storage-recommendations-container" style="margin-top: 0.5rem;"></div>
+                </details>
+            </div>
+            <hr style="border: none; border-top: 1px solid var(--border-color); margin: 1.25rem 0;">
+            <!-- Importer des données -->
+            <div style="margin-bottom: 1rem;">
+                <div style="font-size: 0.9rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--text-primary);">
+                    Importer</div>
+                <button class="btn" onclick="importProject()" style="width: 100%; font-size: 0.85rem;">
+                    <i data-lucide="upload"
+                        style="width:14px;height:14px;vertical-align:middle;margin-right:6px;"></i>Importer depuis un
+                    fichier JSON
+                </button>
+            </div>
+            <!-- Exporter les données -->
+            <div style="margin-bottom: 1rem;">
+                <div style="font-size: 0.9rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--text-primary);">
+                    Exporter</div>
+                <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                    <button class="btn btn-primary" onclick="closeModal('storage-modal'); openExportNovelModal();"
+                        style="font-weight: 600; font-size: 0.85rem;">
+                        <i data-lucide="book-open"
+                            style="width:14px;height:14px;vertical-align:middle;margin-right:6px;"></i>Exporter le roman
+                        (MD, TXT, HTML ...)
+                    </button>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <button class="btn" onclick="exportToJSON()" style="flex: 1; font-size: 0.8rem;">
+                            <i data-lucide="hard-drive"
+                                style="width:14px;height:14px;vertical-align:middle;margin-right:4px;"></i>JSON
+                        </button>
+                        <button class="btn" onclick="exportProject()" style="flex: 1; font-size: 0.8rem;">
+                            <i data-lucide="file-text"
+                                style="width:14px;height:14px;vertical-align:middle;margin-right:4px;"></i>TXT
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!-- Cloud manuel - repliable -->
+            <details style="margin-bottom: 1rem;">
+                <summary style="cursor: pointer; font-weight: 600; color: var(--text-primary); font-size: 0.9rem;">
+                    <i data-lucide="cloud"></i> Cloud (manuel)
+                </summary>
+                <div
+                    style="padding: 0.75rem; background: var(--bg-secondary); border-radius: 4px; margin-top: 0.5rem; border: 1px solid var(--border-color);">
+                    <ol
+                        style="font-size: 0.75rem; color: var(--text-secondary); line-height: 1.6; padding-left: 1.25rem; margin: 0;">
+                        <li>Télécharge en JSON</li>
+                        <li>Uploade sur Google Drive / Dropbox</li>
+                        <li>Pour restaurer : "Importer depuis un fichier"</li>
+                    </ol>
+                </div>
+            </details>
+            <!-- Avertissement très petit -->
+            <p style="font-size: 0.7rem; color: var(--text-muted); text-align: center; margin: 0;">
+                <i data-lucide="alert-triangle"
+                    style="width:12px;height:12px;vertical-align:middle;margin-right:4px;"></i> Pense à exporter
+                régulièrement — les données navigateur peuvent être effacées
+            </p>
+            <div class="modal-actions" style="margin-top: 1rem;">
+                <button class="btn" onclick="closeModal('storage-modal')">Fermer</button>
+            </div>
+        </div>
+    </div>
+    <!-- Modals -->
+    <div class="modal" id="addActModal">
+        <div class="modal-content">
+            <div class="modal-title">Nouvel Acte</div>
+            <div class="form-group">
+                <label class="form-label">Titre de l'acte</label>
+                <input type="text" class="form-input" id="actTitleInput" placeholder="Acte I : L'éveil">
+            </div>
+            <div class="modal-actions">
+                <button class="btn" onclick="closeModal('addActModal')">Annuler</button>
+                <button class="btn btn-primary" onclick="addAct()">Créer</button>
+            </div>
+        </div>
+    </div>
+    <!-- Add Chapter Modal -->
+    <div class="modal" id="addChapterModal">
+        <div class="modal-content">
+            <div class="modal-title">Nouveau Chapitre</div>
+            <div class="form-group">
+                <label class="form-label">Titre du chapitre</label>
+                <input type="text" class="form-input" id="chapterTitleInput" placeholder="Chapitre 1 : Le Début">
+            </div>
+            <div class="modal-actions">
+                <button class="btn" onclick="closeModal('addChapterModal')">Annuler</button>
+                <button class="btn btn-primary" onclick="addChapter()">Créer</button>
+            </div>
+        </div>
+    </div>
+    <!-- Add Scene Modal -->
+    <div class="modal" id="addSceneModal">
+        <div class="modal-content">
+            <div class="modal-title">Nouvelle Scène</div>
+            <div class="form-group">
+                <label class="form-label">Titre de la scène</label>
+                <input type="text" class="form-input" id="sceneTitleInput" placeholder="Scène 1 : Rencontre">
+            </div>
+            <div class="modal-actions">
+                <button class="btn" onclick="closeModal('addSceneModal')">Annuler</button>
+                <button class="btn btn-primary" onclick="addScene()">Créer</button>
+            </div>
+        </div>
+    </div>
+    <!-- Split View Selector Modal -->
+    <div class="modal" id="splitSelectorModal">
+        <div class="modal-content" style="max-width: 600px;">
+            <div class="modal-title"><i data-lucide="layout"
+                    style="width:20px;height:20px;vertical-align:middle;margin-right:8px;"></i>Choisir la vue</div>
+            <div id="splitSelectorContent" style="max-height: 600px; overflow-y: auto;">
+                <!-- Content will be populated by JavaScript -->
+            </div>
+            <div class="modal-actions">
+                <button class="btn" onclick="closeModal('splitSelectorModal')">Annuler</button>
+            </div>
+        </div>
+    </div>
+    <!-- Add Character Modal -->
+    <div class="modal" id="addCharacterModal">
+        <div class="modal-content">
+            <div class="modal-title">Nouveau Personnage</div>
+            <div class="form-group">
+                <label class="form-label">Nom du personnage</label>
+                <input type="text" class="form-input" id="characterNameInput" placeholder="Akiko">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Rôle</label>
+                <input type="text" class="form-input" id="characterRoleInput"
+                    placeholder="Protagoniste, Antagoniste, Allié...">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Description rapide</label>
+                <textarea class="form-input" id="characterDescInput" placeholder="Description du personnage..."
+                    rows="3"></textarea>
+            </div>
+            <div class="modal-actions">
+                <button class="btn" onclick="closeModal('addCharacterModal')">Annuler</button>
+                <button class="btn btn-primary" onclick="addCharacter()">Créer</button>
+            </div>
+        </div>
+    </div>
+    <!-- Add World Element Modal -->
+    <div class="modal" id="addWorldModal">
+        <div class="modal-content">
+            <div class="modal-title">Nouvel élément d'Univers</div>
+            <div class="form-group">
+                <label class="form-label">Nom</label>
+                <input type="text" class="form-input" id="worldNameInput" placeholder="Cité de Voile">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Type</label>
+                <select class="form-input" id="worldTypeInput">
+                    <option value="Lieu">Lieu</option>
+                    <option value="Objet">Objet</option>
+                    <option value="Concept">Concept</option>
+                    <option value="Organisation">Organisation</option>
+                    <option value="événement">événement</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Description rapide</label>
+                <textarea class="form-input" id="worldDescInput" placeholder="Description de l'élément..."
+                    rows="3"></textarea>
+            </div>
+            <div class="modal-actions">
+                <button class="btn" onclick="closeModal('addWorldModal')">Annuler</button>
+                <button class="btn btn-primary" onclick="addWorldElement()">Créer</button>
+            </div>
+        </div>
+    </div>
+    <!-- Add Timeline Event Modal -->
+    <div class="modal" id="addTimelineModal">
+        <div class="modal-content">
+            <div class="modal-title">Nouvel événement</div>
+            <div class="form-group">
+                <label class="form-label">Titre de l'événement</label>
+                <input type="text" class="form-input" id="timelineTitleInput" placeholder="La grande bataille">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Date / Moment</label>
+                <input type="text" class="form-input" id="timelineDateInput"
+                    placeholder="An 2157, Printemps / Chapitre 5 / Jour 3...">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Localisation</label>
+                <input type="text" class="form-input" id="timelineLocationInput" placeholder="Cité de Voile">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Personnages impliqués</label>
+                <input type="text" class="form-input" id="timelineCharactersInput" placeholder="Akiko, Sora, Kumi...">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Description</label>
+                <textarea class="form-input" id="timelineDescInput" placeholder="Description de l'événement..."
+                    rows="4"></textarea>
+            </div>
+            <div class="modal-actions">
+                <button class="btn" onclick="closeModal('addTimelineModal')">Annuler</button>
+                <button class="btn btn-primary" onclick="addTimelineEvent()">Créer</button>
+            </div>
+        </div>
+    </div>
+    <!-- Metro Timeline Event Modal -->
+    <div class="modal" id="metroEventModal">
+        <div class="modal-content" style="max-width: 500px;">
+            <div class="modal-title" id="metroEventModalTitle">Nouvel événement</div>
+            <input type="hidden" id="metroEventId">
+            <div class="metro-event-form">
+                <div class="form-group">
+                    <label class="form-label">Titre de l'événement *</label>
+                    <input type="text" class="form-input" id="metroEventTitle" placeholder="La grande bataille">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Date / Moment</label>
+                    <input type="text" class="form-input" id="metroEventDate" placeholder="An 2157, Printemps...">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Position sur la timeline</label>
+                    <select class="form-input" id="metroEventPosition">
+                        <!-- Populated dynamically -->
+                    </select>
+                    <input type="hidden" id="metroEventOrder">
+                    <small style="color: var(--text-muted);">Choisissez où placer cet événement dans la
+                        chronologie</small>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Description</label>
+                    <textarea class="form-input" id="metroEventDesc" placeholder="Ce qui se passe..."
+                        rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Scène liée</label>
+                    <select class="form-input" id="metroEventScene">
+                        <option value="">Aucune scène</option>
+                        <!-- Populated dynamically -->
+                    </select>
+                    <small style="color: var(--text-muted);">Associez cet événement à une scène de votre roman</small>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Personnages impliqués</label>
+                    <div id="metroCharactersSelector" class="metro-characters-selector">
+                        <!-- Populated dynamically -->
+                    </div>
+                    <div id="metroLinkedChars" class="metro-linked-chars">
+                        <!-- Tags des personnages liés -->
+                    </div>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn" onclick="closeModal('metroEventModal')">Annuler</button>
+                <button class="btn" style="background: var(--accent-red); color: white;" onclick="deleteMetroEvent()"
+                    id="metroDeleteBtn" style="display: none;">Supprimer</button>
+                <button class="btn btn-primary" onclick="saveMetroEvent()">Enregistrer</button>
+            </div>
+        </div>
+    </div>
+    <!-- Metro Event View Choice Modal -->
+    <div class="modal" id="metroViewChoiceModal">
+        <div class="modal-content" style="max-width: 500px;">
+            <div class="modal-title">Ouvrir l'événement Timeline</div>
+            <input type="hidden" id="metroViewChoiceEventId">
+            <div style="padding: 1rem 0;">
+                <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
+                    Comment souhaitez-vous visualiser cet événement ?
+                </p>
+                <div style="display: flex; flex-direction: column; gap: 1rem;">
+                    <button class="btn" onclick="openMetroEventFullView()"
+                        style="padding: 1rem; text-align: left; display: flex; align-items: start; gap: 1rem; border: 2px solid var(--border-color);">
+                        <i data-lucide="maximize-2"
+                            style="width: 24px; height: 24px; flex-shrink: 0; color: var(--accent-blue);"></i>
+                        <div>
+                            <div style="font-weight: 600; margin-bottom: 0.25rem;">Vue complète</div>
+                            <div style="font-size: 0.85rem; color: var(--text-muted);">Basculer vers la vue Timeline
+                                Métro (quitte la vue actuelle)</div>
+                        </div>
+                    </button>
+                    <button class="btn" onclick="openMetroEventSplitView()"
+                        style="padding: 1rem; text-align: left; display: flex; align-items: start; gap: 1rem; border: 2px solid var(--border-color);">
+                        <i data-lucide="columns-2"
+                            style="width: 24px; height: 24px; flex-shrink: 0; color: var(--accent-green);"></i>
+                        <div>
+                            <div style="font-weight: 600; margin-bottom: 0.25rem;">Split-view</div>
+                            <div style="font-size: 0.85rem; color: var(--text-muted);">Ouvrir la Timeline en vue séparée
+                                (conserve l'éditeur)</div>
+                        </div>
+                    </button>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn" onclick="closeModal('metroViewChoiceModal')">Annuler</button>
+            </div>
+        </div>
+    </div>
+    <!-- Metro Character Color Picker Modal -->
+    <div class="modal" id="metroColorModal">
+        <div class="modal-content" style="max-width: 350px;">
+            <div class="modal-title">Couleur de la ligne</div>
+            <input type="hidden" id="metroColorCharId">
+            <div class="form-group">
+                <label class="form-label" id="metroColorCharName">Personnage</label>
+                <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem;">
+                    <div class="metro-color-option" data-color="#E53935" style="background: #E53935;"
+                        onclick="selectMetroColor('#E53935')"></div>
+                    <div class="metro-color-option" data-color="#D81B60" style="background: #D81B60;"
+                        onclick="selectMetroColor('#D81B60')"></div>
+                    <div class="metro-color-option" data-color="#8E24AA" style="background: #8E24AA;"
+                        onclick="selectMetroColor('#8E24AA')"></div>
+                    <div class="metro-color-option" data-color="#5E35B1" style="background: #5E35B1;"
+                        onclick="selectMetroColor('#5E35B1')"></div>
+                    <div class="metro-color-option" data-color="#3949AB" style="background: #3949AB;"
+                        onclick="selectMetroColor('#3949AB')"></div>
+                    <div class="metro-color-option" data-color="#1E88E5" style="background: #1E88E5;"
+                        onclick="selectMetroColor('#1E88E5')"></div>
+                    <div class="metro-color-option" data-color="#039BE5" style="background: #039BE5;"
+                        onclick="selectMetroColor('#039BE5')"></div>
+                    <div class="metro-color-option" data-color="#00ACC1" style="background: #00ACC1;"
+                        onclick="selectMetroColor('#00ACC1')"></div>
+                    <div class="metro-color-option" data-color="#00897B" style="background: #00897B;"
+                        onclick="selectMetroColor('#00897B')"></div>
+                    <div class="metro-color-option" data-color="#43A047" style="background: #43A047;"
+                        onclick="selectMetroColor('#43A047')"></div>
+                    <div class="metro-color-option" data-color="#7CB342" style="background: #7CB342;"
+                        onclick="selectMetroColor('#7CB342')"></div>
+                    <div class="metro-color-option" data-color="#C0CA33" style="background: #C0CA33;"
+                        onclick="selectMetroColor('#C0CA33')"></div>
+                    <div class="metro-color-option" data-color="#FDD835" style="background: #FDD835;"
+                        onclick="selectMetroColor('#FDD835')"></div>
+                    <div class="metro-color-option" data-color="#FFB300" style="background: #FFB300;"
+                        onclick="selectMetroColor('#FFB300')"></div>
+                    <div class="metro-color-option" data-color="#FB8C00" style="background: #FB8C00;"
+                        onclick="selectMetroColor('#FB8C00')"></div>
+                    <div class="metro-color-option" data-color="#F4511E" style="background: #F4511E;"
+                        onclick="selectMetroColor('#F4511E')"></div>
+                    <div class="metro-color-option" data-color="#6D4C41" style="background: #6D4C41;"
+                        onclick="selectMetroColor('#6D4C41')"></div>
+                    <div class="metro-color-option" data-color="#757575" style="background: #757575;"
+                        onclick="selectMetroColor('#757575')"></div>
+                    <div class="metro-color-option" data-color="#546E7A" style="background: #546E7A;"
+                        onclick="selectMetroColor('#546E7A')"></div>
+                    <div class="metro-color-option" data-color="#263238" style="background: #263238;"
+                        onclick="selectMetroColor('#263238')"></div>
+                </div>
+                <div style="margin-top: 1rem;">
+                    <label class="form-label">Couleur personnalisée</label>
+                    <input type="color" id="metroCustomColor" class="form-input"
+                        style="width: 100%; height: 40px; padding: 0; cursor: pointer;">
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn" onclick="closeModal('metroColorModal')">Annuler</button>
+                <button class="btn btn-primary" onclick="applyMetroColor()">Appliquer</button>
+            </div>
+        </div>
+    </div>
+    <style>
+        .metro-color-option {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .metro-color-option:hover {
+            transform: scale(1.15);
+            border-color: white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .metro-color-option.selected {
+            border-color: var(--text-primary);
+            box-shadow: 0 0 0 2px var(--accent-blue);
+        }
+    </style>
+    <!-- Add Note Modal -->
+    <div class="modal" id="addNoteModal">
+        <div class="modal-content">
+            <div class="modal-title">Nouvelle Note</div>
+            <div class="form-group">
+                <label class="form-label">Titre de la note</label>
+                <input type="text" class="form-input" id="noteTitleInput"
+                    placeholder="Recherche sur les sanctuaires Shinto">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Catégorie</label>
+                <select class="form-input" id="noteCategoryInput">
+                    <option value="Recherche">Recherche</option>
+                    <option value="Idée">Idée</option>
+                    <option value="Référence">Référence</option>
+                    <option value="A faire">A faire</option>
+                    <option value="Question">Question</option>
+                    <option value="Autre">Autre</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Tags (séparés par des virgules)</label>
+                <input type="text" class="form-input" id="noteTagsInput" placeholder="shinto, religion, japon">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Contenu</label>
+                <textarea class="form-input" id="noteContentInput" placeholder="Contenu de la note..."
+                    rows="6"></textarea>
+            </div>
+            <div class="modal-actions">
+                <button class="btn" onclick="closeModal('addNoteModal')">Annuler</button>
+                <button class="btn btn-primary" onclick="addNote()">Créer</button>
+            </div>
+        </div>
+    </div>
+    <!-- Add Codex Entry Modal -->
+    <div class="modal" id="addCodexModal">
+        <div class="modal-content">
+            <div class="modal-title">Nouvelle Entrée Codex</div>
+            <div class="form-group">
+                <label class="form-label">Titre</label>
+                <input type="text" class="form-input" id="codexTitleInput" placeholder="Les Sanctuaires Shinto">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Catégorie</label>
+                <select class="form-input" id="codexCategoryInput">
+                    <option value="Culture">Culture</option>
+                    <option value="Histoire">Histoire</option>
+                    <option value="Technologie">Technologie</option>
+                    <option value="Géographie">Géographie</option>
+                    <option value="Politique">Politique</option>
+                    <option value="Magie/Pouvoir">Magie/Pouvoir</option>
+                    <option value="Religion">Religion</option>
+                    <option value="Société">Société</option>
+                    <option value="Autre">Autre</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Résumé rapide</label>
+                <textarea class="form-input" id="codexSummaryInput" placeholder="Description courte..."
+                    rows="3"></textarea>
+            </div>
+            <div class="modal-actions">
+                <button class="btn" onclick="closeModal('addCodexModal')">Annuler</button>
+                <button class="btn btn-primary" onclick="addCodexEntry()">Créer</button>
+            </div>
+        </div>
+    </div>
+    <!-- Projects Management Modal -->
+    <div class="modal" id="projectsModal">
+        <div class="modal-content" style="max-width: 800px;">
+            <div class="modal-title"><i data-lucide="folder-open"></i> Mes Projets</div>
+            <div class="modal-button-group" style="margin-bottom: 2rem;">
+                <button class="btn btn-primary" onclick="openNewProjectModal()">+ Nouveau Projet</button>
+                <button class="btn" onclick="importProject()">Importer un projet</button>
+            </div>
+            <div id="projectsList" style="max-height: 400px; overflow-y: auto;">
+                <!-- Projects will be listed here -->
+            </div>
+            <div class="modal-actions">
+                <button class="btn" onclick="closeModal('projectsModal')">Fermer</button>
+            </div>
+        </div>
+    </div>
+    <!-- New Project Modal -->
+    <div class="modal" id="newProjectModal">
+        <div class="modal-content">
+            <div class="modal-title">Nouveau Projet</div>
+            <div class="form-group">
+                <label class="form-label">Titre du projet</label>
+                <input type="text" class="form-input" id="newProjectTitle" placeholder="Mon Roman">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Description (optionnel)</label>
+                <textarea class="form-input" id="newProjectDesc" placeholder="Un roman de fantasy épique..."
+                    rows="3"></textarea>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Genre</label>
+                <select class="form-input" id="newProjectGenre">
+                    <option value="">Aucun</option>
+                    <option value="Fantasy">Fantasy</option>
+                    <option value="Science-Fiction">Science-Fiction</option>
+                    <option value="Thriller">Thriller</option>
+                    <option value="Romance">Romance</option>
+                    <option value="Policier">Policier</option>
+                    <option value="Horreur">Horreur</option>
+                    <option value="Historique">Historique</option>
+                    <option value="Aventure">Aventure</option>
+                    <option value="Drame">Drame</option>
+                    <option value="Autre">Autre</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Utiliser un template ?</label>
+                <select class="form-input" id="newProjectTemplate">
+                    <option value="">Projet vide</option>
+                    <option value="fantasy">Fantasy (3 actes + personnages types)</option>
+                    <option value="thriller">Thriller (Structure suspense)</option>
+                    <option value="scifi">Science-Fiction (Worldbuilding avancé)</option>
+                </select>
+            </div>
+            <div class="modal-actions">
+                <button class="btn" onclick="closeModal('newProjectModal')">Annuler</button>
+                <button class="btn btn-primary" onclick="createNewProject()">Créer</button>
+            </div>
+        </div>
+    </div>
+    <input type="file" id="importProjectInput" accept=".json" style="display: none;"
+        onchange="handleProjectImport(event)">
+    <!-- Backup Menu Modal -->
+    <div class="modal" id="backupModal">
+        <div class="modal-content" style="max-width: 600px;">
+            <div class="modal-title"><i data-lucide="hard-drive"></i> Sauvegardes et Exports</div>
+            <div style="margin-bottom: 2rem;">
+                <div style="font-size: 1rem; font-weight: 600; margin-bottom: 1rem; color: var(--text-primary);"><i
+                        data-lucide="download"
+                        style="width:16px;height:16px;vertical-align:middle;margin-right:6px;"></i>Importer des données
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                    <button class="btn btn-primary" onclick="openImportChapterModal(); closeModal('backupModal');" style="font-weight: 600;">
+                        <i data-lucide="file-text"
+                            style="width:16px;height:16px;vertical-align:middle;margin-right:6px;"></i>Importer un texte
+                        (.docx, .txt, .md, .epub)
+                    </button>
+                    <button class="btn" onclick="importFromFile()">
+                        <i data-lucide="folder-open"
+                            style="width:16px;height:16px;vertical-align:middle;margin-right:6px;"></i>Importer depuis
+                        un fichier JSON
+                    </button>
+                    <input type="file" id="importFileInput" accept=".json" style="display: none;"
+                        onchange="handleFileImport(event)">
+                </div>
+            </div>
+            <div style="margin-bottom: 2rem;">
+                <div style="font-size: 1rem; font-weight: 600; margin-bottom: 1rem; color: var(--text-primary);"><i
+                        data-lucide="upload"
+                        style="width:16px;height:16px;vertical-align:middle;margin-right:6px;"></i>Exporter les données
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                    <button class="btn btn-primary" onclick="openExportNovelModal()" style="font-weight: 600;">
+                        <i data-lucide="book-open"
+                            style="width:16px;height:16px;vertical-align:middle;margin-right:6px;"></i>Exporter le roman
+                        (MD, TXT, HTML ...)
+                    </button>
+                    <button class="btn" onclick="exportToJSON()">
+                        <i data-lucide="hard-drive"
+                            style="width:16px;height:16px;vertical-align:middle;margin-right:6px;"></i>Télécharger en
+                        JSON (sauvegarde complète)
+                    </button>
+                    <button class="btn" onclick="exportProject()">
+                        <i data-lucide="file-text"
+                            style="width:16px;height:16px;vertical-align:middle;margin-right:6px;"></i>Exporter en TXT
+                        (texte seulement)
+                    </button>
+                </div>
+            </div>
+            <div style="margin-bottom: 2rem;">
+                <div style="font-size: 1rem; font-weight: 600; margin-bottom: 1rem; color: var(--text-primary);"><i
+                        data-lucide="cloud"
+                        style="width:16px;height:16px;vertical-align:middle;margin-right:6px;"></i>Cloud (manuel)</div>
+                <div
+                    style="padding: 1rem; background: var(--bg-secondary); border-radius: 4px; border: 1px solid var(--border-color);">
+                    <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1rem; line-height: 1.6;">
+                        Pour sauvegarder sur Google Drive, Dropbox, ou tout autre service cloud :
+                    </p>
+                    <ol
+                        style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.8; padding-left: 1.5rem;">
+                        <li>Clique sur "Télécharger en JSON"</li>
+                        <li>Le fichier contient TOUTES tes données</li>
+                        <li>Uploade-le manuellement sur ton service cloud préféré</li>
+                        <li>Pour restaurer : télécharge le fichier et utilise "Importer depuis un fichier"</li>
+                    </ol>
+                </div>
+            </div>
+            <div
+                style="padding: 1rem; background: rgba(196, 69, 54, 0.1); border-radius: 4px; border: 1px solid var(--accent-red);">
+                <div style="font-size: 0.85rem; font-weight: 600; color: var(--accent-red); margin-bottom: 0.5rem;">
+                    Important : Sauvegarde régulière
+                </div>
+                <p style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.6;">
+                    Le localStorage peut être effacé par le navigateur. Pense à exporter régulièrement ton projet en
+                    JSON et à le sauvegarder dans un endroit sûr (Google Drive, Dropbox, disque dur, etc.).
+                </p>
+            </div>
+            <div class="modal-actions" style="margin-top: 1.5rem;">
+                <button class="btn" onclick="closeModal('backupModal')">Fermer</button>
+            </div>
+        </div>
+    </div>
+    <!-- Import Chapter Modal (multi-format) -->
+    <div class="modal" id="importChapterModal">
+        <div class="modal-content" style="max-width: 650px; max-height: 85vh; overflow-y: auto;">
+            <div class="modal-title">
+                <i data-lucide="file-plus"></i> Importer un texte
+            </div>
+            <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1.5rem; line-height: 1.5;">
+                Importez votre texte et Plume detectera automatiquement vos chapitres pour creer la structure.
+            </p>
+            <div id="importChapterContent">
+                <!-- Content will be populated by JavaScript -->
+            </div>
+            <div class="modal-actions" style="margin-top: 1.5rem; border-top: 1px solid var(--border-color); padding-top: 1rem;">
+                <button class="btn" onclick="closeImportChapterModal()">Annuler</button>
+            </div>
+        </div>
+    </div>
+    <!-- Export Novel Modal -->
+    <div class="modal" id="exportNovelModal">
+        <div class="modal-content" style="max-width: 700px; max-height: 90vh; overflow-y: auto;">
+            <div class="modal-title"><i data-lucide="book-open"></i> Exporter votre roman</div>
+            <p style="font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 1.5rem; line-height: 1.6;">
+                Vous pouvez exporter votre roman dans plusieurs formats. Vous pouvez ensuite importer les données dans
+                d'autres logiciels d'écriture.
+            </p>
+            <!-- Toggle All Button -->
+            <div style="margin-bottom: 1.5rem;">
+                <button class="btn btn-small" onclick="toggleAllScenes()" style="width: 100%;">
+                    Tout sélectionner / Tout désélectionner
+                </button>
+            </div>
+            <!-- Acts/Chapters/Scenes Selection Tree -->
+            <div style="margin-bottom: 1.5rem; max-height: 300px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: 6px; padding: 1rem; background: var(--bg-secondary);"
+                id="exportTreeContainer">
+                <!-- Will be populated by JavaScript -->
+            </div>
+            <!-- Format Selection -->
+            <div style="margin-bottom: 1.5rem;">
+                <label style="display: block; font-weight: 600; margin-bottom: 0.75rem; color: var(--text-primary);">
+                    Format du fichier
+                </label>
+                <select id="exportFormatSelect" onchange="updateExportFormatInfo()"
+                    style="width: 100%; padding: 0.75rem; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 4px; color: var(--text-primary); font-size: 0.95rem; font-family: 'Crimson Pro', serif;">
+                    <option value="markdown">Markdown (.md)</option>
+                    <option value="txt">Texte brut (.txt)</option>
+                    <option value="html">HTML (.html)</option>
+                    <option value="epub">EPUB (.epub)</option>
+                </select>
+                <div id="formatInfoBox"
+                    style="margin-top: 0.75rem; padding: 0.75rem; background: rgba(212, 175, 55, 0.1); border-radius: 4px; border: 1px solid var(--accent-gold); font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5;">
+                    <strong style="color: var(--text-primary);">Note :</strong>
+                    Toutes les fonctionnalités ne sont pas supportées en format DOCX. Le texte exporté pourrait ne pas
+                    ressembler exactement à l'éditeur. Pour une compatibilité complète, utilisez un autre format.
+                </div>
+            </div>
+            <!-- General Options -->
+            <div style="margin-bottom: 1.5rem;">
+                <label style="display: block; font-weight: 600; margin-bottom: 0.75rem; color: var(--text-primary);">
+                    Options générales
+                </label>
+                <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                    <label
+                        style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.95rem;">
+                        <input type="checkbox" id="exportSummariesCheck" style="cursor: pointer;">
+                        <span>Exporter les résumés</span>
+                    </label>
+                    <label
+                        style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.95rem;">
+                        <input type="checkbox" id="exportProseCheck" checked style="cursor: pointer;">
+                        <span>Exporter le texte</span>
+                    </label>
+                    <label
+                        style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.95rem;">
+                        <input type="checkbox" id="includeActTitlesCheck" checked style="cursor: pointer;">
+                        <span>Inclure les titres d'actes <span
+                                style="color: var(--text-muted); font-size: 0.85rem;">(désactiver pour ex. Vellum,
+                                Atticus)</span></span>
+                    </label>
+                    <label
+                        style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.95rem;">
+                        <input type="checkbox" id="includeSceneSubtitlesCheck" checked style="cursor: pointer;">
+                        <span>Inclure les sous-titres de scènes</span>
+                    </label>
+                </div>
+            </div>
+            <!-- Scene Dividers -->
+            <div style="margin-bottom: 1.5rem;">
+                <label style="display: block; font-weight: 600; margin-bottom: 0.75rem; color: var(--text-primary);">
+                    Séparateurs de scènes
+                </label>
+                <select id="sceneDividerSelect"
+                    style="width: 100%; padding: 0.75rem; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 4px; color: var(--text-primary); font-size: 0.95rem; font-family: 'Crimson Pro', serif;">
+                    <option value="asterisks">Astérisques ( * * * )</option>
+                    <option value="hash">Dièse ( ### )</option>
+                    <option value="line">Ligne horizontale (---)</option>
+                    <option value="space">Espace vide</option>
+                    <option value="none">Aucun séparateur</option>
+                </select>
+            </div>
+            <!-- Project Export (ZIP with all data) -->
+            <div
+                style="margin-bottom: 1.5rem; padding: 1rem; background: var(--bg-secondary); border-radius: 6px; border: 1px solid var(--border-color);">
+                <label style="display: block; font-weight: 600; margin-bottom: 0.75rem; color: var(--text-primary);">
+                    Export du projet complet
+                </label>
+                <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem; line-height: 1.5;">
+                    En exportant le projet complet, le fichier résultant sera une archive ZIP contenant tout le contenu
+                    sélectionné.
+                </p>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+                    <label
+                        style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.95rem;">
+                        <input type="checkbox" id="includeCharactersCheck" style="cursor: pointer;">
+                        <span>Personnages</span>
+                    </label>
+                    <label
+                        style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.95rem;">
+                        <input type="checkbox" id="includeWorldCheck" style="cursor: pointer;">
+                        <span>Univers</span>
+                    </label>
+                    <label
+                        style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.95rem;">
+                        <input type="checkbox" id="includeTimelineCheck" style="cursor: pointer;">
+                        <span>Timeline</span>
+                    </label>
+                    <label
+                        style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.95rem;">
+                        <input type="checkbox" id="includeRelationsCheck" style="cursor: pointer;">
+                        <span>Relations</span>
+                    </label>
+                    <label
+                        style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.95rem;">
+                        <input type="checkbox" id="includeCodexCheck" style="cursor: pointer;">
+                        <span>Codex</span>
+                    </label>
+                    <label
+                        style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.95rem;">
+                        <input type="checkbox" id="includeNotesCheck" style="cursor: pointer;">
+                        <span>Notes</span>
+                    </label>
+                </div>
+                <div style="margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px dashed var(--border-color);">
+                    <button onclick="toggleAllExportOptions(true)" class="btn btn-small"
+                        style="margin-right: 0.5rem; font-size: 0.8rem; padding: 0.3rem 0.6rem;">
+                        Tout sélectionner
+                    </button>
+                    <button onclick="toggleAllExportOptions(false)" class="btn btn-small"
+                        style="font-size: 0.8rem; padding: 0.3rem 0.6rem;">
+                        Tout désélectionner
+                    </button>
+                </div>
+            </div>
+            <!-- Export Button -->
+            <div style="text-align: center; padding-top: 1rem; border-top: 1px solid var(--border-color);">
+                <button class="btn btn-primary" onclick="executeNovelExport()"
+                    style="padding: 0.75rem 2rem; font-size: 1rem; font-weight: 600;">
+                    Exporter
+                </button>
+            </div>
+            <div class="modal-actions" style="margin-top: 1rem;">
+                <button class="btn" onclick="closeModal('exportNovelModal')">Annuler</button>
+            </div>
+        </div>
+    </div>
+    <!-- Tension Words Editor Modal -->
+    <div class="modal" id="tensionWordsModal">
+        <div class="modal-content" style="max-width: 900px;">
+            <div class="modal-title"><i data-lucide="pencil"></i> Personnaliser les mots de tension</div>
+            <div
+                style="margin-bottom: 1.5rem; padding: 1rem; background: var(--bg-secondary); border-radius: 6px; border: 1px solid var(--border-color);">
+                <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; margin: 0;">
+                    Ces mots sont utilisés pour calculer automatiquement la tension narrative de vos scènes.
+                    Personnalisez-les selon votre style d'écriture et le genre de votre roman.
+                </p>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                <!-- High Tension Words -->
+                <div
+                    style="background: var(--bg-secondary); border-radius: 8px; padding: 1.25rem; border: 2px solid rgba(196, 69, 54, 0.3);">
+                    <h3
+                        style="margin: 0 0 0.75rem 0; font-size: 1rem; color: var(--accent-red); display: flex; align-items: center; gap: 0.5rem;">
+                        Haute tension
+                        <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: normal;">(+3 pts
+                            chacun)</span>
+                    </h3>
+                    <div style="margin-bottom: 0.75rem;">
+                        <input type="text" id="highTensionInput" placeholder="Ajouter un mot..."
+                            style="width: 100%; padding: 0.5rem; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 4px; color: var(--text-primary); font-size: 0.85rem;"
+                            onkeypress="if(event.key==='Enter') addTensionWord('high')">
+                        <button onclick="addTensionWord('high')"
+                            style="width: 100%; margin-top: 0.5rem; padding: 0.5rem; background: var(--accent-red); color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.85rem; font-weight: 500;">
+                            + Ajouter
+                        </button>
+                        <button onclick="openBulkImport('high')"
+                            style="width: 100%; margin-top: 0.5rem; padding: 0.5rem; background: rgba(196, 69, 54, 0.2); color: var(--accent-red); border: 1px solid var(--accent-red); border-radius: 4px; cursor: pointer; font-size: 0.85rem; font-weight: 500;">
+                            Import en masse
+                        </button>
+                    </div>
+                    <div id="highTensionList"
+                        style="max-height: 300px; overflow-y: auto; display: flex; flex-direction: column; gap: 0.4rem;">
+                        <!-- Words will be added here -->
+                    </div>
+                </div>
+                <!-- Medium Tension Words -->
+                <div
+                    style="background: var(--bg-secondary); border-radius: 8px; padding: 1.25rem; border: 2px solid rgba(230, 162, 60, 0.3);">
+                    <h3
+                        style="margin: 0 0 0.75rem 0; font-size: 1rem; color: #e6a23c; display: flex; align-items: center; gap: 0.5rem;">
+                        Tension moyenne
+                        <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: normal;">(+1.5 pts
+                            chacun)</span>
+                    </h3>
+                    <div style="margin-bottom: 0.75rem;">
+                        <input type="text" id="mediumTensionInput" placeholder="Ajouter un mot..."
+                            style="width: 100%; padding: 0.5rem; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 4px; color: var(--text-primary); font-size: 0.85rem;"
+                            onkeypress="if(event.key==='Enter') addTensionWord('medium')">
+                        <button onclick="addTensionWord('medium')"
+                            style="width: 100%; margin-top: 0.5rem; padding: 0.5rem; background: #e6a23c; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.85rem; font-weight: 500;">
+                            + Ajouter
+                        </button>
+                        <button onclick="openBulkImport('medium')"
+                            style="width: 100%; margin-top: 0.5rem; padding: 0.5rem; background: rgba(230, 162, 60, 0.2); color: #e6a23c; border: 1px solid #e6a23c; border-radius: 4px; cursor: pointer; font-size: 0.85rem; font-weight: 500;">
+                            Import en masse
+                        </button>
+                    </div>
+                    <div id="mediumTensionList"
+                        style="max-height: 300px; overflow-y: auto; display: flex; flex-direction: column; gap: 0.4rem;">
+                        <!-- Words will be added here -->
+                    </div>
+                </div>
+                <!-- Low Tension Words -->
+                <div
+                    style="background: var(--bg-secondary); border-radius: 8px; padding: 1.25rem; border: 2px solid rgba(74, 144, 226, 0.3);">
+                    <h3
+                        style="margin: 0 0 0.75rem 0; font-size: 1rem; color: var(--accent-blue); display: flex; align-items: center; gap: 0.5rem;">
+                        Faible tension
+                        <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: normal;">(-2 pts
+                            chacun)</span>
+                    </h3>
+                    <div style="margin-bottom: 0.75rem;">
+                        <input type="text" id="lowTensionInput" placeholder="Ajouter un mot..."
+                            style="width: 100%; padding: 0.5rem; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 4px; color: var(--text-primary); font-size: 0.85rem;"
+                            onkeypress="if(event.key==='Enter') addTensionWord('low')">
+                        <button onclick="addTensionWord('low')"
+                            style="width: 100%; margin-top: 0.5rem; padding: 0.5rem; background: #2d6bb3; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.85rem; font-weight: 500;">
+                            + Ajouter
+                        </button>
+                        <button onclick="openBulkImport('low')"
+                            style="width: 100%; margin-top: 0.5rem; padding: 0.5rem; background: rgba(45, 107, 179, 0.15); color: #2d6bb3; border: 1px solid #2d6bb3; border-radius: 4px; cursor: pointer; font-size: 0.85rem; font-weight: 500;">
+                            Import en masse
+                        </button>
+                    </div>
+                    <div id="lowTensionList"
+                        style="max-height: 300px; overflow-y: auto; display: flex; flex-direction: column; gap: 0.4rem;">
+                        <!-- Words will be added here -->
+                    </div>
+                </div>
+            </div>
+            <div class="modal-actions" style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="display: flex; gap: 0.75rem;">
+                    <button class="btn" onclick="exportTensionWords()"
+                        style="background: #2d6bb3; color: white; border: 1px solid #2d6bb3;">
+                        Exporter les dictionnaires
+                    </button>
+                    <button class="btn" onclick="resetTensionWordsToDefault()"
+                        style="background: var(--accent-red); color: white;">
+                        Réinitialiser aux valeurs par défaut
+                    </button>
+                </div>
+                <div style="display: flex; gap: 0.75rem;">
+                    <button class="btn" onclick="closeModal('tensionWordsModal')">Annuler</button>
+                    <button class="btn btn-primary" onclick="saveTensionWords()"><i data-lucide="save"></i>
+                        Enregistrer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Bulk Import Modal -->
+    <div class="modal" id="bulkImportModal">
+        <div class="modal-content" style="max-width: 700px;">
+            <div class="modal-title" id="bulkImportTitle">Import en masse</div>
+            <div style="margin-bottom: 1.5rem;">
+                <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 1rem;">
+                    Importez une liste de mots en masse. Vous pouvez :
+                </p>
+                <ul style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.8; padding-left: 1.5rem;">
+                    <li><strong>Coller du texte</strong> : Un mot par ligne ou séparés par des virgules</li>
+                    <li><strong>Importer un fichier</strong> : Fichier .txt avec un mot par ligne</li>
+                </ul>
+            </div>
+            <div style="margin-bottom: 1.5rem;">
+                <label class="form-label">Collez vos mots ici :</label>
+                <textarea id="bulkImportText"
+                    placeholder="Ex: combat, bataille, mort&#10;tuer, danger, peur&#10;terreur, cri, hurler"
+                    style="width: 100%; min-height: 200px; padding: 0.75rem; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 4px; color: var(--text-primary); font-size: 0.85rem; font-family: monospace; resize: vertical;">
+                </textarea>
+                <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem;">
+                    Formats acceptés : un mot par ligne, ou plusieurs mots séparés par des virgules
+                </div>
+            </div>
+            <div style="margin-bottom: 1.5rem;">
+                <label class="form-label">Ou importez un fichier .txt :</label>
+                <input type="file" id="bulkImportFile" accept=".txt"
+                    style="width: 100%; padding: 0.5rem; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 4px; color: var(--text-primary); font-size: 0.85rem;">
+            </div>
+            <div
+                style="padding: 1rem; background: rgba(74, 144, 226, 0.1); border-radius: 4px; border: 1px solid var(--accent-blue); margin-bottom: 1.5rem;">
+                <div style="font-size: 0.85rem; font-weight: 600; color: var(--accent-blue); margin-bottom: 0.5rem;">
+                    Mode de fusion
+                </div>
+                <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; margin-bottom: 0.5rem;">
+                    <input type="radio" name="importMode" value="add" checked>
+                    <span style="font-size: 0.85rem; color: var(--text-primary);">Ajouter aux mots existants
+                        (recommandé)</span>
+                </label>
+                <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                    <input type="radio" name="importMode" value="replace">
+                    <span style="font-size: 0.85rem; color: var(--text-primary);">Remplacer tous les mots
+                        existants</span>
+                </label>
+            </div>
+            <div class="modal-actions">
+                <button class="btn" onclick="closeModal('bulkImportModal')">Annuler</button>
+                <button class="btn btn-primary" onclick="processBulkImport()"><i data-lucide="download"></i> Importer
+                    les mots</button>
+            </div>
+        </div>
+    </div>
+    <!-- References Panel Modal -->
+    <div class="modal" id="referencesModal">
+        <div class="modal-content" style="max-width: 700px;">
+            <div class="modal-title" id="referencesModalTitle">Références et Liens</div>
+            <div id="referencesModalContent"></div>
+            <div class="modal-actions">
+                <button class="btn" onclick="closeModal('referencesModal')">Fermer</button>
+            </div>
+        </div>
+    </div>
+    </div>
+    <!-- Annotation Popup -->
+    <div class="annotation-popup" id="annotationPopup">
+        <h3 style="margin-bottom: 1rem;">Ajouter une annotation</h3>
+        <div class="annotation-type-selector">
+            <div class="annotation-type-btn comment active" onclick="selectAnnotationType('comment')"><i
+                    data-lucide="message-circle"
+                    style="width:14px;height:14px;vertical-align:middle;margin-right:4px;"></i>Commentaire</div>
+            <div class="annotation-type-btn todo" onclick="selectAnnotationType('todo')"><i data-lucide="check-square"
+                    style="width:14px;height:14px;vertical-align:middle;margin-right:4px;"></i>TODO</div>
+            <div class="annotation-type-btn note" onclick="selectAnnotationType('note')"><i data-lucide="sticky-note"
+                    style="width:14px;height:14px;vertical-align:middle;margin-right:4px;"></i>Note</div>
+            <div class="annotation-type-btn question" onclick="selectAnnotationType('question')"><i
+                    data-lucide="help-circle"
+                    style="width:14px;height:14px;vertical-align:middle;margin-right:4px;"></i>Question</div>
+        </div>
+        <textarea id="annotationText" placeholder="Votre annotation..."></textarea>
+        <div style="display: flex; gap: 0.75rem; justify-content: flex-end;">
+            <button class="btn" onclick="closeAnnotationPopup()">Annuler</button>
+            <button class="btn btn-primary" onclick="saveAnnotation()">Enregistrer</button>
+        </div>
+    </div>
+    <!-- Floating Editor Menu Toggle Button (Mobile) -->
+    <button id="floatingEditorToggle" onclick="toggleFloatingEditorMenu()"><i data-lucide="pen-line"></i></button>
+    <!-- Floating Editor Menu (Mobile) -->
+    <div id="floatingEditorMenu">
+        <div id="floatingMenuHandle" title="Faire glisser pour déplacer"></div>
+        <div id="floatingMenuContent">
+            <!-- Annuler/Rétablir -->
+            <button class="floating-btn-mini" onclick="undo()" title="Annuler"><i data-lucide="undo-2"></i></button>
+            <button class="floating-btn-mini" onclick="redo()" title="Rétablir"><i data-lucide="redo-2"></i></button>
+            <div class="floating-divider"></div>
+            <!-- Formatage de base -->
+            <button class="floating-btn-mini" onclick="formatText('bold')" title="Gras"><i
+                    data-lucide="bold"></i></button>
+            <button class="floating-btn-mini" onclick="formatText('italic')" title="Italique"><i
+                    data-lucide="italic"></i></button>
+            <button class="floating-btn-mini" onclick="formatText('underline')" title="Souligné"><i
+                    data-lucide="underline"></i></button>
+            <button class="floating-btn-mini" onclick="formatText('strikeThrough')" title="Barré"><i
+                    data-lucide="strikethrough"></i></button>
+            <div class="floating-divider"></div>
+            <!-- Alignement -->
+            <button class="floating-btn-mini" onclick="formatText('justifyLeft')" title="Aligner à gauche"><i
+                    data-lucide="align-left"></i></button>
+            <button class="floating-btn-mini" onclick="formatText('justifyCenter')" title="Centrer"><i
+                    data-lucide="align-center"></i></button>
+            <button class="floating-btn-mini" onclick="formatText('justifyRight')" title="Aligner à droite"><i
+                    data-lucide="align-right"></i></button>
+            <button class="floating-btn-mini" onclick="formatText('justifyFull')" title="Justifier"><i
+                    data-lucide="align-justify"></i></button>
+            <div class="floating-divider"></div>
+            <!-- Listes -->
+            <button class="floating-btn-mini" onclick="formatText('insertUnorderedList')" title="Liste à puces"><i
+                    data-lucide="list"></i></button>
+            <button class="floating-btn-mini" onclick="formatText('insertOrderedList')" title="Liste numérotée"><i
+                    data-lucide="list-ordered"></i></button>
+            <div class="floating-divider"></div>
+            <!-- Plus d'options - Toggle sous-menu -->
+            <button class="floating-btn-mini" onclick="toggleAdvancedMenu()" id="advancedMenuBtn"
+                title="Plus d'options"><i data-lucide="more-horizontal"></i></button>
+        </div>
+        <!-- Barre de sous-menu avancé (apparaît au-dessus grâce à column-reverse) -->
+        <div id="advancedMenuBar" style="display: none;">
+            <button class="floating-btn-mini" onclick="formatText('removeFormat')" title="Supprimer le formatage"><i
+                    data-lucide="eraser"></i></button>
+            <button class="floating-btn-mini" onclick="insertLink()" title="Insérer un lien"><i data-lucide="link"
+                    style="width:16px;height:16px;"></i></button>
+            <button class="floating-btn-mini" onclick="formatText('formatBlock', 'h1')" title="Titre 1">H1</button>
+            <button class="floating-btn-mini" onclick="formatText('formatBlock', 'h2')" title="Titre 2">H2</button>
+            <button class="floating-btn-mini" onclick="formatText('formatBlock', 'h3')" title="Titre 3">H3</button>
+            <button class="floating-btn-mini" onclick="formatText('formatBlock', 'blockquote')"
+                title="Citation">Citation</button>
+            <button class="floating-btn-mini" onclick="formatText('insertHorizontalRule')"
+                title="Ligne horizontale">Ligne</button>
+        </div>
+    </div>
+
+    <!-- Vendor JavaScript -->
+    <script src="vendor/driver.js.iife.js"></script>
+    
+    <!-- Application JavaScript (refactored) -->
+    <script src="./js-refactor/01.app.refactor.js"></script>
+    <script src="./js/38.tension.js"></script>
+    <script src="./js/02.storage.js"></script>
+    <script src="./js-refactor/03.projects.refactor.js"></script>
+    <script src="./js/04.init.js"></script>
+    <script src="./js-refactor/05.undo-redo.refactor.js"></script>
+    
+    <!-- Structure Module -->
+    <script src="./js-refactor/structure/structure.model.js"></script>
+    <script src="./js-refactor/structure/structure.repository.js"></script>
+    <script src="./js-refactor/structure/structure.viewmodel.js"></script>
+    <script src="./js-refactor/00.app.view.js"></script>
+    <script src="./js-refactor/structure/structure.view.js"></script>
+    <script src="./js-refactor/structure/structure-organizer.view.js"></script>
+    <script src="./js-refactor/structure/structure.helpers.js"></script>
+    
+    <!-- Stats & Auto-detect -->
+    <script src="./js-refactor/07.stats.refactor.js"></script>
+    <script src="./js-refactor/08.auto-detect.refactor.js"></script>
+    
+    <!-- Editor & UI -->
+    <script src="./js/09.floating-editor.js"></script>
+    <script src="./js-refactor/10.colorpalette.refactor.js"></script>
+    <script src="./js/11.updateStats.js"></script>
+    <script src="./js/12.import-export.js"></script>
+    <script src="./js/13.mobile-menu.js"></script>
+    <script src="./js/14.dragndrop-acts.js"></script>
+    
+    <!-- Characte./rs Module -->
+    <script src="./js-refactor/characters/characters.model.js"></script>
+    <script src="./js-refactor/characters/characters.repository.js"></script>
+    <script src="./js-refactor/characters/characters.viewmodel.js"></script>
+    <script src="./js-refactor/characters/characters.view.js"></script>
+    
+    <!-- Split View -->
+    <script src="./js-refactor/16.split-view.js"></script>
+    
+    <!-- World Module -->
+    <script src="./js-refactor/world/world.model.js"></script>
+    <script src="./js-refactor/world/world.repository.js"></script>
+    <script src="./js-refactor/world/world.viewmodel.js"></script>
+    <script src="./js-refactor/world/world.view.js"></script>
+    
+    <!-- Timeline & Notes -->
+    <script src="./js/18.timeline.js"></script>
+    <script src="./js/19.notes.js"></script>
+    <script src="./js/20.snapshots.js"></script>
+    <script src="./js-refactor/21.sceneVersions.refactor.js"></script>
+    <script src="./js/22.diff.js"></script>
+    <script src="./js/23.stats.js"></script>
+    
+    <!-- Codex Module -->
+    <script src="./js-refactor/codex/codex.model.js"></script>
+    <script src="./js-refactor/codex/codex.repository.js"></script>
+    <script src="./js-refactor/codex/codex.viewmodel.js"></script>
+    <script src="./js-refactor/codex/codex.view.js"></script>
+    
+    <!-- Search & Focus -->
+    <script src="./js/25.globalSearch.js"></script>
+    <script src="./js-refactor/26.focusMode.refactor.js"></script>
+    <script src="./js/27.keyboardShortcuts.js"></script>
+    
+    <!-- Revision & Todos -->
+    <script src="./js-refactor/28.revision.refactor.js"></script>
+    <script src="./js-refactor/29.todos.refactor.js"></script>
+    
+    <!-- Corkboard Module -->
+    <script src="./js-refactor/corkboard/corkboard.model.js"></script>
+    <script src="./js-refactor/corkboard/corkboard.repository.js"></script>
+    <script src="./js-refactor/corkboard/corkboard.viewmodel.js"></script>
+    <script src="./js-refactor/corkboard/corkboard.view.js"></script>
+    <script src="./js-refactor/corkboard/corkboard.handlers.js"></script>
+    <script src="./js-refactor/corkboard/corkboard.main.js"></script>
+    
+    <!-- Mindmap & Touch -->
+    <script src="./js/31.mindmap.js"></script>
+    <script src="./js/32.touch-events.js"></script>
+    
+    <!-- Plot Mod./ule -->
+    <script src="./js-refactor/plot/plot.model.js"></script>
+    <script src="./js-refactor/plot/plot.repository.js"></script>
+    <script src="./js-refactor/plot/plot.viewmodel.js"></script>
+    <script src="./js-refactor/plot/plot.view.js"></script>
+    <script src="./js-refactor/plot/plot.init.js"></script>
+    
+    <!-- Relations & Timeline -->
+    <script src="./js/34.relations-graph.js"></script>
+    <script src="./js/35.renderMap.js"></script>
+    <script src="./js/36.timeline-metro.js"></script>
+    
+    <!-- Theme & Export -->
+    <script src="./js/37.theme-manager.js"></script>
+    <script src="./js/39.export.js"></script>
+    <script src="./js/40.sidebar-views.js"></script>
+    <script src="./js/41.storageMonitoring.js"></script>
+    <script src="./js/42.mobile-swipe.js"></script>
+    
+    <!-- Arcs Module -->
+    <script src="js-refactor/43.arcs.refactor.js"></script>
+    
+    <!-- Arc Board Module -->
+    <script src="./js-refactor/arc-board/arc-board.config.js"></script>
+    <script src="./js-refactor/arc-board/arc-board.models.js"></script>
+    <script src="./js-refactor/arc-board/arc-board.repository.js"></script>
+    <script src="./js-refactor/arc-board/arc-board.viewmodel.js"></script>
+    <script src="./js-refactor/arc-board/arc-board.services.js"></script>
+    <script src="./js-refactor/arc-board/arc-board.views.js"></script>
+    <script src="./js-refactor/arc-board/arc-board.handlers.js"></script>
+    <script src="./js-refactor/arc-board/arc-board.main.js"></script>
+    
+    <!-- Plot Grid Module -->
+    <script src="./js-refactor/plotgrid/plot-grid.model.js"></script>
+    <script src="./js-refactor/plotgrid/plot-grid.repository.js"></script>
+    <script src="./js-refactor/plotgrid/plot-grid.viewmodel.js"></script>
+    <script src="./js-refactor/plotgrid/plot-grid.import-export.js"></script>
+    <script src="./js-refactor/plotgrid/plot-grid.view.js"></script>
+    
+    <!-- Scene Navigation -->
+    <script src="./js-refactor/28.sceneNavigation.js"></script>
+    
+    <!-- Synonyms Module -->
+    <script src="./js-refactor/synonyms/synonyms.config.js"></script>
+    <script src="./js-refactor/synonyms/synonyms.model.js"></script>
+    <script src="./js-refactor/synonyms/synonyms.dictionary.js"></script>
+    <script src="./js-refactor/synonyms/synonyms.service.js"></script>
+    <script src="./js-refactor/synonyms/synonyms.repository.js"></script>
+    <script src="./js-refactor/synonyms/synonyms.viewmodel.js"></script>
+    <script src="./js-refactor/synonyms/synonyms.view.js"></script>
+    
+    <!-- Import Chapter Module -->
+    <script src="./js-refactor/import-chapter/import-chapter.model.js"></script>
+    <script src="./js-refactor/import-chapter/import-chapter.viewmodel.js"></script>
+    <script src="./js-refactor/import-chapter/import-chapter.view.js"></script>
+    
+    <!-- Word Repetition Module -->
+    <script src="./js-refactor/word-repetition/word-repetition.model.js"></script>
+    <script src="./js-refactor/word-repetition/word-repetition.repository.js"></script>
+    <script src="./js-refactor/word-repetition/word-repetition.viewmodel.js"></script>
+    <script src="./js-refactor/word-repetition/word-repetition.view.js"></script>
+    <script src="./js-refactor/word-repetition/word-repetition.handlers.js"></script>
+    <script src="./js-refactor/word-repetition/word-repetition.main.js"></script>
+    
+    <!-- Product Tour Module -->
+    <script src="./js-refactor/48.product-tour.model.js"></script>
+    <script src="./js-refactor/48.product-tour.repository.js"></script>
+    <script src="./js-refactor/48.product-tour.viewmodel.js"></script>
+    <script src="./js-refactor/48.product-tour.view.js"></script>
+</body>
+</html>
