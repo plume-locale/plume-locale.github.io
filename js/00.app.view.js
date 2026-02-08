@@ -1928,8 +1928,8 @@ function renderWelcomeEditor() {
     container.innerHTML = `
         <div class="empty-state">
             <div class="empty-state-icon"><i data-lucide="pencil-line" style="width:48px;height:48px;stroke-width:1.5;"></i></div>
-            <div class="empty-state-title">Sélectionnez une scène</div>
-            <div class="empty-state-text">Choisissez une scène dans la barre latérale pour commencer à écrire.</div>
+            <div class="empty-state-title">${Localization.t('split.empty_state_select_scene')}</div>
+            <div class="empty-state-text">${Localization.t('split.empty_state_select_sidebar')}</div>
         </div>`;
 }
 
@@ -1939,8 +1939,8 @@ function renderCharacterWelcome() {
     container.innerHTML = `
         <div class="empty-state">
             <div class="empty-state-icon"><i data-lucide="users" style="width:48px;height:48px;stroke-width:1.5;"></i></div>
-            <div class="empty-state-title">Personnages</div>
-            <div class="empty-state-text">Sélectionnez un personnage pour voir sa fiche, ou créez-en un nouveau.</div>
+            <div class="empty-state-title">${Localization.t('split.empty_state_characters')}</div>
+            <div class="empty-state-text">${Localization.t('split.empty_state_select_character')}</div>
         </div>`;
     if (typeof lucide !== 'undefined') lucide.createIcons();
 }
@@ -1951,8 +1951,8 @@ function renderWorldWelcome() {
     container.innerHTML = `
         <div class="empty-state">
             <div class="empty-state-icon"><i data-lucide="globe" style="width:48px;height:48px;stroke-width:1.5;"></i></div>
-            <div class="empty-state-title">Univers</div>
-            <div class="empty-state-text">Sélectionnez un lieu ou un élément dans la liste pour voir ses détails.</div>
+            <div class="empty-state-title">${Localization.t('split.empty_state_world')}</div>
+            <div class="empty-state-text">${Localization.t('split.empty_state_select_element')}</div>
         </div>`;
     if (typeof lucide !== 'undefined') lucide.createIcons();
 }
@@ -1963,8 +1963,8 @@ function renderNotesWelcome() {
     container.innerHTML = `
         <div class="empty-state">
             <div class="empty-state-icon"><i data-lucide="sticky-note" style="width:48px;height:48px;stroke-width:1.5;"></i></div>
-            <div class="empty-state-title">Notes</div>
-            <div class="empty-state-text">Sélectionnez une note dans la liste pour la consulter.</div>
+            <div class="empty-state-title">${Localization.t('split.empty_state_notes')}</div>
+            <div class="empty-state-text">${Localization.t('split.empty_state_select_note')}</div>
         </div>`;
     if (typeof lucide !== 'undefined') lucide.createIcons();
 }
@@ -1975,8 +1975,8 @@ function renderCodexWelcome() {
     container.innerHTML = `
         <div class="empty-state">
             <div class="empty-state-icon"><i data-lucide="book-open" style="width:48px;height:48px;stroke-width:1.5;"></i></div>
-            <div class="empty-state-title">Codex</div>
-            <div class="empty-state-text">Sélectionnez une entrée dans la liste pour la consulter.</div>
+            <div class="empty-state-title">${Localization.t('split.empty_state_codex')}</div>
+            <div class="empty-state-text">${Localization.t('split.empty_state_select_codex')}</div>
         </div>`;
     if (typeof lucide !== 'undefined') lucide.createIcons();
 }
