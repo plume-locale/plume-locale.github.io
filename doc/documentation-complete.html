@@ -1,0 +1,2555 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentation - Plume Locale</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #667eea;
+            --primary-dark: #5568d3;
+            --text-color: #2c3e50;
+            --text-light: #6c757d;
+            --bg-light: #f8f9fa;
+            --border-color: #e0e0e0;
+            --sidebar-bg: #f5f5f5;
+            --hover-bg: #e8eaf6;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.7;
+            color: var(--text-color);
+            background-color: #ffffff;
+        }
+
+        /* Layout */
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 280px;
+            background-color: var(--sidebar-bg);
+            border-right: 1px solid var(--border-color);
+            overflow-y: auto;
+            position: fixed;
+            height: 100vh;
+            left: 0;
+            top: 0;
+        }
+
+        .sidebar-header {
+            padding: 25px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .sidebar-header h1 {
+            font-size: 1.5em;
+            margin-bottom: 5px;
+        }
+
+        .sidebar-header p {
+            font-size: 0.85em;
+            opacity: 0.9;
+        }
+
+        .nav-section {
+            padding: 15px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .nav-section-title {
+            padding: 8px 20px;
+            font-size: 0.75em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-light);
+            font-weight: 600;
+        }
+
+        .nav-item {
+            display: block;
+            padding: 10px 20px;
+            color: var(--text-color);
+            text-decoration: none;
+            transition: all 0.2s;
+            font-size: 0.95em;
+            cursor: pointer;
+        }
+
+        .nav-item:hover {
+            background-color: var(--hover-bg);
+            color: var(--primary-color);
+        }
+
+        .nav-item.active {
+            background-color: var(--hover-bg);
+            color: var(--primary-color);
+            font-weight: 600;
+            border-left: 3px solid var(--primary-color);
+        }
+
+        .nav-item.sub-item {
+            padding-left: 40px;
+            font-size: 0.9em;
+        }
+
+        .nav-item .icon {
+            margin-right: 10px;
+            opacity: 0.7;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 40px 60px;
+            max-width: 1200px;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 30px;
+            font-size: 0.9em;
+            color: var(--text-light);
+        }
+
+        .breadcrumb a {
+            color: var(--text-light);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            color: var(--primary-color);
+        }
+
+        .breadcrumb .separator {
+            color: var(--border-color);
+        }
+
+        /* Article Header */
+        .article-header {
+            margin-bottom: 40px;
+        }
+
+        .article-header h1 {
+            font-size: 3em;
+            color: var(--text-color);
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .article-header .subtitle {
+            font-size: 1.25em;
+            color: var(--text-light);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .article-meta {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            padding: 15px 0;
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.9em;
+            color: var(--text-light);
+        }
+
+        .article-meta .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Content Sections */
+        .content-section {
+            margin-bottom: 50px;
+        }
+
+        .content-section h2 {
+            font-size: 2em;
+            color: var(--text-color);
+            margin-bottom: 20px;
+            margin-top: 40px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        .content-section h3 {
+            font-size: 1.5em;
+            color: var(--text-color);
+            margin-bottom: 15px;
+            margin-top: 30px;
+        }
+
+        .content-section h4 {
+            font-size: 1.2em;
+            color: var(--text-color);
+            margin-bottom: 12px;
+            margin-top: 25px;
+        }
+
+        .content-section p {
+            margin-bottom: 18px;
+            font-size: 1.05em;
+            line-height: 1.8;
+        }
+
+        .content-section ul,
+        .content-section ol {
+            margin-bottom: 20px;
+            padding-left: 30px;
+        }
+
+        .content-section li {
+            margin-bottom: 10px;
+            line-height: 1.7;
+        }
+
+        .content-section strong {
+            color: var(--text-color);
+            font-weight: 600;
+        }
+
+        /* Info Boxes */
+        .info-box {
+            background-color: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 4px;
+        }
+
+        .info-box.tip {
+            background-color: #f0f4ff;
+            border-left-color: var(--primary-color);
+        }
+
+        .info-box.warning {
+            background-color: #fff3e0;
+            border-left-color: #ff9800;
+        }
+
+        .info-box.important {
+            background-color: #ffebee;
+            border-left-color: #f44336;
+        }
+
+        .info-box h4 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            color: var(--text-color);
+        }
+
+        .info-box p {
+            margin-bottom: 0;
+        }
+
+        /* Screenshot */
+        .screenshot {
+            margin: 30px 0;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .screenshot img {
+            width: 100%;
+            display: block;
+        }
+
+        .screenshot-caption {
+            text-align: center;
+            font-size: 0.9em;
+            color: var(--text-light);
+            margin-top: 10px;
+            font-style: italic;
+        }
+
+        /* Feature Grid */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .feature-card {
+            background: var(--bg-light);
+            padding: 25px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+            border-color: var(--primary-color);
+        }
+
+        .feature-card h4 {
+            margin-top: 0;
+            color: var(--primary-color);
+            margin-bottom: 12px;
+        }
+
+        .feature-card p {
+            margin-bottom: 0;
+            font-size: 0.95em;
+        }
+
+        /* Navigation Buttons */
+        .page-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 2px solid var(--border-color);
+        }
+
+        .nav-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 20px;
+            background-color: var(--bg-light);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            text-decoration: none;
+            color: var(--text-color);
+            transition: all 0.2s;
+            font-size: 0.95em;
+        }
+
+        .nav-button:hover {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .nav-button.prev::before {
+            content: "←";
+        }
+
+        .nav-button.next::after {
+            content: "→";
+        }
+
+        /* Code Blocks */
+        code {
+            background-color: #f5f5f5;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 0.9em;
+            color: #c7254e;
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .sidebar {
+                transform: translateX(-280px);
+                transition: transform 0.3s;
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 30px 20px;
+            }
+
+            .article-header h1 {
+                font-size: 2.2em;
+            }
+        }
+
+        /* Table of Contents */
+        .toc {
+            background-color: var(--bg-light);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 25px;
+            margin: 30px 0;
+        }
+
+        .toc h3 {
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+
+        .toc ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .toc li {
+            margin-bottom: 8px;
+        }
+
+        .toc a {
+            color: var(--text-color);
+            text-decoration: none;
+            display: block;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .toc a:hover {
+            background-color: white;
+            color: var(--primary-color);
+        }
+
+        .toc ul ul {
+            padding-left: 20px;
+            margin-top: 5px;
+        }
+
+        .toc ul ul a {
+            font-size: 0.95em;
+        }
+    </style>
+</head>
+<body>
+    <div class="layout">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h1>📝 Plume Locale</h1>
+                <p>Documentation complète</p>
+            </div>
+
+            <nav>
+                <div class="nav-section">
+                    <div class="nav-section-title">GÉNÉRAL</div>
+                    <a href="#accueil" class="nav-item active">
+                        <span class="icon">🏠</span> Accueil
+                    </a>
+                    <a href="#introduction" class="nav-item">
+                        <span class="icon">📖</span> Introduction
+                    </a>
+                    <a href="#demarrage" class="nav-item">
+                        <span class="icon">🚀</span> Guide de démarrage
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">ÉCRITURE</div>
+                    <a href="#structure" class="nav-item">
+                        <span class="icon">📚</span> Structure du récit
+                    </a>
+                    <a href="#editeur" class="nav-item sub-item">Éditeur de texte</a>
+                    <a href="#versions" class="nav-item sub-item">Gestion des versions</a>
+                    <a href="#mode-focus" class="nav-item sub-item">Mode Focus</a>
+                    <a href="#annotations" class="nav-item">
+                        <span class="icon">💬</span> Annotations
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">PLANIFICATION</div>
+                    <a href="#tableau-bord" class="nav-item">
+                        <span class="icon">📊</span> Tableau de bord
+                    </a>
+                    <a href="#arcs-narratifs" class="nav-item">
+                        <span class="icon">🎬</span> Arcs narratifs
+                    </a>
+                    <a href="#plot-grid" class="nav-item">
+                        <span class="icon">📋</span> Grille d'intrigue
+                    </a>
+                    <a href="#enquete" class="nav-item">
+                        <span class="icon">🔍</span> Mode Enquête
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">BASE DE DONNÉES</div>
+                    <a href="#personnages" class="nav-item">
+                        <span class="icon">👥</span> Personnages
+                    </a>
+                    <a href="#univers" class="nav-item">
+                        <span class="icon">🌍</span> Univers
+                    </a>
+                    <a href="#codex" class="nav-item">
+                        <span class="icon">📖</span> Codex
+                    </a>
+                    <a href="#notes" class="nav-item">
+                        <span class="icon">📝</span> Notes
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">VISUALISATION</div>
+                    <a href="#mindmap" class="nav-item">
+                        <span class="icon">🧠</span> Carte mentale
+                    </a>
+                    <a href="#relations" class="nav-item">
+                        <span class="icon">🕸️</span> Relations
+                    </a>
+                    <a href="#carte" class="nav-item">
+                        <span class="icon">🗺️</span> Carte géographique
+                    </a>
+                    <a href="#timeline" class="nav-item">
+                        <span class="icon">⏱️</span> Timeline
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">OUTILS</div>
+                    <a href="#statistiques" class="nav-item">
+                        <span class="icon">📈</span> Statistiques
+                    </a>
+                    <a href="#analyse" class="nav-item">
+                        <span class="icon">🔍</span> Analyse
+                    </a>
+                    <a href="#sauvegarde" class="nav-item">
+                        <span class="icon">💾</span> Sauvegarde
+                    </a>
+                    <a href="#import-export" class="nav-item">
+                        <span class="icon">📤</span> Import/Export
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">CONFIGURATION</div>
+                    <a href="#projets" class="nav-item">
+                        <span class="icon">📁</span> Gestion de projets
+                    </a>
+                    <a href="#interface" class="nav-item">
+                        <span class="icon">⚙️</span> Interface
+                    </a>
+                    <a href="#raccourcis" class="nav-item">
+                        <span class="icon">⌨️</span> Raccourcis clavier
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="breadcrumb">
+                <a href="#accueil">Accueil</a>
+                <span class="separator">/</span>
+                <span>Documentation</span>
+            </div>
+
+            <article>
+                <div class="article-header">
+                    <h1>Documentation Plume Locale</h1>
+                    <p class="subtitle">Guide complet pour maîtriser votre outil d'écriture créative et organiser vos projets littéraires de A à Z.</p>
+                    <div class="article-meta">
+                        <div class="meta-item">
+                            <span>📖</span>
+                            <span>15 min de lecture</span>
+                        </div>
+                        <div class="meta-item">
+                            <span>🕒</span>
+                            <span>Dernière mise à jour : Février 2026</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Table of Contents -->
+                <div class="toc">
+                    <h3>📑 Table des matières</h3>
+                    <ul>
+                        <li><a href="#introduction">Introduction à Plume Locale</a></li>
+                        <li><a href="#demarrage">Guide de démarrage rapide</a></li>
+                        <li><a href="#structure">Structure et organisation du récit</a>
+                            <ul>
+                                <li><a href="#editeur">L'éditeur de texte</a></li>
+                                <li><a href="#versions">Gestion des versions</a></li>
+                                <li><a href="#mode-focus">Mode Focus et Pomodoro</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#planification">Outils de planification</a></li>
+                        <li><a href="#base-donnees">Base de données narrative</a></li>
+                        <li><a href="#visualisation">Outils de visualisation</a></li>
+                        <li><a href="#sauvegarde">Sauvegarde et sécurité</a></li>
+                    </ul>
+                </div>
+
+                <!-- Introduction -->
+                <section class="content-section" id="introduction">
+                    <h2>Introduction à Plume Locale</h2>
+                    
+                    <p>Bienvenue dans <strong>Plume Locale</strong>, votre compagnon d'écriture créative entièrement gratuit et sans publicité. Conçu spécifiquement pour les écrivains de romans, nouvelles, scénarios et toute forme de récit narratif, Plume Locale vous offre un environnement complet pour planifier, écrire, organiser et analyser vos projets littéraires.</p>
+
+                    <h3>Qu'est-ce que Plume Locale ?</h3>
+                    
+                    <p>Plume Locale est une application web progressive (PWA) qui fonctionne directement dans votre navigateur, sans nécessiter d'installation. Elle combine les fonctionnalités d'un traitement de texte moderne avec des outils de planification narrative avancés, le tout dans une interface intuitive et performante.</p>
+
+                    <div class="info-box tip">
+                        <h4>💡 Philosophie de Plume Locale</h4>
+                        <p>Plume Locale repose sur trois piliers fondamentaux : <strong>gratuité totale</strong> (aucun coût, aucune publicité), <strong>respect de la vie privée</strong> (vos données restent sur votre appareil), et <strong>fonctionnement hors ligne</strong> (écrivez n'importe où, même sans connexion internet).</p>
+                    </div>
+
+                    <h3>Principales caractéristiques</h3>
+
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <h4>✍️ Écriture et structure</h4>
+                            <p>Organisez votre récit en actes, chapitres et scènes. Éditeur riche avec formatage, versions multiples et mode focus sans distraction.</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>📊 Planification narrative</h4>
+                            <p>Tableau de bord, arcs narratifs, grille d'intrigue et mode enquête pour construire des histoires solides et cohérentes.</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>📚 Base de données</h4>
+                            <p>Gérez vos personnages, univers, codex et notes dans une base organisée avec liens croisés et recherche avancée.</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>🎨 Visualisation</h4>
+                            <p>Carte mentale, graphe de relations, carte géographique et timeline pour voir votre histoire sous tous les angles.</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>📈 Analyse et stats</h4>
+                            <p>Statistiques d'écriture, détection de répétitions et analyse de tension narrative pour améliorer votre texte.</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>💾 Sauvegarde sécurisée</h4>
+                            <p>Sauvegarde automatique locale, synchronisation Google Drive et exports multiformats (DOCX, EPUB, MD, HTML).</p>
+                        </div>
+                    </div>
+
+                    <h3>Pour qui est fait Plume Locale ?</h3>
+
+                    <p>Plume Locale s'adresse à tous les écrivains, quel que soit leur niveau :</p>
+
+                    <ul>
+                        <li><strong>Auteurs débutants</strong> : Interface intuitive avec guides et tooltips pour démarrer facilement</li>
+                        <li><strong>Auteurs confirmés</strong> : Outils avancés de planification et d'analyse pour gérer des projets complexes</li>
+                        <li><strong>Écrivains de fantasy/SF</strong> : Outils de worldbuilding robustes (carte, codex, univers)</li>
+                        <li><strong>Auteurs de polars/thrillers</strong> : Mode enquête dédié pour gérer indices et suspects</li>
+                        <li><strong>Scénaristes</strong> : Gestion d'arcs narratifs et timeline pour structurer vos intrigues</li>
+                    </ul>
+
+                    <div class="info-box warning">
+                        <h4>⚠️ Note importante sur la compatibilité</h4>
+                        <p>Plume Locale fonctionne sur tous les navigateurs modernes (Chrome, Firefox, Edge, Safari). Pour une expérience optimale, nous recommandons d'utiliser Chrome ou Edge sur ordinateur. L'application fonctionne également sur tablettes, bien que certaines fonctionnalités visuelles soient optimisées pour les grands écrans.</p>
+                    </div>
+                </section>
+
+                <!-- Guide de démarrage -->
+                <section class="content-section" id="demarrage">
+                    <h2>Guide de démarrage rapide</h2>
+
+                    <p>Ce guide vous accompagne dans vos premiers pas avec Plume Locale, de la création de votre premier projet jusqu'à votre première session d'écriture.</p>
+
+                    <h3>Étape 1 : Accéder à Plume Locale</h3>
+
+                    <p>Rendez-vous sur <code>https://plume-locale.github.io/</code> dans votre navigateur. L'application se charge automatiquement et est prête à l'emploi. Aucune inscription n'est requise.</p>
+
+                    <div class="info-box tip">
+                        <h4>💡 Astuce : Ajouter à l'écran d'accueil</h4>
+                        <p>Sur Chrome/Edge, vous pouvez installer Plume Locale comme application en cliquant sur l'icône d'installation dans la barre d'adresse. Sur mobile, utilisez "Ajouter à l'écran d'accueil" pour un accès rapide.</p>
+                    </div>
+
+                    <h3>Étape 2 : Créer votre premier projet</h3>
+
+                    <p>Lors de votre première visite, vous arrivez sur l'écran d'accueil. Cliquez sur le bouton <strong>"+ Nouveau Projet"</strong> pour commencer.</p>
+
+                    <p>La fenêtre de création de projet s'ouvre avec plusieurs champs :</p>
+
+                    <ul>
+                        <li><strong>Titre du projet</strong> : Le nom de votre roman, nouvelle ou scénario (exemple : "Les Chroniques de l'Ombre")</li>
+                        <li><strong>Description (optionnel)</strong> : Un bref résumé ou pitch de votre histoire</li>
+                        <li><strong>Genre</strong> : Choisissez parmi Fantasy, Science-Fiction, Thriller, Romance, Policier, Horreur, Historique, Aventure, Drame, ou Autre</li>
+                        <li><strong>Template</strong> : Sélectionnez un modèle de départ
+                            <ul>
+                                <li><em>Projet vide</em> : Commencez avec une page blanche, pour une liberté totale</li>
+                                <li><em>Fantasy (3 actes + personnages types)</em> : Structure prédéfinie avec 3 actes et fiches personnages pour héros, mentor, antagoniste</li>
+                                <li><em>Science-Fiction (Worldbuilding avancé)</em> : Projet avec sections dédiées au worldbuilding technologique et sociétal</li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <p>Cliquez sur <strong>"Créer"</strong> pour générer votre projet. Vous êtes maintenant dans votre espace de travail principal.</p>
+
+                    <h3>Étape 3 : Découvrir l'interface</h3>
+
+                    <p>L'interface de Plume Locale est organisée en plusieurs zones :</p>
+
+                    <h4>Barre de navigation principale (en haut)</h4>
+
+                    <p>Elle contient les onglets principaux qui vous permettent de naviguer entre les différents espaces de travail :</p>
+
+                    <ul>
+                        <li><strong>Écriture</strong> : Votre espace principal avec l'éditeur de texte</li>
+                        <li><strong>Structure</strong> : Vue d'ensemble de vos actes, chapitres et scènes</li>
+                        <li><strong>Tableau</strong> : Dashboard avec statistiques et métriques</li>
+                        <li><strong>Intrigue</strong> : Grille d'intrigue pour planifier scène par scène</li>
+                        <li><strong>Arcs Narratifs</strong> : Gestion de vos fils narratifs multiples</li>
+                        <li><strong>Base de données</strong> : Accès à Personnages, Univers, Codex, Notes</li>
+                        <li><strong>Visualisation</strong> : Mindmap, Relations, Carte, Timeline</li>
+                        <li><strong>Outils</strong> : Statistiques et Analyse de texte</li>
+                        <li><strong>Historique</strong> : Gestion des snapshots et versions</li>
+                    </ul>
+
+                    <h4>Panneau latéral gauche (Structure)</h4>
+
+                    <p>Ce panneau affiche l'arborescence de votre récit et permet de créer, organiser et naviguer entre vos actes, chapitres et scènes.</p>
+
+                    <h4>Zone centrale (Éditeur)</h4>
+
+                    <p>C'est votre espace d'écriture principal où apparaît le texte de la scène sélectionnée.</p>
+
+                    <h4>Panneau latéral droit (Contexte)</h4>
+
+                    <p>Ce panneau contextuel affiche des informations relatives à la scène en cours : versions, liens, annotations, arcs narratifs, etc.</p>
+
+                    <h3>Étape 4 : Créer votre structure</h3>
+
+                    <p>Avant d'écrire, il est utile de créer une structure de base pour votre récit. Voici comment procéder :</p>
+
+                    <h4>Créer un acte</h4>
+
+                    <p>Dans le panneau de structure à gauche, cliquez sur le bouton <strong>"+ Acte"</strong>. Une fenêtre s'ouvre pour nommer votre acte (exemple : "Acte 1 - Le monde ordinaire", "Partie I - L'appel", etc.). Cliquez sur <strong>"Créer"</strong>.</p>
+
+                    <div class="info-box">
+                        <h4>📚 Qu'est-ce qu'un acte ?</h4>
+                        <p>Un acte est une division narrative majeure de votre histoire. La structure classique en 3 actes correspond à : Acte 1 (mise en place), Acte 2 (confrontation), Acte 3 (résolution). Vous pouvez créer autant d'actes que nécessaire selon votre structure narrative.</p>
+                    </div>
+
+                    <h4>Créer un chapitre</h4>
+
+                    <p>Sélectionnez un acte, puis cliquez sur <strong>"+ Chapitre"</strong>. Donnez un titre à votre chapitre (exemple : "Chapitre 1 - La découverte", "Ch. 3 - Retour au village", etc.).</p>
+
+                    <h4>Créer une scène</h4>
+
+                    <p>Sélectionnez un chapitre, puis cliquez sur <strong>"+ Scène"</strong>. Nommez votre scène (exemple : "Réveil d'Alicia", "Combat dans la forêt", "Dialogue avec le mentor"). C'est au niveau de la scène que vous écrivez votre texte.</p>
+
+                    <div class="info-box tip">
+                        <h4>💡 Conseil d'organisation</h4>
+                        <p>Ne vous souciez pas de créer toute la structure d'un coup. Commencez avec quelques scènes et complétez au fur et à mesure. Plume Locale vous permet de réorganiser facilement par glisser-déposer plus tard.</p>
+                    </div>
+
+                    <h3>Étape 5 : Écrire votre première scène</h3>
+
+                    <p>Sélectionnez une scène dans le panneau de structure. L'éditeur de texte apparaît dans la zone centrale. Vous pouvez maintenant commencer à écrire !</p>
+
+                    <p>L'éditeur offre les fonctionnalités suivantes :</p>
+
+                    <ul>
+                        <li><strong>Formatage de texte</strong> : Utilisez les boutons de la barre d'outils ou les raccourcis clavier pour mettre en gras (<code>Ctrl+B</code>), italique (<code>Ctrl+I</code>), souligner (<code>Ctrl+U</code>)</li>
+                        <li><strong>Titres</strong> : Créez des titres de différents niveaux (H1, H2, H3) pour structurer votre texte</li>
+                        <li><strong>Citations</strong> : Formatez des passages en citation</li>
+                        <li><strong>Sauvegarde automatique</strong> : Votre texte est sauvegardé automatiquement à chaque modification</li>
+                    </ul>
+
+                    <div class="info-box tip">
+                        <h4>✏️ Astuces d'écriture</h4>
+                        <ul>
+                            <li>Utilisez <code>Alt+Z</code> pour insérer un guillemet français ouvrant (« ) et <code>Alt+X</code> pour le fermant ( »)</li>
+                            <li>Utilisez <code>Ctrl+Maj+Espace</code> pour insérer une espace insécable (avant :, !, ?, ;)</li>
+                            <li>Utilisez <code>Ctrl+Maj+-</code> pour un tiret cadratin (—) dans les dialogues</li>
+                        </ul>
+                    </div>
+
+                    <h3>Étape 6 : Ajouter vos personnages et lieux</h3>
+
+                    <p>Pendant ou après l'écriture, enrichissez votre projet avec vos personnages et éléments d'univers :</p>
+
+                    <ol>
+                        <li>Cliquez sur l'onglet <strong>"Base de données"</strong> dans la barre de navigation</li>
+                        <li>Sélectionnez <strong>"Personnages"</strong></li>
+                        <li>Cliquez sur <strong>"+ Nouveau Personnage"</strong></li>
+                        <li>Remplissez les champs : Nom, Rôle (Protagoniste, Antagoniste, Secondaire, etc.), Description</li>
+                        <li>Répétez pour vos autres personnages</li>
+                    </ol>
+
+                    <p>Procédez de même pour les éléments d'univers (lieux, objets, organisations, etc.) dans l'onglet <strong>"Univers"</strong>.</p>
+
+                    <h3>Étape 7 : Sauvegarder votre travail</h3>
+
+                    <p>Bien que Plume Locale sauvegarde automatiquement dans votre navigateur, il est crucial de créer des sauvegardes externes :</p>
+
+                    <h4>Option 1 : Google Drive (recommandé)</h4>
+
+                    <p>Cliquez sur <strong>"Sauvegarde/Export"</strong> dans la barre d'outils, puis sur <strong>"Se connecter à Google Drive"</strong>. Une fois connecté, vos projets seront synchronisés automatiquement.</p>
+
+                    <h4>Option 2 : Export manuel JSON</h4>
+
+                    <p>Cliquez sur <strong>"Sauvegarde/Export"</strong> puis <strong>"Télécharger en JSON"</strong>. Ce fichier contient l'intégralité de votre projet et peut être réimporté à tout moment.</p>
+
+                    <div class="info-box important">
+                        <h4>⚠️ Important : Sauvegardez régulièrement</h4>
+                        <p>Le stockage local du navigateur (IndexedDB) peut être effacé si vous nettoyez les données de navigation ou en cas de problème technique. Utilisez impérativement Google Drive ou faites des exports JSON réguliers (idéalement après chaque session d'écriture).</p>
+                    </div>
+                </section>
+
+                <!-- Structure et écriture -->
+                <section class="content-section" id="structure">
+                    <h2>Structure et organisation du récit</h2>
+
+                    <p>La structure est le squelette de votre histoire. Plume Locale vous offre une organisation hiérarchique en trois niveaux : <strong>Actes</strong>, <strong>Chapitres</strong> et <strong>Scènes</strong>.</p>
+
+                    <h3 id="editeur">L'éditeur de texte</h3>
+
+                    <p>L'éditeur de Plume Locale est conçu pour offrir un équilibre parfait entre richesse fonctionnelle et simplicité d'utilisation. Il combine les avantages d'un traitement de texte moderne avec la fluidité nécessaire à l'écriture créative.</p>
+
+                    <h4>Fonctionnalités de formatage</h4>
+
+                    <p>L'éditeur supporte les fonctionnalités de formatage essentielles :</p>
+
+                    <ul>
+                        <li><strong>Mise en forme de caractères</strong> : 
+                            <ul>
+                                <li>Gras (<code>Ctrl+B</code>) pour emphaser</li>
+                                <li>Italique (<code>Ctrl+I</code>) pour les pensées, mots étrangers, titres d'œuvres</li>
+                                <li>Souligné (<code>Ctrl+U</code>) pour mettre en évidence</li>
+                            </ul>
+                        </li>
+                        <li><strong>Titres et structure</strong> :
+                            <ul>
+                                <li>H1 : Titre principal (utilisé pour les titres de parties)</li>
+                                <li>H2 : Sous-titre majeur</li>
+                                <li>H3 : Sous-titre mineur</li>
+                            </ul>
+                        </li>
+                        <li><strong>Éléments spéciaux</strong> :
+                            <ul>
+                                <li>Citations : Pour les lettres, extraits de journaux, épigraphes</li>
+                                <li>Lignes de séparation : Pour marquer des changements de temps ou de point de vue</li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <h4>Typographie française avancée</h4>
+
+                    <p>Plume Locale intègre des outils spécifiques pour la typographie française correcte :</p>
+
+                    <ul>
+                        <li><strong>Guillemets français</strong> : Utilisez <code>Alt+Z</code> pour « et <code>Alt+X</code> pour » au lieu des guillemets droits ""</li>
+                        <li><strong>Espace insécable</strong> : <code>Ctrl+Maj+Espace</code> avant les signes de ponctuation double (:;!?)</li>
+                        <li><strong>Tiret cadratin</strong> : <code>Ctrl+Maj+-</code> pour créer le tiret long (—) utilisé dans les dialogues français</li>
+                    </ul>
+
+                    <div class="info-box">
+                        <h4>📖 Exemple de dialogue correctement formaté</h4>
+                        <p>— Bonjour, répondit-elle avec un sourire énigmatique.<br>
+                        — Vous êtes en retard !<br>
+                        — Je sais… j'en suis désolée.</p>
+                    </div>
+
+                    <h4>Raccourcis clavier essentiels</h4>
+
+                    <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+                        <thead style="background-color: var(--bg-light);">
+                            <tr>
+                                <th style="padding: 12px; text-align: left; border: 1px solid var(--border-color);">Action</th>
+                                <th style="padding: 12px; text-align: left; border: 1px solid var(--border-color);">Raccourci</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="padding: 10px; border: 1px solid var(--border-color);">Sauvegarder</td>
+                                <td style="padding: 10px; border: 1px solid var(--border-color);"><code>Ctrl+S</code></td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 10px; border: 1px solid var(--border-color);">Annuler</td>
+                                <td style="padding: 10px; border: 1px solid var(--border-color);"><code>Ctrl+Z</code></td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 10px; border: 1px solid var(--border-color);">Rétablir</td>
+                                <td style="padding: 10px; border: 1px solid var(--border-color);"><code>Ctrl+Y</code></td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 10px; border: 1px solid var(--border-color);">Rechercher</td>
+                                <td style="padding: 10px; border: 1px solid var(--border-color);"><code>Ctrl+F</code></td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 10px; border: 1px solid var(--border-color);">Mode Focus</td>
+                                <td style="padding: 10px; border: 1px solid var(--border-color);"><code>F11</code></td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 10px; border: 1px solid var(--border-color);">Mode Révision</td>
+                                <td style="padding: 10px; border: 1px solid var(--border-color);"><code>Ctrl+R</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3 id="versions">Gestion des versions</h3>
+
+                    <p>Le système de versions de Plume Locale vous permet de conserver plusieurs brouillons d'une même scène et de les comparer. C'est particulièrement utile pour :</p>
+
+                    <ul>
+                        <li>Tester différentes approches d'une même scène</li>
+                        <li>Conserver des passages que vous avez coupés mais pourriez réutiliser</li>
+                        <li>Revenir à une version antérieure si vous n'êtes pas satisfait de vos modifications</li>
+                        <li>Comparer deux versions pour voir ce qui a changé</li>
+                    </ul>
+
+                    <h4>Créer une nouvelle version</h4>
+
+                    <p>Dans le panneau latéral droit, section <strong>"Versions"</strong>, cliquez sur <strong>"+ Nouvelle version"</strong>. Le contenu actuel de votre scène est automatiquement sauvegardé comme nouvelle version avec un timestamp.</p>
+
+                    <h4>Comparer deux versions</h4>
+
+                    <p>Cliquez sur <strong>"Comparer"</strong> dans le panneau des versions. Une interface de comparaison s'ouvre :</p>
+
+                    <ul>
+                        <li>Sélectionnez deux versions à comparer dans les listes déroulantes</li>
+                        <li>Choisissez le mode d'affichage :
+                            <ul>
+                                <li><strong>Unifié</strong> : Une seule colonne avec les ajouts en vert (+) et suppressions en rouge (-)</li>
+                                <li><strong>Côte à côte</strong> : Deux colonnes pour voir les versions en parallèle</li>
+                            </ul>
+                        </li>
+                        <li>Les statistiques vous indiquent le nombre de mots ajoutés et supprimés</li>
+                    </ul>
+
+                    <h4>Restaurer une version antérieure</h4>
+
+                    <p>Si vous souhaitez revenir à une version précédente, sélectionnez-la dans la liste et cliquez sur <strong>"Restaurer"</strong>. La version sélectionnée devient la version active de votre scène.</p>
+
+                    <div class="info-box warning">
+                        <h4>⚠️ Attention à la restauration</h4>
+                        <p>Restaurer une version antérieure ne supprime pas la version actuelle - elle est automatiquement sauvegardée avant la restauration. Vous pouvez donc revenir en arrière sans risque de perte.</p>
+                    </div>
+
+                    <h3 id="mode-focus">Mode Focus et Pomodoro</h3>
+
+                    <p>Le mode Focus est conçu pour éliminer toutes les distractions et vous permettre de vous concentrer uniquement sur votre écriture.</p>
+
+                    <h4>Activer le mode Focus</h4>
+
+                    <p>Appuyez sur <code>F11</code> ou cliquez sur l'icône de plein écran. L'interface passe en mode immersif :</p>
+
+                    <ul>
+                        <li>La barre de navigation disparaît</li>
+                        <li>Les panneaux latéraux sont masqués (mais accessibles au survol)</li>
+                        <li>L'éditeur occupe tout l'écran</li>
+                        <li>Seul votre texte et un compteur de mots minimal restent visibles</li>
+                    </ul>
+
+                    <h4>Timer Pomodoro intégré</h4>
+
+                    <p>La technique Pomodoro consiste à travailler par sessions de 25 minutes suivies de pauses de 5 minutes. C'est excellent pour maintenir la concentration et la productivité.</p>
+
+                    <p><strong>Utilisation du Pomodoro dans Plume Locale :</strong></p>
+
+                    <ol>
+                        <li>En mode Focus, un timer Pomodoro apparaît (25:00)</li>
+                        <li>Cliquez sur <strong>"Démarrer"</strong> pour lancer la session</li>
+                        <li>Écrivez pendant 25 minutes sans interruption</li>
+                        <li>Une notification vous alerte quand le temps est écoulé</li>
+                        <li>Le compteur affiche le nombre de Pomodoros complétés et de mots écrits pendant la session</li>
+                    </ol>
+
+                    <div class="info-box tip">
+                        <h4>💡 Maximiser votre productivité avec le Pomodoro</h4>
+                        <ul>
+                            <li>Fermez toutes les autres applications et notifications avant de commencer</li>
+                            <li>Fixez-vous un objectif simple pour chaque session (ex: "terminer le dialogue entre X et Y")</li>
+                            <li>Ne vous interrompez pas pendant les 25 minutes, même pour relire ou corriger</li>
+                            <li>Utilisez les pauses de 5 minutes pour vous étirer, boire de l'eau, regarder par la fenêtre</li>
+                            <li>Après 4 Pomodoros, prenez une pause plus longue (15-30 minutes)</li>
+                        </ul>
+                    </div>
+
+                    <h4>Paramètres du mode Focus</h4>
+
+                    <p>Vous pouvez personnaliser le mode Focus selon vos préférences :</p>
+
+                    <ul>
+                        <li><strong>Masquer la barre d'outils</strong> : Cache complètement les options de formatage</li>
+                        <li><strong>Masquer le panneau de liens</strong> : Supprime le panneau contextuel de droite</li>
+                        <li><strong>Timer Pomodoro</strong> : Active ou désactive le timer</li>
+                    </ul>
+                </section>
+
+                <!-- Annotations -->
+                <section class="content-section" id="annotations">
+                    <h2>Système d'annotations et révisions</h2>
+
+                    <p>Le système d'annotations de Plume Locale vous permet d'ajouter des commentaires, rappels et notes directement dans vos scènes, sans perturber le flux de votre texte.</p>
+
+                    <h3>Les 4 types d'annotations</h3>
+
+                    <p>Plume Locale propose quatre types d'annotations, chacun avec une fonction spécifique :</p>
+
+                    <h4>1. 💬 Commentaires</h4>
+                    <p>Utilisez les commentaires pour des <strong>impressions de lecture</strong>, des réactions à votre propre texte, ou du <strong>feedback général</strong> que vous voulez vous laisser.</p>
+                    
+                    <p><strong>Exemples d'utilisation :</strong></p>
+                    <ul>
+                        <li>"Cette scène manque d'émotion, penser à développer les sentiments du personnage"</li>
+                        <li>"Bon dialogue mais trop long, raccourcir"</li>
+                        <li>"J'aime bien cette métaphore, à conserver absolument"</li>
+                    </ul>
+
+                    <h4>2. ✅ TODOs</h4>
+                    <p>Les TODOs sont pour des <strong>tâches concrètes</strong> que vous devez accomplir : corrections, réécritures, ajouts spécifiques.</p>
+                    
+                    <p><strong>Exemples d'utilisation :</strong></p>
+                    <ul>
+                        <li>"Vérifier la cohérence des dates avec le chapitre précédent"</li>
+                        <li>"Ajouter une description physique de ce personnage"</li>
+                        <li>"Supprimer ce paragraphe répétitif"</li>
+                        <li>"Corriger la logique de cette action (impossible qu'il soit là à ce moment)"</li>
+                    </ul>
+
+                    <h4>3. 📝 Notes</h4>
+                    <p>Les notes sont pour des <strong>remarques créatives</strong>, des <strong>idées de développement</strong>, ou des <strong>rappels</strong> pour plus tard.</p>
+                    
+                    <p><strong>Exemples d'utilisation :</strong></p>
+                    <ul>
+                        <li>"Possible foreshadowing pour le chapitre 12 ?"</li>
+                        <li>"Ce personnage pourrait avoir un arc secondaire intéressant"</li>
+                        <li>"Idée : développer cette scène en flashback au chapitre suivant"</li>
+                    </ul>
+
+                    <h4>4. ❓ Questions</h4>
+                    <p>Les questions signalent des <strong>doutes logiques</strong>, des <strong>incohérences potentielles</strong>, ou des <strong>points à vérifier</strong>.</p>
+                    
+                    <p><strong>Exemples d'utilisation :</strong></p>
+                    <ul>
+                        <li>"Est-ce que Marie sait déjà cette information à ce stade ?"</li>
+                        <li>"Contradiction possible avec ce qui s'est passé au chapitre 3 ?"</li>
+                        <li>"Ce personnage n'était-il pas censé être en voyage ?"</li>
+                    </ul>
+
+                    <h3>Créer une annotation</h3>
+
+                    <p>Pour ajouter une annotation à une scène :</p>
+
+                    <ol>
+                        <li>Dans le panneau latéral droit, cliquez sur l'onglet <strong>"Annotations"</strong></li>
+                        <li>Cliquez sur <strong>"+ Ajouter une annotation"</strong></li>
+                        <li>Sélectionnez le type (Commentaire, TODO, Note ou Question)</li>
+                        <li>Rédigez votre annotation dans le champ texte</li>
+                        <li>Cliquez sur <strong>"Enregistrer"</strong></li>
+                    </ol>
+
+                    <p>L'annotation apparaît dans le panneau avec une icône colorée selon son type.</p>
+
+                    <h3>Gérer vos annotations</h3>
+
+                    <ul>
+                        <li><strong>Modifier</strong> : Cliquez sur l'icône crayon pour éditer une annotation existante</li>
+                        <li><strong>Supprimer</strong> : Cliquez sur l'icône corbeille pour supprimer une annotation terminée</li>
+                        <li><strong>Filtrer</strong> : Utilisez les filtres pour n'afficher qu'un type d'annotation (ex: seulement les TODOs)</li>
+                    </ul>
+
+                    <h3>Vue globale des annotations</h3>
+
+                    <p>Le tableau de bord affiche des statistiques globales :</p>
+
+                    <ul>
+                        <li>Nombre total d'annotations actives</li>
+                        <li>Nombre de TODOs en attente</li>
+                        <li>Répartition par type et par scène</li>
+                    </ul>
+
+                    <div class="info-box tip">
+                        <h4>💡 Workflow de révision recommandé</h4>
+                        <ol>
+                            <li><strong>Première écriture</strong> : Écrivez sans vous arrêter, ajoutez des TODOs pour les points à améliorer</li>
+                            <li><strong>Première relecture</strong> : Ajoutez des Commentaires et Questions sur ce qui ne fonctionne pas</li>
+                            <li><strong>Phase de correction</strong> : Traitez les TODOs un par un, supprimez-les au fur et à mesure</li>
+                            <li><strong>Relecture finale</strong> : Vérifiez que toutes les Questions ont été résolues</li>
+                        </ol>
+                    </div>
+
+                    <h3>Mode Révision</h3>
+
+                    <p>Activez le mode Révision avec <code>Ctrl+R</code> pour une navigation optimisée entre vos annotations :</p>
+
+                    <ul>
+                        <li>Les annotations sont mises en évidence dans l'éditeur</li>
+                        <li>Navigation rapide avec les flèches vers l'annotation suivante/précédente</li>
+                        <li>Statistiques de progression (X annotations traitées sur Y)</li>
+                    </ul>
+                </section>
+
+                <!-- Planification -->
+                <section class="content-section" id="planification">
+                    <h2>Outils de planification narrative</h2>
+
+                    <p>Au-delà de l'écriture pure, Plume Locale offre des outils puissants pour planifier, structurer et suivre votre intrigue.</p>
+
+                    <h3 id="tableau-bord">Tableau de bord</h3>
+
+                    <p>Le tableau de bord est votre centre de contrôle. Il affiche en un coup d'œil l'état de votre projet avec des métriques essentielles.</p>
+
+                    <h4>Statistiques principales</h4>
+
+                    <ul>
+                        <li><strong>Compteur de mots global</strong> : Total de mots dans tout votre projet</li>
+                        <li><strong>Répartition par statut de scène</strong> :
+                            <ul>
+                                <li>📝 Brouillon : Scènes non encore écrites ou à peine ébauchées</li>
+                                <li>✍️ En cours : Scènes en cours de rédaction</li>
+                                <li>✅ Terminé : Scènes complètes (premier jet fini)</li>
+                                <li>🔍 À réviser : Scènes marquées pour révision ou correction</li>
+                            </ul>
+                        </li>
+                        <li><strong>Progression Pomodoro</strong> : Nombre de sessions complétées</li>
+                        <li><strong>Activité récente</strong> : Dernières scènes modifiées</li>
+                    </ul>
+
+                    <h4>Utilisation stratégique du tableau de bord</h4>
+
+                    <p>Le tableau de bord n'est pas qu'informatif, il guide votre travail :</p>
+
+                    <ul>
+                        <li>Identifiez rapidement les sections en retard (trop de scènes "Brouillon")</li>
+                        <li>Équilibrez votre temps entre écriture et révision</li>
+                        <li>Suivez votre progression quotidienne/hebdomadaire</li>
+                        <li>Définissez des objectifs (ex: "terminer toutes les scènes en cours cette semaine")</li>
+                    </ul>
+
+                    <h3 id="arcs-narratifs">Arcs narratifs</h3>
+
+                    <p>Les arcs narratifs sont des fils conducteurs qui traversent votre histoire. Ils peuvent représenter :</p>
+
+                    <ul>
+                        <li><strong>Arcs de personnages</strong> : L'évolution d'un personnage du début à la fin (ex: "Transformation d'Alicia : de naïve à héroïne")</li>
+                        <li><strong>Arcs d'intrigue</strong> : Un fil narratif spécifique (ex: "Mystère de l'assassinat", "Romance entre X et Y")</li>
+                        <li><strong>Arcs thématiques</strong> : Un thème exploré (ex: "Quête d'identité", "Corruption du pouvoir")</li>
+                    </ul>
+
+                    <h4>Créer un arc narratif</h4>
+
+                    <ol>
+                        <li>Allez dans l'onglet <strong>"Arcs Narratifs"</strong></li>
+                        <li>Cliquez sur <strong>"+ Nouvel arc"</strong></li>
+                        <li>Donnez un nom descriptif à votre arc</li>
+                        <li>Choisissez une couleur pour l'identifier visuellement</li>
+                        <li>Ajoutez une description (optionnel) : objectif de l'arc, début et fin prévus</li>
+                    </ol>
+
+                    <h4>Associer des scènes à un arc</h4>
+
+                    <p>Pour chaque scène de votre récit :</p>
+
+                    <ol>
+                        <li>Sélectionnez la scène dans la structure</li>
+                        <li>Dans le panneau droit, section "Arcs de la scène"</li>
+                        <li>Cochez les arcs qui sont actifs dans cette scène</li>
+                    </ol>
+
+                    <p>Vous pouvez ainsi visualiser :</p>
+                    <ul>
+                        <li>Quels arcs sont présents dans chaque scène</li>
+                        <li>La continuité d'un arc à travers le récit</li>
+                        <li>Les moments où plusieurs arcs se croisent (moments clés souvent)</li>
+                        <li>Les arcs qui disparaissent trop longtemps (risque d'oubli par le lecteur)</li>
+                    </ul>
+
+                    <div class="info-box tip">
+                        <h4>💡 Équilibrer vos arcs narratifs</h4>
+                        <p>Un bon récit entrelace plusieurs arcs. Vérifiez que :</p>
+                        <ul>
+                            <li>Chaque arc est présent régulièrement (pas de trou de 10 chapitres)</li>
+                            <li>Tous les arcs ne progressent pas au même rythme (alternez tension et calme)</li>
+                            <li>Les arcs secondaires complètent l'arc principal sans le dominer</li>
+                            <li>Chaque arc a un début, milieu et résolution clairs</li>
+                        </ul>
+                    </div>
+
+                    <h3 id="plot-grid">Grille d'intrigue (Plot Grid)</h3>
+
+                    <p>La grille d'intrigue offre une vue matricielle de votre récit, scène par scène, pour planifier en détail.</p>
+
+                    <h4>Qu'est-ce que la Plot Grid ?</h4>
+
+                    <p>C'est un tableau où chaque ligne représente une scène, et les colonnes représentent des éléments narratifs à tracker :</p>
+
+                    <ul>
+                        <li><strong>POV (Point de vue)</strong> : Quel personnage est le narrateur ?</li>
+                        <li><strong>Lieu</strong> : Où se déroule la scène ?</li>
+                        <li><strong>Personnages présents</strong> : Qui apparaît dans cette scène ?</li>
+                        <li><strong>Objectif de la scène</strong> : Que doit accomplir cette scène ? (faire avancer l'intrigue, développer un personnage, créer de la tension...)</li>
+                        <li><strong>Conflit</strong> : Quel est l'obstacle ou le problème ?</li>
+                        <li><strong>Résultat</strong> : Comment la scène se termine ? Qu'est-ce qui change ?</li>
+                    </ul>
+
+                    <h4>Utiliser la Plot Grid efficacement</h4>
+
+                    <p>La grille est particulièrement utile pour :</p>
+
+                    <ul>
+                        <li><strong>Identifier les déséquilibres</strong> : Trop de scènes avec le même POV ? Un personnage absent trop longtemps ?</li>
+                        <li><strong>Vérifier la progression</strong> : Chaque scène fait-elle avancer l'histoire ?</li>
+                        <li><strong>Équilibrer les lieux</strong> : Éviter que toute l'action se passe au même endroit</li>
+                        <li><strong>Maintenir le conflit</strong> : S'assurer qu'il y a toujours un enjeu, jamais de scène "plate"</li>
+                    </ul>
+
+                    <div class="info-box">
+                        <h4>📚 Conseil de planification</h4>
+                        <p>La Plot Grid est excellente en <strong>phase de planification</strong> (avant d'écrire) et en <strong>phase de révision structurelle</strong> (pour repérer les failles). Beaucoup d'auteurs remplissent la grille avant d'écrire, d'autres après le premier jet pour analyser ce qu'ils ont écrit.</p>
+                    </div>
+
+                    <h3 id="enquete">Mode Enquête</h3>
+
+                    <p>Le mode Enquête est un outil spécialisé pour les auteurs de polars, thrillers et romans à mystère.</p>
+
+                    <h4>Éléments trackés dans le mode Enquête</h4>
+
+                    <ul>
+                        <li><strong>Indices</strong> : Tous les éléments de preuve découverts
+                            <ul>
+                                <li>Nom de l'indice</li>
+                                <li>Description</li>
+                                <li>Scène de découverte</li>
+                                <li>Pertinence (crucial, important, secondaire)</li>
+                                <li>Lien avec d'autres indices</li>
+                            </ul>
+                        </li>
+                        <li><strong>Suspects</strong> : Personnages potentiellement impliqués
+                            <ul>
+                                <li>Nom</li>
+                                <li>Mobile</li>
+                                <li>Opportunité</li>
+                                <li>Alibi</li>
+                                <li>Niveau de suspicion (du lecteur / de l'enquêteur)</li>
+                            </ul>
+                        </li>
+                        <li><strong>Révélations</strong> : Informations dévoilées progressivement
+                            <ul>
+                                <li>Nature de la révélation</li>
+                                <li>Scène où elle est révélée</li>
+                                <li>Impact sur l'enquête</li>
+                            </ul>
+                        </li>
+                        <li><strong>Fausses pistes</strong> : Red herrings et distractions
+                            <ul>
+                                <li>Description</li>
+                                <li>Pourquoi c'est une fausse piste</li>
+                                <li>Moment où le lecteur/enquêteur comprend</li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <h4>Chronologie de l'enquête</h4>
+
+                    <p>Le mode Enquête affiche une timeline spécifique où vous pouvez placer :</p>
+
+                    <ul>
+                        <li>Le crime/événement déclencheur</li>
+                        <li>Chaque découverte d'indice</li>
+                        <li>Les interrogatoires et témoignages</li>
+                        <li>Les révélations clés</li>
+                        <li>La résolution</li>
+                    </ul>
+
+                    <div class="info-box tip">
+                        <h4>💡 Construire un mystère solide</h4>
+                        <p>Utilisez le mode Enquête pour vérifier que :</p>
+                        <ul>
+                            <li>Tous les indices nécessaires sont placés AVANT la révélation finale (fair play)</li>
+                            <li>Les indices sont distillés régulièrement (pas tous à la fin)</li>
+                            <li>Vous avez un bon équilibre entre vrais indices et fausses pistes</li>
+                            <li>La solution est logique mais pas évidente trop tôt</li>
+                            <li>Chaque suspect a un mobile, une opportunité ET un alibi (même le coupable)</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Base de données -->
+                <section class="content-section" id="base-donnees">
+                    <h2>Base de données narrative</h2>
+
+                    <p>La base de données narrative de Plume Locale est le cœur de votre worldbuilding. Elle centralise tous les éléments de votre univers et maintient la cohérence de votre histoire.</p>
+
+                    <h3 id="personnages">Personnages</h3>
+
+                    <p>Les personnages sont l'âme de votre récit. Plume Locale vous offre un système complet pour créer, développer et suivre tous vos personnages, des protagonistes aux figurants.</p>
+
+                    <h4>Créer une fiche personnage</h4>
+
+                    <p>Pour créer un nouveau personnage :</p>
+
+                    <ol>
+                        <li>Allez dans <strong>Base de données > Personnages</strong></li>
+                        <li>Cliquez sur <strong>"+ Nouveau Personnage"</strong></li>
+                        <li>Remplissez les informations essentielles :
+                            <ul>
+                                <li><strong>Nom complet</strong> : Prénom, nom de famille, surnoms éventuels</li>
+                                <li><strong>Rôle narratif</strong> : 
+                                    <ul>
+                                        <li>Protagoniste : Le héros principal de votre histoire</li>
+                                        <li>Antagoniste : L'opposant principal, le "méchant"</li>
+                                        <li>Secondaire : Personnages importants (alliés, mentors, sidekicks)</li>
+                                        <li>Tertiaire : Personnages récurrents mais moins centraux</li>
+                                        <li>Figurant : Apparitions ponctuelles</li>
+                                    </ul>
+                                </li>
+                                <li><strong>Description rapide</strong> : Un résumé en 2-3 phrases du personnage</li>
+                            </ul>
+                        </li>
+                    </ol>
+
+                    <h4>Développer un personnage en profondeur</h4>
+
+                    <p>Une fois le personnage créé, cliquez dessus pour accéder à sa fiche détaillée. Vous pouvez y ajouter :</p>
+
+                    <ul>
+                        <li><strong>Physique</strong> : 
+                            <ul>
+                                <li>Âge, taille, corpulence</li>
+                                <li>Couleur des cheveux, yeux, traits distinctifs</li>
+                                <li>Vêtements habituels, accessoires</li>
+                                <li>Cicatrices, tatouages, particularités</li>
+                            </ul>
+                        </li>
+                        <li><strong>Psychologie</strong> :
+                            <ul>
+                                <li>Personnalité (traits dominants, MBTI si vous l'utilisez)</li>
+                                <li>Forces et faiblesses</li>
+                                <li>Peurs, désirs, valeurs fondamentales</li>
+                                <li>Tics, manies, habitudes</li>
+                            </ul>
+                        </li>
+                        <li><strong>Biographie</strong> :
+                            <ul>
+                                <li>Lieu et date de naissance</li>
+                                <li>Famille, origines</li>
+                                <li>Parcours, formation, métier</li>
+                                <li>Événements marquants de son passé</li>
+                            </ul>
+                        </li>
+                        <li><strong>Relations</strong> :
+                            <ul>
+                                <li>Liens familiaux</li>
+                                <li>Amis, ennemis, amours</li>
+                                <li>Alliances, rivalités</li>
+                            </ul>
+                        </li>
+                        <li><strong>Arcs et évolution</strong> :
+                            <ul>
+                                <li>État au début de l'histoire</li>
+                                <li>Transformation prévue</li>
+                                <li>État à la fin</li>
+                                <li>Moments clés de changement</li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <div class="info-box tip">
+                        <h4>💡 Créer des personnages mémorables</h4>
+                        <p>Un bon personnage n'est pas une liste de caractéristiques, mais une personne cohérente :</p>
+                        <ul>
+                            <li><strong>Contradictions intéressantes</strong> : Un guerrier brutal qui aime la poésie, une voleuse avec un code moral strict</li>
+                            <li><strong>Désir vs Besoin</strong> : Ce que le personnage pense vouloir VS ce dont il a vraiment besoin (ex: veut la vengeance, a besoin du pardon)</li>
+                            <li><strong>Blessure émotionnelle</strong> : Un traumatisme du passé qui influence ses actions présentes</li>
+                            <li><strong>Peur fondamentale</strong> : Ce qui le terrorise vraiment (rejet, échec, perte de contrôle...)</li>
+                        </ul>
+                    </div>
+
+                    <h4>Lier les personnages aux scènes</h4>
+
+                    <p>Plume Locale crée automatiquement des liens entre personnages et scènes. Pour chaque scène, vous pouvez :</p>
+
+                    <ul>
+                        <li>Voir quels personnages sont présents</li>
+                        <li>Ajouter/retirer des personnages de la scène</li>
+                        <li>Accéder rapidement à leur fiche depuis l'éditeur</li>
+                    </ul>
+
+                    <p>Inversement, depuis la fiche d'un personnage, vous voyez immédiatement toutes les scènes où il apparaît.</p>
+
+                    <div class="info-box">
+                        <h4>📊 Suivi de présence des personnages</h4>
+                        <p>Utilisez la vue "Présence par personnage" pour vérifier qu'un personnage important n'est pas absent trop longtemps de votre récit. Un personnage secondaire qui disparaît pendant 15 chapitres risque d'être oublié par le lecteur.</p>
+                    </div>
+
+                    <h3 id="univers">Univers et Worldbuilding</h3>
+
+                    <p>La section Univers vous permet de cataloguer tous les éléments de votre monde : lieux, objets, organisations, événements historiques, et bien plus.</p>
+
+                    <h4>Les 5 types d'éléments d'univers</h4>
+
+                    <p><strong>1. 🏛️ Lieux</strong></p>
+
+                    <p>Les lieux sont tous les endroits où se déroule votre histoire, du plus grand (continents, pays) au plus petit (pièces, cachettes).</p>
+
+                    <p>Informations à renseigner pour un lieu :</p>
+                    <ul>
+                        <li>Nom et type (ville, forêt, bâtiment, région, planète...)</li>
+                        <li>Description physique (apparence, climat, atmosphère)</li>
+                        <li>Géographie (position, accès, frontières)</li>
+                        <li>Population et culture locale</li>
+                        <li>Histoire et origine du lieu</li>
+                        <li>Lieux importants à l'intérieur (quartiers, bâtiments remarquables)</li>
+                        <li>Enjeux narratifs (pourquoi ce lieu est important dans votre histoire)</li>
+                    </ul>
+
+                    <p><strong>2. ⚔️ Objets</strong></p>
+
+                    <p>Les objets incluent armes, artefacts, objets magiques, technologies importantes, ou tout objet narrativement significatif.</p>
+
+                    <p>Détails à inclure :</p>
+                    <ul>
+                        <li>Nom et type d'objet</li>
+                        <li>Description physique</li>
+                        <li>Propriétés spéciales (pouvoirs magiques, capacités technologiques)</li>
+                        <li>Origine et histoire (qui l'a créé ? quand ? pourquoi ?)</li>
+                        <li>Possesseur actuel</li>
+                        <li>Conditions d'utilisation, limitations</li>
+                        <li>Rôle dans l'intrigue</li>
+                    </ul>
+
+                    <p><strong>3. 💡 Concepts</strong></p>
+
+                    <p>Les concepts englobent les systèmes abstraits de votre univers : systèmes de magie, lois physiques alternatives, règles sociales, philosophies, etc.</p>
+
+                    <p>Exemples de concepts :</p>
+                    <ul>
+                        <li>Système de magie (comment fonctionne la magie dans votre monde ?)</li>
+                        <li>Lois et règlements (code juridique, tabous sociaux)</li>
+                        <li>Religions et croyances</li>
+                        <li>Principes scientifiques (pour la SF)</li>
+                        <li>Traditions et coutumes</li>
+                        <li>Langues et dialectes</li>
+                    </ul>
+
+                    <p><strong>4. 🏢 Organisations</strong></p>
+
+                    <p>Guildes, gouvernements, entreprises, cultes, armées, académies - tout groupe structuré qui a un rôle dans votre récit.</p>
+
+                    <p>Informations à détailler :</p>
+                    <ul>
+                        <li>Nom et type d'organisation</li>
+                        <li>But et mission</li>
+                        <li>Structure hiérarchique</li>
+                        <li>Membres importants</li>
+                        <li>Ressources et pouvoir</li>
+                        <li>Alliés et ennemis</li>
+                        <li>Histoire et fondation</li>
+                        <li>Symboles, couleurs, devise</li>
+                    </ul>
+
+                    <p><strong>5. 📅 Événements</strong></p>
+
+                    <p>Les événements historiques qui ont façonné votre monde : guerres, catastrophes, découvertes, révolutions, etc.</p>
+
+                    <p>Détails importants :</p>
+                    <ul>
+                        <li>Nom de l'événement</li>
+                        <li>Date(s) ou période</li>
+                        <li>Lieux concernés</li>
+                        <li>Protagonistes (personnes ou organisations impliquées)</li>
+                        <li>Causes</li>
+                        <li>Déroulement</li>
+                        <li>Conséquences à court et long terme</li>
+                        <li>Impact sur l'histoire actuelle</li>
+                    </ul>
+
+                    <h4>Personnaliser les types et catégories</h4>
+
+                    <p>Plume Locale vous permet de créer vos propres types d'éléments d'univers. Cliquez sur <strong>"Gérer les types"</strong> pour :</p>
+
+                    <ul>
+                        <li>Créer de nouvelles catégories (ex: "Créatures", "Véhicules", "Nourriture")</li>
+                        <li>Personnaliser les icônes et couleurs de chaque type</li>
+                        <li>Organiser votre base selon VOS besoins</li>
+                    </ul>
+
+                    <div class="info-box tip">
+                        <h4>💡 Worldbuilding efficace</h4>
+                        <p>Ne créez pas votre univers pour le plaisir de créer. Chaque élément devrait :</p>
+                        <ul>
+                            <li><strong>Servir l'histoire</strong> : S'il n'apparaît jamais dans le récit, est-il vraiment nécessaire de le détailler ?</li>
+                            <li><strong>Créer du conflit</strong> : Les meilleurs éléments d'univers génèrent des tensions (une loi injuste, une ressource rare, des croyances opposées)</li>
+                            <li><strong>Révéler le caractère</strong> : Comment vos personnages interagissent avec les éléments d'univers révèle qui ils sont</li>
+                        </ul>
+                        <p>Détaillez en profondeur ce qui est central, esquissez le reste. Vous pouvez toujours développer plus tard si nécessaire.</p>
+                    </div>
+
+                    <h3 id="codex">Codex</h3>
+
+                    <p>Le Codex est l'encyclopédie de votre univers, un espace pour documenter tous les aspects de votre monde qui ne rentrent pas dans les catégories Personnages ou Univers.</p>
+
+                    <h4>Catégories du Codex</h4>
+
+                    <p>Le Codex est organisé en catégories thématiques :</p>
+
+                    <ul>
+                        <li><strong>Culture</strong> : Arts, musique, littérature, coutumes, fêtes, gastronomie</li>
+                        <li><strong>Histoire</strong> : Chronologie détaillée, dynasties, ères, périodes</li>
+                        <li><strong>Technologie</strong> : Inventions, niveau technologique, innovations</li>
+                        <li><strong>Géographie</strong> : Continents, mers, montagnes, climat, écosystèmes</li>
+                        <li><strong>Politique</strong> : Systèmes de gouvernement, traités, conflits politiques</li>
+                        <li><strong>Magie/Pouvoir</strong> : Systèmes surnaturels, écoles de magie, pouvoirs</li>
+                        <li><strong>Religion</strong> : Divinités, croyances, rituels, clergés</li>
+                        <li><strong>Société</strong> : Classes sociales, castes, systèmes économiques</li>
+                        <li><strong>Autre</strong> : Tout ce qui ne rentre pas ailleurs</li>
+                    </ul>
+
+                    <h4>Créer une entrée de Codex</h4>
+
+                    <ol>
+                        <li>Accédez à <strong>Base de données > Codex</strong></li>
+                        <li>Cliquez sur <strong>"+ Nouvelle Entrée"</strong></li>
+                        <li>Choisissez un titre clair et explicite</li>
+                        <li>Sélectionnez la catégorie appropriée</li>
+                        <li>Rédigez un résumé court (2-3 lignes)</li>
+                        <li>Dans le contenu détaillé, développez l'information</li>
+                    </ol>
+
+                    <h4>Système de tags et références croisées</h4>
+
+                    <p>Chaque entrée de Codex peut recevoir des tags pour faciliter la recherche et créer des liens conceptuels entre entrées.</p>
+
+                    <p>Exemples de tags utiles :</p>
+                    <ul>
+                        <li>#important (information cruciale pour l'intrigue)</li>
+                        <li>#debut (à mentionner dès le début)</li>
+                        <li>#acte2 (spécifique à une partie de l'histoire)</li>
+                        <li>#mystère (lié au mystère principal)</li>
+                        <li>#worldbuilding (pur contexte, pas directement dans le récit)</li>
+                    </ul>
+
+                    <div class="info-box">
+                        <h4>📚 Utilisation du Codex en Fantasy/SF</h4>
+                        <p>Pour les univers complexes, le Codex est essentiel. Exemples d'entrées :</p>
+                        <ul>
+                            <li><strong>Fantasy</strong> : "Système de magie runique", "Ordre des Gardiens", "La Grande Guerre des Dragons", "Calendrier elfique"</li>
+                            <li><strong>SF</strong> : "Voyage supraluminique par repli spatial", "Réseau de portes stellaires", "Confédération des Mondes Extérieurs", "IA et droits des synthétiques"</li>
+                            <li><strong>Historique</strong> : "Contexte de la Révolution française", "Mode vestimentaire XVIIIe siècle", "Étiquette de la cour"</li>
+                        </ul>
+                    </div>
+
+                    <h3 id="notes">Notes</h3>
+
+                    <p>La section Notes est votre espace libre pour tout ce qui ne rentre pas dans les autres catégories : idées en vrac, recherches, références, to-do lists générales, questions ouvertes.</p>
+
+                    <h4>Types de notes</h4>
+
+                    <ul>
+                        <li><strong>📚 Recherche</strong> : Informations factuelles que vous collectez (ex: "Fonctionnement d'un sous-marin", "Architecture gothique", "Symptômes de l'hypothermie")</li>
+                        <li><strong>💡 Idée</strong> : Brainstorming, possibilités narratives, scènes potentielles (ex: "Et si X découvrait la vérité au chapitre 8 au lieu du 12 ?", "Idée : une scène de combat sous la pluie")</li>
+                        <li><strong>🔖 Référence</strong> : Liens vers articles, livres, films qui vous inspirent ou informent</li>
+                        <li><strong>✅ À faire</strong> : Tâches globales du projet (ex: "Finir la cartographie du continent", "Développer l'arc de Marie")</li>
+                        <li><strong>❓ Question</strong> : Points à résoudre (ex: "Comment justifier que personne n'a découvert cette cachette avant ?", "Quelle technologie permet ce voyage ?")</li>
+                        <li><strong>📝 Autre</strong> : Notes diverses</li>
+                    </ul>
+
+                    <h4>Organisation avec tags</h4>
+
+                    <p>Utilisez des tags pour regrouper vos notes par thème, même si elles sont de types différents. Par exemple :</p>
+
+                    <ul>
+                        <li>Toutes les notes taguées #bataille pour préparer une scène de combat</li>
+                        <li>Tag #personnageX pour tout ce qui concerne ce personnage</li>
+                        <li>Tag #revision pour les idées à implémenter lors de la réécriture</li>
+                    </ul>
+
+                    <div class="info-box tip">
+                        <h4>💡 Capturer vos idées efficacement</h4>
+                        <p>Gardez la section Notes toujours accessible. Dès qu'une idée surgit :</p>
+                        <ol>
+                            <li><strong>Capturez immédiatement</strong> : Ne comptez pas sur votre mémoire</li>
+                            <li><strong>Titre explicite</strong> : "Idée dialogue" est inutile, "Dialogue révélation Alice chapitre 7" est clair</li>
+                            <li><strong>Date vos notes</strong> : Utile pour retrouver le contexte plus tard</li>
+                            <li><strong>Triez régulièrement</strong> : Une fois par semaine, transformez les idées en actions concrètes</li>
+                        </ol>
+                    </div>
+                </section>
+
+                <!-- Visualisation -->
+                <section class="content-section" id="visualisation">
+                    <h2>Outils de visualisation</h2>
+
+                    <p>Parfois, voir son histoire visuellement révèle des patterns et connexions qu'on ne voit pas dans le texte. Plume Locale offre quatre outils de visualisation puissants.</p>
+
+                    <h3 id="mindmap">Carte mentale (Mindmap)</h3>
+
+                    <p>La carte mentale vous permet d'organiser vos idées de manière visuelle et non-linéaire, parfaite pour le brainstorming et l'exploration de connexions conceptuelles.</p>
+
+                    <h4>Créer votre mindmap</h4>
+
+                    <ol>
+                        <li>Allez dans <strong>Visualisation > Mindmap</strong></li>
+                        <li>Cliquez n'importe où pour créer un nœud central</li>
+                        <li>Donnez-lui un nom (ex: "Thème principal : Rédemption")</li>
+                        <li>Double-cliquez sur ce nœud pour créer des nœuds enfants</li>
+                        <li>Organisez spatialement vos idées</li>
+                        <li>Connectez les nœuds pour montrer les relations</li>
+                    </ol>
+
+                    <h4>Usages de la mindmap</h4>
+
+                    <ul>
+                        <li><strong>Brainstorming d'intrigue</strong> : Partez du conflit central et développez les ramifications</li>
+                        <li><strong>Exploration de thèmes</strong> : Comment le thème principal se décline dans différents aspects de l'histoire</li>
+                        <li><strong>Développement de personnage</strong> : Toutes les facettes d'un personnage complexe</li>
+                        <li><strong>Structure narrative</strong> : Vue d'ensemble des actes, arcs, subplots</li>
+                        <li><strong>Worldbuilding</strong> : Relations entre cultures, nations, groupes</li>
+                    </ul>
+
+                    <div class="info-box">
+                        <h4>🧠 Exemple de mindmap thématique</h4>
+                        <p>Nœud central : <strong>"Pouvoir et Corruption"</strong></p>
+                        <ul>
+                            <li>Branche 1 : Personnages (qui représente quoi dans ce thème)
+                                <ul>
+                                    <li>Protagoniste : pouvoir refusé</li>
+                                    <li>Antagoniste : pouvoir corrompu</li>
+                                    <li>Mentor : pouvoir responsable</li>
+                                </ul>
+                            </li>
+                            <li>Branche 2 : Symboles
+                                <ul>
+                                    <li>L'anneau (objet de pouvoir)</li>
+                                    <li>Le trône (pouvoir politique)</li>
+                                </ul>
+                            </li>
+                            <li>Branche 3 : Scènes clés illustrant le thème</li>
+                        </ul>
+                    </div>
+
+                    <h3 id="relations">Graphe de relations</h3>
+
+                    <p>Le graphe de relations visualise les connexions entre vos personnages : qui connaît qui, qui aime/déteste qui, qui est allié/ennemi de qui.</p>
+
+                    <h4>Créer des relations</h4>
+
+                    <p>Pour ajouter une relation entre deux personnages :</p>
+
+                    <ol>
+                        <li>Accédez à <strong>Visualisation > Relations</strong></li>
+                        <li>Sélectionnez le personnage de départ</li>
+                        <li>Cliquez sur <strong>"+ Ajouter une relation"</strong></li>
+                        <li>Choisissez le personnage cible</li>
+                        <li>Définissez le type de relation :
+                            <ul>
+                                <li>Famille (parent, enfant, fratrie, époux...)</li>
+                                <li>Amitié / Inimitié</li>
+                                <li>Romance / Amour / Ex</li>
+                                <li>Professionnel (collègue, patron/employé, mentor/élève)</li>
+                                <li>Alliance / Rivalité</li>
+                                <li>Personnalisé</li>
+                            </ul>
+                        </li>
+                        <li>Ajoutez une description (ex: "Meilleurs amis depuis l'enfance", "Se détestent depuis l'incident")</li>
+                        <li>Définissez l'intensité (faible, moyenne, forte)</li>
+                    </ol>
+
+                    <h4>Visualisation du graphe</h4>
+
+                    <p>Le graphe affiche tous vos personnages comme des nœuds, reliés par des lignes colorées selon le type de relation. Vous pouvez :</p>
+
+                    <ul>
+                        <li>Voir d'un coup d'œil qui est connecté à qui</li>
+                        <li>Identifier les personnages isolés (qui n'ont aucune relation)</li>
+                        <li>Repérer les hubs sociaux (personnages avec beaucoup de connexions)</li>
+                        <li>Visualiser des groupes (clusters de personnages tous connectés entre eux)</li>
+                    </ul>
+
+                    <div class="info-box tip">
+                        <h4>💡 Analyser votre réseau de personnages</h4>
+                        <p>Un bon graphe de relations révèle :</p>
+                        <ul>
+                            <li><strong>Équilibre</strong> : Pas tous les personnages connectés au protagoniste uniquement</li>
+                            <li><strong>Conflits</strong> : Les relations négatives créent la tension narrative</li>
+                            <li><strong>Dynamiques</strong> : Triangles (A aime B qui aime C qui aime A) = drame garanti</li>
+                            <li><strong>Évolution</strong> : Mettez à jour le graphe au fil de l'histoire (les relations changent !)</li>
+                        </ul>
+                    </div>
+
+                    <h4>Relations évolutives</h4>
+
+                    <p>Les relations changent au cours de l'histoire. Plume Locale vous permet de tracker cette évolution :</p>
+
+                    <ul>
+                        <li>Marquez une relation comme "début de l'histoire" vs "milieu" vs "fin"</li>
+                        <li>Notez les événements qui changent une relation</li>
+                        <li>Créez plusieurs "états" du graphe pour différents moments</li>
+                    </ul>
+
+                    <h3 id="carte">Carte géographique</h3>
+
+                    <p>La carte vous permet de placer visuellement tous les lieux de votre histoire et de voir leurs positions relatives.</p>
+
+                    <h4>Créer votre carte</h4>
+
+                    <p>Vous avez deux options :</p>
+
+                    <p><strong>Option 1 : Carte vierge</strong></p>
+                    <ol>
+                        <li>Démarrez avec une carte blanche</li>
+                        <li>Ajoutez vos lieux en cliquant sur la carte</li>
+                        <li>Organisez-les spatialement</li>
+                    </ol>
+
+                    <p><strong>Option 2 : Importer une carte dessinée</strong></p>
+                    <ol>
+                        <li>Téléchargez une image de votre carte (dessinée à la main, créée dans un logiciel...)</li>
+                        <li>Utilisez-la comme fond</li>
+                        <li>Placez des marqueurs sur les lieux importants</li>
+                    </ol>
+
+                    <h4>Ajouter des lieux sur la carte</h4>
+
+                    <p>Pour chaque marqueur de lieu :</p>
+
+                    <ul>
+                        <li>Nom du lieu</li>
+                        <li>Type (utilisez vos types personnalisés d'Univers)</li>
+                        <li>Description contextuelle</li>
+                        <li>Icône personnalisée</li>
+                        <li>Couleur de marqueur</li>
+                    </ul>
+
+                    <p>Les marqueurs peuvent être regroupés par type (toutes les villes en bleu, toutes les forêts en vert, etc.).</p>
+
+                    <h4>Usages narratifs de la carte</h4>
+
+                    <ul>
+                        <li><strong>Cohérence des trajets</strong> : Vérifiez que vos personnages ne font pas 1000km en une journée</li>
+                        <li><strong>Stratégie militaire</strong> : Pour les scènes de bataille, visualisez positions et mouvements</li>
+                        <li><strong>Climat et environnement</strong> : Une forêt au nord sera différente d'une au sud</li>
+                        <li><strong>Temps de voyage</strong> : Estimez réalistiquement combien de temps prend un déplacement</li>
+                    </ul>
+
+                    <div class="info-box">
+                        <h4>🗺️ Conseil de cartographie</h4>
+                        <p>Vous n'avez pas besoin d'une carte détaillée du monde entier. Créez ce dont vous avez besoin :</p>
+                        <ul>
+                            <li>Pour un roman d'aventure : carte du continent avec itinéraire du voyage</li>
+                            <li>Pour un thriller urbain : plan de la ville avec lieux clés</li>
+                            <li>Pour un huis clos : plan du bâtiment/navire/station</li>
+                        </ul>
+                        <p>La carte est un outil au service du récit, pas une fin en soi.</p>
+                    </div>
+
+                    <h3 id="timeline">Timeline (Frise chronologique)</h3>
+
+                    <p>La timeline organise tous les événements de votre histoire sur un axe temporel, permettant de vérifier la cohérence chronologique.</p>
+
+                    <h4>Créer votre timeline</h4>
+
+                    <ol>
+                        <li>Allez dans <strong>Visualisation > Timeline</strong></li>
+                        <li>Définissez votre système de datation :
+                            <ul>
+                                <li>Calendrier réel (pour romans contemporains/historiques)</li>
+                                <li>Calendrier fictif (pour fantasy/SF)</li>
+                                <li>Timeline relative ("Jour 1", "Jour 2", "3 mois plus tard"...)</li>
+                            </ul>
+                        </li>
+                        <li>Créez vos événements</li>
+                    </ol>
+
+                    <h4>Types d'événements</h4>
+
+                    <p>La timeline peut contenir deux types d'événements :</p>
+
+                    <p><strong>1. Événements historiques (passé)</strong></p>
+                    <p>Ce qui s'est passé AVANT le début de votre récit et qui influence l'histoire actuelle.</p>
+
+                    <p>Exemples :</p>
+                    <ul>
+                        <li>"La Grande Guerre (100 ans avant l'histoire)"</li>
+                        <li>"Naissance du protagoniste"</li>
+                        <li>"Mort du père du héros (événement déclencheur du trauma)"</li>
+                    </ul>
+
+                    <p><strong>2. Événements du récit (présent)</strong></p>
+                    <p>Ce qui se passe pendant votre histoire, synchronisé avec vos scènes.</p>
+
+                    <p>Pour chaque événement du récit :</p>
+                    <ul>
+                        <li>Associez-le à une scène spécifique</li>
+                        <li>Date/moment précis</li>
+                        <li>Durée (si applicable)</li>
+                        <li>Personnages impliqués</li>
+                        <li>Lieu</li>
+                        <li>Description</li>
+                    </ul>
+
+                    <h4>Vérification de cohérence temporelle</h4>
+
+                    <p>La timeline est essentielle pour éviter les erreurs chronologiques :</p>
+
+                    <ul>
+                        <li><strong>Vérifier les âges</strong> : Si X a 30 ans et Y en a 25, et qu'ils étaient dans la même classe, problème !</li>
+                        <li><strong>Durées réalistes</strong> : Une grossesse dure 9 mois, pas 6</li>
+                        <li><strong>Saisons et météo</strong> : Pas de neige en juillet (hémisphère nord)</li>
+                        <li><strong>Délais logiques</strong> : Un courrier par bateau prend du temps, pas instantané</li>
+                    </ul>
+
+                    <div class="info-box tip">
+                        <h4>💡 Timeline multi-POV</h4>
+                        <p>Si votre histoire suit plusieurs personnages en parallèle, la timeline est cruciale :</p>
+                        <ul>
+                            <li>Créez un code couleur par personnage/groupe</li>
+                            <li>Marquez clairement quand deux lignes temporelles se rejoignent</li>
+                            <li>Vérifiez que les événements qui devraient être connus d'un personnage le sont bien</li>
+                            <li>Assurez-vous qu'aucun personnage n'est à deux endroits simultanément</li>
+                        </ul>
+                    </div>
+
+                    <h4>Timeline et structure narrative</h4>
+
+                    <p>Votre récit peut ne pas être raconté dans l'ordre chronologique (flashbacks, récit non-linéaire). La timeline vous aide à :</p>
+
+                    <ul>
+                        <li>Voir l'ordre "réel" des événements vs l'ordre narratif</li>
+                        <li>Planifier vos révélations (quand révéler quelle information)</li>
+                        <li>S'assurer que les flashbacks sont cohérents avec le présent</li>
+                    </ul>
+                </section>
+
+                <!-- Statistiques et Analyse -->
+                <section class="content-section" id="statistiques">
+                    <h2>Statistiques et analyse de texte</h2>
+
+                    <p>Plume Locale vous fournit des outils pour analyser objectivement votre texte et suivre votre progression.</p>
+
+                    <h3>Statistiques d'écriture</h3>
+
+                    <h4>Métriques disponibles</h4>
+
+                    <p>Plume Locale calcule automatiquement :</p>
+
+                    <ul>
+                        <li><strong>Nombre de mots</strong> : Total et par acte/chapitre/scène</li>
+                        <li><strong>Nombre de caractères</strong> : Avec et sans espaces</li>
+                        <li><strong>Nombre de pages estimé</strong> : Basé sur 250 mots/page (standard édition)</li>
+                        <li><strong>Temps de lecture estimé</strong> : Basé sur 200 mots/minute</li>
+                        <li><strong>Densité de paragraphes</strong> : Longueur moyenne des paragraphes</li>
+                    </ul>
+
+                    <h4>Statistiques par scène</h4>
+
+                    <p>Pour chaque scène individuelle :</p>
+
+                    <ul>
+                        <li>Nombre de mots</li>
+                        <li>Statut (Brouillon, En cours, Terminé, À réviser)</li>
+                        <li>Nombre de versions créées</li>
+                        <li>Nombre d'annotations</li>
+                        <li>Dernière modification</li>
+                    </ul>
+
+                    <h4>Progression et objectifs</h4>
+
+                    <p>Définissez des objectifs pour rester motivé :</p>
+
+                    <ul>
+                        <li><strong>Objectif de mots total</strong> : Ex: 80 000 mots pour le roman</li>
+                        <li><strong>Objectif quotidien</strong> : Ex: 1000 mots/jour</li>
+                        <li><strong>Objectif de session</strong> : Ex: 500 mots par Pomodoro</li>
+                    </ul>
+
+                    <p>Une barre de progression visuelle vous montre où vous en êtes.</p>
+
+                    <div class="info-box tip">
+                        <h4>💡 Utiliser les stats intelligemment</h4>
+                        <p>Les chiffres ne font pas la qualité, mais ils aident :</p>
+                        <ul>
+                            <li><strong>Identifier les déséquilibres</strong> : Un chapitre de 15 000 mots et un autre de 2 000 mots signalent un problème structurel</li>
+                            <li><strong>Maintenir le rythme</strong> : Des scènes trop longues ralentissent le récit</li>
+                            <li><strong>Suivre la progression</strong> : Voir les mots s'accumuler motive</li>
+                        </ul>
+                        <p>Mais ne devenez pas esclave des chiffres. Parfois, une scène de 800 mots est parfaite, parfois il en faut 3000.</p>
+                    </div>
+
+                    <h3 id="analyse">Analyse de texte</h3>
+
+                    <h4>Détection de répétitions</h4>
+
+                    <p>L'analyseur de répétitions scanne votre texte et identifie :</p>
+
+                    <ul>
+                        <li><strong>Mots surutilisés</strong> : Mots qui apparaissent trop fréquemment</li>
+                        <li><strong>Répétitions rapprochées</strong> : Même mot utilisé 2-3 fois dans le même paragraphe</li>
+                        <li><strong>Structures répétitives</strong> : Toutes les phrases commencent par "Il" ou "Elle"</li>
+                    </ul>
+
+                    <p>L'outil vous montre :</p>
+                    <ul>
+                        <li>Liste des mots par fréquence</li>
+                        <li>Contexte (où apparaissent ces répétitions)</li>
+                        <li>Suggestions de remplacement (synonymes)</li>
+                    </ul>
+
+                    <h4>Analyse de tension narrative</h4>
+
+                    <p>Plume Locale peut analyser la tension émotionnelle de vos scènes en se basant sur le vocabulaire utilisé.</p>
+
+                    <p><strong>Comment ça marche :</strong></p>
+
+                    <ol>
+                        <li>Vous définissez des dictionnaires de mots associés à différents niveaux de tension :
+                            <ul>
+                                <li><strong>Haute tension (+3 pts)</strong> : "hurler", "exploser", "terreur", "danger", "sang"</li>
+                                <li><strong>Tension moyenne (+1.5 pts)</strong> : "inquiétude", "doute", "observer", "attendre"</li>
+                                <li><strong>Basse tension (-2 pts)</strong> : "calme", "paix", "repos", "sourire", "sérénité"</li>
+                            </ul>
+                        </li>
+                        <li>L'outil scanne chaque scène et calcule un score de tension</li>
+                        <li>Vous visualisez une courbe de tension sur l'ensemble du récit</li>
+                    </ol>
+
+                    <h4>Utiliser la courbe de tension</h4>
+
+                    <p>Une bonne structure narrative alterne tension et relâchement :</p>
+
+                    <ul>
+                        <li><strong>Début</strong> : Tension modérée (mise en place)</li>
+                        <li><strong>Premier plot point</strong> : Pic de tension (événement déclencheur)</li>
+                        <li><strong>Milieu acte 2</strong> : Vallée puis remontée progressive</li>
+                        <li><strong>Point médian</strong> : Pic important</li>
+                        <li><strong>Fin acte 2</strong> : Creux (tout semble perdu)</li>
+                        <li><strong>Climax</strong> : Pic maximum de tension</li>
+                        <li><strong>Résolution</strong> : Descente progressive vers le calme</li>
+                    </ul>
+
+                    <div class="info-box warning">
+                        <h4>⚠️ Limites de l'analyse automatique</h4>
+                        <p>L'analyse de tension est un outil, pas une vérité absolue :</p>
+                        <ul>
+                            <li>Elle se base sur les mots, pas le contexte narratif</li>
+                            <li>Une scène calme peut être extrêmement tendue (suspense psychologique)</li>
+                            <li>Les dictionnaires par défaut sont génériques, personnalisez-les pour votre genre et style</li>
+                        </ul>
+                        <p>Utilisez-la comme indicateur, pas comme règle stricte.</p>
+                    </div>
+
+                    <h4>Personnaliser les dictionnaires</h4>
+
+                    <p>Adaptez l'analyse à votre style d'écriture :</p>
+
+                    <ol>
+                        <li>Accédez à <strong>Analyse > Paramètres de tension</strong></li>
+                        <li>Ajoutez vos propres mots selon votre genre :
+                            <ul>
+                                <li>Romance : "passion", "désir", "trahison" = haute tension</li>
+                                <li>Policier : "indice", "suspect", "alibi" = tension moyenne</li>
+                                <li>Fantastique : "magie", "sortilège", "malédiction" selon contexte</li>
+                            </ul>
+                        </li>
+                        <li>Importez/exportez vos dictionnaires pour les réutiliser</li>
+                    </ol>
+                </section>
+
+                <!-- Sauvegarde et sécurité -->
+                <section class="content-section" id="sauvegarde">
+                    <h2>Sauvegarde et sécurité de vos données</h2>
+
+                    <p>Votre travail est précieux. Plume Locale offre plusieurs niveaux de sauvegarde pour garantir que vous ne perdiez jamais votre création.</p>
+
+                    <h3>Sauvegarde automatique locale</h3>
+
+                    <p>Plume Locale sauvegarde automatiquement votre travail dans le stockage local de votre navigateur (IndexedDB) :</p>
+
+                    <ul>
+                        <li><strong>Fréquence</strong> : À chaque modification (temps réel)</li>
+                        <li><strong>Portée</strong> : Tout le projet (texte, personnages, univers, notes...)</li>
+                        <li><strong>Capacité</strong> : Jusqu'à 5 MB par projet (largement suffisant pour plusieurs romans)</li>
+                    </ul>
+
+                    <div class="info-box important">
+                        <h4>⚠️ Limites du stockage local</h4>
+                        <p>Le stockage local du navigateur N'EST PAS une sauvegarde fiable à long terme :</p>
+                        <ul>
+                            <li>Il peut être effacé si vous nettoyez les données de navigation</li>
+                            <li>Il peut être perdu en cas de crash système ou corruption</li>
+                            <li>Il n'est accessible que depuis cet appareil et ce navigateur</li>
+                        </ul>
+                        <p><strong>Le stockage local est une sauvegarde de travail, PAS une sauvegarde de sécurité.</strong></p>
+                    </div>
+
+                    <h3>Google Drive (Sauvegarde cloud automatique)</h3>
+
+                    <p>La méthode recommandée pour sécuriser votre travail est la synchronisation Google Drive.</p>
+
+                    <h4>Configuration Google Drive</h4>
+
+                    <ol>
+                        <li>Cliquez sur <strong>"Sauvegarde/Export"</strong> dans la barre d'outils</li>
+                        <li>Cliquez sur <strong>"Se connecter à Google Drive"</strong></li>
+                        <li>Autorisez Plume Locale à accéder à votre Drive</li>
+                        <li>Choisissez vos préférences :
+                            <ul>
+                                <li><strong>Sauvegarde automatique</strong> : Synchronise toutes les X minutes</li>
+                                <li><strong>Dossier de destination</strong> : Où stocker vos fichiers</li>
+                            </ul>
+                        </li>
+                    </ol>
+
+                    <h4>Fonctionnement de la synchronisation</h4>
+
+                    <ul>
+                        <li><strong>Automatique</strong> : Vos modifications sont envoyées vers Drive périodiquement</li>
+                        <li><strong>Bidirectionnelle</strong> : Si vous modifiez depuis un autre appareil, les changements sont récupérés</li>
+                        <li><strong>Versionnée</strong> : Drive conserve l'historique des versions</li>
+                        <li><strong>Indicateur</strong> : Un icône vous montre l'état (synchronisé, en cours, erreur)</li>
+                    </ul>
+
+                    <h4>Restauration depuis Google Drive</h4>
+
+                    <p>Pour restaurer un projet :</p>
+
+                    <ol>
+                        <li>Connectez-vous à Google Drive dans Plume Locale</li>
+                        <li>Cliquez sur <strong>"Restaurer"</strong></li>
+                        <li>Sélectionnez la version à restaurer</li>
+                        <li>Confirmez (votre version locale sera remplacée)</li>
+                    </ol>
+
+                    <h3>Export manuel (Sauvegarde JSON)</h3>
+
+                    <p>Pour une sauvegarde complète et portable de votre projet :</p>
+
+                    <ol>
+                        <li>Allez dans <strong>"Sauvegarde/Export"</strong></li>
+                        <li>Cliquez sur <strong>"Télécharger en JSON"</strong></li>
+                        <li>Un fichier <code>nom-projet-YYYY-MM-DD.json</code> est téléchargé</li>
+                    </ol>
+
+                    <h4>Que contient le fichier JSON ?</h4>
+
+                    <p>Le fichier JSON contient l'INTÉGRALITÉ de votre projet :</p>
+
+                    <ul>
+                        <li>Toute la structure (actes, chapitres, scènes)</li>
+                        <li>Tout le texte de toutes les scènes</li>
+                        <li>Toutes les versions de scènes</li>
+                        <li>Tous les personnages, univers, codex, notes</li>
+                        <li>Tous les arcs narratifs, liens, annotations</li>
+                        <li>Toutes les données de mindmap, relations, carte, timeline</li>
+                        <li>Toutes vos configurations et préférences</li>
+                    </ul>
+
+                    <div class="info-box tip">
+                        <h4>💡 Stratégie de sauvegarde recommandée</h4>
+                        <p>Utilisez une approche "3-2-1" :</p>
+                        <ul>
+                            <li><strong>3 copies</strong> de vos données : locale (navigateur), Google Drive, export JSON</li>
+                            <li><strong>2 supports différents</strong> : cloud (Drive) + support physique (disque dur externe avec le JSON)</li>
+                            <li><strong>1 copie hors site</strong> : Google Drive ou autre cloud</li>
+                        </ul>
+                        <p><strong>Fréquence recommandée :</strong></p>
+                        <ul>
+                            <li>Google Drive : activez la synchronisation automatique</li>
+                            <li>Export JSON manuel : après chaque session d'écriture importante (ou au moins hebdomadaire)</li>
+                            <li>Sauvegarde sur disque externe : mensuelle</li>
+                        </ul>
+                    </div>
+
+                    <h3>Import de sauvegarde</h3>
+
+                    <p>Pour restaurer un projet depuis un fichier JSON :</p>
+
+                    <ol>
+                        <li>Allez dans <strong>"Sauvegarde/Export"</strong></li>
+                        <li>Cliquez sur <strong>"Importer depuis un fichier JSON"</strong></li>
+                        <li>Sélectionnez votre fichier de sauvegarde</li>
+                        <li>Le projet est immédiatement restauré</li>
+                    </ol>
+
+                    <h3 id="import-export">Import et Export de manuscrits</h3>
+
+                    <h4>Import de textes existants</h4>
+
+                    <p>Si vous avez déjà commencé à écrire ailleurs, importez votre travail dans Plume Locale :</p>
+
+                    <p><strong>Formats supportés :</strong></p>
+                    <ul>
+                        <li><strong>DOCX</strong> : Documents Word</li>
+                        <li><strong>TXT</strong> : Fichiers texte brut</li>
+                        <li><strong>MD</strong> : Markdown</li>
+                        <li><strong>EPUB</strong> : E-books (extraction du texte)</li>
+                    </ul>
+
+                    <p><strong>Processus d'import :</strong></p>
+
+                    <ol>
+                        <li>Cliquez sur <strong>"Sauvegarde/Export"</strong></li>
+                        <li>Sélectionnez <strong>"Importer un texte"</strong></li>
+                        <li>Choisissez votre fichier</li>
+                        <li>Plume Locale détecte automatiquement :
+                            <ul>
+                                <li>Les chapitres (basés sur les titres de niveau 1)</li>
+                                <li>Les scènes (basés sur les séparateurs ou sous-titres)</li>
+                                <li>La mise en forme (gras, italique...)</li>
+                            </ul>
+                        </li>
+                        <li>Vous pouvez ajuster la détection avant validation</li>
+                        <li>Le texte est importé avec sa structure</li>
+                    </ol>
+
+                    <h4>Export de votre roman</h4>
+
+                    <p>Une fois votre roman terminé (ou pour partager un brouillon), exportez-le dans le format approprié.</p>
+
+                    <p><strong>Formats d'export disponibles :</strong></p>
+
+                    <ul>
+                        <li><strong>Markdown (.md)</strong> : Format universel, compatible avec de nombreux outils</li>
+                        <li><strong>Texte brut (.txt)</strong> : Maximum de compatibilité, aucune mise en forme</li>
+                        <li><strong>HTML (.html)</strong> : Pour publication web ou conversion ultérieure</li>
+                        <li><strong>EPUB (.epub)</strong> : Format e-book standard, lisible sur liseuses</li>
+                    </ul>
+
+                    <h4>Options d'export</h4>
+
+                    <p>Personnalisez votre export selon vos besoins :</p>
+
+                    <p><strong>Contenu :</strong></p>
+                    <ul>
+                        <li>☑ Inclure/exclure les résumés de scènes</li>
+                        <li>☑ Inclure/exclure le texte (si vous voulez juste la structure)</li>
+                        <li>☑ Inclure/exclure les titres d'actes</li>
+                        <li>☑ Inclure/exclure les sous-titres de scènes</li>
+                    </ul>
+
+                    <p><strong>Séparateurs de scènes :</strong></p>
+                    <ul>
+                        <li>Astérisques centré ( * * * )</li>
+                        <li>Dièses ( ### )</li>
+                        <li>Ligne horizontale ( --- )</li>
+                        <li>Espace vide</li>
+                        <li>Aucun séparateur</li>
+                    </ul>
+
+                    <div class="info-box">
+                        <h4>📚 Export pour publication</h4>
+                        <p><strong>Pour auto-édition (Kindle, Vellum, Atticus) :</strong></p>
+                        <ul>
+                            <li>Format : EPUB ou Markdown</li>
+                            <li>Désactivez "Inclure les titres d'actes" (géré par le logiciel de mise en page)</li>
+                            <li>Séparateur : ### ou espace vide</li>
+                        </ul>
+                        <p><strong>Pour envoi éditeur :</strong></p>
+                        <ul>
+                            <li>Format : Texte brut (.txt) ou Markdown</li>
+                            <li>Séparateur : ###</li>
+                            <li>Police standard (Times New Roman 12pt) - configuré après export</li>
+                        </ul>
+                    </div>
+
+                    <h4>Export du projet complet (ZIP)</h4>
+
+                    <p>Exportez TOUT : texte + base de données + visualisations dans une archive ZIP.</p>
+
+                    <p>Cochez les éléments à inclure :</p>
+                    <ul>
+                        <li>☑ Personnages (PDF avec toutes les fiches)</li>
+                        <li>☑ Univers (PDF organisé par type)</li>
+                        <li>☑ Timeline (PDF avec frise chronologique)</li>
+                        <li>☑ Relations (Image PNG du graphe)</li>
+                        <li>☑ Codex (PDF encyclopédique)</li>
+                        <li>☑ Notes (PDF de toutes vos notes)</li>
+                    </ul>
+
+                    <p>Résultat : un fichier ZIP contenant le manuscrit ET toute la documentation de votre univers.</p>
+
+                    <h3>Snapshots (Points de sauvegarde)</h3>
+
+                    <p>Les snapshots sont des "photos" complètes de votre projet à un moment donné.</p>
+
+                    <h4>Quand créer un snapshot ?</h4>
+
+                    <ul>
+                        <li><strong>Avant une révision majeure</strong> : Pour pouvoir revenir en arrière si nécessaire</li>
+                        <li><strong>Fin de premier jet</strong> : Conserver une version "brouillon complet"</li>
+                        <li><strong>Avant restructuration</strong> : Si vous allez changer l'ordre des chapitres ou supprimer des sections</li>
+                        <li><strong>Étapes importantes</strong> : Fin d'un acte, résolution d'un arc majeur</li>
+                    </ul>
+
+                    <h4>Créer un snapshot</h4>
+
+                    <ol>
+                        <li>Allez dans <strong>Historique > Snapshots</strong></li>
+                        <li>Cliquez sur <strong>"+ Nouveau Snapshot"</strong></li>
+                        <li>Donnez-lui un nom descriptif (ex: "Fin premier jet", "Avant révision structure")</li>
+                        <li>Ajoutez une note (optionnel) : "Version avant refonte du chapitre 12"</li>
+                        <li>Le snapshot est créé instantanément</li>
+                    </ol>
+
+                    <h4>Restaurer un snapshot</h4>
+
+                    <ol>
+                        <li>Dans <strong>Historique > Snapshots</strong>, consultez la liste</li>
+                        <li>Sélectionnez le snapshot à restaurer</li>
+                        <li><strong>Important</strong> : La restauration crée automatiquement un snapshot de l'état actuel avant de restaurer (filet de sécurité)</li>
+                        <li>Confirmez la restauration</li>
+                        <li>Votre projet revient à cet état exact</li>
+                    </ol>
+                </section>
+
+                <!-- Gestion de projets -->
+                <section class="content-section" id="projets">
+                    <h2>Gestion de projets multiples</h2>
+
+                    <p>Plume Locale vous permet de gérer autant de projets d'écriture que vous le souhaitez, chacun complètement indépendant.</p>
+
+                    <h3>Créer et organiser vos projets</h3>
+
+                    <h4>Vue "Mes Projets"</h4>
+
+                    <p>Cliquez sur <strong>"Mes Projets"</strong> dans la barre d'outils pour accéder à la vue d'ensemble :</p>
+
+                    <ul>
+                        <li>Liste de tous vos projets avec miniatures</li>
+                        <li>Informations rapides (titre, genre, progression, dernière modification)</li>
+                        <li>Tri par : date de modification, titre, genre, nombre de mots</li>
+                    </ul>
+
+                    <h4>Basculer entre projets</h4>
+
+                    <p>Cliquez simplement sur un projet pour l'ouvrir. Le projet actuel est automatiquement sauvegardé avant de charger le nouveau.</p>
+
+                    <h4>Dupliquer un projet</h4>
+
+                    <p>Pour créer une variation ou une version alternative :</p>
+
+                    <ol>
+                        <li>Dans "Mes Projets", cliquez sur <strong>"⋯"</strong> sur le projet</li>
+                        <li>Sélectionnez <strong>"Dupliquer"</strong></li>
+                        <li>Le projet est copié intégralement (texte + base de données)</li>
+                        <li>Renommez la copie (ex: "Version alternative - Fin différente")</li>
+                    </ol>
+
+                    <h4>Archiver un projet</h4>
+
+                    <p>Pour les projets terminés ou en pause longue :</p>
+
+                    <ul>
+                        <li>Cliquez sur <strong>"⋯" > "Archiver"</strong></li>
+                        <li>Le projet disparaît de la liste principale</li>
+                        <li>Accédez aux projets archivés via <strong>"Afficher les archivés"</strong></li>
+                        <li>Vous pouvez désarchiver à tout moment</li>
+                    </ul>
+
+                    <h4>Supprimer un projet</h4>
+
+                    <div class="info-box warning">
+                        <h4>⚠️ Attention : Suppression définitive</h4>
+                        <p>La suppression d'un projet est IRRÉVERSIBLE (sauf si vous avez une sauvegarde externe). Avant de supprimer :</p>
+                        <ol>
+                            <li>Exportez le projet en JSON</li>
+                            <li>Sauvegardez le fichier JSON précieusement</li>
+                            <li>Puis seulement, supprimez depuis Plume Locale</li>
+                        </ol>
+                    </div>
+
+                    <h3>Templates de projets</h3>
+
+                    <p>Les templates accélèrent le démarrage de nouveaux projets avec des structures pré-configurées.</p>
+
+                    <h4>Templates intégrés</h4>
+
+                    <p><strong>1. Projet vide</strong></p>
+                    <p>Page blanche totale. Idéal si vous :</p>
+                    <ul>
+                        <li>Avez une structure très spécifique en tête</li>
+                        <li>Voulez personnaliser complètement</li>
+                        <li>Écrivez dans un format non-standard</li>
+                    </ul>
+
+                    <p><strong>2. Fantasy (3 actes + personnages types)</strong></p>
+                    <p>Pré-configuré avec :</p>
+                    <ul>
+                        <li>Structure en 3 actes (monde ordinaire, confrontation, résolution)</li>
+                        <li>Fiches personnages pour : héros, mentor, antagoniste, allié, herald</li>
+                        <li>Sections Univers pour : système de magie, royaumes, races, objets légendaires</li>
+                        <li>Codex avec catégories fantasy standard</li>
+                    </ul>
+
+                    <p><strong>3. Science-Fiction (Worldbuilding avancé)</strong></p>
+                    <p>Optimisé pour SF hard :</p>
+                    <ul>
+                        <li>Sections Univers pour : technologies, vaisseaux, planètes, corporations, factions</li>
+                        <li>Codex avec focus sur : sciences, politique galactique, histoire du futur</li>
+                        <li>Timeline étendue (passé et futur)</li>
+                    </ul>
+                </section>
+
+                <!-- Interface et configuration -->
+                <section class="content-section" id="interface">
+                    <h2>Interface et configuration</h2>
+
+                    <h3>Langues disponibles</h3>
+
+                    <p>Plume Locale est entièrement traduit en 4 langues :</p>
+
+                    <ul>
+                        <li>🇫🇷 <strong>Français</strong></li>
+                        <li>🇬🇧 <strong>English</strong></li>
+                        <li>🇩🇪 <strong>Deutsch</strong></li>
+                        <li>🇪🇸 <strong>Español</strong></li>
+                    </ul>
+
+                    <p>Changez de langue via le sélecteur en bas à droite. Le changement est instantané et conservé.</p>
+
+                    <h3 id="raccourcis">Raccourcis clavier</h3>
+
+                    <p>Maîtriser les raccourcis clavier multiplie votre efficacité. Appuyez sur <strong>?</strong> n'importe quand pour afficher le guide complet.</p>
+
+                    <h4>Raccourcis essentiels (à mémoriser)</h4>
+
+                    <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+                        <thead style="background-color: var(--bg-light);">
+                            <tr>
+                                <th style="padding: 12px; text-align: left; border: 1px solid var(--border-color);">Action</th>
+                                <th style="padding: 12px; text-align: left; border: 1px solid var(--border-color);">Raccourci Windows/Linux</th>
+                                <th style="padding: 12px; text-align: left; border: 1px solid var(--border-color);">Raccourci Mac</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="padding: 10px; border: 1px solid var(--border-color);"><strong>Sauvegarder</strong></td>
+                                <td style="padding: 10px; border: 1px solid var(--border-color);"><code>Ctrl + S</code></td>
+                                <td style="padding: 10px; border: 1px solid var(--border-color);"><code>Cmd + S</code></td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 10px; border: 1px solid var(--border-color);"><strong>Mode Focus</strong></td>
+                                <td style="padding: 10px; border: 1px solid var(--border-color);"><code>F11</code></td>
+                                <td style="padding: 10px; border: 1px solid var(--border-color);"><code>F11</code></td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 10px; border: 1px solid var(--border-color);"><strong>Recherche globale</strong></td>
+                                <td style="padding: 10px; border: 1px solid var(--border-color);"><code>Ctrl + F</code></td>
+                                <td style="padding: 10px; border: 1px solid var(--border-color);"><code>Cmd + F</code></td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 10px; border: 1px solid var(--border-color);"><strong>Annuler</strong></td>
+                                <td style="padding: 10px; border: 1px solid var(--border-color);"><code>Ctrl + Z</code></td>
+                                <td style="padding: 10px; border: 1px solid var(--border-color);"><code>Cmd + Z</code></td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 10px; border: 1px solid var(--border-color);"><strong>Rétablir</strong></td>
+                                <td style="padding: 10px; border: 1px solid var(--border-color);"><code>Ctrl + Y</code></td>
+                                <td style="padding: 10px; border: 1px solid var(--border-color);"><code>Cmd + Shift + Z</code></td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 10px; border: 1px solid var(--border-color);"><strong>Gras</strong></td>
+                                <td style="padding: 10px; border: 1px solid var(--border-color);"><code>Ctrl + B</code></td>
+                                <td style="padding: 10px; border: 1px solid var(--border-color);"><code>Cmd + B</code></td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 10px; border: 1px solid var(--border-color);"><strong>Italique</strong></td>
+                                <td style="padding: 10px; border: 1px solid var(--border-color);"><code>Ctrl + I</code></td>
+                                <td style="padding: 10px; border: 1px solid var(--border-color);"><code>Cmd + I</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3>Support tactile (Tablettes et mobiles)</h3>
+
+                    <p>Plume Locale fonctionne sur appareils tactiles avec des gestes dédiés :</p>
+
+                    <ul>
+                        <li><strong>Glisser depuis le bord gauche</strong> : Ouvre le panneau latéral de structure</li>
+                        <li><strong>Glisser vers la gauche</strong> : Ferme le panneau latéral</li>
+                        <li><strong>Appui long</strong> : Menu contextuel (sur les éléments de structure)</li>
+                        <li><strong>Pincer pour zoomer</strong> : Sur la carte et mindmap</li>
+                    </ul>
+
+                    <div class="info-box">
+                        <h4>📱 Note sur l'usage mobile</h4>
+                        <p>Plume Locale fonctionne sur téléphones, mais l'expérience est optimale sur tablette ou ordinateur en raison de la richesse de l'interface. Les téléphones sont pratiques pour :</p>
+                        <ul>
+                            <li>Prendre des notes rapides</li>
+                            <li>Consulter vos fiches personnages/univers</li>
+                            <li>Réviser des passages courts</li>
+                        </ul>
+                        <p>Pour des sessions d'écriture longues, préférez tablette ou ordinateur.</p>
+                    </div>
+                </section>
+
+                <!-- Compatibilité -->
+                <section class="content-section" id="compatibilite">
+                    <h2>Compatibilité et prérequis techniques</h2>
+
+                    <h3>Navigateurs supportés</h3>
+
+                    <p>Plume Locale fonctionne sur tous les navigateurs modernes :</p>
+
+                    <ul>
+                        <li>✅ <strong>Google Chrome</strong> : Version 90+ (recommandé)</li>
+                        <li>✅ <strong>Microsoft Edge</strong> : Version 90+ (basé sur Chromium, excellent support)</li>
+                        <li>✅ <strong>Mozilla Firefox</strong> : Version 88+</li>
+                        <li>✅ <strong>Safari</strong> : Version 14+ (macOS / iOS)</li>
+                        <li>✅ <strong>Opera</strong> : Version 76+</li>
+                        <li>✅ <strong>Brave</strong> : Toutes versions récentes</li>
+                    </ul>
+
+                    <h3>Configuration minimale recommandée</h3>
+
+                    <p><strong>Ordinateur :</strong></p>
+                    <ul>
+                        <li>Processeur : Dual-core 1.6 GHz ou supérieur</li>
+                        <li>RAM : 4 GB minimum (8 GB recommandé)</li>
+                        <li>Écran : 1280x720 minimum (1920x1080 recommandé pour le confort)</li>
+                        <li>Connexion internet : Nécessaire uniquement pour synchronisation Google Drive</li>
+                    </ul>
+
+                    <p><strong>Tablette :</strong></p>
+                    <ul>
+                        <li>iPad (2018 ou plus récent) ou équivalent Android</li>
+                        <li>Écran 10 pouces minimum recommandé</li>
+                        <li>iOS 14+ ou Android 9+</li>
+                    </ul>
+
+                    <h3>Fonctionnement hors ligne</h3>
+
+                    <p>Plume Locale est une PWA (Progressive Web App), ce qui signifie :</p>
+
+                    <ul>
+                        <li>✅ Fonctionne entièrement hors ligne après premier chargement</li>
+                        <li>✅ Toutes les fonctionnalités disponibles sans internet</li>
+                        <li>✅ Sauvegarde locale automatique</li>
+                        <li>⚠️ Synchronisation Google Drive nécessite connexion</li>
+                    </ul>
+
+                    <h3>Installation comme application</h3>
+
+                    <p>Sur Chrome/Edge bureau :</p>
+                    <ol>
+                        <li>Visitez Plume Locale</li>
+                        <li>Cliquez sur l'icône d'installation dans la barre d'adresse</li>
+                        <li>Plume Locale s'installe comme application native</li>
+                        <li>Lancez depuis le menu Démarrer/Applications</li>
+                    </ol>
+
+                    <p>Sur mobile/tablette :</p>
+                    <ol>
+                        <li>Visitez Plume Locale dans Safari (iOS) ou Chrome (Android)</li>
+                        <li>Menu > "Ajouter à l'écran d'accueil"</li>
+                        <li>Une icône apparaît sur votre écran d'accueil</li>
+                        <li>Tapotez pour lancer en mode app (plein écran, sans barre de navigateur)</li>
+                    </ol>
+
+                    <h3>Stockage et limites</h3>
+
+                    <p>Chaque projet peut utiliser jusqu'à 5 MB de stockage local, ce qui représente approximativement :</p>
+
+                    <ul>
+                        <li>~1 million de mots de texte pur</li>
+                        <li>ou ~2000 pages au format standard</li>
+                        <li>ou ~300 000 mots avec base de données riche (personnages, univers, notes)</li>
+                    </ul>
+
+                    <p>Pour des projets exceptionnellement volumineux (séries multi-tomes), divisez en plusieurs projets.</p>
+                </section>
+
+                <!-- Conclusion -->
+                <section class="content-section">
+                    <h2>Conclusion et prochaines étapes</h2>
+
+                    <p>Vous avez maintenant une vue complète de toutes les fonctionnalités de Plume Locale. La meilleure façon d'apprendre est de pratiquer !</p>
+
+                    <h3>Pour aller plus loin</h3>
+
+                    <ul>
+                        <li>🚀 <strong>Créez votre premier projet</strong> et expérimentez librement</li>
+                        <li>📚 <strong>Explorez les différentes vues</strong> (Mindmap, Timeline, Relations) pour découvrir celle qui correspond à votre façon de travailler</li>
+                        <li>💾 <strong>Configurez Google Drive</strong> dès maintenant pour ne jamais perdre votre travail</li>
+                        <li>⌨️ <strong>Mémorisez les raccourcis</strong> essentiels pour gagner en fluidité</li>
+                        <li>🎯 <strong>Commencez petit</strong> : pas besoin de remplir toute la base de données avant d'écrire. Ajoutez au fur et à mesure.</li>
+                    </ul>
+
+                    <div class="info-box tip">
+                        <h4>💡 Un dernier conseil</h4>
+                        <p>Plume Locale offre beaucoup d'outils, mais ne vous laissez pas submerger. Commencez par l'essentiel :</p>
+                        <ol>
+                            <li>Structure (actes, chapitres, scènes)</li>
+                            <li>Écriture (l'éditeur)</li>
+                            <li>Personnages de base</li>
+                        </ol>
+                        <p>Puis explorez progressivement les autres fonctionnalités selon vos besoins. Chaque auteur utilise Plume Locale différemment - trouvez VOTRE workflow !</p>
+                    </div>
+
+                    <h3>Besoin d'aide ?</h3>
+
+                    <p>Si vous rencontrez un problème ou avez une question :</p>
+
+                    <ul>
+                        <li>📖 Relisez les sections pertinentes de cette documentation</li>
+                        <li>💬 Rejoignez notre communauté (lien dans l'application)</li>
+                        <li>🐛 Signalez des bugs via GitHub</li>
+                        <li>💡 Proposez des améliorations</li>
+                    </ul>
+
+                    <p style="margin-top: 40px; text-align: center; font-size: 1.2em; color: var(--primary-color);">
+                        <strong>Bonne écriture avec Plume Locale ! 📝✨</strong>
+                    </p>
+                </section>
+
+                <!-- Navigation -->
+                <div class="page-navigation">
+                    <a href="#introduction" class="nav-button prev">
+                        <span>Retour au début</span>
+                    </a>
+                    <a href="#accueil" class="nav-button next">
+                        <span>Accueil</span>
+                    </a>
+                </div>
+            </article>
+        </main>
+    </div>
+
+    <script>
+        // Navigation smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                    
+                    // Update active nav item
+                    document.querySelectorAll('.nav-item').forEach(item => {
+                        item.classList.remove('active');
+                    });
+                    if (this.classList.contains('nav-item')) {
+                        this.classList.add('active');
+                    }
+                }
+            });
+        });
+
+        // Highlight active section on scroll
+        window.addEventListener('scroll', () => {
+            let current = '';
+            document.querySelectorAll('section[id]').forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (scrollY >= sectionTop - 100) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+                if (item.getAttribute('href') === '#' + current) {
+                    item.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
