@@ -118,7 +118,17 @@ const SearchRepository = {
             ].join(' ').toLowerCase();
 
             if (searchText.includes(lowerQuery)) {
-                const preview = char.description || char.personality || Localization.t('search.default.nodesc');
+                let preview = '';
+                // On cherche des champs textuels pour l'aperçu, en excluant les objets comme 'personality'
+                if (char.description && typeof char.description === 'string') preview = char.description;
+                if (!preview && char.physicalDescription && typeof char.physicalDescription === 'string') preview = char.physicalDescription;
+                if (!preview && char.past && typeof char.past === 'string') preview = char.past;
+                if (!preview && char.background && typeof char.background === 'string') preview = char.background;
+                if (!preview && char.notes && typeof char.notes === 'string') preview = char.notes;
+
+                // Fallback final
+                if (!preview) preview = Localization.t('search.default.nodesc');
+
                 results.push(
                     SearchResultModel.createCharacterResult(char, originalQuery, preview)
                 );
