@@ -2,6 +2,18 @@
 // [MVVM : Other]
 // Mixte (Controller/Initialization)
 async function init() {
+    // Initialiser le thème le plus tôt possible
+    if (typeof ThemeManagerModule !== 'undefined') {
+        ThemeManagerModule.init();
+    } else if (typeof themeManager !== 'undefined') {
+        themeManager.init();
+    }
+
+    // Initialiser la localisation
+    if (typeof Localization !== 'undefined') {
+        Localization.init();
+    }
+
     // Initialiser IndexedDB en premier
     const dbReady = await initDB();
     if (!dbReady) {
@@ -11,7 +23,11 @@ async function init() {
     }
 
     // Charger les projets depuis IndexedDB
-    await loadAllProjects();
+    try {
+        await loadAllProjects();
+    } catch (e) {
+        console.error("❌ Erreur lors du chargement des projets:", e);
+    }
     await loadTreeState(); // Charger l'état d'expansion
 
     // Forcer la vue Structure au démarrage
@@ -60,7 +76,15 @@ async function init() {
     // Initialize storage monitoring
     initStorageMonitoring();
 
+    // Initialize Revision Module
+    if (typeof RevisionModule !== 'undefined' && RevisionModule.init) {
+        RevisionModule.init();
+    }
+
     // Initialize scene versions sidebar
+    if (typeof SceneVersionApp !== 'undefined' && SceneVersionApp.init) {
+        SceneVersionApp.init();
+    }
     renderSceneVersionsList();
 
     // Initialize progress bar
@@ -72,9 +96,13 @@ async function init() {
     // Update storage badge every 10 seconds
     setInterval(updateStorageBadge, 10000);
 
-    // Initialize product tour
     if (typeof initProductTourVM === 'function') {
         await initProductTourVM();
+    }
+
+    // Ensure all icons are rendered
+    if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
     }
 }
 
@@ -187,4 +215,8 @@ function renameProject() {
     saveProject();
     showNotification('✓ Projet renommé');
 }
+
+// Lancer l'initialisation au chargement de la page
+window.addEventListener('load', init);
+
 
