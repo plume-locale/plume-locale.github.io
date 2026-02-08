@@ -82,6 +82,7 @@ const LOCALE_ES = {
     "header.shortcuts": "Atajos de teclado (?)",
     "header.themes": "Gestor de Temas",
     "header.projects": "Gestionar Proyectos",
+    "header.documentation": "Documentación",
     "header.split": "Alternar Vista Dividida",
     "header.storage": "Espacio de Almacenamiento",
     "header.lang.switch": "Cambiar Idioma (FR/EN)",

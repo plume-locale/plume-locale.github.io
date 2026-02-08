@@ -43,6 +43,7 @@
 <link rel="stylesheet" href="./css/14.product-tour.css">
 <link rel="stylesheet" href="./css/investigation-board.css">
 <link rel="stylesheet" href="./css/investigation-board.tabs.css">
+<link rel="stylesheet" href="./css/17.documentation-button.css">
 <link rel="stylesheet" href="./css/13.thriller-board.css">
 <link rel="stylesheet" href="./css/16.theme-manager-premium.css">
 <link rel="stylesheet" href="./css/synonyms.css">
@@ -51,7 +52,6 @@
 <link rel="stylesheet" href="./css/synonyms.css">
 <link rel="stylesheet" href="./css/map.css">
 <link rel="stylesheet" href="./css/keyboard-shortcuts.css">
-<link rel="stylesheet" href="./css/17.documentation-button.css">
 </head>
 <body>
     <!-- Mobile Menu Handle (poignée latérale) -->
@@ -65,82 +65,90 @@
                 <i data-lucide="pen-tool"></i>
                 <span data-i18n="mobile.group.write">écriture</span>
             </div>
-            <button class="mobile-nav-item active" onclick="switchViewMobile('editor')" data-view="editor">
-                <span class="mobile-nav-item-icon"><i data-lucide="pen-line"></i></span>
-                <span data-i18n="nav.structure">Structure</span>
-            </button>
-            <button class="mobile-nav-item" onclick="switchViewMobile('corkboard')" data-view="corkboard">
-                <span class="mobile-nav-item-icon"><i data-lucide="layout-grid"></i></span>
-                <span data-i18n="nav.corkboard">Tableau</span>
-            </button>
-            <button class="mobile-nav-item" onclick="switchViewMobile('plot')" data-view="plot">
-                <span class="mobile-nav-item-icon"><i data-lucide="trending-up"></i></span>
-                <span data-i18n="nav.plot">Intrigue</span>
-            </button>
-            <button class="mobile-nav-item" onclick="switchViewMobile('arcs')" data-view="arcs">
-                <span class="mobile-nav-item-icon"><i data-lucide="git-commit-horizontal"></i></span>
-                <span data-i18n="nav.arcs">Arcs Narratifs</span>
-            </button>
-            
-            
+            <div class="mobile-nav-grid">
+                <button class="mobile-nav-item active" onclick="switchViewMobile('editor')" data-view="editor">
+                    <span class="mobile-nav-item-icon"><i data-lucide="pen-line"></i></span>
+                    <span data-i18n="nav.structure">Structure</span>
+                </button>
+                <button class="mobile-nav-item" onclick="switchViewMobile('corkboard')" data-view="corkboard">
+                    <span class="mobile-nav-item-icon"><i data-lucide="layout-grid"></i></span>
+                    <span data-i18n="nav.corkboard">Tableau</span>
+                </button>
+                <button class="mobile-nav-item" onclick="switchViewMobile('plot')" data-view="plot">
+                    <span class="mobile-nav-item-icon"><i data-lucide="trending-up"></i></span>
+                    <span data-i18n="nav.plot">Intrigue</span>
+                </button>
+                <button class="mobile-nav-item" onclick="switchViewMobile('arcs')" data-view="arcs">
+                    <span class="mobile-nav-item-icon"><i data-lucide="git-commit-horizontal"></i></span>
+                    <span data-i18n="nav.arcs">Arcs Narratifs</span>
+                </button>
+                
+                
+            </div>
         </div>
         <div class="mobile-nav-section">
             <div class="mobile-nav-section-title">
                 <i data-lucide="database"></i>
                 <span data-i18n="mobile.group.db">Base de données</span>
             </div>
-            <button class="mobile-nav-item" onclick="switchViewMobile('characters')" data-view="characters">
-                <span class="mobile-nav-item-icon"><i data-lucide="users"></i></span>
-                <span data-i18n="nav.characters">Personnages</span>
-            </button>
-            <button class="mobile-nav-item" onclick="switchViewMobile('world')" data-view="world">
-                <span class="mobile-nav-item-icon"><i data-lucide="globe"></i></span>
-                <span data-i18n="nav.world">Univers</span>
-            </button>
-            <button class="mobile-nav-item" onclick="switchViewMobile('codex')" data-view="codex">
-                <span class="mobile-nav-item-icon"><i data-lucide="book-open"></i></span>
-                <span data-i18n="nav.codex">Codex</span>
-            </button>
-            <button class="mobile-nav-item" onclick="switchViewMobile('notes')" data-view="notes">
-                <span class="mobile-nav-item-icon"><i data-lucide="sticky-note"></i></span>
-                <span data-i18n="nav.notes">Notes</span>
-            </button>
+            <div class="mobile-nav-grid">
+                <button class="mobile-nav-item" onclick="switchViewMobile('characters')" data-view="characters">
+                    <span class="mobile-nav-item-icon"><i data-lucide="users"></i></span>
+                    <span data-i18n="nav.characters">Personnages</span>
+                </button>
+                <button class="mobile-nav-item" onclick="switchViewMobile('world')" data-view="world">
+                    <span class="mobile-nav-item-icon"><i data-lucide="globe"></i></span>
+                    <span data-i18n="nav.world">Univers</span>
+                </button>
+                <button class="mobile-nav-item" onclick="switchViewMobile('codex')" data-view="codex">
+                    <span class="mobile-nav-item-icon"><i data-lucide="book-open"></i></span>
+                    <span data-i18n="nav.codex">Codex</span>
+                </button>
+                <button class="mobile-nav-item" onclick="switchViewMobile('notes')" data-view="notes">
+                    <span class="mobile-nav-item-icon"><i data-lucide="sticky-note"></i></span>
+                    <span data-i18n="nav.notes">Notes</span>
+                </button>
+            </div>
         </div>
         <div class="mobile-nav-section">
             <div class="mobile-nav-section-title">
                 <i data-lucide="eye"></i>
                 <span data-i18n="mobile.group.viz">Visualisation</span>
             </div>
-            <button class="mobile-nav-item" onclick="switchViewMobile('mindmap')" data-view="mindmap">
-                <span class="mobile-nav-item-icon"><i data-lucide="git-branch"></i></span>
-                <span data-i18n="nav.mindmap">Mindmap</span>
-            </button>
-            <button class="mobile-nav-item" onclick="switchViewMobile('relations')" data-view="relations">
-                <span class="mobile-nav-item-icon"><i data-lucide="link"></i></span>
-                <span data-i18n="nav.relations">Relations</span>
-            </button>
-            <button class="mobile-nav-item" onclick="switchViewMobile('map')" data-view="map">
-                <span class="mobile-nav-item-icon"><i data-lucide="map"></i></span>
-                <span data-i18n="nav.map">Carte</span>
-            </button>
-            <button class="mobile-nav-item" onclick="switchViewMobile('timelineviz')" data-view="timelineviz">
-                <span class="mobile-nav-item-icon"><i data-lucide="clock"></i></span>
-                <span data-i18n="nav.timeline">Timeline</span>
-            </button>
+            <div class="mobile-nav-grid">
+                <button class="mobile-nav-item" onclick="switchViewMobile('mindmap')" data-view="mindmap">
+                    <span class="mobile-nav-item-icon"><i data-lucide="git-branch"></i></span>
+                    <span data-i18n="nav.mindmap">Mindmap</span>
+                </button>
+                <button class="mobile-nav-item" onclick="switchViewMobile('relations')" data-view="relations">
+                    <span class="mobile-nav-item-icon"><i data-lucide="link"></i></span>
+                    <span data-i18n="nav.relations">Relations</span>
+                </button>
+                <button class="mobile-nav-item" onclick="switchViewMobile('map')" data-view="map">
+                    <span class="mobile-nav-item-icon"><i data-lucide="map"></i></span>
+                    <span data-i18n="nav.map">Carte</span>
+                </button>
+                <button class="mobile-nav-item" onclick="switchViewMobile('timelineviz')" data-view="timelineviz">
+                    <span class="mobile-nav-item-icon"><i data-lucide="clock"></i></span>
+                    <span data-i18n="nav.timeline">Timeline</span>
+                </button>
+            </div>
         </div>
         <div class="mobile-nav-section">
             <div class="mobile-nav-section-title">
                 <i data-lucide="wrench"></i>
                 <span data-i18n="mobile.group.tools">Outils</span>
             </div>
-            <button class="mobile-nav-item" onclick="switchViewMobile('stats')" data-view="stats">
-                <span class="mobile-nav-item-icon"><i data-lucide="bar-chart-3"></i></span>
-                <span data-i18n="nav.stats">Stats</span>
-            </button>
-            <button class="mobile-nav-item" onclick="switchViewMobile('analysis')" data-view="analysis">
-                <span class="mobile-nav-item-icon"><i data-lucide="scan-search"></i></span>
-                <span data-i18n="nav.analysis">Analyse</span>
-            </button>
+            <div class="mobile-nav-grid">
+                <button class="mobile-nav-item" onclick="switchViewMobile('stats')" data-view="stats">
+                    <span class="mobile-nav-item-icon"><i data-lucide="bar-chart-3"></i></span>
+                    <span data-i18n="nav.stats">Stats</span>
+                </button>
+                <button class="mobile-nav-item" onclick="switchViewMobile('analysis')" data-view="analysis">
+                    <span class="mobile-nav-item-icon"><i data-lucide="scan-search"></i></span>
+                    <span data-i18n="nav.analysis">Analyse</span>
+                </button>
+            </div>
         </div>
         <div class="mobile-nav-section">
             <div class="mobile-nav-section-title">
@@ -157,41 +165,96 @@
                 <i data-lucide="settings"></i>
                 <span data-i18n="mobile.group.actions">Actions</span>
             </div>
-            <button class="mobile-nav-item" onclick="
-                    openProjectsModal();
-                    toggleMobileNav();
-                ">
-                <span class="mobile-nav-item-icon"><i data-lucide="folder-open"></i></span>
-                <span data-i18n="mobile.action.projects">Mes Projets</span>
-            </button>
-            <button class="mobile-nav-item" onclick="
-                    openThemeManager();
-                    toggleMobileNav();
-                ">
-                <span class="mobile-nav-item-icon"><i data-lucide="palette"></i></span>
-                <span data-i18n="mobile.action.themes">Thèmes</span>
-            </button>
-            <button class="mobile-nav-item" onclick="
-                    undo();
-                    toggleMobileNav();
-                " id="mobileUndoBtn">
-                <span class="mobile-nav-item-icon"><i data-lucide="undo-2"></i></span>
-                <span data-i18n="mobile.action.undo">Annuler</span>
-            </button>
-            <button class="mobile-nav-item" onclick="
-                    redo();
-                    toggleMobileNav();
-                " id="mobileRedoBtn">
-                <span class="mobile-nav-item-icon"><i data-lucide="redo-2"></i></span>
-                <span data-i18n="mobile.action.redo">Rétablir</span>
-            </button>
-            <button class="mobile-nav-item" onclick="
-                    showBackupMenu();
-                    toggleMobileNav();
-                ">
-                <span class="mobile-nav-item-icon"><i data-lucide="download"></i></span>
-                <span data-i18n="mobile.action.backup">Sauvegarde/Export</span>
-            </button>
+            <div class="mobile-nav-grid">
+                <button class="mobile-nav-item" onclick="
+                        openProjectsModal();
+                        toggleMobileNav();
+                    ">
+                    <span class="mobile-nav-item-icon"><i data-lucide="folder-open"></i></span>
+                    <span data-i18n="mobile.action.projects">Mes Projets</span>
+                </button>
+                <button class="mobile-nav-item" onclick="
+                        openThemeManager();
+                        toggleMobileNav();
+                    ">
+                    <span class="mobile-nav-item-icon"><i data-lucide="palette"></i></span>
+                    <span data-i18n="mobile.action.themes">Thèmes</span>
+                </button>
+                <button class="mobile-nav-item" onclick="
+                        undo();
+                        toggleMobileNav();
+                    " id="mobileUndoBtn">
+                    <span class="mobile-nav-item-icon"><i data-lucide="undo-2"></i></span>
+                    <span data-i18n="mobile.action.undo">Annuler</span>
+                </button>
+                <button class="mobile-nav-item" onclick="
+                        redo();
+                        toggleMobileNav();
+                    " id="mobileRedoBtn">
+                    <span class="mobile-nav-item-icon"><i data-lucide="redo-2"></i></span>
+                    <span data-i18n="mobile.action.redo">Rétablir</span>
+                </button>
+                <button class="mobile-nav-item" onclick="
+                        showBackupMenu();
+                        toggleMobileNav();
+                    ">
+                    <span class="mobile-nav-item-icon"><i data-lucide="file-up"></i></span>
+                    <span data-i18n="mobile.action.backup">Sauvegarde/Export</span>
+                </button>
+                <button class="mobile-nav-item" onclick="
+                        openImportChapterModal();
+                        toggleMobileNav();
+                    ">
+                    <span class="mobile-nav-item-icon"><i data-lucide="download"></i></span>
+                    <span data-i18n="mobile.action.import">Importer un texte</span>
+                </button>
+                <button class="mobile-nav-item" onclick="
+                        KeyboardShortcutsHandlers.openShortcutsModal();
+                        toggleMobileNav();
+                    ">
+                    <span class="mobile-nav-item-icon"><i data-lucide="keyboard"></i></span>
+                    <span data-i18n="mobile.action.shortcuts">Raccourcis clavier</span>
+                </button>
+                <button class="mobile-nav-item" onclick="
+                        togglePomodoroPopup();
+                        toggleMobileNav();
+                    ">
+                    <span class="mobile-nav-item-icon"><i data-lucide="timer"></i></span>
+                    <span data-i18n="mobile.action.pomodoro">Timer Pomodoro</span>
+                </button>
+            </div>
+        </div>
+        <div class="mobile-nav-section">
+            <div class="mobile-nav-section-title">
+                <i data-lucide="languages"></i>
+                <span data-i18n="mobile.group.help">Langue & Aide</span>
+            </div>
+
+            <div class="mobile-lang-container">
+                <div class="mobile-lang-row">
+                    <div class="mobile-lang-label">INTERFACE</div>
+                    <div class="mobile-lang-flags">
+                        <button class="mobile-lang-btn" onclick="Localization.setLocale('fr'); toggleMobileNav();"
+                            title="Français">🇫🇷</button>
+                        <button class="mobile-lang-btn" onclick="Localization.setLocale('en'); toggleMobileNav();"
+                            title="English">🇬🇧</button>
+                        <button class="mobile-lang-btn" onclick="Localization.setLocale('es'); toggleMobileNav();"
+                            title="Español">🇪🇸</button>
+                        <button class="mobile-lang-btn" onclick="Localization.setLocale('de'); toggleMobileNav();"
+                            title="Deutsch">🇩🇪</button>
+                    </div>
+                </div>
+
+                <div class="mobile-lang-row">
+                    <div class="mobile-lang-label">DOCS / AIDE</div>
+                    <div class="mobile-lang-flags">
+                        <a href="doc/fr/" class="mobile-lang-btn">🇫🇷</a>
+                        <a href="doc/en/" class="mobile-lang-btn">🇬🇧</a>
+                        <a href="doc/es/" class="mobile-lang-btn">🇪🇸</a>
+                        <a href="doc/de/" class="mobile-lang-btn">🇩🇪</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <!-- Barre de progression d'écriture (mode focus) - hors du grid -->
@@ -328,23 +391,23 @@
                     <i data-lucide="timer"></i>
                 </button>
                 <button class="header-action-btn" onclick="openImportChapterModal()" title="Importer un texte"
-                    data-i18n-title="header.import">
+                    data-i18n-title="header.import" id="headerImportBtn">
                     <i data-lucide="download"></i>
                 </button>
                 <button class="header-action-btn" onclick="showBackupMenu()" title="Sauvegardes et exports"
-                    data-i18n-title="header.backup">
+                    data-i18n-title="header.backup" id="headerBackupBtn">
                     <i data-lucide="file-up"></i>
                 </button>
                 <button class="header-action-btn" onclick="KeyboardShortcutsHandlers.openShortcutsModal()"
-                    title="Raccourcis clavier" data-i18n-title="header.shortcuts">
-                    <i data-lucide="help-circle"></i>
+                    title="Raccourcis clavier" data-i18n-title="header.shortcuts" id="headerShortcutsBtn">
+                    <i data-lucide="keyboard"></i>
                 </button>
                 <button class="header-action-btn" onclick="openThemeManager()" title="Gérer les thèmes"
-                    data-i18n-title="header.themes">
+                    data-i18n-title="header.themes" id="headerThemesBtn">
                     <i data-lucide="palette"></i>
                 </button>
                 <button class="header-action-btn" onclick="openProjectsModal()" title="Gérer les projets"
-                    data-i18n-title="header.projects">
+                    data-i18n-title="header.projects" id="headerProjectsBtn">
                     <i data-lucide="folder-open"></i>
                 </button>
                 <div class="doc-dropdown" id="docDropdown">
@@ -1612,7 +1675,7 @@
                                         style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary)">
                                         Utilisateur Google</div>
                                     <div id="gdrive-user-email" style="font-size: 0.75rem; color: var(--text-muted)">
-                                        <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c7a2aaa6aeab87a0aaa6aeabe9a4a8aa">[email&#160;protected]</a></div>
+                                        email@gmail.com</div>
                                 </div>
                             </div>
                             <button class="btn btn-small" onclick="handleSignoutClick()" title="Déconnexion"
@@ -2470,7 +2533,7 @@
                 Certains raccourcis peuvent varier selon votre système d'exploitation.</div>
         </div>
     </div>
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script></body>
+</body>
     <!-- Generated JS Scripts -->
     <script src="./js/vendor/driver.js.iife.js"></script>
 <script src="./js/vendor/idb.js"></script>
@@ -2730,4 +2793,9 @@
 <script src="./js/investigation-board/investigation-board.matrix.js"></script>
 <script src="./js/investigation-board/investigation-board.mmo.js"></script>
 <script src="./js/investigation-board/investigation-board.timeline.js"></script>
-<script src="./js/investigation-boa
+<script src="./js/investigation-board/investigation-board.demo.js"></script>
+<script src="./js/investigation-board/investigation-board.sidebar.js"></script>
+<script src="./js/investigation-board/investigation-board.view.js"></script>
+
+    </body>
+</html>

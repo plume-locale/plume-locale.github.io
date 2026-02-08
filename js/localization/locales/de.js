@@ -82,6 +82,7 @@ const LOCALE_DE = {
     "header.shortcuts": "Tastenkombinationen (?)",
     "header.themes": "Themen verwalten",
     "header.projects": "Projekte verwalten",
+    "header.documentation": "Dokumentation",
     "header.split": "Geteilte Ansicht umschalten",
     "header.storage": "Speicherplatz",
     "header.lang.switch": "Sprache wechseln (FR/EN)",
