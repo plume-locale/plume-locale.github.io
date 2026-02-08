@@ -51,6 +51,7 @@
 <link rel="stylesheet" href="./css/synonyms.css">
 <link rel="stylesheet" href="./css/map.css">
 <link rel="stylesheet" href="./css/keyboard-shortcuts.css">
+<link rel="stylesheet" href="./css/17.documentation-button.css">
 </head>
 <body>
     <!-- Mobile Menu Handle (poignée latérale) -->
@@ -346,6 +347,30 @@
                     data-i18n-title="header.projects">
                     <i data-lucide="folder-open"></i>
                 </button>
+                <div class="doc-dropdown" id="docDropdown">
+                    <button class="header-action-btn" title="Documentation" data-i18n-title="header.documentation"
+                        onclick="this.parentElement.classList.toggle('open'); event.stopPropagation();">
+                        <i data-lucide="book-open-text"></i>
+                    </button>
+                    <div class="doc-dropdown-menu">
+                        <a href="doc/fr/" class="doc-option">
+                            <span class="doc-flag">🇫🇷</span>
+                            <span class="doc-name">Français</span>
+                        </a>
+                        <a href="doc/en/" class="doc-option">
+                            <span class="doc-flag">🇬🇧</span>
+                            <span class="doc-name">English</span>
+                        </a>
+                        <a href="doc/de/" class="doc-option">
+                            <span class="doc-flag">🇩🇪</span>
+                            <span class="doc-name">Deutsch</span>
+                        </a>
+                        <a href="doc/es/" class="doc-option">
+                            <span class="doc-flag">🇪🇸</span>
+                            <span class="doc-name">Español</span>
+                        </a>
+                    </div>
+                </div>
                 <div class="lang-dropdown" id="langDropdown">
                     <button class="header-action-btn" title="Changer la langue" data-i18n-title="header.lang.switch"
                         onclick="this.parentElement.classList.toggle('open'); event.stopPropagation();">
@@ -1587,7 +1612,7 @@
                                         style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary)">
                                         Utilisateur Google</div>
                                     <div id="gdrive-user-email" style="font-size: 0.75rem; color: var(--text-muted)">
-                                        email@gmail.com</div>
+                                        <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c7a2aaa6aeab87a0aaa6aeabe9a4a8aa">[email&#160;protected]</a></div>
                                 </div>
                             </div>
                             <button class="btn btn-small" onclick="handleSignoutClick()" title="Déconnexion"
@@ -2445,7 +2470,7 @@
                 Certains raccourcis peuvent varier selon votre système d'exploitation.</div>
         </div>
     </div>
-</body>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script></body>
     <!-- Generated JS Scripts -->
     <script src="./js/vendor/driver.js.iife.js"></script>
 <script src="./js/vendor/idb.js"></script>
@@ -2705,9 +2730,4 @@
 <script src="./js/investigation-board/investigation-board.matrix.js"></script>
 <script src="./js/investigation-board/investigation-board.mmo.js"></script>
 <script src="./js/investigation-board/investigation-board.timeline.js"></script>
-<script src="./js/investigation-board/investigation-board.demo.js"></script>
-<script src="./js/investigation-board/investigation-board.sidebar.js"></script>
-<script src="./js/investigation-board/investigation-board.view.js"></script>
-
-    </body>
-</html>
+<script src="./js/investigation-boa
