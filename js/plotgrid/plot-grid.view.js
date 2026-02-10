@@ -95,6 +95,13 @@ const PlotGridUI = {
                         font-family: inherit;
                         font-size: 1.1rem;
                         font-weight: bolder;
+                        resize: none;
+                        overflow: hidden;
+                        height: auto;
+                        min-height: 1.2em;
+                        display: block;
+                        line-height: 1.2;
+                        padding: 2px 0;
                     }
                     .pg-header-input:hover, .pg-header-input:focus {
                         border-bottom-color: var(--primary-color);
@@ -426,6 +433,12 @@ const PlotGridUI = {
         `;
 
         if (typeof lucide !== 'undefined') lucide.createIcons();
+
+        // Auto-resize header inputs
+        container.querySelectorAll('.pg-header-input').forEach(el => {
+            el.style.height = 'auto';
+            el.style.height = el.scrollHeight + 'px';
+        });
     },
 
     /**
@@ -539,7 +552,7 @@ const PlotGridUI = {
                 const editable = col.type !== 'structure';
                 content = `
                     <div class="pg-col-header-container">
-                        ${editable ? `<input class="pg-header-input" value="${title}" onblur="PlotGridUI.updateColTitle('${col.id}', this.value)">` : `<span>${title}</span>`}
+                        ${editable ? `<textarea class="pg-header-input" rows="1" onblur="PlotGridUI.updateColTitle('${col.id}', this.value)" oninput="this.style.height = 'auto'; this.style.height = this.scrollHeight + 'px'" title="${title}">${title}</textarea>` : `<span>${title}</span>`}
                         ${editable ? `<span class="pg-col-delete-btn" onclick="PlotGridUI.deleteColumn('${col.id}')" title="${Localization.t('plotgrid.col.delete_tooltip')}"><i data-lucide="trash-2"></i></span>` : ''}
                     </div>
                 `;
@@ -547,11 +560,12 @@ const PlotGridUI = {
                 // Ghost column - editable to create a new column with custom title
                 content = `
                     <div class="pg-col-header-container">
-                        <input class="pg-header-input pg-ghost-header"
-                               value=""
+                        <textarea class="pg-header-input pg-ghost-header"
+                               rows="1"
                                placeholder="${Localization.t('plotgrid.ghost.header_placeholder')}"
                                onfocus="this.classList.add('editing')"
-                               onblur="PlotGridUI.createColumnFromGhost(${i}, this.value); this.classList.remove('editing')">
+                               oninput="this.style.height = 'auto'; this.style.height = this.scrollHeight + 'px'"
+                               onblur="PlotGridUI.createColumnFromGhost(${i}, this.value); this.classList.remove('editing')"></textarea>
                     </div>
                 `;
             }

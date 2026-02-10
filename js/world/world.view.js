@@ -121,10 +121,10 @@ function renderWorldList() {
                     ${elements.map(elem => {
             const iconName = WORLD_TYPE_ICONS[type] || 'circle';
             return `
-                            <div class="treeview-item" onclick="openWorldDetail(${elem.id})">
+                            <div class="treeview-item" onclick="openWorldDetail('${elem.id}')">
                                 <span class="treeview-item-icon"><i data-lucide="${iconName}" style="width:14px;height:14px;vertical-align:middle;"></i></span>
                                 <span class="treeview-item-label">${elem.name}</span>
-                                <button class="treeview-item-delete" onclick="event.stopPropagation(); handleDeleteWorldElement(${elem.id})" title="${Localization.t('world.action.delete')}"><i data-lucide="x" style="width:12px;height:12px;"></i></button>
+                                <button class="treeview-item-delete" onclick="event.stopPropagation(); handleDeleteWorldElement('${elem.id}')" title="${Localization.t('world.action.delete')}"><i data-lucide="x" style="width:12px;height:12px;"></i></button>
                             </div>
                         `;
         }).join('')}
@@ -170,7 +170,7 @@ function openWorldDetail(id) {
                     <span style="font-size: 0.9rem; padding: 0.5rem 1rem; background: var(--accent-gold); color: var(--bg-primary); border-radius: 2px;">${Localization.t(WORLD_TYPE_I18N[data.element.type] || 'world.type.other')}</span>
                 </div>
                 <div style="display: flex; gap: 0.5rem;">
-                    <button class="btn btn-small" onclick="showReferencesForElement(${id})"><i data-lucide="link" style="width:14px;height:14px;vertical-align:middle;margin-right:4px;"></i>${Localization.t('world.action.view_refs')}</button>
+                    <button class="btn btn-small" onclick="showReferencesForElement('${id}')"><i data-lucide="link" style="width:14px;height:14px;vertical-align:middle;margin-right:4px;"></i>${Localization.t('world.action.view_refs')}</button>
                     <button class="btn" onclick="switchView('editor')"><i data-lucide="arrow-left" style="width:14px;height:14px;vertical-align:middle;margin-right:4px;"></i> ${Localization.t('world.action.back_editor')}</button>
                 </div>
             </div>
@@ -182,13 +182,13 @@ function openWorldDetail(id) {
                 <div class="detail-field">
                     <div class="detail-label">${Localization.t('world.field.name')}</div>
                     <input type="text" class="form-input" value="${data.element.name}" 
-                           onchange="handleUpdateWorldField(${id}, 'name', this.value)">
+                           onchange="handleUpdateWorldField('${id}', 'name', this.value)">
                 </div>
             </div>
 
             <div class="detail-section">
                 <div class="detail-section-title">${Localization.t('world.section.type')}</div>
-                <select class="form-input" onchange="handleUpdateWorldField(${id}, 'type', this.value)">
+                <select class="form-input" onchange="handleUpdateWorldField('${id}', 'type', this.value)">
                     <option value="Lieu" ${data.element.type === 'Lieu' ? 'selected' : ''}>${Localization.t('world.type.place')}</option>
                     <option value="Objet" ${data.element.type === 'Objet' ? 'selected' : ''}>${Localization.t('world.type.object')}</option>
                     <option value="Concept" ${data.element.type === 'Concept' ? 'selected' : ''}>${Localization.t('world.type.concept')}</option>
@@ -200,25 +200,25 @@ function openWorldDetail(id) {
             <div class="detail-section">
                 <div class="detail-section-title">${Localization.t('world.section.description')}</div>
                 <textarea class="form-input" rows="6" 
-                          onchange="handleUpdateWorldField(${id}, 'description', this.value)">${data.element.description}</textarea>
+                          onchange="handleUpdateWorldField('${id}', 'description', this.value)">${data.element.description}</textarea>
             </div>
 
             <div class="detail-section">
                 <div class="detail-section-title">${Localization.t('world.section.details')}</div>
                 <textarea class="form-input" rows="6" 
-                          onchange="handleUpdateWorldField(${id}, 'details', this.value)">${data.element.details}</textarea>
+                          onchange="handleUpdateWorldField('${id}', 'details', this.value)">${data.element.details}</textarea>
             </div>
 
             <div class="detail-section">
                 <div class="detail-section-title">${Localization.t('world.section.history')}</div>
                 <textarea class="form-input" rows="6" 
-                          onchange="handleUpdateWorldField(${id}, 'history', this.value)">${data.element.history}</textarea>
+                          onchange="handleUpdateWorldField('${id}', 'history', this.value)">${data.element.history}</textarea>
             </div>
 
             <div class="detail-section">
                 <div class="detail-section-title">${Localization.t('world.section.notes')}</div>
                 <textarea class="form-input" rows="4" 
-                          onchange="handleUpdateWorldField(${id}, 'notes', this.value)">${data.element.notes}</textarea>
+                          onchange="handleUpdateWorldField('${id}', 'notes', this.value)">${data.element.notes}</textarea>
             </div>
         </div>
     `;
@@ -237,7 +237,7 @@ function renderLinkedScenesFragment(linkedScenes) {
             <div class="detail-section-title"><i data-lucide="file-text" style="width:14px;height:14px;vertical-align:middle;margin-right:4px;"></i>${Localization.t('world.section.linked_scenes', linkedScenes.length)}</div>
             <div class="quick-links">
                 ${linkedScenes.map(scene => `
-                    <span class="link-badge" onclick="openScene(${scene.actId}, ${scene.chapterId}, ${scene.sceneId})" title="${scene.actTitle} - ${scene.chapterTitle}">
+                    <span class="link-badge" onclick="openScene('${scene.actId}', '${scene.chapterId}', '${scene.sceneId}')" title="${scene.actTitle} - ${scene.chapterTitle}">
                         ${scene.breadcrumb}
                     </span>
                 `).join('')}

@@ -23,7 +23,7 @@ const ProjectHandlers = {
         }
 
         // Import de projet
-        const importInput = document.getElementById('importProjectInput');
+        const importInput = document.getElementById('importProjectFile');
         if (importInput) {
             importInput.onchange = (e) => ProjectViewModel.import(e.target.files[0]);
         }
@@ -33,7 +33,7 @@ const ProjectHandlers = {
      * Déclenche l'ouverture du sélecteur de fichier pour l'import.
      */
     triggerImport() {
-        document.getElementById('importProjectInput')?.click();
+        document.getElementById('importProjectFile')?.click();
     }
 };
 
@@ -49,7 +49,11 @@ function createNewProject() {
 }
 function openNewProjectModal() { ProjectView.openNewModal(); }
 function importProject() { ProjectHandlers.triggerImport(); }
-function renderProjectsList() { ProjectView.renderList(projects, currentProjectId); }
+function renderProjectsList() {
+    if (typeof ProjectView !== 'undefined' && typeof ProjectView.renderLandingPage === 'function') {
+        ProjectView.renderLandingPage(projects);
+    }
+}
 function renderAnalysis() { ProjectView.renderAnalysis(); }
 function switchToProject(id) { ProjectViewModel.switchTo(id); }
 function deleteProject(id) { ProjectViewModel.delete(id); }

@@ -1,0 +1,321 @@
+/* Product Tour Editor Styles */
+
+:root {
+    --tour-editor-primary: #ff9800;
+    --tour-editor-bg: rgba(26, 26, 26, 0.95);
+    --tour-editor-border: rgba(255, 152, 0, 0.3);
+}
+
+/* Selector Overlay */
+#tour-selector-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 999999;
+    cursor: crosshair;
+    display: none;
+    background: rgba(0, 0, 0, 0.1);
+}
+
+#tour-selector-overlay.active {
+    display: block;
+}
+
+.tour-element-highlight {
+    position: absolute;
+    border: 2px solid var(--tour-editor-primary);
+    background: rgba(255, 152, 0, 0.1);
+    pointer-events: none;
+    z-index: 1000000;
+    transition: all 0.1s ease-out;
+    box-shadow: 0 0 15px var(--tour-editor-primary);
+}
+
+.tour-element-label {
+    position: absolute;
+    background: var(--tour-editor-primary);
+    color: white;
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    top: -20px;
+    left: 0;
+    white-space: nowrap;
+    font-family: monospace;
+}
+
+/* Editor Modal */
+.tour-editor-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    max-width: 90vw;
+    background: var(--tour-editor-bg);
+    border: 1px solid var(--tour-editor-border);
+    border-radius: 12px;
+    color: white;
+    z-index: 1000001;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    display: none;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+}
+
+.tour-editor-modal.active {
+    display: flex;
+    flex-direction: column;
+}
+
+.tour-editor-header {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 1rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.tour-editor-header h3 {
+    margin: 0;
+    color: var(--tour-editor-primary);
+    font-size: 1.1rem;
+}
+
+.tour-editor-body {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.tour-editor-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.tour-editor-field label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #ccc;
+}
+
+.tour-editor-field input,
+.tour-editor-field textarea,
+.tour-editor-field select {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 6px;
+    color: white;
+    padding: 0.75rem;
+    font-size: 0.9rem;
+    transition: border-color 0.2s;
+}
+
+.tour-editor-field input:focus,
+.tour-editor-field textarea:focus,
+.tour-rte-editor:focus {
+    border-color: var(--tour-editor-primary);
+    outline: none;
+}
+
+/* Rich Text Editor */
+.tour-rte-toolbar {
+    display: flex;
+    gap: 4px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-bottom: none;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    padding: 6px;
+}
+
+.tour-rte-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #ccc;
+    padding: 4px 8px;
+    cursor: pointer;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.tour-rte-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.tour-rte-btn i {
+    width: 14px;
+    height: 14px;
+}
+
+.tour-rte-editor {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+    color: white;
+    padding: 0.75rem;
+    font-size: 0.95rem;
+    min-height: 120px;
+    max-height: 300px;
+    overflow-y: auto;
+    transition: border-color 0.2s;
+    line-height: 1.5;
+}
+
+.tour-rte-editor ul,
+.tour-rte-editor ol {
+    margin-left: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.tour-rte-editor b,
+.tour-rte-editor strong {
+    color: var(--tour-editor-primary);
+    font-weight: 700;
+}
+
+/* Placeholder simulation for contenteditable */
+.tour-rte-editor:empty:before {
+    content: "Décrivez ce que fait cet élément...";
+    color: #777;
+    pointer-events: none;
+}
+
+.tour-editor-footer {
+    padding: 1rem 1.5rem;
+    background: rgba(0, 0, 0, 0.2);
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.tour-editor-btn {
+    padding: 0.6rem 1.2rem;
+    border-radius: 6px;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.tour-editor-btn-secondary {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.tour-editor-btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.tour-editor-btn-primary {
+    background: var(--tour-editor-primary);
+    color: black;
+}
+
+.tour-editor-btn-primary:hover {
+    background: #ffa726;
+    transform: translateY(-2px);
+}
+
+/* Tour Steps Sidebar */
+#tour-steps-sidebar {
+    position: fixed;
+    right: 0;
+    top: 60px;
+    bottom: 0;
+    width: 300px;
+    background: var(--tour-editor-bg);
+    border-left: 1px solid var(--tour-editor-border);
+    z-index: 999998;
+    display: none;
+    flex-direction: column;
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.3);
+}
+
+#tour-steps-sidebar.active {
+    display: flex;
+}
+
+.tour-sidebar-header {
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.tour-sidebar-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.tour-step-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 0.75rem;
+    cursor: grab;
+    transition: all 0.2s;
+}
+
+.tour-step-card:hover {
+    border-color: var(--tour-editor-primary);
+    background: rgba(255, 152, 0, 0.05);
+}
+
+.tour-step-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 0.5rem;
+}
+
+.tour-step-title {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--tour-editor-primary);
+}
+
+.tour-step-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.tour-step-btn {
+    background: none;
+    border: none;
+    color: #888;
+    cursor: pointer;
+    padding: 2px;
+}
+
+.tour-step-btn:hover {
+    color: white;
+}
+
+.tour-step-selector {
+    font-family: monospace;
+    font-size: 0.75rem;
+    color: #777;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

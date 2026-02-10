@@ -31,6 +31,11 @@ const ProjectModel = {
                 facts: [],
                 knowledge: [],
                 suspectLinks: []
+            },
+            globalnotes: {
+                boards: [],
+                items: [],
+                activeBoardId: null
             }
         };
     },
@@ -57,6 +62,15 @@ const ProjectModel = {
             facts: [],
             knowledge: [],
             suspectLinks: []
+        };
+        if (project.milanote) {
+            project.globalnotes = project.milanote;
+            delete project.milanote;
+        }
+        project.globalnotes = project.globalnotes || {
+            boards: [],
+            items: [],
+            activeBoardId: null
         };
         return project;
     },

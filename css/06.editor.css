@@ -144,6 +144,67 @@
     max-width: none;
     margin: 0 auto;
     padding: 3rem;
+    transition: width 0.3s ease, padding 0.3s ease, margin 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+}
+
+
+/* Responsive adjustments for small screens */
+@media (max-width: 25cm) {
+    .editor-content.page-mode {
+        width: 95% !important;
+        padding: 1rem !important;
+        margin: 1rem auto;
+    }
+
+    .editor-content.page-mode .page-break {
+        display: none;
+    }
+
+    .page-format-a4 .editor-textarea,
+    .page-format-moyen .editor-textarea,
+    .page-format-a5 .editor-textarea,
+    .page-format-digest .editor-textarea,
+    .page-format-pocket .editor-textarea {
+        min-height: 1200px !important;
+    }
+}
+
+/* Multi-page layout styles */
+.pages-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    justify-content: center;
+    padding: 2rem 0;
+}
+
+.simulated-page {
+    background: #ffffff;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    border: 1px solid var(--border-color);
+    position: relative;
+    overflow: hidden;
+    page-break-after: always;
+}
+
+[data-theme="dark"] .simulated-page {
+    background: #f9f9f9;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+}
+
+.simulated-page .page-text {
+    font-family: 'Crimson Pro', serif;
+    color: #2c3e50;
+    overflow: hidden;
+}
+
+[data-theme="dark"] .simulated-page .page-text {
+    color: #1a1a1a;
+}
+
+.simulated-page .page-number {
+    font-family: 'Crimson Pro', serif;
+    user-select: none;
 }
 
 .editor-textarea {
@@ -282,9 +343,9 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(var(--bg-accent-rgb), 0.6);
-    backdrop-filter: blur(4px);
-    z-index: 1000;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(8px);
+    z-index: 2000000;
     align-items: center;
     justify-content: center;
 }
@@ -871,7 +932,6 @@
 
 .scene-nav-toolbar.visible {
     opacity: 1;
-    pointer-events: auto;
 }
 
 .scene-nav-buttons {

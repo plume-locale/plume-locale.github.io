@@ -27,6 +27,18 @@
     color: var(--text-secondary);
 }
 
+.driver-popover-image {
+    width: 100%;
+    max-height: 350px;
+    object-fit: contain;
+    background: var(--bg-secondary);
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    display: block;
+}
+
+
+
 .driver-popover-description p {
     margin-bottom: 0.75rem;
 }
@@ -129,8 +141,13 @@
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
 
 /* Arrow styling */
@@ -176,6 +193,7 @@
         opacity: 0;
         transform: translate(-50%, -45%);
     }
+
     to {
         opacity: 1;
         transform: translate(-50%, -50%);
@@ -307,20 +325,20 @@
         max-width: 90vw;
         margin: 1rem;
     }
-    
+
     .tour-welcome-modal {
         padding: 1.5rem;
         max-width: 90%;
     }
-    
+
     .tour-welcome-actions {
         flex-direction: column;
     }
-    
+
     .driver-popover-footer {
         flex-direction: column;
     }
-    
+
     .driver-popover-next-btn,
     .driver-popover-prev-btn {
         width: 100%;
@@ -336,6 +354,7 @@
 
 /* Print styles - hide tour elements */
 @media print {
+
     .driver-popover,
     .driver-overlay,
     .tour-welcome-modal,
@@ -350,7 +369,7 @@
     .driver-active-element {
         outline-width: 4px;
     }
-    
+
     .driver-popover {
         border-width: 2px;
     }
@@ -358,6 +377,7 @@
 
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
+
     .driver-popover,
     .tour-welcome-modal,
     .driver-overlay,

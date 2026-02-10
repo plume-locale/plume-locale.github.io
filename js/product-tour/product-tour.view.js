@@ -312,22 +312,25 @@ const ProductTourDriverView = {
         const tempElements = document.querySelectorAll('[data-tour-temp]');
         tempElements.forEach(el => el.remove());
 
-        // Supprimer tous les éléments Driver.js qui pourraient rester
+        // Supprimer tous les éléments Driver.js qui sont des couches DOM autonomes
         const driverElements = [
             '.driver-overlay',
             '.driver-popover',
             '#driver-popover-content',
-            '.driver-active-element',
-            '.driver-no-interaction',
             '#driver-dummy-element'
         ];
 
         driverElements.forEach(selector => {
             const elements = document.querySelectorAll(selector);
             elements.forEach(el => {
-                console.log('Removing element:', selector);
+                console.log('Removing helper element:', selector);
                 el.remove();
             });
+        });
+
+        // Nettoyer les classes Driver.js sur les éléments de l'application
+        document.querySelectorAll('.driver-active-element, .driver-no-interaction').forEach(el => {
+            el.classList.remove('driver-active-element', 'driver-no-interaction');
         });
 
         // Retirer les classes Driver.js du body

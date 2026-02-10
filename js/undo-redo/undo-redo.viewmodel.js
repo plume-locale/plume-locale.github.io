@@ -104,11 +104,7 @@ const UndoRedoViewModel = {
     saveToHistoryImmediate(actionType = 'immediate') {
         if (window.isUndoRedoAction) return;
 
-        if (this._debounceTimer) {
-            clearTimeout(this._debounceTimer);
-            this._debounceTimer = null;
-        }
-
+        this._cancelDebounce();
         this._saveInternal(actionType);
     },
 
@@ -116,8 +112,9 @@ const UndoRedoViewModel = {
      * Fonction de sauvegarde interne
      */
     _saveInternal(actionType) {
-        const actionLabel = UndoRedoConfig.actionLabels[actionType] || actionType;
-        const currentSnapshot = UndoRedoRepository.createSnapshot(actionLabel);
+        // On stocke le type (clé de traduction) comme label du snapshot
+        const snapshotType = actionType;
+        const currentSnapshot = UndoRedoRepository.createSnapshot(snapshotType);
 
         if (!currentSnapshot) return;
 
@@ -132,8 +129,8 @@ const UndoRedoViewModel = {
             return;
         }
 
-        // Pousser l'ANCIEN état avec le label de l'action actuelle
-        lastSnap.label = actionLabel;
+        // Pousser l'ANCIEN état avec le type de l'action actuelle
+        lastSnap.label = snapshotType;
         window.historyStack.push(lastSnap);
 
         // Limiter la taille
@@ -146,6 +143,7 @@ const UndoRedoViewModel = {
         UndoRedoRepository._lastSnapshot = currentSnapshot;
 
         UndoRedoView.updateButtons();
+        const actionLabel = UndoRedoConfig.actionLabels[actionType] || actionType;
         console.log(`[UndoRedo] Changement détecté: ${actionLabel}, historique: ${window.historyStack.length}`);
     },
 
@@ -202,6 +200,7 @@ const UndoRedoViewModel = {
         if (typeof updateStats === 'function') try { updateStats(); } catch (e) { }
         if (typeof renderArcs === 'function') try { renderArcs(); } catch (e) { }
         if (typeof ThrillerBoardView !== 'undefined' && typeof ThrillerBoardView.render === 'function') try { ThrillerBoardView.render(); } catch (e) { }
+        if (typeof GlobalNotesView !== 'undefined' && typeof GlobalNotesView.render === 'function') try { GlobalNotesView.render(); } catch (e) { }
         if (typeof ArcBoardView !== 'undefined' && typeof ArcBoardView.render === 'function') try { ArcBoardView.render(); } catch (e) { }
         if (typeof ArcBoardViewModel !== 'undefined' && typeof ArcBoardViewModel.render === 'function') try { ArcBoardViewModel.render(); } catch (e) { }
         if (typeof renderMindmapView === 'function') try { renderMindmapView(); } catch (e) { }

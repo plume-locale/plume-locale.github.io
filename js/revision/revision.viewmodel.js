@@ -38,6 +38,13 @@ const RevisionViewModel = {
      * Applies the current highlight color to the selection.
      */
     applyHighlight() {
+        const editor = document.querySelector('.editor-textarea');
+        if (editor && editor._lastRange) {
+            const sel = window.getSelection();
+            sel.removeAllRanges();
+            sel.addRange(editor._lastRange);
+        }
+
         const success = RevisionView.wrapSelectionInSpan(`highlight-${this.state.selectedHighlightColor}`);
         if (success) {
             this.updateSceneContent();
@@ -47,12 +54,20 @@ const RevisionViewModel = {
 
         const sel = window.getSelection();
         if (sel) sel.removeAllRanges();
+        if (editor) editor._lastRange = null;
     },
 
     /**
      * Removes highlights from the current selection.
      */
     removeHighlight() {
+        const editor = document.querySelector('.editor-textarea');
+        if (editor && editor._lastRange) {
+            const sel = window.getSelection();
+            sel.removeAllRanges();
+            sel.addRange(editor._lastRange);
+        }
+
         const success = RevisionView.removeHighlightSpan();
         if (success) {
             this.updateSceneContent();
@@ -62,12 +77,20 @@ const RevisionViewModel = {
 
         const sel = window.getSelection();
         if (sel) sel.removeAllRanges();
+        if (editor) editor._lastRange = null;
     },
 
     /**
      * Prepares and opens the annotation popup.
      */
     openAnnotationPopup() {
+        const editor = document.querySelector('.editor-textarea');
+        if (editor && editor._lastRange) {
+            const sel = window.getSelection();
+            sel.removeAllRanges();
+            sel.addRange(editor._lastRange);
+        }
+
         const sel = window.getSelection();
         if (!sel.rangeCount || sel.isCollapsed) {
             alert(Localization.t('revision.alert.select_text_to_annotate'));

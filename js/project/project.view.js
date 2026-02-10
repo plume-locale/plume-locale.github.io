@@ -14,102 +14,366 @@ const ProjectView = {
     },
 
     /**
-     * Affiche la liste des projets dans la modale.
+     * Rendu de la page d'accueil (Landing Page) des projets.
      * @param {Array} projects 
-     * @param {number|string} currentId 
      */
-    renderList(projects, currentId) {
-        const container = document.getElementById('projectsList');
+    renderLandingPage(projects) {
+        const container = document.getElementById('editorView');
+        if (!container) return;
+
+        const viewMode = ProjectViewModel.viewMode;
+
+        container.innerHTML = `
+            <div class="projects-landing-container">
+                <div class="projects-header">
+                    <h1 class="projects-title">
+                        <i data-lucide="folder-open"></i> ${Localization.t('project.view.title')}
+                    </h1>
+                    <div class="projects-actions">
+                        <div class="view-toggle-group">
+                            <button class="toggle-btn ${viewMode === 'grid' ? 'active' : ''}" 
+                                onclick="ProjectViewModel.setViewMode('grid')" 
+                                title="${Localization.t('project.view.grid')}">
+                                <i data-lucide="layout-grid"></i>
+                            </button>
+                            <button class="toggle-btn ${viewMode === 'table' ? 'active' : ''}" 
+                                onclick="ProjectViewModel.setViewMode('table')" 
+                                title="${Localization.t('project.view.table')}">
+                                <i data-lucide="list"></i>
+                            </button>
+                        </div>
+                        <button class="btn" onclick="ProjectViewModel.importHandler()">
+                            <i data-lucide="download"></i> ${Localization.t('btn.import_project')}
+                        </button>
+                        <button class="btn btn-primary" onclick="ProjectView.openNewModal()">
+                            ${Localization.t('btn.add_project')}
+                        </button>
+                    </div>
+                </div>
+                
+                ${(projects && projects.length > 0)
+                ? (viewMode === 'grid'
+                    ? `<div class="projects-grid" id="projectsGrid">${projects.map(proj => this.renderCard(proj)).join('')}</div>`
+                    : this.renderTableView(projects))
+                : `
+                    <div class="projects-empty-state">
+                        <div class="empty-icon"><i data-lucide="folder-search"></i></div>
+                        <h2>${Localization.t('project.view.no_project')}</h2>
+                        <button class="btn btn-primary" onclick="ProjectView.openNewModal()" style="margin-top: 1rem;">
+                            <i data-lucide="plus"></i> ${Localization.t('btn.add_project')}
+                        </button>
+                    </div>`
+            }
+            </div>
+        `;
+
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+    },
+
+    /**
+     * Rendu d'une carte projet individuelle.
+     * @param {Object} proj 
+     */
+    renderCard(proj) {
+        const isActive = proj.id === currentProjectId;
+        const stats = this.getProjectStats(proj);
+
+        const createdDate = this.formatDate(proj.createdAt);
+        const updatedDate = this.formatDate(proj.updatedAt);
+
+        // Calcule du progrès
+        const totalWords = stats.wordCount;
+        const goal = proj.stats?.totalGoal || 80000;
+        const progress = Math.min(100, Math.round((totalWords / goal) * 100));
+
+        return `
+            <div class="project-card-new ${isActive ? 'active' : ''}" onclick="ProjectViewModel.switchTo(${proj.id})">
+                ${isActive ? `<span class="status-badge active">${Localization.t('project.view.active')}</span>` : ''}
+                
+                <h3 class="title">${proj.title}</h3>
+                ${(proj.updatedAt && (new Date() - new Date(proj.updatedAt)) < 24 * 60 * 60 * 1000) ? `<span class="recent-badge" style="background: rgba(46, 204, 113, 0.1); color: #2ecc71; border: 1px solid #2ecc71; font-size: 0.65rem; padding: 2px 6px; border-radius: 10px; margin-left: 8px; vertical-align: middle;">${Localization.t('project.view.recently_updated')}</span>` : ''}
+                ${proj.genre ? `<div class="genre">${proj.genre}</div>` : ''}
+                <p class="description">${proj.description || ''}</p>
+                
+                <div class="card-dates">
+                    <span><i data-lucide="calendar" style="width:12px;height:12px;"></i> ${Localization.t('project.view.created_at')} ${createdDate}</span>
+                    <span><i data-lucide="clock" style="width:12px;height:12px;"></i> ${Localization.t('project.view.updated_at')} ${updatedDate}</span>
+                </div>
+
+                ${stats.lastSession ? `
+                <div class="card-last-session" style="font-size: 0.75rem; color: var(--accent-gold); margin-bottom: 0.5rem;">
+                    <i data-lucide="history" style="width:12px;height:12px;vertical-align:middle;margin-right:4px;"></i>
+                    ${Localization.t('project.view.last_session', this.formatDate(stats.lastSession.date), stats.lastSession.words)}
+                </div>
+                ` : ''}
+
+                <div class="progress-section">
+                    <div class="progress-bar-container">
+                        <div class="progress-bar-fill" style="width: ${progress}%"></div>
+                    </div>
+                    <div class="progress-info">
+                        <span>${progress}%</span>
+                        <span style="opacity: 0.7; font-size: 0.75rem;">${totalWords.toLocaleString()} / ${goal.toLocaleString()} ${Localization.t('project.view.words_short')}</span>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-group-title">${Localization.t('project.view.manuscript')}</div>
+                    <div class="stat-item" title="${Localization.t('project.view.total_word_count')}">
+                        <div class="stat-row">
+                            <i data-lucide="align-left"></i>
+                            <span class="value">${totalWords.toLocaleString(Localization.currentLang === 'fr' ? 'fr-FR' : 'en-US')}</span>
+                        </div>
+                        <span class="label">${Localization.t('project.view.words_short')}</span>
+                    </div>
+                    <div class="stat-item" title="${Localization.t('project.view.act_count')}">
+                        <div class="stat-row">
+                            <i data-lucide="layers"></i>
+                            <span class="value">${proj.acts?.length || 0}</span>
+                        </div>
+                        <span class="label">${Localization.t('project.view.acts_short')}</span>
+                    </div>
+                    <div class="stat-item" title="${Localization.t('project.view.chapter_count')}">
+                        <div class="stat-row">
+                            <i data-lucide="bookmark"></i>
+                            <span class="value">${stats.chapterCount}</span>
+                        </div>
+                        <span class="label">${Localization.t('project.view.chapters_short')}</span>
+                    </div>
+                    <div class="stat-item" title="${Localization.t('project.view.scene_count')}">
+                        <div class="stat-row">
+                            <i data-lucide="file-text"></i>
+                            <span class="value">${stats.sceneCount}</span>
+                        </div>
+                        <span class="label">${Localization.t('project.view.scenes_short')}</span>
+                    </div>
+
+                    <div class="stat-group-title">${Localization.t('project.view.database')}</div>
+                    <div class="stat-item" title="${Localization.t('project.view.character_count')}">
+                        <div class="stat-row">
+                            <i data-lucide="users"></i>
+                            <span class="value">${stats.characterCount}</span>
+                        </div>
+                        <span class="label">${Localization.t('nav.characters')}</span>
+                    </div>
+                    <div class="stat-item" title="${Localization.t('project.view.world_count')}">
+                        <div class="stat-row">
+                            <i data-lucide="globe"></i>
+                            <span class="value">${stats.worldCount}</span>
+                        </div>
+                        <span class="label">${Localization.t('nav.world')}</span>
+                    </div>
+                    <div class="stat-item" title="${Localization.t('project.view.codex_count')}">
+                        <div class="stat-row">
+                            <i data-lucide="book"></i>
+                            <span class="value">${stats.codexCount}</span>
+                        </div>
+                        <span class="label">${Localization.t('nav.codex')}</span>
+                    </div>
+                    <div class="stat-item" title="${Localization.t('project.view.note_count')}">
+                        <div class="stat-row">
+                            <i data-lucide="sticky-note"></i>
+                            <span class="value">${stats.noteCount}</span>
+                        </div>
+                        <span class="label">${Localization.t('nav.notes')}</span>
+                    </div>
+                    <div class="stat-item" title="${Localization.t('project.view.arc_count')}">
+                        <div class="stat-row">
+                            <i data-lucide="git-branch"></i>
+                            <span class="value">${stats.arcCount}</span>
+                        </div>
+                        <span class="label">${Localization.t('nav.arcs')}</span>
+                    </div>
+                    <div class="stat-item" title="${Localization.t('project.view.investigation_count')}">
+                        <div class="stat-row">
+                            <i data-lucide="search"></i>
+                            <span class="value">${stats.investigationCount}</span>
+                        </div>
+                        <span class="label">${Localization.t('project.view.investigation_short')}</span>
+                    </div>
+                </div>
+
+                <div class="project-card-actions-row">
+                    <button class="btn btn-small" onclick="event.stopPropagation(); ProjectViewModel.switchTo(${proj.id})">
+                        <i data-lucide="external-link"></i> ${Localization.t('project.view.btn_open')}
+                    </button>
+                    <button class="btn btn-small btn-outline" onclick="event.stopPropagation(); ProjectViewModel.export(${proj.id})" title="${Localization.t('project.view.btn_export')}">
+                        <i data-lucide="upload"></i>
+                    </button>
+                    <button class="btn btn-small btn-outline" onclick="event.stopPropagation(); ProjectViewModel.backup(${proj.id})" title="${Localization.t('header.backup')}">
+                        <i data-lucide="file-up"></i>
+                    </button>
+                    <button class="btn btn-small btn-danger-outline" onclick="event.stopPropagation(); ProjectViewModel.delete(${proj.id})" title="${Localization.t('project.view.btn_delete')}">
+                        <i data-lucide="trash-2"></i>
+                    </button>
+                </div>
+            </div>
+        `;
+    },
+
+    /**
+     * Rendu des projets sous forme de tableau.
+     */
+    renderTableView(projects) {
+        return `
+            <div class="projects-table-wrapper">
+                <table class="projects-table">
+                    <thead>
+                        <tr>
+                            <th>${Localization.t('modal.project.label_name')}</th>
+                            <th>Stats</th>
+                            <th style="text-align: center;">${Localization.t('project.view.total_word_count')} / Goal</th>
+                            <th style="text-align: center;">${Localization.t('project.view.updated_at')}</th>
+                            <th style="text-align: center;">${Localization.t('project.view.active')}</th>
+                            <th style="text-align: right;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${projects.map(proj => {
+            const isActive = proj.id === currentProjectId;
+            const stats = this.getProjectStats(proj);
+            const updatedDate = this.formatDate(proj.updatedAt);
+            return `
+                                <tr class="${isActive ? 'active' : ''}" onclick="ProjectViewModel.switchTo(${proj.id})">
+                                    <td>
+                                        <div class="table-title">
+                                            <i data-lucide="folder"></i>
+                                            <div style="display: flex; flex-direction: column;">
+                                                <span>${proj.title}</span>
+                                                <span style="font-size: 0.7rem; opacity: 0.6;">${proj.genre || '-'}</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="table-stats-row" style="display: flex; gap: 12px; font-size: 0.8rem;">
+                                            <span title="${Localization.t('project.view.act_count')}"><i data-lucide="layers" style="width:12px;height:12px;vertical-align:middle;margin-right:2px;"></i> ${proj.acts?.length || 0}</span>
+                                            <span title="${Localization.t('project.view.chapter_count')}"><i data-lucide="bookmark" style="width:12px;height:12px;vertical-align:middle;margin-right:2px;"></i> ${stats.chapterCount}</span>
+                                            <span title="${Localization.t('project.view.scene_count')}"><i data-lucide="file-text" style="width:12px;height:12px;vertical-align:middle;margin-right:2px;"></i> ${stats.sceneCount}</span>
+                                        </div>
+                                    </td>
+                                    <td style="text-align: center;">
+                                        <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
+                                            <span style="font-weight: 600;">${stats.wordCount.toLocaleString()}</span>
+                                            <div style="width: 80px; height: 4px; background: var(--bg-tertiary); border-radius: 2px; overflow: hidden; border: 1px solid var(--border-color);">
+                                                <div style="width: ${Math.min(100, Math.round((stats.wordCount / (proj.stats?.totalGoal || 80000)) * 100))}% ; height: 100%; background: var(--accent-gold);"></div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td style="text-align: center; font-size: 0.85rem;">${updatedDate}</td>
+                                    <td style="text-align: center;">
+                                        ${isActive ? `<span class="active-dot"></span>` : ''}
+                                    </td>
+                                    <td style="text-align: right;">
+                                        <div class="table-actions">
+                                            <button class="icon-btn" onclick="event.stopPropagation(); ProjectViewModel.export(${proj.id})" title="${Localization.t('project.view.btn_export')}">
+                                                <i data-lucide="upload"></i>
+                                            </button>
+                                            <button class="icon-btn" onclick="event.stopPropagation(); ProjectViewModel.backup(${proj.id})" title="${Localization.t('header.backup')}">
+                                                <i data-lucide="file-up"></i>
+                                            </button>
+                                            <button class="icon-btn danger" onclick="event.stopPropagation(); ProjectViewModel.delete(${proj.id})" title="${Localization.t('project.view.btn_delete')}">
+                                                <i data-lucide="trash-2"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            `;
+        }).join('')}
+                    </tbody>
+                </table>
+            </div>
+        `;
+    },
+
+    getProjectStats(proj) {
+        let chapterCount = 0;
+        let sceneCount = 0;
+        let wordCount = 0;
+
+        if (proj.acts) {
+            proj.acts.forEach(act => {
+                if (act.chapters) {
+                    chapterCount += act.chapters.length;
+                    act.chapters.forEach(chap => {
+                        if (chap.scenes) {
+                            sceneCount += chap.scenes.length;
+                            chap.scenes.forEach(scene => {
+                                const text = scene.content ? ProjectModel.stripHTML(scene.content) : '';
+                                if (text.trim().length > 0) {
+                                    const words = text.trim().match(/[\w\u00C0-\u00FF]+(?:[''’][\w\u00C0-\u00FF]+)*/g);
+                                    if (words) wordCount += words.length;
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+        }
+
+        return {
+            chapterCount,
+            sceneCount,
+            wordCount,
+            characterCount: proj.characters?.length || 0,
+            worldCount: proj.world?.length || 0,
+            noteCount: proj.notes?.length || 0,
+            codexCount: proj.codex?.length || 0,
+            arcCount: proj.narrativeArcs?.length || 0,
+            investigationCount: (proj.investigationBoard?.facts?.length || 0),
+            mindmapCount: proj.mindmaps?.length || 0,
+            mapCount: proj.maps?.length || 0,
+            lastSession: proj.stats?.writingSessions?.length > 0 ? proj.stats.writingSessions[proj.stats.writingSessions.length - 1] : null
+        };
+    },
+
+    /**
+     * Formate une date selon la locale actuelle.
+     */
+    formatDate(dateStr) {
+        if (!dateStr) return '-';
+        try {
+            const date = new Date(dateStr);
+            if (isNaN(date.getTime())) return '-';
+
+            const locale = Localization.getLocale();
+            const localeMap = {
+                'fr': 'fr-FR',
+                'en': 'en-GB', // Force dd/mm format even for english
+                'es': 'es-ES',
+                'de': 'de-DE'
+            };
+
+            return date.toLocaleDateString(localeMap[locale] || 'fr-FR');
+        } catch (e) {
+            return '-';
+        }
+    },
+
+    /**
+     * Rendu de la liste des projets dans la sidebar.
+     * @param {Array} projects 
+     */
+    renderSidebarList(projects) {
+        const container = document.getElementById('projectsSidebarList');
         if (!container) return;
 
         if (!projects || projects.length === 0) {
-            container.innerHTML = `<div style="padding: 2rem; text-align: center; color: var(--text-muted);">${Localization.t('project.view.no_project')}</div>`;
+            container.innerHTML = `<div class="sidebar-empty">${Localization.t('project.view.no_project')}</div>`;
             return;
         }
 
         container.innerHTML = projects.map(proj => {
-            const isActive = proj.id === currentId;
-
-            // Calcul rapide des stats
-            const actCount = proj.acts ? proj.acts.length : 0;
-            let chapterCount = 0;
-            let sceneCount = 0;
-            let wordCount = 0;
-
-            if (proj.acts) {
-                proj.acts.forEach(act => {
-                    if (act.chapters) {
-                        chapterCount += act.chapters.length;
-                        act.chapters.forEach(chap => {
-                            if (chap.scenes) {
-                                sceneCount += chap.scenes.length;
-                                chap.scenes.forEach(scene => {
-                                    const text = scene.content ? ProjectModel.stripHTML(scene.content) : '';
-                                    if (text.trim().length > 0) {
-                                        const words = text.trim().match(/[\w\u00C0-\u00FF]+(?:[''’][\w\u00C0-\u00FF]+)*/g);
-                                        if (words) wordCount += words.length;
-                                    }
-                                });
-                            }
-                        });
-                    }
-                });
-            }
-
-            const charCount = proj.characters ? proj.characters.length : 0;
-            const worldCount = proj.world ? proj.world.length : 0;
-            const codexCount = proj.codex ? proj.codex.length : 0;
-
+            const isActive = proj.id === currentProjectId;
             return `
-                <div class="project-card ${isActive ? 'active' : ''}" onclick="ProjectViewModel.switchTo(${proj.id}); ProjectView.closeProjectsModal();">
-                    <div class="project-card-header">
-                        <div>
-                            <div class="project-card-title">${proj.title}</div>
-                            ${proj.genre ? `<span class="project-card-genre">${proj.genre}</span>` : ''}
-                        </div>
-                        ${isActive ? `<span style="color: var(--accent-red); font-weight: 600;">● ${Localization.t('project.view.active')}</span>` : ''}
-                    </div>
-                    ${proj.description ? `<div class="project-card-desc">${proj.description}</div>` : ''}
-                    
-                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 0.5rem; margin-top: 1rem; padding-top: 0.75rem; border-top: 1px solid var(--border-color); font-size: 0.8rem; color: var(--text-muted);">
-                        <div style="display: flex; align-items: center; gap: 6px;" title="${Localization.t('project.view.total_word_count')}">
-                            <i data-lucide="align-left" style="width: 14px; height: 14px; color: var(--accent-gold);"></i> 
-                            <span style="font-weight: 600;">${wordCount.toLocaleString(Localization.currentLang === 'fr' ? 'fr-FR' : 'en-US')}</span> ${Localization.t('project.view.words')}
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 6px;" title="${Localization.t('project.view.act_count')}">
-                            <i data-lucide="book" style="width: 14px; height: 14px;"></i> 
-                            <span>${actCount} ${Localization.t('project.view.acts')}</span>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 6px;" title="${Localization.t('project.view.chapter_count')}">
-                            <i data-lucide="bookmark" style="width: 14px; height: 14px;"></i> 
-                            <span>${chapterCount} ${Localization.t('project.view.chapters')}</span>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 6px;" title="${Localization.t('project.view.scene_count')}">
-                            <i data-lucide="file-text" style="width: 14px; height: 14px;"></i> 
-                            <span>${sceneCount} ${Localization.t('project.view.scenes')}</span>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 6px;" title="${Localization.t('project.view.characters')}">
-                            <i data-lucide="users" style="width: 14px; height: 14px;"></i> 
-                            <span>${charCount} ${Localization.t('project.view.pers')}</span>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 6px;" title="${Localization.t('project.view.world_entries')}">
-                            <i data-lucide="globe" style="width: 14px; height: 14px;"></i> 
-                            <span>${worldCount} ${Localization.t('project.view.univ')}</span>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 6px;" title="${Localization.t('project.view.codex_entries')}">
-                            <i data-lucide="book-open" style="width: 14px; height: 14px;"></i> 
-                            <span>${codexCount} ${Localization.t('project.view.codex')}</span>
-                        </div>
-                    </div>
-
-                    <div class="project-card-actions">
-                        <button class="btn btn-small" onclick="event.stopPropagation(); ProjectViewModel.export(${proj.id})"><i data-lucide="upload" style="width:12px;height:12px;margin-right:4px;vertical-align:middle;"></i> ${Localization.t('project.view.btn_export')}</button>
-                        <button class="btn btn-small" onclick="event.stopPropagation(); ProjectViewModel.delete(${proj.id})"><i data-lucide="trash-2" style="width:12px;height:12px;margin-right:4px;vertical-align:middle;"></i> ${Localization.t('project.view.btn_delete')}</button>
-                    </div>
-                </div>`;
+                <div class="sidebar-item ${isActive ? 'active' : ''}" onclick="ProjectViewModel.switchTo(${proj.id})">
+                    <i data-lucide="folder" class="sidebar-item-icon"></i>
+                    <span class="sidebar-item-text">${proj.title}</span>
+                    ${isActive ? '<span class="active-dot"></span>' : ''}
+                </div>
+            `;
         }).join('');
 
-        if (typeof lucide !== 'undefined') lucide.createIcons();
+        if (typeof lucide !== 'undefined') lucide.createIcons({ root: container });
     },
 
     /**

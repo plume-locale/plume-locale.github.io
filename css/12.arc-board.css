@@ -1,5 +1,5 @@
 /* ============================================
-   ARC BOARD - Canvas Style (Milanote-inspired)
+   ARC BOARD - Canvas Style (globalnotes-inspired)
    ============================================ */
 
 /* ============================================
@@ -327,7 +327,7 @@
     height: 100%;
     overflow: auto;
     cursor: grab;
-    /* Grille de fond style Milanote */
+    /* Grille de fond style globalnotes */
     background-image:
         radial-gradient(circle, var(--border-color) 1px, transparent 1px);
     background-size: 24px 24px;
@@ -368,24 +368,63 @@
 
 .arc-connection-line {
     stroke: var(--text-muted);
-    stroke-width: 2;
+    stroke-width: 2.5;
     fill: none;
     pointer-events: stroke;
     cursor: pointer;
+    transition: all 0.2s ease;
+    stroke-linecap: round;
+    opacity: 0.6;
 }
 
-.arc-connection-line:hover {
-    stroke: var(--primary-color);
-    stroke-width: 3;
-}
-
+.arc-connection-line:hover,
 .arc-connection-line.selected {
     stroke: var(--primary-color);
-    stroke-width: 3;
+    stroke-width: 4;
+    opacity: 1;
+}
+
+.arc-connection-delete-handle {
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.arc-connection-line:hover+.arc-connection-delete-handle,
+.arc-connection-delete-handle:hover {
+    opacity: 1;
+}
+
+.arc-connection-delete-bg {
+    fill: var(--bg-primary);
+    stroke: var(--border-color);
+    stroke-width: 1;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.arc-connection-delete-handle:hover .arc-connection-delete-bg {
+    fill: var(--error-color);
+    stroke: var(--error-color);
+}
+
+.arc-connection-delete-icon {
+    stroke: var(--text-muted);
+    stroke-width: 2;
+    stroke-linecap: round;
+}
+
+.arc-connection-delete-handle:hover .arc-connection-delete-icon {
+    stroke: white;
 }
 
 .arc-connection-arrow {
     fill: var(--text-muted);
+    transition: fill 0.2s ease;
+}
+
+.arc-connection-line:hover .arc-connection-arrow,
+.arc-connection-line.selected .arc-connection-arrow {
+    fill: var(--primary-color);
 }
 
 .arc-connection-temp {
@@ -1686,6 +1725,7 @@
         opacity: 0;
         transform: translateY(-8px) scale(0.96);
     }
+
     to {
         opacity: 1;
         transform: translateY(0) scale(1);
@@ -2268,7 +2308,7 @@
 .arc-multi-modes button.active {
     background: var(--bg-primary);
     color: var(--text-primary);
-    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 /* Ghost arcs section */
@@ -3244,8 +3284,8 @@
     height: 4px;
     border-radius: 2px;
     background: linear-gradient(to right,
-        rgba(255, 255, 255, 0.3),
-        var(--arc-color, var(--primary-color)));
+            rgba(255, 255, 255, 0.3),
+            var(--arc-color, var(--primary-color)));
     cursor: pointer;
     outline: none;
 }

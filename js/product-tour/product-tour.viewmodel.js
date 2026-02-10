@@ -22,7 +22,9 @@ async function initProductTourVM() {
 
         // Créer le bouton de tour dans le header
         ProductTourButtonView.create(() => {
-            startProductTourVM();
+            // Au lieu de démarrer directement, on affiche le modal de bienvenue
+            // pour permettre de choisir, d'ignorer ou de masquer définitivement.
+            showWelcomeModalVM();
         });
 
         // Vérifier si on doit afficher le modal de bienvenue
@@ -131,13 +133,17 @@ async function startProductTourVM() {
     console.log('Starting product tour...');
 
     try {
+        // Réinitialiser le step sauvegardé pour recommencer du début
+        await ProductTourStateRepository.updateCurrentStep(0);
+
         // Fermer le modal de bienvenue s'il est ouvert
         if (ProductTourWelcomeView.isVisible()) {
             ProductTourWelcomeView.hide();
         }
 
         // Récupérer les steps
-        const steps = ProductTourStepsRepository.getAllSteps();
+        const view = typeof currentView !== 'undefined' ? currentView : 'editor';
+        const steps = await ProductTourStepsRepository.getAllSteps(view);
         if (steps.length === 0) {
             ProductTourNotificationView.showError(Localization.t('tour.notification.no_steps'));
             return {
@@ -145,6 +151,45 @@ async function startProductTourVM() {
                 error: 'No tour steps available'
             };
         }
+
+        // Enricher les steps avec les actions automatiques (ex: clickBefore) et les médias (images)
+        steps.forEach(step => {
+            // Support des images : injection dans la description
+            if (step.popover.image) {
+                const imgHtml = `<img src="${step.popover.image}" class="driver-popover-image">`;
+                step.popover.description = imgHtml + (step.popover.description || '');
+            }
+
+            if (step.clickBefore) {
+
+                const originalOnHighlightStarted = step.onHighlightStarted;
+                step.onHighlightStarted = (element) => {
+                    const elToClick = document.querySelector(step.clickBefore);
+                    if (elToClick) {
+                        console.log('🎓 Auto-clicking element before step:', step.clickBefore);
+                        elToClick.click();
+                    }
+                    if (typeof originalOnHighlightStarted === 'function') {
+                        originalOnHighlightStarted(element);
+                    }
+                };
+            }
+
+            if (step.clickAfter) {
+                const originalOnDeselected = step.onDeselected;
+                step.onDeselected = (element) => {
+                    const elToClick = document.querySelector(step.clickAfter);
+                    if (elToClick) {
+                        console.log('🎓 Auto-clicking element after step:', step.clickAfter);
+                        elToClick.click();
+                    }
+                    if (typeof originalOnDeselected === 'function') {
+                        originalOnDeselected(element);
+                    }
+                };
+            }
+        });
+
 
         // Créer la configuration Driver.js
         const isMobile = window.innerWidth < 768;

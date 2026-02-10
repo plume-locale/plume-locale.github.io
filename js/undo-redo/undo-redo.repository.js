@@ -202,6 +202,9 @@ const UndoRedoRepository = {
         integrate(window.CorkBoardRepository, 'CorkBoard', {
             immediate: ['updateSceneSynopsis', 'updateSceneColor', 'reorderScenes', 'createAct', 'createChapter', 'createScene']
         });
+        integrate(window.GlobalNotesRepository, 'GlobalNotes', {
+            immediate: ['saveBoard', 'saveItem', 'deleteBoard', 'deleteItem', 'moveToColumn', 'reorderInColumn', 'removeFromColumn']
+        });
 
         console.log('[UndoRedo] Integration avec tous les repositories effectuee');
     }

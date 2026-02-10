@@ -363,14 +363,28 @@ function formatTextInPanel(panel, command, value = null) {
     const editor = document.getElementById('editor-' + panel);
     if (!editor) return;
 
-    // Focus the editor first
+    // Restore selection if we have a saved one for this editor
+    if (editor._lastRange) {
+        const sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(editor._lastRange);
+    }
+
+    // Focus the editor
     editor.focus();
 
+    // S'assurer que le rendu se fait via CSS
+    try {
+        document.execCommand('styleWithCSS', false, true);
+    } catch (e) { }
+
     // Execute the command
-    if (value) {
-        document.execCommand(command, false, value);
-    } else {
-        document.execCommand(command, false, null);
+    document.execCommand(command, false, value);
+
+    // Update last range after command
+    const sel = window.getSelection();
+    if (sel.rangeCount > 0) {
+        editor._lastRange = sel.getRangeAt(0).cloneRange();
     }
 }
 

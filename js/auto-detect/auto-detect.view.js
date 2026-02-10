@@ -327,8 +327,39 @@ const AutoDetectView = {
         }
 
         const editor = document.querySelector(selector);
-        if (editor) editor.focus();
+        if (editor) {
+            // Restore selection if we have a saved one for this editor
+            if (editor._lastRange) {
+                const sel = window.getSelection();
+                sel.removeAllRanges();
+                sel.addRange(editor._lastRange);
+            }
+            editor.focus();
+        }
 
         document.execCommand(command, false, value);
+
+        // Update last range after command (selection might have changed)
+        if (editor) {
+            const sel = window.getSelection();
+            if (sel.rangeCount > 0) {
+                editor._lastRange = sel.getRangeAt(0).cloneRange();
+            }
+        }
     }
 };
+
+// Global selection tracking to prevent loss of focus issues
+document.addEventListener('selectionchange', () => {
+    const active = document.activeElement;
+    if (active && active.classList.contains('editor-textarea')) {
+        const sel = window.getSelection();
+        if (sel.rangeCount > 0) {
+            // Check if the selection is actually inside this editor
+            const range = sel.getRangeAt(0);
+            if (active.contains(range.commonAncestorContainer)) {
+                active._lastRange = range.cloneRange();
+            }
+        }
+    }
+});

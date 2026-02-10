@@ -77,27 +77,32 @@ const UndoRedoView = {
         }
 
         const stack = type === 'undo' ? window.historyStack : window.redoStack;
-        const title = type === 'undo' ? 'Historique d\'annulation' : 'Historique de rétablissement';
+        const title = type === 'undo' ? Localization.t('undoredo.title.undo') || 'Historique d\'annulation' : Localization.t('undoredo.title.redo') || 'Historique de rétablissement';
 
         if (!stack || stack.length === 0) {
             popup.innerHTML = `
                 <div class="undo-redo-header"><span>${title}</span></div>
-                <div class="undo-redo-empty">Aucune action disponible</div>
+                <div class="undo-redo-empty">${Localization.t('undoredo.empty') || 'Aucune action disponible'}</div>
             `;
         } else {
             const displayStack = [...stack].reverse().slice(0, 15);
+            const countLabel = Localization.t('undoredo.actions_count', stack.length, stack.length > 1 ? 's' : '') || `${stack.length} action${stack.length > 1 ? 's' : ''}`;
+
             popup.innerHTML = `
                 <div class="undo-redo-header">
                     <span>${title}</span>
-                    <span>${stack.length} action${stack.length > 1 ? 's' : ''}</span>
+                    <span>${countLabel}</span>
                 </div>
                 <ul class="undo-redo-list">
-                    ${displayStack.map((snap, idx) => `
-                        <li class="undo-redo-item" onclick="UndoRedoViewModel.jumpToHistoryState('${type}', ${stack.length - 1 - idx})">
-                            <span class="undo-redo-item-label">${snap.label || 'Action sans nom'}</span>
-                            <span class="undo-redo-item-time">${this.formatTimestamp(snap.timestamp)}</span>
-                        </li>
-                    `).join('')}
+                    ${displayStack.map((snap, idx) => {
+                const label = Localization.t('undoredo.label.' + snap.label) || snap.label || Localization.t('undoredo.default_label') || 'Action sans nom';
+                return `
+                            <li class="undo-redo-item" onclick="UndoRedoViewModel.jumpToHistoryState('${type}', ${stack.length - 1 - idx})">
+                                <span class="undo-redo-item-label">${label}</span>
+                                <span class="undo-redo-item-time">${this.formatTimestamp(snap.timestamp)}</span>
+                            </li>
+                        `;
+            }).join('')}
                 </ul>
             `;
         }

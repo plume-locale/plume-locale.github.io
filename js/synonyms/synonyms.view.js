@@ -451,10 +451,18 @@ const SynonymsView = {
      * [MVVM : View]
      */
     toggle() {
-        if (this._modal.classList.contains('synonyms-modal-open')) {
+        if (this._modal && this._modal.classList.contains('synonyms-modal-open')) {
             this.close();
         } else {
-            this.open();
+            // Par défaut, on essaie d'insérer le mot dans l'éditeur si on en trouve un
+            const insertCallback = (word) => {
+                if (typeof formatText === 'function') {
+                    formatText('insertText', word);
+                } else {
+                    document.execCommand('insertText', false, word);
+                }
+            };
+            this.openWithSelection(insertCallback);
         }
     },
 
@@ -464,6 +472,16 @@ const SynonymsView = {
      * [MVVM : View]
      */
     openWithSelection(onInsert = null) {
+        // Restore selection if available
+        const active = document.activeElement;
+        const editor = (active && active.classList.contains('editor-textarea')) ? active : document.querySelector('.editor-textarea');
+
+        if (editor && editor._lastRange) {
+            const sel = window.getSelection();
+            sel.removeAllRanges();
+            sel.addRange(editor._lastRange);
+        }
+
         const selection = window.getSelection().toString().trim();
         this.open(selection, onInsert);
     }

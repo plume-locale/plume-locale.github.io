@@ -273,11 +273,15 @@ const ArcBoardView = {
                                     <defs>
                                         <marker id="arrowhead" markerWidth="10" markerHeight="7"
                                                 refX="9" refY="3.5" orient="auto">
-                                            <polygon points="0 0, 10 3.5, 0 7" class="arc-connection-arrow"/>
+                                            <path d="M0,0 L10,3.5 L0,7 Z" class="arc-connection-arrow"/>
+                                        </marker>
+                                        <marker id="arrowhead-selected" markerWidth="10" markerHeight="7"
+                                                refX="9" refY="3.5" orient="auto">
+                                            <path d="M0,0 L10,3.5 L0,7 Z" fill="var(--primary-color)"/>
                                         </marker>
                                         <marker id="arrowhead-interarc" markerWidth="10" markerHeight="7"
                                                 refX="9" refY="3.5" orient="auto">
-                                            <polygon points="0 0, 10 3.5, 0 7" fill="var(--primary-color)"/>
+                                            <path d="M0,0 L10,3.5 L0,7 Z" fill="var(--primary-color)"/>
                                         </marker>
                                     </defs>
                                 </svg>
@@ -493,7 +497,8 @@ const ArcBoardView = {
     _createConnectionPath(from, to) {
         const dx = to.x - from.x;
         const dy = to.y - from.y;
-        const cx = Math.abs(dx) / 2;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        const cx = Math.max(40, dist * 0.4);
 
         return `M ${from.x} ${from.y} C ${from.x + cx} ${from.y}, ${to.x - cx} ${to.y}, ${to.x} ${to.y}`;
     },
@@ -840,21 +845,30 @@ const ArcBoardView = {
 
                 if (!fromEl || !toEl) return;
 
-                const fromPos = getRelativePosition(fromEl, conn.fromSide);
-                const toPos = getRelativePosition(toEl, conn.toSide);
+                const fromPos = this._getElementPosition(fromEl, conn.fromSide);
+                const toPos = this._getElementPosition(toEl, conn.toSide);
 
                 const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-                const d = this._createBezierPath(fromPos, toPos, conn.fromSide, conn.toSide);
+                const { path: d, cp1, cp2 } = this._createBezierPath(fromPos, toPos, conn.fromSide, conn.toSide);
 
                 path.setAttribute('d', d);
-                path.setAttribute('class', 'arc-connection-line');
+                const isSelected = ArcBoardState.selectedItems.includes(conn.id);
+                path.setAttribute('class', `arc-connection-line ${isSelected ? 'selected' : ''}`);
                 path.setAttribute('data-connection-id', conn.id);
                 path.setAttribute('data-arc-id', arcId);
-                path.setAttribute('marker-end', 'url(#arrowhead)');
+                path.setAttribute('marker-end', isSelected ? 'url(#arrowhead-selected)' : 'url(#arrowhead)');
                 path.style.stroke = arc.color;
-                path.style.opacity = '0.6';
+                path.onclick = (e) => {
+                    e.stopPropagation();
+                    ArcBoardViewModel.selectItem(conn.id, e.ctrlKey || e.metaKey, arcId);
+                };
 
                 svg.appendChild(path);
+
+                // Ajouter un bouton de suppression au milieu de la ligne
+                const mid = this._getBezierPoint(fromPos, cp1, cp2, toPos, 0.5);
+                const deleteBtn = this._createConnectionDeleteBtn(conn.id, mid, arcId);
+                svg.appendChild(deleteBtn);
             });
         });
 
@@ -873,21 +887,28 @@ const ArcBoardView = {
 
             if (!fromEl || !toEl) return;
 
-            const fromPos = getRelativePosition(fromEl, 'right');
-            const toPos = getRelativePosition(toEl, 'left');
+            const fromPos = this._getElementPosition(fromEl, 'right');
+            const toPos = this._getElementPosition(toEl, 'left');
 
             const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-            const d = this._createBezierPath(fromPos, toPos, 'right', 'left');
+            const { path: d, cp1, cp2 } = this._createBezierPath(fromPos, toPos, 'right', 'left');
 
             path.setAttribute('d', d);
-            path.setAttribute('class', 'arc-connection-line arc-interarc-connection');
+            const isSelected = ArcBoardState.selectedItems.includes(conn.id);
+            path.setAttribute('class', `arc-connection-line arc-interarc-connection ${isSelected ? 'selected' : ''}`);
             path.setAttribute('data-interarc-id', conn.id);
-            path.setAttribute('marker-end', 'url(#arrowhead-interarc)');
-            path.style.stroke = 'var(--primary-color)';
-            path.style.strokeWidth = '2';
-            path.style.strokeDasharray = '5,5';
+            path.setAttribute('marker-end', isSelected ? 'url(#arrowhead-selected)' : 'url(#arrowhead-interarc)');
+            path.onclick = (e) => {
+                e.stopPropagation();
+                ArcBoardViewModel.selectItem(conn.id, e.ctrlKey || e.metaKey);
+            };
 
             svg.appendChild(path);
+
+            // Bouton delete pour inter-arc
+            const mid = this._getBezierPoint(fromPos, cp1, cp2, toPos, 0.5);
+            const deleteBtn = this._createConnectionDeleteBtn(conn.id, mid, null, true);
+            svg.appendChild(deleteBtn);
         });
     },
 
@@ -1597,20 +1618,25 @@ const ArcBoardView = {
             const toPos = this._getElementPosition(toEl, conn.toSide);
 
             const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-            const d = this._createBezierPath(fromPos, toPos, conn.fromSide, conn.toSide);
+            const isSelected = ArcBoardState.selectedItems.includes(conn.id);
+            const { path: d, cp1, cp2 } = this._createBezierPath(fromPos, toPos, conn.fromSide, conn.toSide);
 
             path.setAttribute('d', d);
-            path.setAttribute('class', `arc-connection-line ${ArcBoardState.selectedItems.includes(conn.id) ? 'selected' : ''}`);
+            path.setAttribute('class', `arc-connection-line ${isSelected ? 'selected' : ''}`);
             path.setAttribute('data-connection-id', conn.id);
-            path.setAttribute('marker-end', 'url(#arrowhead)');
+            path.setAttribute('marker-end', isSelected ? 'url(#arrowhead-selected)' : 'url(#arrowhead)');
             path.style.pointerEvents = 'stroke';
             path.onclick = (e) => {
                 e.stopPropagation();
-                ArcBoardState.selectedItems = [conn.id];
-                ArcBoardViewModel._updateSelectionUI();
+                ArcBoardViewModel.selectItem(conn.id, e.ctrlKey || e.metaKey);
             };
 
             svg.appendChild(path);
+
+            // Ajouter un bouton de suppression au milieu (visible au hover via CSS)
+            const mid = this._getBezierPoint(fromPos, cp1, cp2, toPos, 0.5);
+            const deleteBtn = this._createConnectionDeleteBtn(conn.id, mid, arc.id);
+            svg.appendChild(deleteBtn);
         });
     },
 
@@ -1650,7 +1676,13 @@ const ArcBoardView = {
         const dx = to.x - from.x;
         const dy = to.y - from.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
-        const offset = Math.min(80, Math.max(40, dist / 3));
+
+        // Tension dynamique basée sur la distance
+        let offset = Math.min(250, Math.max(60, dist * 0.45));
+
+        // Ajustement si items très proches pour éviter les boucles bizarres
+        if (Math.abs(dx) < 60 && (fromSide === 'left' || fromSide === 'right')) offset = 40;
+        if (Math.abs(dy) < 60 && (fromSide === 'top' || fromSide === 'bottom')) offset = 40;
 
         let cp1 = { x: from.x, y: from.y };
         let cp2 = { x: to.x, y: to.y };
@@ -1669,7 +1701,72 @@ const ArcBoardView = {
             case 'right': cp2.x += offset; break;
         }
 
-        return `M ${from.x} ${from.y} C ${cp1.x} ${cp1.y}, ${cp2.x} ${cp2.y}, ${to.x} ${to.y}`;
+        return {
+            path: `M ${from.x} ${from.y} C ${cp1.x} ${cp1.y}, ${cp2.x} ${cp2.y}, ${to.x} ${to.y}`,
+            cp1,
+            cp2
+        };
+    },
+
+    /**
+     * Calcule un point sur une courbe de Bézier cubique (t entre 0 et 1)
+     */
+    _getBezierPoint(p0, p1, p2, p3, t) {
+        const ont = (1 - t);
+        return {
+            x: ont ** 3 * p0.x + 3 * ont ** 2 * t * p1.x + 3 * ont * t ** 2 * p2.x + t ** 3 * p3.x,
+            y: ont ** 3 * p0.y + 3 * ont ** 2 * t * p1.y + 3 * ont * t ** 2 * p2.y + t ** 3 * p3.y
+        };
+    },
+
+    /**
+     * Crée un bouton de suppression SVG pour une connexion
+     */
+    _createConnectionDeleteBtn(connectionId, pos, arcId, isInterArc = false) {
+        const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        g.setAttribute('class', 'arc-connection-delete-handle');
+        if (isInterArc) {
+            g.setAttribute('data-interarc-delete-id', connectionId);
+        } else {
+            g.setAttribute('data-connection-delete-id', connectionId);
+        }
+
+        const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        circle.setAttribute('cx', pos.x);
+        circle.setAttribute('cy', pos.y);
+        circle.setAttribute('r', '10');
+        circle.setAttribute('class', 'arc-connection-delete-bg');
+
+        const line1 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        line1.setAttribute('x1', pos.x - 4);
+        line1.setAttribute('y1', pos.y - 4);
+        line1.setAttribute('x2', pos.x + 4);
+        line1.setAttribute('y2', pos.y + 4);
+        line1.setAttribute('class', 'arc-connection-delete-icon');
+
+        const line2 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        line2.setAttribute('x1', pos.x + 4);
+        line2.setAttribute('y1', pos.y - 4);
+        line2.setAttribute('x2', pos.x - 4);
+        line2.setAttribute('y2', pos.y + 4);
+        line2.setAttribute('class', 'arc-connection-delete-icon');
+
+        g.appendChild(circle);
+        g.appendChild(line1);
+        g.appendChild(line2);
+
+        g.onclick = (e) => {
+            e.stopPropagation();
+            if (isInterArc) {
+                InterArcConnectionRepository.delete(connectionId);
+                ArcBoardViewModel.render();
+            } else {
+                ConnectionRepository.delete(arcId, connectionId);
+                ArcBoardViewModel.renderItems();
+            }
+        };
+
+        return g;
     },
 
     // ==========================================

@@ -60,7 +60,7 @@ let activeChapterId = null;
 
 // [MVVM : ViewModel]
 // État de la vue active
-let currentView = 'editor'; // 'editor', 'characters', 'world', 'timeline', 'notes', 'stats', 'codex', 'versions'
+let currentView = null; // 'projects', 'editor', 'characters', 'world', 'timeline', 'notes', 'stats', 'codex', 'versions'
 let currentMindmapId = null; // ID du mindmap actuellement affiché
 
 // [MVVM : ViewModel]

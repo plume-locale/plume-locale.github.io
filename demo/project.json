@@ -1,0 +1,1181 @@
+{
+    "id": 1707519130000,
+    "title": "Les Cicatrices du Verre",
+    "description": "Un thriller haletant où un détective doit résoudre une affaire de meurtre dans une villa de luxe, pour découvrir une conspiration liée à une technologie de communication impériale disparue.",
+    "genre": "Thriller",
+    "createdAt": "2026-02-09T22:15:00.000Z",
+    "updatedAt": "2026-02-09T22:45:00.000Z",
+    "acts": [
+        {
+            "id": 1,
+            "title": "Acte 1 : Le Piège",
+            "createdAt": "2026-02-09T22:15:00.000Z",
+            "updatedAt": "2026-02-09T22:15:00.000Z",
+            "metadata": {
+                "color": "#E53935",
+                "description": "L'introduction du mystère et la mise en place des personnages."
+            },
+            "chapters": [
+                {
+                    "id": 11,
+                    "title": "Chapitre 1 : Verre Brisé",
+                    "createdAt": "2026-02-09T22:15:00.000Z",
+                    "updatedAt": "2026-02-09T22:15:00.000Z",
+                    "metadata": {
+                        "description": "Marc découvre la villa dévastée et les premiers indices."
+                    },
+                    "scenes": [
+                        {
+                            "id": 111,
+                            "title": "Scène 1 : L'arrivée sur les lieux",
+                            "content": "La villa surplombant l'abîme n'était plus que l'ombre de la <span class=\"annotation-marker comment\" data-annotation-id=\"11100201\">splendeur architecturale</span> que Marc avait contemplée dans les revues spécialisées. Sous une lune livide, elle évoquait le squelette d'un titan déchu, ses poutres métalliques fendant les nuages avec une agressivité muette. Marc coupa le contact de sa vieille berline, qui s'éteignit dans un râle d'agonie. Le silence qui s'abattit sur la falaise était glacial, seulement troublé par les assauts furieux de l'océan contre la pierre, cent mètres plus bas.\n\nIl franchit le ruban de scène de crime, ses semelles écrasant les débris de luxe. À mesure qu'il approchait du seuil, le crissement changea de tessiture. Ce n'était plus de la roche, mais du verre. Des myriades d'éclats stellaires couvraient le sol, comme si une galaxie s'était brisée là. Mais Marc savait que cette poussière d'étoiles avait un prix de sang. C'était le cadavre de la baie vitrée monumentale, le chef-d'œuvre de Victor Blackwood.\n\nIl s'introduisit dans le hall. L'iode se heurtait à l'odeur cuivrée de la mort. Les techniciens de l'identité judiciaire avaient déjà emporté le corps, mais l'écho de la violence demeurait. Le mobilier scandinave gisait éventré, les toiles de maîtres n'étaient plus que des lambeaux. Au centre de cette dévastation, là où Blackwood s'était éteint, les fragments de miroir formeraient un cercle hypnotique autour d'une flaque sombre.\n\nMarc alluma sa torche. La lumière crue lécha le béton brossé, révélant les stigmates du combat. Ce n'était pas un vol qui avait dérapé. C'était un abattage, chirurgical et impitoyable. Blackwood, le Magnat du Verre, s'était brisé parmi ses propres illusions. Marc s'agenouilla devant la tache pourpre, le regard avide. Il cherchait la faille, le grain de sable dans le mécanisme de cette tragédie. Car Marc ne croyait pas au hasard ; il lisait les ruines comme un livre ouvert. Et ici, dans ce mausolée de cristal, une page l'attendait.",
+                            "wordCount": 410,
+                            "status": "complete",
+                            "activeVersionId": 111002,
+                            "createdAt": "2026-02-09T22:15:00.000Z",
+                            "updatedAt": "2026-02-09T22:18:00.000Z",
+                            "versions": [
+                                {
+                                    "id": 111001,
+                                    "number": 1,
+                                    "label": "Premier Jet",
+                                    "content": "La villa de la falaise ne ressemblait plus à l'œuvre d'art architecturale que Marc avait admirée dans les magazines. Sous la lune blafarde, elle ressemblait plutôt à une carcasse de baleine échouée, dont les côtes d'acier pointaient vers un ciel sans étoiles. Marc gara sa vieille berline dont le moteur fit entendre un dernier râle de mécontentement avant de se taire. Le silence qui suivit était lourd, épais, interrompu seulement par le ressac de l'Atlantique, cent mètres plus bas, contre les rochers acérés.\n\nIl franchit le périmètre de sécurité, ses chaussures crissant sur les gravillons de l'allée. À mesure qu'il approchait de l'entrée principale, le bruit changea. Ce n'était plus du gravier, mais du verre. Des milliers de fragments étincelants jonchaient le sol, comme si le ciel avait pleuré des diamants. Mais Marc savait que ce verre n'avait rien de céleste. C'était le reste de la baie vitrée monumentale, celle qui faisait la bride de Victor Blackwood.\n\nIl pénétra dans le salon. L'odeur de sel marin se mêlait à celle, plus métallique, du sang séché. Les policiers étaient déjà passés, emportant le corps, mais ils avaient laissé derrière eux une scène de désolation. Le mobilier design était renversé, les toiles de maîtres lacérées. Au centre de la pièce, là où Blackwood avait été retrouvé, les éclats de verre étaient plus denses, formant une sorte de halo macabre autour d'une tache sombre.\n\nMarc sortit sa lampe torche. Le faisceau balaya les murs de béton brut, révélant des impacts de balles et des griffures profondes. Ce n'était pas un simple cambriolage qui avait mal tourné. C'était une exécution, méthodique et haineuse. Blackwood, le \"Roi du Cristal\", avait fini sa course au milieu de ses propres créations, brisé comme un vulgaire flacon de parfum. Marc s'accroupit près de la tache de sang, ses yeux scrutant chaque interstice. Il cherchait ce que les experts de la balistique avaient manqué, ce détail infime qui ne cadrait pas avec la violence apparente de la scène. Car Marc ne croyait pas au chaos ; il croyait aux intentions cachées derrière chaque acte de destruction. Et ici, au milieu de ces ruines de luxe, une intention bien précise l'attendait.",
+                                    "wordCount": 385,
+                                    "createdAt": "2026-02-09T22:15:00.000Z",
+                                    "isActive": false,
+                                    "isFinal": false,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": 111002,
+                                    "number": 2,
+                                    "label": "Version Littéraire",
+                                    "content": "La villa surplombant l'abîme n'était plus que l'ombre de la <span class=\"annotation-marker comment\" data-annotation-id=\"11100201\">splendeur architecturale</span> que Marc avait contemplée dans les revues spécialisées. Sous une lune livide, elle évoquait le squelette d'un titan déchu, ses poutres métalliques fendant les nuages avec une agressivité muette. Marc coupa le contact de sa vieille berline, qui s'éteignit dans un râle d'agonie. Le silence qui s'abattit sur la falaise était glacial, seulement troublé par les assauts furieux de l'océan contre la pierre, cent mètres plus bas.\n\nIl franchit le ruban de scène de crime, ses semelles écrasant les débris de luxe. À mesure qu'il approchait du seuil, le crissement changea de tessiture. Ce n'était plus de la roche, mais du verre. Des myriades d'éclats stellaires couvraient le sol, comme si une galaxie s'était brisée là. Mais Marc savait que cette poussière d'étoiles avait un prix de sang. C'était le cadavre de la baie vitrée monumentale, le chef-d'œuvre de Victor Blackwood.\n\nIl s'introduisit dans le hall. L'iode se heurtait à l'odeur cuivrée de la mort. Les techniciens de l'identité judiciaire avaient déjà emporté le corps, mais l'écho de la violence demeurait. Le mobilier scandinave gisait éventré, les toiles de maîtres n'étaient plus que des lambeaux. Au centre de cette dévastation, là où Blackwood s'était éteint, les fragments de miroir formeraient un cercle hypnotique autour d'une flaque sombre.\n\nMarc alluma sa torche. La lumière crue lécha le béton brossé, révélant les stigmates du combat. Ce n'était pas un vol qui avait dérapé. C'était un abattage, chirurgical et impitoyable. Blackwood, le Magnat du Verre, s'était brisé parmi ses propres illusions. Marc s'agenouilla devant la tache pourpre, le regard avide. Il cherchait la faille, le grain de sable dans le mécanisme de cette tragédie. Car Marc ne croyait pas au hasard ; il lisait les ruines comme un livre ouvert. Et ici, dans ce mausolée de cristal, une page l'attendait.",
+                                    "wordCount": 410,
+                                    "createdAt": "2026-02-09T22:18:00.000Z",
+                                    "isActive": true,
+                                    "isFinal": false,
+                                    "annotations": [
+                                        {
+                                            "id": 11100201,
+                                            "type": "comment",
+                                            "text": "Peut-être un peu trop mélodramatique ? À voir à la relecture.",
+                                            "context": "splendeur architecturale",
+                                            "completed": false,
+                                            "createdAt": "2026-02-09T22:20:00.000Z"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "id": 112,
+                            "title": "Scène 2 : Le fil rouge",
+                            "content": "Le faisceau de la lampe de Marc se figea sur un reflet singulier. Parmi les éclats de verre transparent et les fragments de cristal de roche qui composaient la collection de Blackwood, une couleur n'avait pas sa place. Une nuance de pourpre, presque organique. Marc sortit une pince de sa poche intérieure et, avec une précision de chirurgien, il écarta deux morceaux de miroir brisé.\n\nIncrusté dans une rainure du parquet, un fil de soie rouge rubis l'attendait. Il était court, à peine trois centimètres, mais sa texture était d'une finesse exceptionnelle. Marc l'approcha de ses yeux. Ce n'était pas un fil de vêtement ordinaire. C'était de la soie de damas, du genre qu'on n'utilisait plus que dans les ateliers de restauration de la cité impériale ou pour des œuvres d'art textile hors de prix. \n\nCe fil n'avait pas été laissé là par mégarde. Il était trop bien placé, presque mis en scène dans cette anfractuosité. Marc sentit une décharge d'adrénaline parcourir son échine. Blackwood recevait souvent des personnalités influentes, mais peu d'entre elles portaient de la soie de cette qualité, et encore moins pendant une lutte à mort. À moins que... Marc se remémora la rumeur qui courait les bas-fonds du marché de l'art quelques semaines plus tôt. On murmurait qu'une pièce unique, disparue depuis la chute des tsars, avait refait surface dans une vente privée. On l'appelait \"La Larme du Tsar\", un objet de verre rouge si pur qu'on le confondait avec un rubis géant.\n\nSoudain, un bruit de froissement retentit derrière lui. Marc éteignit sa torche instantanément. Il resta immobile, plongeant dans l'obscurité totale, son oreille tendue vers le moindre soupir de l'air de mer dans la carcasse de la villa. Un pas léger, presque imperceptible, se rapprochait. Quelqu'un d'autre s'intéressait aux décombres de la villa Blackwood. Marc glissa sa main vers son arme, mais ses doigts se refermèrent plutôt sur le sachet de preuves contenant le fil rouge. C'était sa seule piste, son unique lien avec un passé que beaucoup auraient préféré laisser enterré sous les débris de cristal. Le visiteur inconnu s'arrêta à l'entrée du salon. Marc retint son souffle, le cœur battant contre ses côtes comme un oiseau en cage.",
+                            "wordCount": 392,
+                            "status": "complete",
+                            "createdAt": "2026-02-09T22:15:00.000Z",
+                            "updatedAt": "2026-02-09T22:15:00.000Z"
+                        }
+                    ]
+                },
+                {
+                    "id": 12,
+                    "title": "Chapitre 2 : Échos du Passé",
+                    "createdAt": "2026-02-09T22:15:00.000Z",
+                    "updatedAt": "2026-02-09T22:15:00.000Z",
+                    "metadata": {
+                        "description": "L'appel à une experte et la découverte d'une menace technologique."
+                    },
+                    "scenes": [
+                        {
+                            "id": 121,
+                            "title": "Scène 1 : L'Experte",
+                            "content": "L'atelier d'Elena était une antre de lumière et de chaleur, située dans une ruelle borgne où l'odeur du canal se mêlait à celle de l'ozone. C'était un lieu de contrastes, où des fours crachant des flammes orangées côtoyaient des établis couverts de poussière de silice et d'outils d'une autre époque. Elena, les cheveux noués dans un foulard de cuir, ne leva pas les yeux de sa pièce en cours quand Marc franchit la porte. Elle maniait une canne à souffler with the grace d'une chef d'orchestre, transformant une masse incandescente en une sphère parfaite.\n\n« Tu es en retard de dix ans, Marc, » lança-t-elle, sa voix rauque étouffée par le bruit du ventilateur.\n« Certains disent que je n'arrive jamais, Elena. Je ne fais que passer. »\nElle déposa délicatement l'objet fini dans le four de recuisson et se tourna vers lui, essuyant ses mains calleuses sur son tablier. Ses yeux noirs le scannèrent avec une acuité qui mettait Marc mal à l'aise. Elle n'avait pas changé. Toujours cette même autorité silencieuse, celle que l'on acquiert en domptant le feu et le sable.\n\nMarc sortit le sachet contenant le fil rouge et le posa sur l'établi. Le visage d'Elena se figea. Elle ne toucha pas le sachet, mais ses narines frémirent. \n« Où as-tu trouvé ça ? » demanda-t-elle, le ton soudain dépourvu de toute ironie.\n« Chez Blackwood. Juste après qu'il ait décidé de mourir au milieu de ses miroirs. »\nElena s'approcha, sa lampe frontale éclairant le fil rubis. Ses doigts tremblèrent légèrement alors qu'elle saisissait une loupe de bijoutier. Le silence dans l'atelier devint pesant, seulement rompu par le ronronnement des fours.\n« Ce n'est pas un fil de soie, Marc, » murmura-t-elle. « Enfin, si, la gaine est en soie. Mais l'âme... l'âme est faite de fibres de verre optique d'une pureté que je n'ai vue qu'une fois dans ma vie. Dans les archives de mon grand-père. »\nElle se redressa, la mine grave.\n« Tu joues avec un feu bien plus brûlant que mes fours. Ce fil appartient à \"L'Araignée de Verre\", un réseau de faussaires qu'on croyait démantelé depuis la guerre froide. S'ils sont revenus chez Blackwood, c'est pour une seule raison. »",
+                            "wordCount": 405,
+                            "status": "complete",
+                            "createdAt": "2026-02-09T22:15:00.000Z",
+                            "updatedAt": "2026-02-09T22:15:00.000Z"
+                        },
+                        {
+                            "id": 122,
+                            "title": "Scène 2 : La Larme du Tsar",
+                            "content": "Elena s'assit lourdement sur un tabouret haut, ses yeux ne quittant plus le fil rouge. « La Larme du Tsar n'est pas qu'une légende, Marc. C'était la pièce maîtresse d'un mécanisme d'optique secret mis au point par les ingénieurs de Nicolas II. Pas pour la beauté, mais pour la communication. Un système de réflexion de lumière capable d'envoyer des messages cryptés à travers les steppes, indétectable par quiconque ne possédait pas le prisme récepteur. »\nMarc s'appuya contre une étagère chargée de globes de verre. « Et Blackwood l'avait ? »\n« Non. Il essayait de la recréer. Il utilisait sa fortune pour financer des recherches sur le verre intelligent. Il pensait pouvoir briser le monopole des communications par satellite avec une technologie vieille de cent ans. Quelqu'un n'aimait pas l'idée de voir ressurgir ce fantôme. »\n\nLe téléphone de Marc vibra violemment dans sa poche. Un numéro inconnu s'affichait. Il décrocha, s'attendant à une voix, mais seul un sifflement strident lui répondit, suivi d'une série de cliquetis rythmés. Elena se tendit. \n« Raccroche ! » cria-t-elle.\nMais il était trop tard. Sur l'écran du salon attenant, relié à la caméra de sécurité de la ruelle, une silhouette apparut. Un homme vêtu d'un manteau long, immobile sous la pluie fine qui commençait à tomber. Il ne regardait pas l'atelier, il regardait son propre poignet, comme s'il consultait une montre. Ou un détonateur.\n\nSoudain, une onde de choc fit trembler les vitres de l'atelier. Ce n'était pas une explosion massive, mais une fréquence vibratoire intense. Les étagères d'Elena se mirent à chanter, puis à hurler. Dans un fracas de cristal, des dizaines d'œuvres de verre explosèrent simultanément, transformant l'air en une nuée de rasoirs volants. Marc se précipita sur Elena pour la plaquer au sol alors que le plafond de verre de l'atelier cédait à son tour. Au milieu du chaos, le téléphone de Marc projetait maintenant un laser rouge sur le mur opposé, traçant des coordonnées géographiques. La menace était claire : le jeu avait commencé, et le temps des enquêtes discrètes était révolu. Ils étaient désormais les proies de l'Araignée.",
+                            "wordCount": 420,
+                            "status": "complete",
+                            "createdAt": "2026-02-09T22:15:00.000Z",
+                            "updatedAt": "2026-02-09T22:15:00.000Z"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "title": "Acte 2 : La Vérité Éclatée",
+            "createdAt": "2026-02-09T22:15:00.000Z",
+            "updatedAt": "2026-02-09T22:15:00.000Z",
+            "metadata": {
+                "color": "#1E88E5",
+                "description": "La révélation de la conspiration et l'ultime affrontement."
+            },
+            "chapters": [
+                {
+                    "id": 21,
+                    "title": "Chapitre 3 : La Piste Fragile",
+                    "createdAt": "2026-02-09T22:15:00.000Z",
+                    "updatedAt": "2026-02-09T22:15:00.000Z",
+                    "metadata": {
+                        "description": "L'excursion dans le passé de Blackwood."
+                    },
+                    "scenes": [
+                        {
+                            "id": 211,
+                            "title": "Scène 1 : La Verrerie de l'Oubli",
+                            "content": "Les coordonnées menaient Marc loin de la côte, au cœur d'une forêt de conifères si denses qu'ils semblaient vouloir étouffer la lumière du jour. Là, nichée dans un creux de vallée, se dressait une ancienne verrerie industrielle, monument de brique rouge et de cheminées décapitées. C'était ici que le \"Roi du Cristal\" avait commencé sa carrière, bien avant les villas de luxe et les tapis rouges. Le lieu respirait l'abandon, les herbes folles forçant le bitume craquelé du parking.\n\nMarc s'avança, évitant les carcasses de machines rouillées. L'air était froid, chargé d'une humidité qui lui glaçait les os. Il tenait son arme d'une main ferme, son regard balayant les fenêtres brisées qui ressemblaient à des orbites vides. Pourquoi Blackwood reviendrait-il ici ? S'agissait-il d'un sanctuaire ou d'une cachette ? Il trouva une porte latérale entrouverte, ses charnières gémissant dans le vent.\n\nÀ l'intérieur, l'atmosphère changeait radicalement. Le hall principal, immense, était plongé dans une pénombre bleutée. Mais au lieu de la poussière attendue, Marc découvrit un laboratoire de pointe installé au centre de la nef. Des câbles à fibre optique couraient sur le sol comme des lianes technologiques, reliant des serveurs silencieux à une chambre de verre pressurisée. Au centre de cette chambre, suspendue par des fils de soie rouge identiques à celui de la villa, une sphère rubis irradiait une lumière pulsante. La Larme du Tsar. Elle n'était pas faite de verre ancien, mais de quelque chose de bien plus moderne : un processeur photonique logé dans une coque de cristal. Blackwood n'avait pas simplement retrouvé la Larme ; il l'avait transformée en l'arme de communication ultime. Marc s'approcha, fasciné par la beauté toxique de l'objet, ignorant les ombres qui commençaient à se détacher des piliers de brique.",
+                            "wordCount": 395,
+                            "status": "complete",
+                            "createdAt": "2026-02-09T22:15:00.000Z",
+                            "updatedAt": "2026-02-09T22:15:00.000Z"
+                        },
+                        {
+                            "id": 212,
+                            "title": "Scène 2 : L'Embuscade",
+                            "content": "Un clic métallique familier figea Marc dans son élan. \n« Très impressionnant, n'est-ce pas ? Une larme de lumière pour un monde de ténèbres. »\nLa voix sortait d'un haut-parleur dissimulé, une voix synthétique, dénuée d'émotion. Marc fit volte-face, son arme pointée vers la mezzanine. Des faisceaux laser rouges traversèrent la pièce, convergeant tous sur sa poitrine. Il était pris au piège. \n\n« Vous avez été utile, Marc. Vous avez apporté le dernier composant sans même le savoir. »\nMarc sentit le sachet dans sa poche. Le fil rouge. Il comprit soudain qu'Elena n'était pas qu'une amie ; elle était la clé. Le fil n'était pas une preuve, c'était un capteur. En le déplaçant, Marc avait activé une balise de proximité.\nSoudain, les serveurs autour du laboratoire s'emballèrent. Un sifflement strident emplit la verrerie. Des flammes jaillirent des cuves à gaz abandonnées, transformant instantanément le bâtiment en une fournaise. Le feu n'était pas accidentel ; c'était un protocole de nettoyage.\n\nMarc n'avait que quelques secondes. Il tira deux balles dans la vitre de la chambre pressurisée, mais le verre resta intact. C'était du cristal blindé. La fumée noire commençait à envahir l'espace, rendant la respiration difficile. Il vit les silhouettes des assaillants se replier vers les sorties de secours, le laissant brûler vif avec le secret de Blackwood. Mais Marc avait remarqué une chose : la Larme vibrait au même rythme que son téléphone. Utilisant l'écran de son mobile comme un prisme, il dirigea le laser rouge qu'il avait reçu plus tôt vers le cœur de la sphère. L'interaction fut immédiate. Une surtension fit craquer le cristal blindé. Dans une explosion de lumière pourpre, la sphère vola en éclats, brisant la cloison. Marc plongea à travers les débris, saisissant le noyau de la Larme avant de s'élancer vers une fenêtre haute alors que la structure de la verrerie commençait à s'effondrer dans un fracas de verre et de flammes.",
+                            "wordCount": 415,
+                            "status": "complete",
+                            "createdAt": "2026-02-09T22:15:00.000Z",
+                            "updatedAt": "2026-02-09T22:15:00.000Z"
+                        }
+                    ]
+                },
+                {
+                    "id": 22,
+                    "title": "Chapitre 4 : De l'autre côté du miroir",
+                    "createdAt": "2026-02-09T22:15:00.000Z",
+                    "updatedAt": "2026-02-09T22:15:00.000Z",
+                    "metadata": {
+                        "description": "La confrontation finale là où tout bascule."
+                    },
+                    "scenes": [
+                        {
+                            "id": 221,
+                            "title": "Scène 1 : La Mise en Scène",
+                            "content": "Trempé de sueur, les vêtements roussis par les flammes, Marc se réfugia dans un vieux poste d'observation dominant la vallée. Il tenait entre ses mains le noyau de la Larme, un petit prisme qui semblait contenir une galaxie de circuits. En y insérant la carte mémoire de sa caméra, il parvint à décrypter les derniers fichiers enregistrés par Blackwood. Ce qu'il vit le glaça plus sûrement que le vent de la forêt.\n\nLa vidéo ne montrait pas une attaque. Elle montrait Victor Blackwood, bien vivant, arrangeant lui-même les éclats de verre dans la villa. Il plaçait méticuleusement le fil rouge dans la rainure du parquet. Il configurait les explosifs de l'atelier d'Elena. Blackwood n'était pas la victime ; il était l'architecte de sa propre disparition. Sa \"mort\" était une diversion massive pour effacer ses dettes, éliminer ses rivaux et surtout, tester son système de communication en conditions réelles.\n\nMarc réalisa avec une horreur croissante qu'il avait été le jouet de Blackwood depuis le début. Le détective modèle, l'intègre cherchant la vérité, n'était qu'un pion utilisé pour transporter le noyau de la verrerie vers un lieu plus sûr. Les assaillants à la verrerie ? Des mercenaires payés pour simuler un combat et s'assurer que Marc s'échappe avec l'objet précieux. Blackwood voulant que Marc \"sauve\" la Larme du Tsar pour l'amener à son point final de transmission. Marc regarda l'horizon. Au loin, le vieux phare de la Pointe-Noire s'allumait. C'était le point le plus haut de la côte, le seul endroit capable d'envoyer un signal photonique au-delà de l'horizon. C'était là que le Roi du Cristal attendait sa résurrection.",
+                            "wordCount": 380,
+                            "status": "complete",
+                            "createdAt": "2026-02-09T22:15:00.000Z",
+                            "updatedAt": "2026-02-09T22:15:00.000Z"
+                        },
+                        {
+                            "id": 222,
+                            "title": "Scène 2 : Le Phare de la Vérité",
+                            "content": "Le phare de la Pointe-Noire se dressait contre la tempête montante. Marc gravit les marches de pierre en colimaçon, son pas résonnant comme un glas. Arrivé au sommet, il trouva la galerie de la lanterne baignée d'une lumière rouge sang. Victor Blackwood était là, debout devant l'optique monumentale du phare, le visage serein. Il tenait une coupe de cristal à la main.\n\n« Bonjour, Marc. J'apprécie votre ponctualité. Vous avez le noyau ? »\nBlackwood ne portait aucune trace de lutte. Il semblait sortir d'un dîner de gala. Marc s'arrêta à quelques mètres de lui, le prisme de la Larme serré dans son poing. \n« Pourquoi Elena ? » demander Marc d'une voix sourde.\n« Les sacrifices sont nécessaires pour l'art, Marc. L'atelier d'Elena était le dernier lien avec l'Araignée de Verre. Il fallait que ce chapitre se ferme. Maintenant, donnez-le moi. Le signal va partir dans trois minutes. Une nouvelle ère de contrôle commence. » \n\nMarc regarda le complexe mécanisme derrière Blackwood. Il aurait pu tirer, mais il savait que Blackwood avait sûrement prévu cette issue. Au lieu de cela, Marc sortit le sachet contenant le fil rouge original. \n« Vous avez fait une erreur, Victor. Vous avez cru que je ne verrais que ce que vous vouliez que je voie. Mais vous avez oublié que le verre ne fait pas que refléter. Il peut aussi réfracter la vérité. » \nMarc glissa le fil rouge au cœur du prisme photonique et jeta l'ensemble non pas vers Blackwood, mais directement dans l'engrenage de rotation de la lanterne. Le fil de soie et de verre optique se coinça dans les dents d'acier. Le mécanisme hurla, une étincelle jaillit, et le faisceau lumineux du phare vira soudain au blanc aveuglant avant de s'éteindre dans un nuage d'ozone.\n\nBlackwood se précipita vers la lanterne, mais il était trop tard. La surcharge avait grillé les serveurs. La Larme du Tsar n'était plus qu'un morceau de verre inerte. Le Roi du Cristal s'effondra contre la vitre, regardant la mer redevenue sombre. La police arrivait, leurs gyrophares escaladant la falaise. Marc ne resta pas pour les explications. Il redescendit les marches, laissant derrière lui le phare éteint et le fantôme d'un homme qui avait cru pouvoir régner par la lumière. Dehors, la pluie lavait enfin le sang et le verre, laissant le monde tel qu'il était : fragile, mais enfin débarrassé de ses reflets trompeurs.",
+                            "wordCount": 435,
+                            "status": "complete",
+                            "createdAt": "2026-02-09T22:15:00.000Z",
+                            "updatedAt": "2026-02-09T22:15:00.000Z"
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "characters": [
+        {
+            "id": "char_marc",
+            "name": "Marc Laroque",
+            "firstName": "Marc",
+            "lastName": "Laroque",
+            "role": "Protagoniste / Détective",
+            "occupation": "Détective Privé",
+            "age": "42",
+            "avatarEmoji": "🕵️",
+            "roleImportance": 5,
+            "traits": [
+                "Analytique",
+                "Obsessionnel",
+                "Mélancolique",
+                "Stoïque"
+            ],
+            "personality": {
+                "intelligence": 18,
+                "force": 12,
+                "robustesse": 14,
+                "empathie": 8,
+                "perception": 19,
+                "agilite": 11,
+                "sociabilite": 7
+            },
+            "physicalDescription": "Grand, les traits tirés par les insomnies. Porte toujours un imperméable gris et semble avoir un train de retard sur le monde, sauf quand il s'agit d'observer des détails.",
+            "past": "Ancien inspecteur de la brigade criminelle, il a démissionné après une affaire qui a coûté la vie à son partenaire. Il vit désormais pour résoudre les énigmes que les autres considèrent comme closes."
+        },
+        {
+            "id": "char_blackwood",
+            "name": "Victor Blackwood",
+            "firstName": "Victor",
+            "lastName": "Blackwood",
+            "role": "Antagoniste / Victime présumée",
+            "occupation": "Magnat du Verre / Inventeur",
+            "age": "58",
+            "avatarEmoji": "💎",
+            "roleImportance": 5,
+            "traits": [
+                "Ambitieux",
+                "Manipulateur",
+                "Perfectionniste",
+                "Visionnaire"
+            ],
+            "personality": {
+                "intelligence": 20,
+                "force": 10,
+                "robustesse": 12,
+                "empathie": 4,
+                "perception": 15,
+                "agilite": 10,
+                "sociabilite": 16
+            },
+            "physicalDescription": "Élégance aristocratique, cheveux argentés parfaitement coiffés. Ses mains sont marquées par des micro-cicatrices, stigmates de ses années de travail du verre.",
+            "past": "Fondateur de Blackwood Optique. Il a bâti un empire sur la pureté de son cristal. Passionné par les technologies impériales oubliées, il a passé sa vie à chercher la Larme du Tsar."
+        },
+        {
+            "id": "char_elena",
+            "name": "Elena Kovalev",
+            "firstName": "Elena",
+            "lastName": "Kovalev",
+            "role": "Alliée / Experte",
+            "occupation": "Maître Verrière / Experte en Optique",
+            "age": "45",
+            "avatarEmoji": "🔥",
+            "roleImportance": 4,
+            "traits": [
+                "Indépendante",
+                "Râleuse",
+                "Loyale",
+                "Précise"
+            ],
+            "personality": {
+                "intelligence": 17,
+                "force": 14,
+                "robustesse": 16,
+                "empathie": 12,
+                "perception": 18,
+                "agilite": 15,
+                "sociabilite": 10
+            },
+            "physicalDescription": "Bras musclés par le travail au four, regard perçant protégé par des lunettes de protection. Son tablier de cuir porte les traces de mille expérimentations.",
+            "past": "Petite-fille d'un ingénieur de la cour impériale. Elle seule possède le savoir-faire nécessaire pour comprendre les mécanismes de la Larme du Tsar."
+        }
+    ],
+    "world": [
+        {
+            "id": "loc_villa",
+            "name": "Villa Blackwood",
+            "type": "Lieu",
+            "description": "Une merveille architecturale perchée sur les falaises d'albâtre.",
+            "details": "Murs de béton brossé, baies vitrées monumentales offrant une vue plongeante sur l'océan. C'est ici que l'histoire commence avec le meurtre présumé de Victor Blackwood.",
+            "history": "Construite par Blackwood lui-même comme un laboratoire de lumière et de vie privée."
+        },
+        {
+            "id": "loc_atelier",
+            "name": "L'Atelier d'Elena",
+            "type": "Lieu",
+            "description": "Une verrerie cachée dans les quartiers industriels de la ville basse.",
+            "details": "Chaleur étouffante des fours, odeur d'ozone et piles de documents optiques rares. C'est le centre nerveux des recherches techniques de Marc.",
+            "history": "Une ancienne fonderie héritée par Elena de son grand-père."
+        },
+        {
+            "id": "loc_verrerie",
+            "name": "Verrerie de l'Oubli",
+            "type": "Lieu",
+            "description": "Bâtiment industriel abandonné au fond de la forêt noire.",
+            "details": "Enveloppe de briques décrépies cachant un laboratoire de photonique de pointe. C'est ici que Blackwood a assemblé la nouvelle Larme du Tsar.",
+            "history": "La première usine de Blackwood, fermée officiellement il y a vingt ans."
+        },
+        {
+            "id": "loc_phare",
+            "name": "Phare de la Pointe-Noire",
+            "type": "Lieu",
+            "description": "Le plus ancien phare de la côte, dominant les récifs les plus dangereux.",
+            "details": "Lanterne monumentale modifiée par Blackwood pour servir d'antenne de transmission photonique globale.",
+            "history": "Monument historique, site de la confrontation finale."
+        }
+    ],
+    "timeline": [
+        {
+            "id": 1,
+            "title": "Crime à la Villa",
+            "date": "15 Octobre, Minuit",
+            "order": 1,
+            "description": "Marc arrive à la villa pour inspecter le cadavre disparu de Blackwood.",
+            "characters": [
+                "Marc Laroque"
+            ]
+        },
+        {
+            "id": 2,
+            "title": "L'Indice Rubis",
+            "date": "15 Octobre, 02:00",
+            "order": 2,
+            "description": "Découverte du fil de soie rouge incrusté dans le sol.",
+            "characters": [
+                "Marc Laroque"
+            ]
+        },
+        {
+            "id": 3,
+            "title": "Analyse chez Elena",
+            "date": "15 Octobre, 10:00",
+            "order": 3,
+            "description": "Marc apporte le fil à Elena qui identifie la technologie interdite.",
+            "characters": [
+                "Marc Laroque",
+                "Elena Kovalev"
+            ]
+        },
+        {
+            "id": 4,
+            "title": "L'Attaque de l'Atelier",
+            "date": "15 Octobre, 20:00",
+            "order": 4,
+            "description": "L'atelier est frappé par une fréquence vibratoire, destruction massive des œuvres.",
+            "characters": [
+                "Marc Laroque",
+                "Elena Kovalev"
+            ]
+        },
+        {
+            "id": 5,
+            "title": "Infiltration de la Verrerie",
+            "date": "16 Octobre, 04:00",
+            "order": 5,
+            "description": "Marc trouve le laboratoire caché et la sphère photonique.",
+            "characters": [
+                "Marc Laroque"
+            ]
+        },
+        {
+            "id": 6,
+            "title": "La diversion de feu",
+            "date": "16 Octobre, 05:30",
+            "order": 6,
+            "description": "Incendie de la verrerie, Marc s'échappe de justesse.",
+            "characters": [
+                "Marc Laroque"
+            ]
+        },
+        {
+            "id": 7,
+            "title": "Décryptage de la Mise en Scène",
+            "date": "16 Octobre, 14:00",
+            "order": 7,
+            "description": "Marc réalise que Blackwood est vivant en analysant les fichiers du prisme.",
+            "characters": [
+                "Marc Laroque"
+            ]
+        },
+        {
+            "id": 8,
+            "title": "L'Affrontement Final",
+            "date": "16 Octobre, 22:00",
+            "order": 8,
+            "description": "Le signal du phare est neutralisé, Blackwood est arrêté.",
+            "characters": [
+                "Marc Laroque",
+                "Victor Blackwood"
+            ]
+        }
+    ],
+    "metroTimeline": [
+        {
+            "id": 101,
+            "title": "L'Arrivée à la Villa",
+            "date": "15/10/2026",
+            "order": 1,
+            "description": "Marc Laroque pénètre dans la demeure de Blackwood sous une pluie battante.",
+            "characters": [
+                "char_marc"
+            ],
+            "sceneId": 111
+        },
+        {
+            "id": 102,
+            "title": "Expertise Optique",
+            "date": "15/10/2026",
+            "order": 2,
+            "description": "Elena identifie le fil rubis comme une pièce de technologie impériale.",
+            "characters": [
+                "char_marc",
+                "char_elena"
+            ],
+            "sceneId": 121
+        },
+        {
+            "id": 103,
+            "title": "Le Piège se Referme",
+            "date": "15/10/2026",
+            "order": 3,
+            "description": "Vibrations destructrices dans l'atelier d'Elena. Marc la sauve de justesse.",
+            "characters": [
+                "char_marc",
+                "char_elena"
+            ],
+            "sceneId": 122
+        },
+        {
+            "id": 104,
+            "title": "La Verrerie de l'Oubli",
+            "date": "16/10/2026",
+            "order": 4,
+            "description": "Marc infiltre le laboratoire secret et dérobe la Larme du Tsar.",
+            "characters": [
+                "char_marc"
+            ],
+            "sceneId": 211
+        },
+        {
+            "id": 105,
+            "title": "L'Ultime Refraction",
+            "date": "16/10/2026",
+            "order": 5,
+            "description": "Face à face au sommet du phare. Marc sabote le signal de Blackwood.",
+            "characters": [
+                "char_marc",
+                "char_blackwood"
+            ],
+            "sceneId": 222
+        }
+    ],
+    "characterColors": {
+        "char_marc": "#1E88E5",
+        "char_blackwood": "#FB8C00",
+        "char_elena": "#43A047"
+    },
+    "investigationBoard": {
+        "activeCaseId": "case_blackwood_murder",
+        "cases": [
+            {
+                "id": "case_blackwood_murder",
+                "title": "Le Meurtre du Roi du Cristal",
+                "description": "Victor Blackwood a été retrouvé mort (ou a disparu) dans sa villa. Sa fortune et ses brevets sont en jeu.",
+                "status": "in_progress",
+                "phase": "analysis",
+                "victimId": "char_blackwood",
+                "crimeType": "murder"
+            }
+        ],
+        "facts": [
+            {
+                "id": "fact_death_blackwood",
+                "caseId": "case_blackwood_murder",
+                "type": "crime",
+                "label": "Mort de Victor Blackwood",
+                "description": "Le corps de Victor Blackwood a été découvert dans son bureau, puis il a disparu.",
+                "truthStatus": "verified",
+                "relatedCharacterIds": [
+                    "char_blackwood"
+                ],
+                "relatedLocationIds": [
+                    "loc_villa"
+                ],
+                "timeline": [
+                    {
+                        "id": "step_death_1",
+                        "characterId": "char_marc",
+                        "sceneId": 111,
+                        "state": "revealed",
+                        "description": "Marc arrive à la villa et constate la mort (apparente) de Blackwood."
+                    },
+                    {
+                        "id": "step_death_2",
+                        "characterId": "char_marc",
+                        "sceneId": 221,
+                        "state": "confirmed",
+                        "description": "Marc découvre via les fichiers de Blackwood que sa mort était une mise en scène."
+                    }
+                ]
+            },
+            {
+                "id": "fact_ruby_thread",
+                "caseId": "case_blackwood_murder",
+                "type": "clue",
+                "label": "Fil de soie rubis",
+                "description": "Un fil de soie rouge rubis contenant de la fibre optique ultra-pure.",
+                "truthStatus": "verified",
+                "relatedCharacterIds": [
+                    "char_blackwood",
+                    "char_elena"
+                ],
+                "timeline": [
+                    {
+                        "id": "step_ruby_1",
+                        "characterId": "char_marc",
+                        "sceneId": 112,
+                        "state": "revealed",
+                        "description": "Marc trouve le fil incrusté dans le parquet de la villa."
+                    },
+                    {
+                        "id": "step_ruby_2",
+                        "characterId": "char_elena",
+                        "sceneId": 121,
+                        "state": "confirmed",
+                        "description": "Elena identifie le fil comme de la fibre optique de haute pureté."
+                    }
+                ]
+            },
+            {
+                "id": "fact_glass_spider",
+                "caseId": "case_blackwood_murder",
+                "type": "testimony",
+                "label": "L'Araignée de Verre",
+                "description": "Réseau de faussaires spécialisé dans les technologies optiques de la guerre froide.",
+                "truthStatus": "verified",
+                "timeline": [
+                    {
+                        "id": "step_spider_1",
+                        "characterId": "char_elena",
+                        "sceneId": 121,
+                        "state": "hinted",
+                        "description": "Elena mentionne l'Araignée de Verre comme l'origine probable du fil."
+                    }
+                ]
+            },
+            {
+                "id": "fact_tsar_tear",
+                "caseId": "case_blackwood_murder",
+                "type": "object",
+                "label": "La Larme du Tsar",
+                "description": "Un prisme photonique légendaire capable de crypter des communications via la lumière.",
+                "truthStatus": "verified",
+                "relatedLocationIds": [
+                    "loc_verrerie",
+                    "loc_phare"
+                ],
+                "timeline": [
+                    {
+                        "id": "step_tear_1",
+                        "characterId": "char_elena",
+                        "sceneId": 122,
+                        "state": "hinted",
+                        "description": "Elena explique la nature technologique de la Larme du Tsar."
+                    },
+                    {
+                        "id": "step_tear_2",
+                        "characterId": "char_marc",
+                        "sceneId": 211,
+                        "state": "revealed",
+                        "description": "Marc découvre la sphère rubis (La Larme) dans la verrerie de l'oubli."
+                    }
+                ]
+            }
+        ],
+        "knowledge": [
+            {
+                "characterId": "char_marc",
+                "factId": "fact_death_blackwood",
+                "sceneId": 111,
+                "state": "knows"
+            },
+            {
+                "characterId": "char_marc",
+                "factId": "fact_ruby_thread",
+                "sceneId": 112,
+                "state": "knows"
+            },
+            {
+                "characterId": "char_elena",
+                "factId": "fact_ruby_thread",
+                "sceneId": 121,
+                "state": "knows"
+            },
+            {
+                "characterId": "char_marc",
+                "factId": "fact_glass_spider",
+                "sceneId": 121,
+                "state": "suspicious"
+            },
+            {
+                "characterId": "char_elena",
+                "factId": "fact_glass_spider",
+                "sceneId": 121,
+                "state": "knows"
+            },
+            {
+                "characterId": "char_marc",
+                "factId": "fact_tsar_tear",
+                "sceneId": 122,
+                "state": "suspicious"
+            },
+            {
+                "characterId": "char_elena",
+                "factId": "fact_tsar_tear",
+                "sceneId": 122,
+                "state": "knows"
+            }
+        ],
+        "suspectLinks": [
+            {
+                "id": "mmo_marc_blackwood",
+                "caseId": "case_blackwood_murder",
+                "suspectId": "char_marc",
+                "victimId": "fact_death_blackwood",
+                "motive": {
+                    "level": 2,
+                    "description": "Besoin de clôture sur une affaire passée impliquant Blackwood."
+                },
+                "means": {
+                    "level": 8,
+                    "description": "Possède une arme de service et une connaissance tactique."
+                },
+                "opportunity": {
+                    "level": 5,
+                    "description": "Était sur place peu après le crime."
+                }
+            },
+            {
+                "id": "mmo_elena_blackwood",
+                "caseId": "case_blackwood_murder",
+                "suspectId": "char_elena",
+                "victimId": "fact_death_blackwood",
+                "motive": {
+                    "level": 4,
+                    "description": "Blackwood utilisait les brevets de sa famille sans compensation."
+                },
+                "means": {
+                    "level": 10,
+                    "description": "Capacité technique de saboter les verres de la villa."
+                },
+                "opportunity": {
+                    "level": 3,
+                    "description": "Alibi de travail dans son atelier, non vérifié."
+                }
+            }
+        ]
+    },
+    "plotGrid": {
+        "columns": [
+            {
+                "id": "pg_col_struct",
+                "type": "structure",
+                "title": "Structure Narrative",
+                "order": 0
+            },
+            {
+                "id": "pg_col_spider",
+                "type": "custom",
+                "title": "Arc A : L'Araignée de Verre",
+                "order": 1
+            },
+            {
+                "id": "pg_col_tear",
+                "type": "custom",
+                "title": "Arc B : La Larme du Tsar",
+                "order": 2
+            },
+            {
+                "id": "pg_col_chars",
+                "type": "custom",
+                "title": "Arc C : Marc & Elena",
+                "order": 3
+            }
+        ],
+        "rows": [
+            {
+                "id": "pg_row_111",
+                "type": "structure",
+                "structureId": 111,
+                "structureType": "scene",
+                "order": 0
+            },
+            {
+                "id": "pg_row_112",
+                "type": "structure",
+                "structureId": 112,
+                "structureType": "scene",
+                "order": 10
+            },
+            {
+                "id": "pg_row_121",
+                "type": "structure",
+                "structureId": 121,
+                "structureType": "scene",
+                "order": 20
+            },
+            {
+                "id": "pg_row_122",
+                "type": "structure",
+                "structureId": 122,
+                "structureType": "scene",
+                "order": 30
+            },
+            {
+                "id": "pg_row_211",
+                "type": "structure",
+                "structureId": 211,
+                "structureType": "scene",
+                "order": 40
+            },
+            {
+                "id": "pg_row_212",
+                "type": "structure",
+                "structureId": 212,
+                "structureType": "scene",
+                "order": 50
+            },
+            {
+                "id": "pg_row_221",
+                "type": "structure",
+                "structureId": 221,
+                "structureType": "scene",
+                "order": 60
+            },
+            {
+                "id": "pg_row_222",
+                "type": "structure",
+                "structureId": 222,
+                "structureType": "scene",
+                "order": 70
+            }
+        ],
+        "cards": [
+            {
+                "id": "card_1",
+                "rowId": "pg_row_111",
+                "colId": "pg_col_spider",
+                "title": "L'indice pourpre",
+                "content": "Marc remarque un fragment de verre qui ne vient pas de la villa."
+            },
+            {
+                "id": "card_2",
+                "rowId": "pg_row_112",
+                "colId": "pg_col_spider",
+                "title": "Le fil rubis",
+                "content": "Découverte du fil de soie. Premier lien concret avec l'organisation."
+            },
+            {
+                "id": "card_3",
+                "rowId": "pg_row_121",
+                "colId": "pg_col_chars",
+                "title": "Vieilles blessures",
+                "content": "Elena et Marc évoquent leur passé commun et la raison de leur rupture."
+            },
+            {
+                "id": "card_4",
+                "rowId": "pg_row_121",
+                "colId": "pg_col_tear",
+                "title": "L'âme de verre",
+                "content": "Elena révèle que le fil contient de la fibre optique militaire."
+            },
+            {
+                "id": "card_5",
+                "rowId": "pg_row_122",
+                "colId": "pg_col_tear",
+                "title": "Le projet impérial",
+                "content": "Origine de la Larme : un système de communication par prisme."
+            },
+            {
+                "id": "card_6",
+                "rowId": "pg_row_211",
+                "colId": "pg_col_tear",
+                "title": "Le prototype",
+                "content": "Marc trouve la sphère dans l'usine désaffectée. Elle est active."
+            },
+            {
+                "id": "card_7",
+                "rowId": "pg_row_221",
+                "colId": "pg_col_spider",
+                "title": "L'architecte",
+                "content": "Révélation : Blackwood a tout orchestré."
+            },
+            {
+                "id": "card_8",
+                "rowId": "pg_row_222",
+                "colId": "pg_col_spider",
+                "title": "Coupure de courant",
+                "content": "Marc sabote le signal du phare, neutralisant le réseau de l'Araignée."
+            }
+        ]
+    },
+    "narrativeArcs": [
+        {
+            "id": "arc_spider",
+            "title": "Arc A : L'Araignée de Verre",
+            "category": "mystery",
+            "color": "#607d8b",
+            "description": "L'enquête sur le réseau de faussaires.",
+            "type": "mystery",
+            "importance": "major",
+            "board": {
+                "items": [
+                    {
+                        "id": "item_1707519130001",
+                        "type": "column",
+                        "x": 50,
+                        "y": 50,
+                        "title": "Enquête",
+                        "width": 260,
+                        "cards": [
+                            {
+                                "id": "arc_card_a1",
+                                "type": "scene",
+                                "sceneId": 111,
+                                "sceneTitle": "Scène 1 : L'arrivée sur les lieux",
+                                "breadcrumb": "ACTE 1 : LE PIÈGE › CHAPITRE 1 : VERRE BRISÉ",
+                                "status": "complete"
+                            },
+                            {
+                                "id": "arc_card_a2",
+                                "type": "scene",
+                                "sceneId": 112,
+                                "sceneTitle": "Scène 2 : Le fil rouge",
+                                "breadcrumb": "ACTE 1 : LE PIÈGE › CHAPITRE 1 : VERRE BRISÉ",
+                                "status": "complete"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "item_1707519130002",
+                        "type": "column",
+                        "x": 710,
+                        "y": 50,
+                        "title": "3. L'Architecte",
+                        "width": 260,
+                        "cards": [
+                            {
+                                "id": "arc_card_a7",
+                                "type": "scene",
+                                "sceneId": 221,
+                                "sceneTitle": "Scène 1 : La Mise en Scène",
+                                "breadcrumb": "ACTE 2 : LA VÉRITÉ ÉCLATÉE › CHAPITRE 4",
+                                "status": "complete"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "item_1707519130003",
+                        "type": "column",
+                        "x": 1040,
+                        "y": 50,
+                        "title": "4. Sabotage",
+                        "width": 260,
+                        "cards": [
+                            {
+                                "id": "arc_card_a8",
+                                "type": "scene",
+                                "sceneId": 222,
+                                "sceneTitle": "Scène 2 : Le Phare de la Vérité",
+                                "breadcrumb": "ACTE 2 : LA VÉRITÉ ÉCLATÉE › CHAPITRE 4",
+                                "status": "complete"
+                            }
+                        ]
+                    }
+                ],
+                "connections": [
+                    {
+                        "id": "conn_a1_a2",
+                        "from": "item_1707519130001",
+                        "fromSide": "right",
+                        "to": "item_1707519130002",
+                        "toSide": "left"
+                    },
+                    {
+                        "id": "conn_a2_a3",
+                        "from": "item_1707519130002",
+                        "fromSide": "right",
+                        "to": "item_1707519130003",
+                        "toSide": "left"
+                    }
+                ]
+            },
+            "scenePresence": [
+                {
+                    "sceneId": 111,
+                    "columnId": "item_1707519130001",
+                    "intensity": 3
+                },
+                {
+                    "sceneId": 112,
+                    "columnId": "item_1707519130001",
+                    "intensity": 4
+                },
+                {
+                    "sceneId": 221,
+                    "columnId": "item_1707519130002",
+                    "intensity": 5
+                },
+                {
+                    "sceneId": 222,
+                    "columnId": "item_1707519130003",
+                    "intensity": 5
+                }
+            ]
+        },
+        {
+            "id": "arc_tear",
+            "title": "Arc B : La Larme du Tsar",
+            "category": "plot",
+            "color": "#e74c3c",
+            "description": "La technologie photonique et le projet impérial.",
+            "type": "plot",
+            "importance": "major",
+            "board": {
+                "items": [
+                    {
+                        "id": "item_1707519130004",
+                        "type": "column",
+                        "x": 50,
+                        "y": 50,
+                        "title": "1. L'Âme de Verre",
+                        "width": 260,
+                        "cards": [
+                            {
+                                "id": "arc_card_b4",
+                                "type": "scene",
+                                "sceneId": 121,
+                                "sceneTitle": "Scène 1 : L'Experte",
+                                "breadcrumb": "ACTE 1 : LE PIÈGE › CHAPITRE 2",
+                                "status": "complete"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "item_1707519130005",
+                        "type": "column",
+                        "x": 380,
+                        "y": 50,
+                        "title": "2. Projet Impérial",
+                        "width": 260,
+                        "cards": [
+                            {
+                                "id": "arc_card_b5",
+                                "type": "scene",
+                                "sceneId": 122,
+                                "sceneTitle": "Scène 2 : La Larme du Tsar",
+                                "breadcrumb": "ACTE 1 : LE PIÈGE › CHAPITRE 2",
+                                "status": "complete"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "item_1707519130006",
+                        "type": "column",
+                        "x": 710,
+                        "y": 50,
+                        "title": "3. Le Prototype",
+                        "width": 260,
+                        "cards": [
+                            {
+                                "id": "arc_card_b6",
+                                "type": "scene",
+                                "sceneId": 211,
+                                "sceneTitle": "Scène 1 : La Verrerie de l'Oubli",
+                                "breadcrumb": "ACTE 2 : LA VÉRITÉ ÉCLATÉE › CHAPITRE 3",
+                                "status": "complete"
+                            }
+                        ]
+                    }
+                ],
+                "connections": [
+                    {
+                        "id": "conn_b1_b2",
+                        "from": "item_1707519130004",
+                        "fromSide": "right",
+                        "to": "item_1707519130005",
+                        "toSide": "left"
+                    },
+                    {
+                        "id": "conn_b2_b3",
+                        "from": "item_1707519130005",
+                        "fromSide": "right",
+                        "to": "item_1707519130006",
+                        "toSide": "left"
+                    }
+                ]
+            },
+            "scenePresence": [
+                {
+                    "sceneId": 121,
+                    "columnId": "item_1707519130004",
+                    "intensity": 5
+                },
+                {
+                    "sceneId": 122,
+                    "columnId": "item_1707519130005",
+                    "intensity": 3
+                },
+                {
+                    "sceneId": 211,
+                    "columnId": "item_1707519130006",
+                    "intensity": 4
+                }
+            ]
+        },
+        {
+            "id": "arc_relationship",
+            "title": "Arc C : Marc & Elena",
+            "category": "relationship",
+            "color": "#e91e63",
+            "description": "Leurs retrouvailles et l'évolution de leur dynamique.",
+            "type": "relationship",
+            "importance": "minor",
+            "board": {
+                "items": [
+                    {
+                        "id": "item_1707519130007",
+                        "type": "column",
+                        "x": 50,
+                        "y": 50,
+                        "title": "1. Blessures Passées",
+                        "width": 260,
+                        "cards": [
+                            {
+                                "id": "arc_card_c3",
+                                "type": "scene",
+                                "sceneId": 121,
+                                "sceneTitle": "Scène 1 : L'Experte",
+                                "breadcrumb": "ACTE 1 : LE PIÈGE › CHAPITRE 2",
+                                "status": "complete"
+                            }
+                        ]
+                    }
+                ],
+                "connections": []
+            },
+            "scenePresence": [
+                {
+                    "sceneId": 121,
+                    "columnId": "item_1707519130007",
+                    "intensity": 4
+                }
+            ]
+        }
+    ],
+    "interArcConnections": [
+        {
+            "id": "inter_a2_b4",
+            "fromArcId": "arc_spider",
+            "fromItemId": "arc_card_a2",
+            "fromSide": "right",
+            "toArcId": "arc_tear",
+            "toItemId": "arc_card_b4",
+            "toSide": "left",
+            "type": "cause",
+            "label": "Besoin d'expertise"
+        },
+        {
+            "id": "inter_b6_a7",
+            "fromArcId": "arc_tear",
+            "fromItemId": "arc_card_b6",
+            "fromSide": "right",
+            "toArcId": "arc_spider",
+            "toItemId": "arc_card_a7",
+            "toSide": "left",
+            "type": "cause",
+            "label": "Preuve accablante"
+        },
+        {
+            "id": "inter_c3_b4",
+            "fromArcId": "arc_relationship",
+            "fromItemId": "arc_card_c3",
+            "fromSide": "right",
+            "toArcId": "arc_tear",
+            "toItemId": "arc_card_b4",
+            "toSide": "left",
+            "type": "parallel",
+            "label": "Tension partagée"
+        }
+    ],
+    "arcCategories": {},
+    "collapsedArcCategories": [],
+    "notes": [],
+    "codex": [],
+    "stats": {
+        "dailyGoal": 500,
+        "totalGoal": 80000,
+        "writingSessions": []
+    },
+    "versions": [],
+    "relationships": [],
+    "relations": [
+        {
+            "id": "rel_marc_elena",
+            "char1Id": "char_marc",
+            "char2Id": "char_elena",
+            "type": "amitie",
+            "description": "Anciens collègues de confiance. Elena aide Marc à décoder les preuves technologiques.",
+            "createdAt": "2026-02-10T21:40:00.000Z"
+        },
+        {
+            "id": "rel_marc_blackwood",
+            "char1Id": "char_marc",
+            "char2Id": "char_blackwood",
+            "type": "rivalite",
+            "description": "Marc cherche à exposer la fraude de Blackwood, tandis que Blackwood le manipule.",
+            "createdAt": "2026-02-10T21:40:00.000Z"
+        },
+        {
+            "id": "rel_elena_blackwood",
+            "char1Id": "char_elena",
+            "char2Id": "char_blackwood",
+            "type": "rivalite",
+            "description": "Elena méprise Blackwood pour avoir exploité les brevets de son grand-père.",
+            "createdAt": "2026-02-10T21:40:00.000Z"
+        }
+    ],
+    "characterPositions": {
+        "char_elena": {
+            "x": 300,
+            "y": 200
+        },
+        "char_marc": {
+            "x": 550,
+            "y": 350
+        },
+        "char_blackwood": {
+            "x": 300,
+            "y": 500
+        }
+    },
+    "maps": [
+        {
+            "id": 1707519130000,
+            "name": "Carte de la Côte d'Albâtre",
+            "image": "https://images.unsplash.com/photo-1526772662000-3f88f10405ff?q=80&w=1000",
+            "locations": [
+                {
+                    "name": "Villa Blackwood",
+                    "x": 75,
+                    "y": 25,
+                    "description": "Perchée sur la falaise, point de départ de l'enquête.",
+                    "typeId": "crime-scene"
+                },
+                {
+                    "name": "L'Atelier d'Elena",
+                    "x": 30,
+                    "y": 60,
+                    "description": "Zone industrielle basse, refuge technique.",
+                    "typeId": "hideout"
+                },
+                {
+                    "name": "Verrerie de l'Oubli",
+                    "x": 15,
+                    "y": 15,
+                    "description": "Cachée dans la forêt dense, laboratoire de photonique.",
+                    "typeId": "default"
+                },
+                {
+                    "name": "Phare de la Pointe-Noire",
+                    "x": 85,
+                    "y": 80,
+                    "description": "Point culminant de la côte, site de la confrontation finale.",
+                    "typeId": "marker"
+                }
+            ]
+        }
+    ],
+    "globalnotes": {
+        "boards": [],
+        "items": [],
+        "activeBoardId": null
+    }
+}

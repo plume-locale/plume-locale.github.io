@@ -7,6 +7,13 @@
 let activeStatusFilters = ['draft', 'progress', 'complete', 'review'];
 let currentStatusMenu = null;
 let chapterScrollTrackingHandler = null;
+let currentPageFormat = localStorage.getItem('plume_page_format') || 'none';
+let isMobile = window.innerWidth <= 900;
+
+// Update isMobile on resize
+window.addEventListener('resize', () => {
+    isMobile = window.innerWidth <= 900;
+});
 
 // --- DISPATCHER DE REPOSITORY ---
 
@@ -135,15 +142,35 @@ function switchView(view) {
         'projectProgressBar',
         'statusFilters',
         'sceneTools',
-        'toolsSidebar'
+        'sidebar-header'
     ];
 
     structureOnlyElements.forEach(id => {
         const el = document.getElementById(id);
         if (el) {
-            el.style.display = (view === 'editor') ? '' : 'none';
+            el.style.display = (view === 'editor' || (view === 'projects' && id === 'sidebar-header')) ? '' : 'none';
         }
     });
+
+    // Special handling for toolsSidebar (visible in editor AND globalnotes)
+    const toolsSidebar = document.getElementById('toolsSidebar');
+    if (toolsSidebar) {
+        if (!window.originalToolsSidebarHTML) {
+            window.originalToolsSidebarHTML = toolsSidebar.innerHTML;
+        }
+
+        if (view === 'editor') {
+            toolsSidebar.style.display = '';
+            // Restore default tools
+            toolsSidebar.innerHTML = window.originalToolsSidebarHTML;
+            if (typeof lucide !== 'undefined') lucide.createIcons({ root: toolsSidebar });
+        } else if (view === 'globalnotes') {
+            toolsSidebar.style.display = '';
+            updateGNToolsSidebar();
+        } else {
+            toolsSidebar.style.display = 'none';
+        }
+    }
 
     // Toolbar de l'arborescence
     const treeCollapseToolbar = document.getElementById('treeCollapseToolbar');
@@ -166,7 +193,7 @@ function switchView(view) {
         'notesList', 'codexList', 'arcsList', 'statsList', 'versionsList', 'analysisList',
         'todosList', 'corkboardList', 'mindmapList', 'plotList',
         'relationsList', 'mapList', 'timelineVizList', 'storyGridList', 'thrillerList', 'noSidebarMessage',
-        'investigationList'
+        'investigationList', 'globalnotesList'
     ];
 
     sidebarLists.forEach(listId => {
@@ -186,7 +213,8 @@ function switchView(view) {
         'timelineviz': 'timelineVizList',
         'thriller': 'thrillerList',
         'map': 'mapList',
-        'investigation': 'investigationList'
+        'investigation': 'investigationList',
+        'projects': 'projectsSidebarList'
     };
 
     const editorViewVues = ['stats', 'analysis', 'versions', 'todos', 'timeline', 'corkboard', 'plot', 'plotgrid', 'relations'];
@@ -271,10 +299,108 @@ function updateSidebarActions(view) {
         case 'arcs':
             html = `<button class="btn btn-primary" onclick="createNewArc()">+ ${Localization.t('nav.arcs')}</button>`;
             break;
+        case 'globalnotes':
+            html = `
+                <div class="sidebar-gn-tools-container" style="padding: 16px 0;">
+                    <div class="gn-sidebar-section">
+                        <div class="gn-section-header" style="margin: 0 16px 8px 16px;">${Localization.t('globalnotes.sidebar.group.boards') || 'Mes Tableaux'}</div>
+                        <div class="gn-boards-list">
+                            ${renderGlobalNotesTree()}
+                        </div>
+                    </div>
+                </div>
+            `;
+            break;
     }
 
     sidebarActions.innerHTML = html;
     if (typeof lucide !== 'undefined') lucide.createIcons();
+}
+
+/**
+ * Resets the vertical tools sidebar with GlobalNotes creation tools.
+ */
+function updateGNToolsSidebar() {
+    const toolsSidebar = document.getElementById('toolsSidebar');
+    if (!toolsSidebar) return;
+
+    toolsSidebar.innerHTML = `
+        <div class="tool-item">
+            <button class="tool-btn" onclick="GlobalNotesView.addNewItem('board')" title="${Localization.t('globalnotes.tool.board')}"><i data-lucide="layout-grid"></i></button>
+        </div>
+        <div class="tool-item">
+            <button class="tool-btn" onclick="GlobalNotesView.addNewItem('column')" title="${Localization.t('globalnotes.tool.column')}"><i data-lucide="columns"></i></button>
+        </div>
+        <div class="tool-item">
+            <button class="tool-btn" onclick="GlobalNotesView.addNewItem('note')" title="${Localization.t('globalnotes.tool.note')}"><i data-lucide="sticky-note"></i></button>
+        </div>
+        <div class="tool-separator"></div>
+        <div class="tool-item">
+            <button class="tool-btn" onclick="GlobalNotesView.addNewItem('checklist')" title="${Localization.t('globalnotes.tool.checklist')}"><i data-lucide="list-checks"></i></button>
+        </div>
+        <div class="tool-item">
+            <button class="tool-btn" onclick="GlobalNotesView.addNewItem('table')" title="${Localization.t('globalnotes.tool.table')}"><i data-lucide="table"></i></button>
+        </div>
+        <div class="tool-item">
+            <button class="tool-btn" onclick="GlobalNotesView.addNewItem('sketch')" title="${Localization.t('globalnotes.tool.sketch')}"><i data-lucide="pen"></i></button>
+        </div>
+        <div class="tool-item">
+            <button class="tool-btn" onclick="GlobalNotesView.addNewItem('line')" title="${Localization.t('globalnotes.tool.line')}"><i data-lucide="share-2"></i></button>
+        </div>
+        <div class="tool-separator"></div>
+        <div class="tool-item">
+            <button class="tool-btn" onclick="GlobalNotesView.addNewItem('image')" title="${Localization.t('globalnotes.tool.image')}"><i data-lucide="image"></i></button>
+        </div>
+        <div class="tool-item">
+            <button class="tool-btn" onclick="GlobalNotesView.addNewItem('file')" title="${Localization.t('globalnotes.tool.file')}"><i data-lucide="upload"></i></button>
+        </div>
+        <div class="tool-item">
+            <button class="tool-btn" onclick="GlobalNotesView.addNewItem('video')" title="${Localization.t('globalnotes.tool.video')}"><i data-lucide="video"></i></button>
+        </div>
+        <div class="tool-item">
+            <button class="tool-btn" onclick="GlobalNotesView.addNewItem('link')" title="${Localization.t('globalnotes.tool.link')}"><i data-lucide="link"></i></button>
+        </div>
+        <div class="tool-item">
+            <button class="tool-btn" onclick="GlobalNotesView.addNewItem('map')" title="${Localization.t('globalnotes.tool.map')}"><i data-lucide="map-pin"></i></button>
+        </div>
+        <div class="tool-item">
+            <button class="tool-btn" onclick="GlobalNotesView.addNewItem('color')" title="${Localization.t('globalnotes.tool.color')}"><i data-lucide="palette"></i></button>
+        </div>
+    `;
+    if (typeof lucide !== 'undefined') lucide.createIcons({ root: toolsSidebar });
+}
+
+/**
+ * Renders the boards as a nested treeview.
+ */
+function renderGlobalNotesTree() {
+    if (typeof GlobalNotesRepository === 'undefined') return '';
+    const boards = GlobalNotesRepository.getBoards();
+    if (boards.length === 0) return '';
+
+    // Step 1: Find roots (boards without parent or parent doesn't exist)
+    const roots = boards.filter(b => !b.parentId || !boards.some(parent => parent.id === b.parentId));
+
+    return roots.map(root => renderGNTreeItem(root, boards, 0)).join('');
+}
+
+function renderGNTreeItem(board, allBoards, level) {
+    const isActive = GlobalNotesViewModel.state.activeBoardId === board.id;
+    const children = allBoards.filter(b => b.parentId === board.id);
+    const hasChildren = children.length > 0;
+
+    return `
+        <div class="gn-tree-node">
+            <div class="gn-board-nav-item ${isActive ? 'active' : ''}" 
+                 style="padding-left: ${12 + level * 12}px;"
+                 onclick="GlobalNotesViewModel.setActiveBoard('${board.id}'); updateSidebarActions();">
+                ${hasChildren ? '<i data-lucide="chevron-down" style="width: 12px; height: 12px; margin-right: -4px; opacity: 0.5;"></i>' : '<div style="width: 12px;"></div>'}
+                <i data-lucide="${level === 0 ? 'home' : 'layout'}" style="width: 14px; height: 14px;"></i>
+                <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1;">${board.title}</span>
+            </div>
+            ${hasChildren ? `<div class="gn-tree-children">${children.map(child => renderGNTreeItem(child, allBoards, level + 1)).join('')}</div>` : ''}
+        </div>
+    `;
 }
 
 // Ensure sidebar actions are updated when locale changes
@@ -291,6 +417,11 @@ function renderViewContent(view, containerId) {
     if (!container) return;
 
     switch (view) {
+        case 'projects':
+            if (typeof ProjectView !== 'undefined' && typeof ProjectView.renderLandingPage === 'function') {
+                ProjectView.renderLandingPage(projects);
+            }
+            break;
         case 'editor':
             if (currentActId && currentChapterId && currentSceneId) {
                 if (containerId === 'editorView' && !splitViewActive) {
@@ -319,19 +450,19 @@ function renderViewContent(view, containerId) {
             // État vide par défaut pour l'éditeur
             if (project.acts.length === 0 || (project.acts.length === 1 && project.acts[0].chapters.length === 0)) {
                 container.innerHTML = `
-                    <div class="empty-state">
+                <div class="empty-state">
                         <div class="empty-state-icon"><i data-lucide="pencil" style="width:48px;height:48px;stroke-width:1;"></i></div>
                         <div class="empty-state-title">${Localization.t('empty.start')}</div>
                         <div class="empty-state-text">${Localization.t('empty.create_chapter')}</div>
                         <button class="btn btn-primary" onclick="openAddChapterModal()">${Localization.t('btn.create')}</button>
-                    </div>`;
+                    </div> `;
             } else {
                 container.innerHTML = `
-                    <div class="empty-state">
+                <div class="empty-state">
                         <div class="empty-state-icon"><i data-lucide="pencil" style="width:48px;height:48px;stroke-width:1;"></i></div>
                         <div class="empty-state-title">${Localization.t('empty.select_scene')}</div>
                         <div class="empty-state-text">${Localization.t('empty.select_sidebar')}</div>
-                    </div>`;
+                    </div> `;
             }
             break;
 
@@ -369,13 +500,14 @@ function renderViewContent(view, containerId) {
         case 'storygrid': if (typeof renderStoryGrid === 'function') renderStoryGrid(); break;
         case 'thriller': if (typeof renderThrillerBoard === 'function') renderThrillerBoard(); break;
         case 'investigation': if (typeof renderInvestigationBoard === 'function') renderInvestigationBoard(); break;
+        case 'globalnotes': if (typeof renderGlobalNotes === 'function') renderGlobalNotes(); break;
         default:
             container.innerHTML = `
                 <div class="empty-state">
                     <div class="empty-state-icon"><i data-lucide="layout" style="width:48px;height:48px;stroke-width:1;"></i></div>
                     <div class="empty-state-title">Panneau vide</div>
                     <div class="empty-state-text">Cliquez sur l'en-tête pour choisir une vue</div>
-                </div>`;
+                </div> `;
             break;
     }
 }
@@ -421,6 +553,8 @@ function refreshAllViews() {
         case 'timelineviz': if (typeof renderTimelineVizView === 'function') renderTimelineVizView(); break;
         case 'arcs': if (typeof renderArcsList === 'function') renderArcsList(); break;
         case 'investigation': if (typeof renderInvestigationBoard === 'function') renderInvestigationBoard(); break;
+        case 'globalnotes': if (typeof renderGlobalNotes === 'function') renderGlobalNotes(); break;
+        case 'projects': if (typeof ProjectView !== 'undefined' && typeof ProjectView.renderLandingPage === 'function') ProjectView.renderLandingPage(projects); break;
     }
 
     // 5. Rafraîchir l'éditeur si une scène est ouverte
@@ -435,12 +569,14 @@ function refreshAllViews() {
         }
     }
 
-    // 6. Rafraîchir la sidebar mobile si on est sur mobile
-    const isMobile = window.innerWidth <= 900;
-    const sidebarViewsWithConfig = ['editor', 'characters', 'world', 'notes', 'codex'];
-    if (isMobile && sidebarViewsWithConfig.includes(currentView) && typeof renderMobileSidebarView === 'function') {
+    const isMobileView = window.innerWidth <= 900;
+    const sidebarViewsWithConfig = ['editor', 'characters', 'world', 'notes', 'codex', 'arcs', 'thriller', 'map', 'investigation', 'globalnotes'];
+    if (isMobileView && sidebarViewsWithConfig.includes(currentView) && typeof renderMobileSidebarView === 'function') {
         renderMobileSidebarView(currentView);
     }
+
+    // 7. Rafraîchir le format de page
+    // Nettoyage historique : updatePageFormatUI n'existe plus
 }
 
 // --- GOOGLE FONTS SUPPORT ---
@@ -456,7 +592,7 @@ const POPULAR_GOOGLE_FONTS = [
 
 function loadGoogleFont(fontName) {
     if (!fontName) return;
-    const linkId = `font-${fontName.replace(/\s+/g, '-').toLowerCase()}`;
+    const linkId = `font - ${fontName.replace(/\s+/g, '-').toLowerCase()} `;
     if (!document.getElementById(linkId)) {
         const link = document.createElement('link');
         link.id = linkId;
@@ -842,7 +978,6 @@ function setActiveScene(actId, chapterId, sceneId) {
             }
         });
     }
-
     // Mettre à jour les indicateurs visuels des sidebars si ouverts
 
     // 1. Versions
@@ -897,16 +1032,16 @@ function getEditorToolbarHTML(panel = null) {
     return `
         <!-- Basic formatting -->
         <div class="toolbar-group">
-            <button class="toolbar-btn" data-format="bold" onclick="${fnName}(${fnPrefix}'bold')" title="${Localization.t('toolbar.bold')}">
+            <button class="toolbar-btn" data-format="bold" onmousedown="event.preventDefault()" onclick="${fnName}(${fnPrefix}'bold')" title="${Localization.t('toolbar.bold')}">
                 <i data-lucide="bold" style="width:14px;height:14px;"></i>
             </button>
-            <button class="toolbar-btn" data-format="italic" onclick="${fnName}(${fnPrefix}'italic')" title="${Localization.t('toolbar.italic')}">
+            <button class="toolbar-btn" data-format="italic" onmousedown="event.preventDefault()" onclick="${fnName}(${fnPrefix}'italic')" title="${Localization.t('toolbar.italic')}">
                 <i data-lucide="italic" style="width:14px;height:14px;"></i>
             </button>
-            <button class="toolbar-btn" data-format="underline" onclick="${fnName}(${fnPrefix}'underline')" title="${Localization.t('toolbar.underline')}">
+            <button class="toolbar-btn" data-format="underline" onmousedown="event.preventDefault()" onclick="${fnName}(${fnPrefix}'underline')" title="${Localization.t('toolbar.underline')}">
                 <i data-lucide="underline" style="width:14px;height:14px;"></i>
             </button>
-            <button class="toolbar-btn" data-format="strikethrough" onclick="${fnName}(${fnPrefix}'strikeThrough')" title="${Localization.t('toolbar.strikethrough')}">
+            <button class="toolbar-btn" data-format="strikethrough" onmousedown="event.preventDefault()" onclick="${fnName}(${fnPrefix}'strikeThrough')" title="${Localization.t('toolbar.strikethrough')}">
                 <i data-lucide="strikethrough" style="width:14px;height:14px;"></i>
             </button>
         </div>
@@ -932,7 +1067,7 @@ function getEditorToolbarHTML(panel = null) {
         <!-- Text color -->
         <div class="toolbar-group">
             <div class="color-picker-wrapper">
-                <button class="toolbar-btn" onclick="toggleColorPicker('text', event, ${panel ? `'${panel}'` : 'null'})" title="${Localization.t('toolbar.color_text')}">
+                <button class="toolbar-btn" onmousedown="event.preventDefault()" onclick="toggleColorPicker('text', event, ${panel ? `'${panel}'` : 'null'})" title="${Localization.t('toolbar.color_text')}">
                     <i data-lucide="baseline" style="width:14px;height:14px; border-bottom: 2px solid currentColor;"></i>
                 </button>
                 <div class="color-picker-dropdown" id="textColorPicker${idSuffix}">
@@ -946,14 +1081,14 @@ function getEditorToolbarHTML(panel = null) {
                             <input type="color" id="textColorInput${idSuffix}" onchange="applyTextColor(this.value, ${panel ? `'${panel}'` : 'null'})">
                             <input type="text" id="textColorHex${idSuffix}" placeholder="${Localization.t('toolbar.color_hex_placeholder')}" maxlength="7" onchange="applyTextColor(this.value, ${panel ? `'${panel}'` : 'null'})">
                         </div>
-                        <button class="color-reset-btn" onclick="applyTextColor('', ${panel ? `'${panel}'` : 'null'})" title="${Localization.t('toolbar.color_reset')}">
+                        <button class="color-reset-btn" onmousedown="event.preventDefault()" onclick="applyTextColor('', ${panel ? `'${panel}'` : 'null'})" title="${Localization.t('toolbar.color_reset')}">
                             <i data-lucide="rotate-ccw"></i>
                         </button>
                     </div>
                 </div>
             </div>
             <div class="color-picker-wrapper">
-                <button class="toolbar-btn" onclick="toggleColorPicker('background', event, ${panel ? `'${panel}'` : 'null'})" title="${Localization.t('toolbar.color_bg')}">
+                <button class="toolbar-btn" onmousedown="event.preventDefault()" onclick="toggleColorPicker('background', event, ${panel ? `'${panel}'` : 'null'})" title="${Localization.t('toolbar.color_bg')}">
                     <i data-lucide="highlighter" style="width:14px;height:14px; border-bottom: 2px solid yellow;"></i>
                 </button>
                 <div class="color-picker-dropdown" id="backgroundColorPicker${idSuffix}">
@@ -967,7 +1102,7 @@ function getEditorToolbarHTML(panel = null) {
                             <input type="color" id="bgColorInput${idSuffix}" onchange="applyBackgroundColor(this.value, ${panel ? `'${panel}'` : 'null'})">
                             <input type="text" id="bgColorHex${idSuffix}" placeholder="#FFFF00" maxlength="7" onchange="applyBackgroundColor(this.value, ${panel ? `'${panel}'` : 'null'})">
                         </div>
-                        <button class="color-reset-btn" onclick="applyBackgroundColor('', ${panel ? `'${panel}'` : 'null'})" title="${Localization.t('toolbar.color_reset')}">
+                        <button class="color-reset-btn" onmousedown="event.preventDefault()" onclick="applyBackgroundColor('', ${panel ? `'${panel}'` : 'null'})" title="${Localization.t('toolbar.color_reset')}">
                             <i data-lucide="rotate-ccw"></i>
                         </button>
                     </div>
@@ -977,67 +1112,75 @@ function getEditorToolbarHTML(panel = null) {
         
         <!-- Alignment -->
         <div class="toolbar-group">
-            <button class="toolbar-btn" onclick="${fnName}(${fnPrefix}'justifyLeft')" title="${Localization.t('toolbar.align_left')}">
+            <button class="toolbar-btn" onmousedown="event.preventDefault()" onclick="${fnName}(${fnPrefix}'justifyLeft')" title="${Localization.t('toolbar.align_left')}">
                 <i data-lucide="align-left" style="width:14px;height:14px;"></i>
             </button>
-            <button class="toolbar-btn" onclick="${fnName}(${fnPrefix}'justifyCenter')" title="${Localization.t('toolbar.align_center')}">
+            <button class="toolbar-btn" onmousedown="event.preventDefault()" onclick="${fnName}(${fnPrefix}'justifyCenter')" title="${Localization.t('toolbar.align_center')}">
                 <i data-lucide="align-center" style="width:14px;height:14px;"></i>
             </button>
-            <button class="toolbar-btn" onclick="${fnName}(${fnPrefix}'justifyRight')" title="${Localization.t('toolbar.align_right')}">
+            <button class="toolbar-btn" onmousedown="event.preventDefault()" onclick="${fnName}(${fnPrefix}'justifyRight')" title="${Localization.t('toolbar.align_right')}">
                 <i data-lucide="align-right" style="width:14px;height:14px;"></i>
             </button>
-            <button class="toolbar-btn" onclick="${fnName}(${fnPrefix}'justifyFull')" title="${Localization.t('toolbar.align_justify')}">
+            <button class="toolbar-btn" onmousedown="event.preventDefault()" onclick="${fnName}(${fnPrefix}'justifyFull')" title="${Localization.t('toolbar.align_justify')}">
                 <i data-lucide="align-justify" style="width:14px;height:14px;"></i>
             </button>
         </div>
         
         <!-- Headings -->
         <div class="toolbar-group">
-            <button class="toolbar-btn" onclick="${fnName}(${fnPrefix}'formatBlock', 'h1')" title="${Localization.t('toolbar.heading_1')}"><i data-lucide="heading-1" style="width:14px;height:14px;"></i></button>
-            <button class="toolbar-btn" onclick="${fnName}(${fnPrefix}'formatBlock', 'h2')" title="${Localization.t('toolbar.heading_2')}"><i data-lucide="heading-2" style="width:14px;height:14px;"></i></button>
-            <button class="toolbar-btn" onclick="${fnName}(${fnPrefix}'formatBlock', 'h3')" title="${Localization.t('toolbar.heading_3')}"><i data-lucide="heading-3" style="width:14px;height:14px;"></i></button>
-            <button class="toolbar-btn" onclick="${fnName}(${fnPrefix}'formatBlock', 'p')" title="${Localization.t('toolbar.paragraph')}"><i data-lucide="pilcrow" style="width:14px;height:14px;"></i></button>
+            <button class="toolbar-btn" onmousedown="event.preventDefault()" onclick="${fnName}(${fnPrefix}'formatBlock', 'h1')" title="${Localization.t('toolbar.heading_1')}"><i data-lucide="heading-1" style="width:14px;height:14px;"></i></button>
+            <button class="toolbar-btn" onmousedown="event.preventDefault()" onclick="${fnName}(${fnPrefix}'formatBlock', 'h2')" title="${Localization.t('toolbar.heading_2')}"><i data-lucide="heading-2" style="width:14px;height:14px;"></i></button>
+            <button class="toolbar-btn" onmousedown="event.preventDefault()" onclick="${fnName}(${fnPrefix}'formatBlock', 'h3')" title="${Localization.t('toolbar.heading_3')}"><i data-lucide="heading-3" style="width:14px;height:14px;"></i></button>
+            <button class="toolbar-btn" onmousedown="event.preventDefault()" onclick="${fnName}(${fnPrefix}'formatBlock', 'p')" title="${Localization.t('toolbar.paragraph')}"><i data-lucide="pilcrow" style="width:14px;height:14px;"></i></button>
         </div>
         
         <!-- Lists and quotes -->
         <div class="toolbar-group">
-            <button class="toolbar-btn" onclick="${fnName}(${fnPrefix}'insertUnorderedList')" title="${Localization.t('toolbar.list_bullets')}"><i data-lucide="list" style="width:14px;height:14px;"></i></button>
-            <button class="toolbar-btn" onclick="${fnName}(${fnPrefix}'insertOrderedList')" title="${Localization.t('toolbar.list_ordered')}"><i data-lucide="list-ordered" style="width:14px;height:14px;"></i></button>
-            <button class="toolbar-btn" onclick="${fnName}(${fnPrefix}'formatBlock', 'blockquote')" title="${Localization.t('toolbar.quote')}"><i data-lucide="quote" style="width:14px;height:14px;"></i></button>
+            <button class="toolbar-btn" onmousedown="event.preventDefault()" onclick="${fnName}(${fnPrefix}'insertUnorderedList')" title="${Localization.t('toolbar.list_bullets')}"><i data-lucide="list" style="width:14px;height:14px;"></i></button>
+            <button class="toolbar-btn" onmousedown="event.preventDefault()" onclick="${fnName}(${fnPrefix}'insertOrderedList')" title="${Localization.t('toolbar.list_ordered')}"><i data-lucide="list-ordered" style="width:14px;height:14px;"></i></button>
+            <button class="toolbar-btn" onmousedown="event.preventDefault()" onclick="${fnName}(${fnPrefix}'formatBlock', 'blockquote')" title="${Localization.t('toolbar.quote')}"><i data-lucide="quote" style="width:14px;height:14px;"></i></button>
         </div>
         
         <!-- Indentation -->
         <div class="toolbar-group">
-            <button class="toolbar-btn" onclick="${fnName}(${fnPrefix}'indent')" title="${Localization.t('toolbar.indent_increase')}"><i data-lucide="indent" style="width:14px;height:14px;"></i></button>
-            <button class="toolbar-btn" onclick="${fnName}(${fnPrefix}'outdent')" title="${Localization.t('toolbar.indent_decrease')}"><i data-lucide="outdent" style="width:14px;height:14px;"></i></button>
+            <button class="toolbar-btn" onmousedown="event.preventDefault()" onclick="${fnName}(${fnPrefix}'indent')" title="${Localization.t('toolbar.indent_increase')}"><i data-lucide="indent" style="width:14px;height:14px;"></i></button>
+            <button class="toolbar-btn" onmousedown="event.preventDefault()" onclick="${fnName}(${fnPrefix}'outdent')" title="${Localization.t('toolbar.indent_decrease')}"><i data-lucide="outdent" style="width:14px;height:14px;"></i></button>
         </div>
         
         <!-- Superscript, subscript -->
         <div class="toolbar-group">
-            <button class="toolbar-btn" onclick="${fnName}(${fnPrefix}'superscript')" title="${Localization.t('toolbar.superscript')}"><i data-lucide="superscript" style="width:14px;height:14px;"></i></button>
-            <button class="toolbar-btn" onclick="${fnName}(${fnPrefix}'subscript')" title="${Localization.t('toolbar.subscript')}"><i data-lucide="subscript" style="width:14px;height:14px;"></i></button>
+            <button class="toolbar-btn" onmousedown="event.preventDefault()" onclick="${fnName}(${fnPrefix}'superscript')" title="${Localization.t('toolbar.superscript')}"><i data-lucide="superscript" style="width:14px;height:14px;"></i></button>
+            <button class="toolbar-btn" onmousedown="event.preventDefault()" onclick="${fnName}(${fnPrefix}'subscript')" title="${Localization.t('toolbar.subscript')}"><i data-lucide="subscript" style="width:14px;height:14px;"></i></button>
         </div>
         
         <!-- Synonyms -->
         <div class="toolbar-group">
-            <button class="toolbar-btn" onclick="if(typeof SynonymsView !== 'undefined') SynonymsView.toggle()" title="${Localization.t('toolbar.synonyms')}">
+            <button class="toolbar-btn" onmousedown="event.preventDefault()" onclick="if(typeof SynonymsView !== 'undefined') SynonymsView.toggle()" title="${Localization.t('toolbar.synonyms')}">
                 <i data-lucide="book-a" style="width:14px;height:14px;"></i>
             </button>
         </div>
-
+        
         <!-- Other -->
         <div class="toolbar-group">
-            <button class="toolbar-btn" onclick="${fnName}(${fnPrefix}'insertHorizontalRule')" title="${Localization.t('toolbar.horizontal_rule')}"><i data-lucide="minus" style="width:14px;height:14px;"></i></button>
-            <button class="toolbar-btn" onclick="${fnName}(${fnPrefix}'removeFormat')" title="${Localization.t('toolbar.remove_format')}"><i data-lucide="eraser" style="width:14px;height:14px;"></i></button>
+            <button class="toolbar-btn" onmousedown="event.preventDefault()" onclick="${fnName}(${fnPrefix}'insertHorizontalRule')" title="${Localization.t('toolbar.horizontal_rule')}"><i data-lucide="minus" style="width:14px;height:14px;"></i></button>
+            <button class="toolbar-btn" onmousedown="event.preventDefault()" onclick="${fnName}(${fnPrefix}'removeFormat')" title="${Localization.t('toolbar.remove_format')}"><i data-lucide="eraser" style="width:14px;height:14px;"></i></button>
         </div>
-
         
         <!-- Revision mode button -->
         <div class="toolbar-group">
-            <button class="toolbar-btn" onclick="toggleRevisionMode()" title="${Localization.t('toolbar.revision_mode')}" style="color: var(--accent-gold); font-weight: 600;"><i data-lucide="pencil" style="width:14px;height:14px;vertical-align:middle;margin-right:4px;"></i> ${Localization.t('toolbar.revision')}</button>
+            <button class="toolbar-btn" onmousedown="event.preventDefault()" onclick="toggleRevisionMode()" title="${Localization.t('toolbar.revision_mode')}" style="color: var(--accent-gold); font-weight: 600;"><i data-lucide="pencil" style="width:14px;height:14px;vertical-align:middle;margin-right:4px;"></i> ${Localization.t('toolbar.revision')}</button>
+        </div>
+        
+        <!-- Page Preview Button -->
+        <div class="toolbar-group">
+            <button class="toolbar-btn" onmousedown="event.preventDefault()" onclick="openPagePreview()" title="${Localization.t('preview.title')}">
+                <i data-lucide="eye" style="width:14px;height:14px;vertical-align:middle;margin-right:4px;"></i>
+                <span>${Localization.t('preview.title')}</span>
+            </button>
         </div>
     `;
 }
+
 
 /**
  * [MVVM : View]
@@ -1980,3 +2123,4 @@ function renderCodexWelcome() {
         </div>`;
     if (typeof lucide !== 'undefined') lucide.createIcons();
 }
+

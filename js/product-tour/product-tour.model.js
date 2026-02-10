@@ -84,6 +84,7 @@ const ProductTourStepModel = {
             popover: {
                 title: data.popover?.title || '',
                 description: data.popover?.description || '',
+                image: data.popover?.image || null,
                 side: data.popover?.side || 'bottom',
                 align: data.popover?.align || 'start'
             },
@@ -91,7 +92,9 @@ const ProductTourStepModel = {
             onHighlighted: data.onHighlighted || null,
             onDeselected: data.onDeselected || null,
             onNext: data.onNext || null,
-            onPrevious: data.onPrevious || null
+            onPrevious: data.onPrevious || null,
+            clickBefore: data.clickBefore || null,
+            clickAfter: data.clickAfter || null
         };
     },
 
@@ -108,6 +111,51 @@ const ProductTourStepModel = {
             console.warn(`Invalid selector: ${selector}`, e);
             return false;
         }
+    },
+
+    /**
+     * Génère un sélecteur CSS unique pour un élément DOM.
+     * @param {HTMLElement} el - Élément DOM.
+     * @returns {string} Sélecteur CSS.
+     */
+    getUniqueSelector: function (el) {
+        if (!el || !(el instanceof HTMLElement)) return null;
+
+        // 1. Essayer par ID
+        if (el.id) return `#${el.id}`;
+
+        // 2. Essayer par classes spécifiques (si pas trop génériques)
+        if (el.classList.length > 0) {
+            const ignoredClasses = ['active', 'selected', 'hover', 'dragging', 'visible'];
+            const validClasses = Array.from(el.classList).filter(c => !ignoredClasses.includes(c));
+            if (validClasses.length > 0) {
+                // Essayer de trouver une combinaison unique
+                const selector = `.${validClasses.join('.')}`;
+                if (document.querySelectorAll(selector).length === 1) return selector;
+            }
+        }
+
+        // 3. Fallback: Chemin complet
+        const path = [];
+        let current = el;
+        while (current && current.nodeType === Node.ELEMENT_NODE) {
+            let selector = current.nodeName.toLowerCase();
+            if (current.id) {
+                selector += `#${current.id}`;
+                path.unshift(selector);
+                break;
+            } else {
+                let sibling = current;
+                let nth = 1;
+                while (sibling = sibling.previousElementSibling) {
+                    if (sibling.nodeName.toLowerCase() === selector) nth++;
+                }
+                if (nth > 1) selector += `:nth-of-type(${nth})`;
+            }
+            path.unshift(selector);
+            current = current.parentNode;
+        }
+        return path.join(' > ');
     }
 };
 
@@ -126,7 +174,7 @@ const ProductTourConfigModel = {
             opacity: 0.75,
             padding: 10,
             allowClose: true,
-            overlayClickNext: false,
+            overlayClickNext: true,
             doneBtnText: Localization.t('tour.driver.done'),
             closeBtnText: Localization.t('tour.driver.close'),
             nextBtnText: Localization.t('tour.driver.next'),
@@ -172,21 +220,38 @@ const ProductTourConfigModel = {
 
 const ProductTourStepsModel = {
     /**
-     * Retourne tous les steps du tour selon le contexte.
+     * Retourne tous les steps du tour selon le contexte (vue et plateforme).
+     * @param {string} view - Vue actuelle (ex: 'editor', 'characters').
      * @returns {Array} Liste des steps.
      */
-    getAllSteps: function () {
+    getAllSteps: function (view = 'editor') {
         const isMobile = window.innerWidth < 768;
-        return isMobile ? this.getMobileSteps() : this.getDesktopSteps();
+        if (isMobile) return this.getMobileSteps(view);
+
+        return this.getDesktopSteps(view);
     },
 
     /**
-     * Steps pour desktop (tour complet).
+     * Steps pour desktop selon la vue.
+     * @param {string} view - Vue demandée.
      * @returns {Array} Steps desktop.
      */
-    getDesktopSteps: function () {
+    getDesktopSteps: function (view) {
+        switch (view) {
+            case 'editor':
+                return this.getStructureSteps();
+            default:
+                return this.getGlobalOverviewSteps();
+        }
+    },
+
+    /**
+     * Tour "Structure" (Éditeur) détaillé.
+     * @returns {Array} Steps.
+     */
+    getStructureSteps: function () {
         return [
-            // Stage 1: Welcome & Orientation
+            // Bienvenue spécifique à la structure
             {
                 element: '#headerProjectTitle',
                 popover: {
@@ -194,28 +259,118 @@ const ProductTourStepsModel = {
                     description: Localization.t('tour.step.welcome.desc'),
                     side: 'bottom',
                     align: 'start'
-                },
-                onHighlightStarted: () => {
-                    // Ensure we're on the editor view
-                    if (typeof currentView !== 'undefined' && currentView !== 'editor') {
-                        if (typeof switchView === 'function') {
-                            switchView('editor');
-                        }
-                    }
                 }
             },
+            // Sidebar: La structure elle-même
             {
-                element: '#headerProjectTitle',
+                element: '.sidebar',
                 popover: {
-                    title: Localization.t('tour.step.project_title.title'),
-                    description: Localization.t('tour.step.project_title.desc'),
+                    title: Localization.t('tour.step.structure_sidebar.title'),
+                    description: Localization.t('tour.step.structure_sidebar.desc'),
+                    side: 'right',
+                    align: 'start'
+                }
+            },
+            // Boutons d'ajout (Actes/Chapitres)
+            {
+                element: '.sidebar-header-actions',
+                popover: {
+                    title: Localization.t('tour.step.structure_actions.title'),
+                    description: Localization.t('tour.step.structure_actions.desc'),
                     side: 'bottom',
                     align: 'start'
                 }
             },
-            // Navigation - Groupe 1: Écriture
+            // Toolbar de l'arbre
             {
-                element: '.header-nav .nav-group:nth-child(1)',
+                element: '.tree-toolbar',
+                popover: {
+                    title: Localization.t('tour.step.structure_toolbar.title'),
+                    description: Localization.t('tour.step.structure_toolbar.desc'),
+                    side: 'bottom',
+                    align: 'start'
+                }
+            },
+            // L'éditeur: Header
+            {
+                element: '.editor-header',
+                popover: {
+                    title: Localization.t('tour.step.editor_header.title'),
+                    description: Localization.t('tour.step.editor_header.desc'),
+                    side: 'bottom',
+                    align: 'start'
+                }
+            },
+            // Synopsis
+            {
+                element: '.editor-synopsis',
+                popover: {
+                    title: Localization.t('tour.step.editor_synopsis.title'),
+                    description: Localization.t('tour.step.editor_synopsis.desc'),
+                    side: 'bottom',
+                    align: 'start'
+                }
+            },
+            // Toolbar de formatage
+            {
+                element: '#editorToolbar',
+                popover: {
+                    title: Localization.t('tour.step.editor_toolbar.title'),
+                    description: Localization.t('tour.step.editor_toolbar.desc'),
+                    side: 'top',
+                    align: 'center'
+                }
+            },
+            // Zone de texte
+            {
+                element: '.editor-textarea',
+                popover: {
+                    title: Localization.t('tour.step.editor_content.title'),
+                    description: Localization.t('tour.step.editor_content.desc'),
+                    side: 'top',
+                    align: 'center'
+                }
+            },
+            // Sidebar de droite (Outils)
+            {
+                element: '#toolsSidebar',
+                popover: {
+                    title: Localization.t('tour.step.tools_sidebar.title'),
+                    description: Localization.t('tour.step.tools_sidebar.desc'),
+                    side: 'left',
+                    align: 'start'
+                }
+            },
+            // Fin
+            {
+                element: '#headerProjectTitle',
+                popover: {
+                    title: Localization.t('tour.step.finish.title'),
+                    description: Localization.t('tour.step.finish.desc'),
+                    side: 'bottom',
+                    align: 'start'
+                }
+            }
+        ];
+    },
+
+    /**
+     * Tour d'horizon global (Fallback ou mode découverte).
+     * @returns {Array} Steps.
+     */
+    getGlobalOverviewSteps: function () {
+        return [
+            {
+                element: '#headerProjectTitle',
+                popover: {
+                    title: Localization.t('tour.step.welcome.title'),
+                    description: Localization.t('tour.step.welcome.desc'),
+                    side: 'bottom',
+                    align: 'start'
+                }
+            },
+            {
+                element: '.header-nav',
                 popover: {
                     title: Localization.t('tour.step.writing_tools.title'),
                     description: Localization.t('tour.step.writing_tools.desc'),
@@ -223,139 +378,6 @@ const ProductTourStepsModel = {
                     align: 'start'
                 }
             },
-            // Navigation - Groupe 2: Base de données
-            {
-                element: '.header-nav .nav-group:nth-child(2)',
-                popover: {
-                    title: Localization.t('tour.step.database.title'),
-                    description: Localization.t('tour.step.database.desc'),
-                    side: 'bottom',
-                    align: 'start'
-                }
-            },
-            // Navigation - Groupe 3: Visualisations
-            {
-                element: '.header-nav .nav-group:nth-child(3)',
-                popover: {
-                    title: Localization.t('tour.step.viz.title'),
-                    description: Localization.t('tour.step.viz.desc'),
-                    side: 'bottom',
-                    align: 'center'
-                }
-            },
-            // Navigation - Groupe 4: Analyse
-            {
-                element: '.header-nav .nav-group:nth-child(4)',
-                popover: {
-                    title: Localization.t('tour.step.analysis.title'),
-                    description: Localization.t('tour.step.analysis.desc'),
-                    side: 'bottom',
-                    align: 'center'
-                }
-            },
-            // Navigation - Groupe 5: Historique
-            {
-                element: '.header-nav .nav-group:nth-child(5)',
-                popover: {
-                    title: Localization.t('tour.step.snapshots.title'),
-                    description: Localization.t('tour.step.snapshots.desc'),
-                    side: 'bottom',
-                    align: 'center'
-                }
-            },
-
-            // Actions Header - Stats
-            {
-                element: '#headerStatsContainer',
-                popover: {
-                    title: Localization.t('tour.step.quick_stats.title'),
-                    description: Localization.t('tour.step.quick_stats.desc'),
-                    side: 'bottom',
-                    align: 'end'
-                }
-            },
-            // Actions Header - Split View
-            {
-                element: '#splitModeToggle',
-                popover: {
-                    title: Localization.t('tour.step.split_mode.title'),
-                    description: Localization.t('tour.step.split_mode.desc'),
-                    side: 'bottom',
-                    align: 'end'
-                }
-            },
-            // Actions Header - Storage
-            {
-                element: '#storage-badge',
-                popover: {
-                    title: Localization.t('tour.step.storage.title'),
-                    description: Localization.t('tour.step.storage.desc'),
-                    side: 'bottom',
-                    align: 'end'
-                }
-            },
-            // Actions Header - Undo/Redo
-            {
-                element: '#headerUndoBtn',
-                popover: {
-                    title: Localization.t('tour.step.undo_redo.title'),
-                    description: Localization.t('tour.step.undo_redo.desc'),
-                    side: 'bottom',
-                    align: 'end'
-                }
-            },
-            // Actions Header - Pomodoro
-            {
-                element: '#pomodoroHeaderBtn',
-                popover: {
-                    title: Localization.t('tour.step.pomodoro.title'),
-                    description: Localization.t('tour.step.pomodoro.desc'),
-                    side: 'bottom',
-                    align: 'end'
-                }
-            },
-            // Actions Header - Import
-            {
-                element: '.header-action-btn[onclick="openImportChapterModal()"]',
-                popover: {
-                    title: Localization.t('tour.step.import.title'),
-                    description: Localization.t('tour.step.import.desc'),
-                    side: 'bottom',
-                    align: 'end'
-                }
-            },
-            // Actions Header - Export
-            {
-                element: '.header-action-btn[onclick="showBackupMenu()"]',
-                popover: {
-                    title: Localization.t('tour.step.export.title'),
-                    description: Localization.t('tour.step.export.desc'),
-                    side: 'bottom',
-                    align: 'end'
-                }
-            },
-            // Actions Header - Themes
-            {
-                element: '.header-action-btn[onclick="openThemeManager()"]',
-                popover: {
-                    title: Localization.t('tour.step.themes.title'),
-                    description: Localization.t('tour.step.themes.desc'),
-                    side: 'bottom',
-                    align: 'end'
-                }
-            },
-            // Actions Header - Projects
-            {
-                element: '.header-action-btn[onclick="openProjectsModal()"]',
-                popover: {
-                    title: Localization.t('tour.step.projects.title'),
-                    description: Localization.t('tour.step.projects.desc'),
-                    side: 'bottom',
-                    align: 'end'
-                }
-            },
-
-            // Stage 2: Core Writing Features
             {
                 element: '.sidebar',
                 popover: {
@@ -373,26 +395,16 @@ const ProductTourStepsModel = {
                     side: 'left',
                     align: 'start'
                 }
-            },
-
-            // Stage 3: Completion
-            {
-                element: '#headerProjectTitle',
-                popover: {
-                    title: Localization.t('tour.step.finish.title'),
-                    description: Localization.t('tour.step.finish.desc'),
-                    side: 'bottom',
-                    align: 'start'
-                }
             }
         ];
     },
 
     /**
-     * Steps pour mobile (tour simplifié).
+     * Steps pour mobile.
+     * @param {string} view - Vue demandée.
      * @returns {Array} Steps mobile.
      */
-    getMobileSteps: function () {
+    getMobileSteps: function (view) {
         return [
             {
                 element: '#headerProjectTitle',
@@ -440,7 +452,7 @@ const ProductTourStepsModel = {
      */
     filterValidSteps: function (steps) {
         return steps.filter(step => {
-            if (!step.element) return true; // Steps sans élément (modals, etc.)
+            if (!step.element) return true;
             return ProductTourStepModel.validateElement(step.element);
         });
     }

@@ -30,32 +30,10 @@ async function init() {
     }
     await loadTreeState(); // Charger l'état d'expansion
 
-    // Forcer la vue Structure au démarrage
-    currentView = 'editor';
+    // Forcer la vue Projets au démarrage
+    switchView('projects');
 
-    // S'assurer que les autres vues sont cachées
-    setTimeout(() => {
-        // Masquer toutes les vues
-        const viewsToHide = ['charactersList', 'worldList', 'notesList', 'codexList', 'statsList',
-            'versionsList', 'analysisList', 'todosList', 'corkboardList'];
-        viewsToHide.forEach(viewId => {
-            const el = document.getElementById(viewId);
-            if (el) el.style.display = 'none';
-        });
-
-        // Afficher la structure
-        const chaptersList = document.getElementById('chaptersList');
-        if (chaptersList) chaptersList.style.display = 'block';
-
-        // Activer l'onglet Structure
-        document.querySelectorAll('[id^="tab-"]').forEach(tab => {
-            tab.classList.remove('btn-primary');
-        });
-        const editorTab = document.getElementById('tab-editor');
-        if (editorTab) editorTab.classList.add('btn-primary');
-    }, 100);
-
-    switchView('editor');
+    // Charger la liste des actes mais ne pas changer de vue
     renderActsList();
 
     // Initialiser l'historique avec l'état initial
@@ -98,6 +76,11 @@ async function init() {
 
     if (typeof initProductTourVM === 'function') {
         await initProductTourVM();
+    }
+
+    // Initialize Mention Help
+    if (typeof MentionHelp !== 'undefined' && MentionHelp.init) {
+        MentionHelp.init();
     }
 
     // Ensure all icons are rendered
