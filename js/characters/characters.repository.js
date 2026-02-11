@@ -16,7 +16,7 @@ const CharacterRepository = {
      * Récupère un personnage par son ID.
      */
     getById(id) {
-        return this.getAll().find(c => c.id === id);
+        return this.getAll().find(c => String(c.id) === String(id));
     },
 
     /**
@@ -32,7 +32,7 @@ const CharacterRepository = {
      */
     remove(id) {
         if (!project.characters) return;
-        project.characters = project.characters.filter(c => c.id !== id);
+        project.characters = project.characters.filter(c => String(c.id) !== String(id));
     },
 
     /**

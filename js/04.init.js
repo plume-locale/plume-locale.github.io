@@ -14,6 +14,11 @@ async function init() {
         Localization.init();
     }
 
+    // Initialiser les préférences d'interface
+    if (typeof InterfaceCustomizerViewModel !== 'undefined') {
+        InterfaceCustomizerViewModel.init();
+    }
+
     // Initialiser IndexedDB en premier
     const dbReady = await initDB();
     if (!dbReady) {

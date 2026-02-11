@@ -42,10 +42,10 @@ const CodexView = {
                         ${sortedEntries.map(entry => {
                 const iconName = getCodexCategoryIcon(category);
                 return `
-                                <div class="treeview-item" onclick="openCodexDetail(${entry.id})">
+                                <div class="treeview-item" onclick="openCodexDetail('${entry.id}')">
                                     <span class="treeview-item-icon"><i data-lucide="${iconName}" style="width:14px;height:14px;vertical-align:middle;"></i></span>
                                     <span class="treeview-item-label">${entry.title}</span>
-                                    <button class="treeview-item-delete" onclick="event.stopPropagation(); deleteCodexEntry(${entry.id})" title="${Localization.t('codex.action.delete')}">×</button>
+                                    <button class="treeview-item-delete" onclick="event.stopPropagation(); deleteCodexEntry('${entry.id}')" title="${Localization.t('codex.action.delete')}">×</button>
                                 </div>
                             `;
             }).join('')}
@@ -105,7 +105,7 @@ const CodexView = {
                     <div style="display: flex; align-items: center; gap: 1rem; flex: 1;">
                         <input type="text" class="form-input" value="${entry.title}" 
                                style="font-size: 1.8rem; font-weight: 600; font-family: 'Noto Serif JP', serif; padding: 0.5rem;"
-                               onchange="updateCodexField(${id}, 'title', this.value)"
+                               onchange="updateCodexField('${id}', 'title', this.value)"
                                placeholder="${Localization.t('codex.detail.placeholder.title')}">
                         <span style="font-size: 0.8rem; padding: 0.4rem 0.8rem; background: var(--accent-gold); color: var(--bg-primary); border-radius: 2px;">${Localization.t('codex.category.' + entry.category)}</span>
                     </div>
@@ -114,7 +114,7 @@ const CodexView = {
                 
                 <div class="detail-section">
                     <div class="detail-section-title">${Localization.t('codex.detail.category')}</div>
-                    <select class="form-input" onchange="updateCodexField(${id}, 'category', this.value)">
+                    <select class="form-input" onchange="updateCodexField('${id}', 'category', this.value)">
                         ${categoryOptions}
                     </select>
                 </div>
@@ -122,13 +122,13 @@ const CodexView = {
                 <div class="detail-section">
                     <div class="detail-section-title">${Localization.t('codex.detail.summary')}</div>
                     <textarea class="form-input" rows="3" 
-                               onchange="updateCodexField(${id}, 'summary', this.value)">${entry.summary}</textarea>
+                               onchange="updateCodexField('${id}', 'summary', this.value)">${entry.summary}</textarea>
                 </div>
 
                 <div class="detail-section">
                     <div class="detail-section-title">${Localization.t('codex.detail.content')}</div>
                     <textarea class="form-input" rows="20" 
-                              onchange="updateCodexField(${id}, 'content', this.value)">${entry.content}</textarea>
+                              onchange="updateCodexField('${id}', 'content', this.value)">${entry.content}</textarea>
                 </div>
             </div>
         `;
@@ -166,7 +166,7 @@ const CodexView = {
 
                 <div class="references-section">
                     <div class="references-title"><i data-lucide="link" style="width:14px;height:14px;vertical-align:middle;margin-right:4px;"></i>${Localization.t('codex.refs.manage_links')}</div>
-                    <button class="btn btn-small" onclick="openLinkManagerForCharacter(${characterId})">${Localization.t('codex.refs.btn.link')}</button>
+                    <button class="btn btn-small" onclick="openLinkManagerForCharacter('${characterId}')">${Localization.t('codex.refs.btn.link')}</button>
                 </div>
             `;
         }
@@ -208,7 +208,7 @@ const CodexView = {
 
                 <div class="references-section">
                     <div class="references-title"><i data-lucide="link" style="width:14px;height:14px;vertical-align:middle;margin-right:4px;"></i>${Localization.t('codex.refs.manage_links')}</div>
-                    <button class="btn btn-small" onclick="openLinkManagerForElement(${elementId})">${Localization.t('codex.refs.btn.link')}</button>
+                    <button class="btn btn-small" onclick="openLinkManagerForElement('${elementId}')">${Localization.t('codex.refs.btn.link')}</button>
                 </div>
             `;
         }

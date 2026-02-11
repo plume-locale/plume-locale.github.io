@@ -338,49 +338,49 @@ function renderCharacterSheet(character, racesList, groupsList, linkedScenes) {
                         <div class="character-field">
                             <label class="character-field-label">${Localization.t('char.field.height')}</label>
                             <input type="text" value="${character.height || ''}" placeholder="cm"
-                                   onchange="updateCharacterField(${character.id}, 'height', this.value)">
+                                   onchange="updateCharacterField('${character.id}', 'height', this.value)">
                         </div>
                         <div class="character-field">
                             <label class="character-field-label">${Localization.t('char.field.weight')}</label>
                             <input type="text" value="${character.weight || ''}" placeholder="kg"
-                                   onchange="updateCharacterField(${character.id}, 'weight', this.value)">
+                                   onchange="updateCharacterField('${character.id}', 'weight', this.value)">
                         </div>
                         <div class="character-field">
                             <label class="character-field-label">${Localization.t('char.field.body_type')}</label>
                             <input type="text" value="${character.bodyType || ''}" 
-                                   onchange="updateCharacterField(${character.id}, 'bodyType', this.value)">
+                                   onchange="updateCharacterField('${character.id}', 'bodyType', this.value)">
                         </div>
                     </div>
                     <div class="character-field-row">
                         <div class="character-field">
                             <label class="character-field-label">${Localization.t('char.field.hair_color')}</label>
                             <input type="text" value="${character.hairColor || ''}" 
-                                   onchange="updateCharacterField(${character.id}, 'hairColor', this.value)">
+                                   onchange="updateCharacterField('${character.id}', 'hairColor', this.value)">
                         </div>
                         <div class="character-field">
                             <label class="character-field-label">${Localization.t('char.field.eye_color')}</label>
                             <input type="text" value="${character.eyeColor || ''}" 
-                                   onchange="updateCharacterField(${character.id}, 'eyeColor', this.value)">
+                                   onchange="updateCharacterField('${character.id}', 'eyeColor', this.value)">
                         </div>
                         <div class="character-field">
                             <label class="character-field-label">${Localization.t('char.field.voice')}</label>
                             <input type="text" value="${character.voice || ''}" 
-                                   onchange="updateCharacterField(${character.id}, 'voice', this.value)">
+                                   onchange="updateCharacterField('${character.id}', 'voice', this.value)">
                         </div>
                     </div>
                     <div class="character-field-row">
                         <div class="character-field">
                             <label class="character-field-label">${Localization.t('char.field.clothing')}</label>
-                            <textarea rows="3" onchange="updateCharacterField(${character.id}, 'clothing', this.value)">${character.clothing || ''}</textarea>
+                            <textarea rows="3" onchange="updateCharacterField('${character.id}', 'clothing', this.value)">${character.clothing || ''}</textarea>
                         </div>
                         <div class="character-field">
                             <label class="character-field-label">${Localization.t('char.field.accessories')}</label>
-                            <textarea rows="3" onchange="updateCharacterField(${character.id}, 'accessories', this.value)">${character.accessories || ''}</textarea>
+                            <textarea rows="3" onchange="updateCharacterField('${character.id}', 'accessories', this.value)">${character.accessories || ''}</textarea>
                         </div>
                     </div>
                     <div class="character-field">
                         <label class="character-field-label">${Localization.t('char.field.description')}</label>
-                        <textarea rows="4" onchange="updateCharacterField(${character.id}, 'physicalDescription', this.value)">${character.physicalDescription || ''}</textarea>
+                        <textarea rows="4" onchange="updateCharacterField('${character.id}', 'physicalDescription', this.value)">${character.physicalDescription || ''}</textarea>
                     </div>
                 </div>
             </div>

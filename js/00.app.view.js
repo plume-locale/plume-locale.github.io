@@ -193,7 +193,7 @@ function switchView(view) {
         'notesList', 'codexList', 'arcsList', 'statsList', 'versionsList', 'analysisList',
         'todosList', 'corkboardList', 'mindmapList', 'plotList',
         'relationsList', 'mapList', 'timelineVizList', 'storyGridList', 'thrillerList', 'noSidebarMessage',
-        'investigationList', 'globalnotesList'
+        'investigationList', 'globalnotesList', 'frontMatterList'
     ];
 
     sidebarLists.forEach(listId => {
@@ -214,7 +214,8 @@ function switchView(view) {
         'thriller': 'thrillerList',
         'map': 'mapList',
         'investigation': 'investigationList',
-        'projects': 'projectsSidebarList'
+        'projects': 'projectsSidebarList',
+        'front_matter': 'frontMatterList'
     };
 
     const editorViewVues = ['stats', 'analysis', 'versions', 'todos', 'timeline', 'corkboard', 'plot', 'plotgrid', 'relations'];
@@ -308,6 +309,16 @@ function updateSidebarActions(view) {
                             ${renderGlobalNotesTree()}
                         </div>
                     </div>
+                </div>
+            `;
+            break;
+        case 'front_matter':
+            html = `
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn btn-primary" onclick="FrontMatterView.openAddModal()" style="flex: 1;">+ ${Localization.t('front_matter.add_btn')}</button>
+                    <button class="btn btn-secondary" onclick="FrontMatterView.openOrganizeModal()" style="padding: 10px;" title="${Localization.t('tool.tree.organize')}">
+                        <i data-lucide="layers"></i>
+                    </button>
                 </div>
             `;
             break;
@@ -501,6 +512,11 @@ function renderViewContent(view, containerId) {
         case 'thriller': if (typeof renderThrillerBoard === 'function') renderThrillerBoard(); break;
         case 'investigation': if (typeof renderInvestigationBoard === 'function') renderInvestigationBoard(); break;
         case 'globalnotes': if (typeof renderGlobalNotes === 'function') renderGlobalNotes(); break;
+        case 'front_matter':
+            if (window.FrontMatterView) {
+                window.FrontMatterView.render(containerId);
+            }
+            break;
         default:
             container.innerHTML = `
                 <div class="empty-state">
@@ -554,6 +570,7 @@ function refreshAllViews() {
         case 'arcs': if (typeof renderArcsList === 'function') renderArcsList(); break;
         case 'investigation': if (typeof renderInvestigationBoard === 'function') renderInvestigationBoard(); break;
         case 'globalnotes': if (typeof renderGlobalNotes === 'function') renderGlobalNotes(); break;
+        case 'front_matter': if (window.FrontMatterView) window.FrontMatterView.render(); break;
         case 'projects': if (typeof ProjectView !== 'undefined' && typeof ProjectView.renderLandingPage === 'function') ProjectView.renderLandingPage(projects); break;
     }
 
@@ -1024,7 +1041,7 @@ function setActiveScene(actId, chapterId, sceneId) {
  * Retourne le HTML complet de la barre d'outils de l'éditeur.
  * @param {string} [panel] - Si présent, utilise formatTextInPanel au lieu de formatText
  */
-function getEditorToolbarHTML(panel = null) {
+function getEditorToolbarHTML(panel = null, hideExtraTools = false) {
     const fnName = panel ? 'formatTextInPanel' : 'formatText';
     const fnPrefix = panel ? `'${panel}', ` : '';
     const idSuffix = panel ? `-${panel}` : '';
@@ -1166,6 +1183,7 @@ function getEditorToolbarHTML(panel = null) {
             <button class="toolbar-btn" onmousedown="event.preventDefault()" onclick="${fnName}(${fnPrefix}'removeFormat')" title="${Localization.t('toolbar.remove_format')}"><i data-lucide="eraser" style="width:14px;height:14px;"></i></button>
         </div>
         
+        ${!hideExtraTools ? `
         <!-- Revision mode button -->
         <div class="toolbar-group">
             <button class="toolbar-btn" onmousedown="event.preventDefault()" onclick="toggleRevisionMode()" title="${Localization.t('toolbar.revision_mode')}" style="color: var(--accent-gold); font-weight: 600;"><i data-lucide="pencil" style="width:14px;height:14px;vertical-align:middle;margin-right:4px;"></i> ${Localization.t('toolbar.revision')}</button>
@@ -1178,6 +1196,7 @@ function getEditorToolbarHTML(panel = null) {
                 <span>${Localization.t('preview.title')}</span>
             </button>
         </div>
+        ` : ''}
     `;
 }
 

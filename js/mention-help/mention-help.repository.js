@@ -81,20 +81,20 @@ const MentionHelpRepository = {
         // On utilise les repositories existants pour rester dans le flux Undo/Redo
         switch (type) {
             case 'character':
-                if (typeof CharacterRepository !== 'undefined') {
-                    newItem = { name: name, role: 'Brouillon', id: Date.now() };
+                if (typeof CharacterModel !== 'undefined' && typeof CharacterRepository !== 'undefined') {
+                    newItem = CharacterModel.create({ name: name, role: 'Brouillon' });
                     CharacterRepository.add(newItem);
                 }
                 break;
             case 'world':
-                if (typeof WorldRepository !== 'undefined') {
-                    newItem = { name: name, type: 'Brouillon', id: Date.now() };
+                if (typeof WorldModel !== 'undefined' && typeof WorldRepository !== 'undefined') {
+                    newItem = WorldModel.create({ name: name, type: 'Brouillon' });
                     WorldRepository.add(newItem);
                 }
                 break;
             case 'codex':
-                if (typeof CodexRepository !== 'undefined') {
-                    newItem = { title: name, category: 'Autre', id: Date.now() };
+                if (typeof CodexModel !== 'undefined' && typeof CodexRepository !== 'undefined') {
+                    newItem = CodexModel.create({ title: name, category: 'Autre' });
                     CodexRepository.add(newItem);
                 }
                 break;

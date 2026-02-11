@@ -283,6 +283,7 @@
 .btn-secondary:hover {
     background: var(--bg-tertiary);
     border-color: var(--text-secondary);
+    color: var(--text-primary);
 }
 
 .btn-small {

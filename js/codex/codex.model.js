@@ -8,8 +8,9 @@ const CodexModel = {
      * Crée une nouvelle entrée de codex avec les valeurs par défaut.
      */
     create(data = {}) {
-        const id = data.id || Date.now();
-        
+        // ID unique robuste
+        const id = data.id || (Date.now() + Math.floor(Math.random() * 1000)).toString();
+
         return {
             id: id,
             title: data.title || '',
@@ -27,10 +28,10 @@ const CodexModel = {
      */
     migrate(entry) {
         if (!entry) return null;
-        
+
         // Si déjà migré, on vérifie juste les champs manquants
         const migrated = this.create(entry);
-        
+
         return migrated;
     },
 

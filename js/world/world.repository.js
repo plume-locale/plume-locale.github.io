@@ -18,7 +18,7 @@ const WorldRepository = {
      * @returns {Object|null} The element or null if not found.
      */
     getById: (id) => {
-        return (project.world || []).find(w => w.id === id) || null;
+        return (project.world || []).find(w => String(w.id) === String(id)) || null;
     },
 
     /**
@@ -39,7 +39,7 @@ const WorldRepository = {
      * @returns {Object|null} The updated element or null if not found.
      */
     update: (id, updates) => {
-        const index = (project.world || []).findIndex(w => w.id === id);
+        const index = (project.world || []).findIndex(w => String(w.id) === String(id));
         if (index === -1) return null;
 
         const updated = {
@@ -57,11 +57,11 @@ const WorldRepository = {
      * @returns {Object|null} The removed element or null if not found.
      */
     remove: (id) => {
-        const index = (project.world || []).findIndex(w => w.id === id);
+        const index = (project.world || []).findIndex(w => String(w.id) === String(id));
         if (index === -1) return null;
 
         const removed = project.world[index];
-        project.world = project.world.filter(w => w.id !== id);
+        project.world = project.world.filter(w => String(w.id) !== String(id));
         return removed;
     }
 };

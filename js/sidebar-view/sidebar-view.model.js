@@ -50,6 +50,15 @@ const SidebarViewModelData = {
             emptySubMessageKey: 'sidebar_view.codex.empty_sub_message',
             actionButton: '<button class="btn btn-primary" style="font-size: 1.2rem; padding: 1rem 2rem;" onclick="openAddCodexModal()">${Localization.t("sidebar_view.codex.action_btn")}</button>',
             sidebarHintKey: 'sidebar_view.codex.hint'
+        },
+        front_matter: {
+            icon: 'book-open-check',
+            titleKey: 'sidebar_view.front_matter.title',
+            descriptionKey: 'sidebar_view.front_matter.description',
+            emptyMessageKey: 'sidebar_view.front_matter.empty_message',
+            emptySubMessageKey: 'sidebar_view.front_matter.empty_sub_message',
+            actionButton: '<button class="btn btn-primary" style="font-size: 1.2rem; padding: 1rem 2rem;" onclick="FrontMatterView.openAddModal()">${Localization.t("sidebar_view.front_matter.action_btn")}</button>',
+            sidebarHintKey: 'sidebar_view.front_matter.hint'
         }
     }
 };

@@ -1413,6 +1413,13 @@
                     <span class="mobile-nav-item-icon"><i data-lucide="timer"></i></span>
                     <span data-i18n="mobile.action.pomodoro">Timer Pomodoro</span>
                 </button>
+                <button class="mobile-nav-item" onclick="
+                        InterfaceCustomizerViewModel.startEditing();
+                        toggleMobileNav();
+                    ">
+                    <span class="mobile-nav-item-icon"><i data-lucide="settings-2"></i></span>
+                    <span data-i18n="mobile.action.interface">Personnaliser l'interface</span>
+                </button>
             </div>
         </div>
         <div class="mobile-nav-section">
@@ -1476,6 +1483,10 @@
                     <button class="nav-btn" onclick="switchView('editor')" id="header-tab-editor">
                         <span class="nav-btn-icon"><i data-lucide="pen-line"></i></span>
                         <span class="nav-btn-text" data-i18n="nav.structure">Structure</span>
+                    </button>
+                    <button class="nav-btn" onclick="switchView('front_matter')" id="header-tab-front_matter">
+                        <span class="nav-btn-icon"><i data-lucide="book-open-check"></i></span>
+                        <span class="nav-btn-text" data-i18n="nav.front_matter">Liminaires</span>
                     </button>
                     <button class="nav-btn" onclick="switchView('corkboard')" id="header-tab-corkboard">
                         <span class="nav-btn-icon"><i data-lucide="layout-grid"></i></span>
@@ -1600,6 +1611,10 @@
                 <button class="header-action-btn" onclick="openThemeManager()" title="Gérer les thèmes"
                     data-i18n-title="header.themes" id="headerThemesBtn">
                     <i data-lucide="palette"></i>
+                </button>
+                <button class="header-action-btn" onclick="InterfaceCustomizerViewModel.startEditing()" title="Personnaliser l'interface"
+                    data-i18n-title="header.interface" id="headerInterfaceBtn">
+                    <i data-lucide="settings-2"></i>
                 </button>
 
                 <div class="doc-dropdown" id="docDropdown">
@@ -1798,6 +1813,9 @@
                 </div>
                 <div class="chapters-list" id="chaptersList">
                     <!-- Structure will be dynamically inserted here -->
+                </div>
+                <div class="database-list" id="frontMatterList" style="display: none">
+                    <!-- Front Matter elements will be dynamically inserted here -->
                 </div>
                 <div class="database-list" id="charactersList" style="display: none">
                     <!-- Characters will be dynamically inserted here -->
@@ -2757,10 +2775,25 @@
             <div class="form-group">
                 <label class="form-label" data-i18n="modal.project.label_template">Utiliser un template ?</label>
                 <select class="form-input" id="newProjectTemplate">
-                    <option value="">Projet vide</option>
-                    <option value="fantasy">Fantasy (3 actes + personnages types)</option>
-                    
-                    <option value="scifi">Science-Fiction (Worldbuilding avancé)</option>
+                    <option value="" data-i18n="modal.project.template.empty">Projet vide</option>
+                    <option value="acts3" data-i18n="modal.project.template.acts3_desc">Structure en 3 Actes
+                        (Exposition, Confrontation, Résolution)</option>
+                    <option value="hero_journey" data-i18n="modal.project.template.hero_journey_desc">Le Voyage du Héros
+                        (12 étapes mythiques)</option>
+                    <option value="save_the_cat" data-i18n="modal.project.template.save_the_cat_desc">Save the Cat! (Les
+                        15 beats de Snyder)</option>
+                    <option value="thriller" data-i18n="modal.project.template.thriller_desc">Thriller / Enquête
+                        (Suspense & Mystère)</option>
+                    <option value="romance" data-i18n="modal.project.template.romance_desc">Romance (Rencontre, Tension
+                        & Union)</option>
+                    <option value="snowflake" data-i18n="modal.project.template.snowflake_desc">Méthode Snowflake
+                        (Construction itérative)</option>
+                    <option value="scifi" data-i18n="modal.project.template.scifi_desc">Science-Fiction (Worldbuilding
+                        avancé)</option>
+                    <option value="story_circle" data-i18n="modal.project.template.story_circle_desc">Story Circle (Les
+                        8 étapes de Dan Harmon)</option>
+                    <option value="fichtean_curve" data-i18n="modal.project.template.fichtean_curve_desc">Courbe de
+                        Fichte (Action & Crises successives)</option>
                 </select>
             </div>
             <div class="modal-actions">
@@ -3308,84 +3341,93 @@
         <div id="floatingMenuHandle" title="Faire glisser pour déplacer" data-i18n-title="floating.title.drag"></div>
         <div id="floatingMenuContent">
             <!-- Annuler/Rétablir -->
-            <button class="floating-btn-mini" onmousedown="event.preventDefault()" onclick="undo()" title="Annuler" data-i18n-title="floating.title.undo">
+            <button class="floating-btn-mini" onmousedown="event.preventDefault()" onclick="undo()" title="Annuler"
+                data-i18n-title="floating.title.undo">
                 <i data-lucide="undo-2"></i>
             </button>
-            <button class="floating-btn-mini" onmousedown="event.preventDefault()" onclick="redo()" title="Rétablir" data-i18n-title="floating.title.redo">
+            <button class="floating-btn-mini" onmousedown="event.preventDefault()" onclick="redo()" title="Rétablir"
+                data-i18n-title="floating.title.redo">
                 <i data-lucide="redo-2"></i>
             </button>
             <div class="floating-divider"></div>
             <!-- Formatage de base -->
-            <button class="floating-btn-mini" onmousedown="event.preventDefault()" onclick="formatText('bold')" title="Gras"
-                data-i18n-title="floating.title.bold">
+            <button class="floating-btn-mini" onmousedown="event.preventDefault()" onclick="formatText('bold')"
+                title="Gras" data-i18n-title="floating.title.bold">
                 <i data-lucide="bold"></i>
             </button>
-            <button class="floating-btn-mini" onmousedown="event.preventDefault()" onclick="formatText('italic')" title="Italique"
-                data-i18n-title="floating.title.italic">
+            <button class="floating-btn-mini" onmousedown="event.preventDefault()" onclick="formatText('italic')"
+                title="Italique" data-i18n-title="floating.title.italic">
                 <i data-lucide="italic"></i>
             </button>
-            <button class="floating-btn-mini" onmousedown="event.preventDefault()" onclick="formatText('underline')" title="Souligné"
-                data-i18n-title="floating.title.underline">
+            <button class="floating-btn-mini" onmousedown="event.preventDefault()" onclick="formatText('underline')"
+                title="Souligné" data-i18n-title="floating.title.underline">
                 <i data-lucide="underline"></i>
             </button>
-            <button class="floating-btn-mini" onmousedown="event.preventDefault()" onclick="formatText('strikeThrough')" title="Barré"
-                data-i18n-title="floating.title.strikethrough">
+            <button class="floating-btn-mini" onmousedown="event.preventDefault()" onclick="formatText('strikeThrough')"
+                title="Barré" data-i18n-title="floating.title.strikethrough">
                 <i data-lucide="strikethrough"></i>
             </button>
             <div class="floating-divider"></div>
             <!-- Alignement -->
-            <button class="floating-btn-mini" onmousedown="event.preventDefault()" onclick="formatText('justifyLeft')" title="Aligner à gauche"
-                data-i18n-title="floating.title.align_left">
+            <button class="floating-btn-mini" onmousedown="event.preventDefault()" onclick="formatText('justifyLeft')"
+                title="Aligner à gauche" data-i18n-title="floating.title.align_left">
                 <i data-lucide="align-left"></i>
             </button>
-            <button class="floating-btn-mini" onmousedown="event.preventDefault()" onclick="formatText('justifyCenter')" title="Centrer"
-                data-i18n-title="floating.title.center">
+            <button class="floating-btn-mini" onmousedown="event.preventDefault()" onclick="formatText('justifyCenter')"
+                title="Centrer" data-i18n-title="floating.title.center">
                 <i data-lucide="align-center"></i>
             </button>
-            <button class="floating-btn-mini" onmousedown="event.preventDefault()" onclick="formatText('justifyRight')" title="Aligner à droite"
-                data-i18n-title="floating.title.align_right">
+            <button class="floating-btn-mini" onmousedown="event.preventDefault()" onclick="formatText('justifyRight')"
+                title="Aligner à droite" data-i18n-title="floating.title.align_right">
                 <i data-lucide="align-right"></i>
             </button>
-            <button class="floating-btn-mini" onmousedown="event.preventDefault()" onclick="formatText('justifyFull')" title="Justifier"
-                data-i18n-title="floating.title.justify">
+            <button class="floating-btn-mini" onmousedown="event.preventDefault()" onclick="formatText('justifyFull')"
+                title="Justifier" data-i18n-title="floating.title.justify">
                 <i data-lucide="align-justify"></i>
             </button>
             <div class="floating-divider"></div>
             <!-- Listes -->
-            <button class="floating-btn-mini" onmousedown="event.preventDefault()" onclick="formatText('insertUnorderedList')" title="Liste à puces"
+            <button class="floating-btn-mini" onmousedown="event.preventDefault()"
+                onclick="formatText('insertUnorderedList')" title="Liste à puces"
                 data-i18n-title="floating.title.unordered_list">
                 <i data-lucide="list"></i>
             </button>
-            <button class="floating-btn-mini" onmousedown="event.preventDefault()" onclick="formatText('insertOrderedList')" title="Liste numérotée"
+            <button class="floating-btn-mini" onmousedown="event.preventDefault()"
+                onclick="formatText('insertOrderedList')" title="Liste numérotée"
                 data-i18n-title="floating.title.ordered_list">
                 <i data-lucide="list-ordered"></i>
             </button>
             <div class="floating-divider"></div>
             <!-- Plus d'options - Toggle sous-menu -->
-            <button class="floating-btn-mini" id="advancedMenuBtn" onmousedown="event.preventDefault()" title="Plus d'options"
-                data-i18n-title="floating.title.more_options">
+            <button class="floating-btn-mini" id="advancedMenuBtn" onmousedown="event.preventDefault()"
+                title="Plus d'options" data-i18n-title="floating.title.more_options">
                 <i data-lucide="more-horizontal"></i>
             </button>
         </div>
         <!-- Barre de sous-menu avancé (apparaît au-dessus grâce à column-reverse) -->
         <div id="advancedMenuBar" style="display: none">
-            <button class="floating-btn-mini" onmousedown="event.preventDefault()" onclick="formatText('removeFormat')" title="Supprimer le formatage"
-                data-i18n-title="floating.title.remove_format">
+            <button class="floating-btn-mini" onmousedown="event.preventDefault()" onclick="formatText('removeFormat')"
+                title="Supprimer le formatage" data-i18n-title="floating.title.remove_format">
                 <i data-lucide="eraser"></i>
             </button>
-            <button class="floating-btn-mini" onmousedown="event.preventDefault()" onclick="insertLink()" title="Insérer un lien"
-                data-i18n-title="floating.title.insert_link">
+            <button class="floating-btn-mini" onmousedown="event.preventDefault()" onclick="insertLink()"
+                title="Insérer un lien" data-i18n-title="floating.title.insert_link">
                 <i data-lucide="link" style="width: 16px; height: 16px"></i>
             </button>
-            <button class="floating-btn-mini" onmousedown="event.preventDefault()" onclick="formatText('formatBlock', 'h1')" title="Titre 1"
+            <button class="floating-btn-mini" onmousedown="event.preventDefault()"
+                onclick="formatText('formatBlock', 'h1')" title="Titre 1"
                 data-i18n-title="floating.title.h1">H1</button>
-            <button class="floating-btn-mini" onmousedown="event.preventDefault()" onclick="formatText('formatBlock', 'h2')" title="Titre 2"
+            <button class="floating-btn-mini" onmousedown="event.preventDefault()"
+                onclick="formatText('formatBlock', 'h2')" title="Titre 2"
                 data-i18n-title="floating.title.h2">H2</button>
-            <button class="floating-btn-mini" onmousedown="event.preventDefault()" onclick="formatText('formatBlock', 'h3')" title="Titre 3"
+            <button class="floating-btn-mini" onmousedown="event.preventDefault()"
+                onclick="formatText('formatBlock', 'h3')" title="Titre 3"
                 data-i18n-title="floating.title.h3">H3</button>
-            <button class="floating-btn-mini" onmousedown="event.preventDefault()" onclick="formatText('formatBlock', 'blockquote')" title="Citation"
+            <button class="floating-btn-mini" onmousedown="event.preventDefault()"
+                onclick="formatText('formatBlock', 'blockquote')" title="Citation"
                 data-i18n-title="floating.title.blockquote" data-i18n="floating.title.blockquote">Citation</button>
-            <button class="floating-btn-mini" onmousedown="event.preventDefault()" onclick="formatText('insertHorizontalRule')" title="Ligne horizontale"
+            <button class="floating-btn-mini" onmousedown="event.preventDefault()"
+                onclick="formatText('insertHorizontalRule')" title="Ligne horizontale"
                 data-i18n-title="floating.title.horizontal_rule" data-i18n="floating.label.line">Ligne</button>
         </div>
     </div>
@@ -3728,6 +3770,7 @@
 <script src="./js/localization/localization.model.js"></script>
 <script src="./js/localization/localization.view.js"></script>
 <script src="./js/localization/localization.manager.js"></script>
+<script src="./js/localization/landing-locales.js"></script>
 <script src="./js/tension/tension.model.js"></script>
 <script src="./js/tension/tension.repository.js"></script>
 <script src="./js/tension/tension.viewmodel.js"></script>
@@ -3741,6 +3784,7 @@
 <script src="./js/storage/storage.main.js"></script>
 <script src="./js/project/project.model.js"></script>
 <script src="./js/project/project.repository.js"></script>
+<script src="./js/project/project.templates.js"></script>
 <script src="./js/project/project.viewmodel.js"></script>
 <script src="./js/project/project.view.js"></script>
 <script src="./js/project/project.handlers.js"></script>
@@ -3751,6 +3795,10 @@
 <script src="./js/floating-editor/floating-editor.viewmodel.js"></script>
 <script src="./js/floating-editor/floating-editor.handlers.js"></script>
 <script src="./js/floating-editor/floating-editor.main.js"></script>
+<script src="./js/interface-customizer/interface-customizer.model.js"></script>
+<script src="./js/interface-customizer/interface-customizer.repository.js"></script>
+<script src="./js/interface-customizer/interface-customizer.viewmodel.js"></script>
+<script src="./js/interface-customizer/interface-customizer.view.js"></script>
 <script src="./js/04.init.js"></script>
 <script src="./js/undo-redo/undo-redo.model.js"></script>
 <script src="./js/undo-redo/undo-redo.repository.js"></script>
@@ -3758,6 +3806,8 @@
 <script src="./js/undo-redo/undo-redo.view.js"></script>
 <script src="./js/undo-redo/undo-redo.handlers.js"></script>
 <script src="./js/undo-redo/undo-redo.main.js"></script>
+<script src="./js/page-preview.js"></script>
+<script src="./js/pagination.js"></script>
 <script src="./js/structure/structure.model.js"></script>
 <script src="./js/structure/structure.repository.js"></script>
 <script src="./js/structure/structure.viewmodel.js"></script>
@@ -3918,6 +3968,11 @@
 <script src="./js/import-export/import-export.view.js"></script>
 <script src="./js/import-export/import-export.handlers.js"></script>
 <script src="./js/import-export/import-export.main.js"></script>
+<script src="./js/front-matter/front-matter.model.js"></script>
+<script src="./js/front-matter/front-matter.repository.js"></script>
+<script src="./js/front-matter/front-matter.viewmodel.js"></script>
+<script src="./js/front-matter/front-matter.view.js"></script>
+<script src="./js/front-matter/front-matter.main.js"></script>
 <script src="./js/sidebar-view/sidebar-view.model.js"></script>
 <script src="./js/sidebar-view/sidebar-view.repository.js"></script>
 <script src="./js/sidebar-view/sidebar-view.viewmodel.js"></script>
@@ -3941,6 +3996,7 @@
 <script src="./js/arc-board/arc-board.services.js"></script>
 <script src="./js/arc-board/arc-board.views.js"></script>
 <script src="./js/arc-board/arc-board.handlers.js"></script>
+<script src="./js/arc-board/index.js"></script>
 <script src="./js/arc-board/arc-board.main.js"></script>
 <script src="./js/plotgrid/plot-grid.model.js"></script>
 <script src="./js/plotgrid/plot-grid.repository.js"></script>
@@ -3995,8 +4051,6 @@
 <script src="./js/globalnotes/globalnotes.item.view.js"></script>
 <script src="./js/globalnotes/globalnotes.handlers.js"></script>
 <script src="./js/globalnotes/globalnotes.main.js"></script>
-<script src="./js/pagination.js"></script>
-<script src="./js/page-preview.js"></script>
 
     </body>
 </html>

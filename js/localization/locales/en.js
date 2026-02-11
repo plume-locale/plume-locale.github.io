@@ -19,6 +19,31 @@ const LOCALE_EN = {
     "mention.quick_create.title": "Create '{0}'",
     "mention.quick_create.desc": "Add this new {0} to your project",
     "nav.investigation": "Investigation",
+
+    // Front Matter
+    "nav.front_matter": "Front Matter",
+    "front_matter.add_btn": "Add Item",
+    "front_matter.empty_list": "No front/back matter items.",
+    "front_matter.title_placeholder": "Section Title",
+    "front_matter.content_placeholder": "Content...",
+    "front_matter.confirm_delete": "Are you sure you want to delete this item?",
+    "front_matter.auto_save": "Auto-saving...",
+    "front_matter.add_modal_title": "Choose Section Type",
+
+    // Types
+    "front_matter.type.preface": "Preface",
+    "front_matter.type.foreword": "Foreword",
+    "front_matter.type.introduction": "Introduction",
+    "front_matter.type.prologue": "Prologue",
+    "front_matter.type.epigraph": "Epigraph",
+    "front_matter.type.dedication": "Dedication",
+    "front_matter.type.copyright": "Copyright / Legal",
+    "front_matter.type.acknowledgements": "Acknowledgements",
+    "front_matter.type.postface": "Postface",
+    "front_matter.type.epilogue": "Epilogue",
+    "front_matter.type.appendix": "Appendix",
+    "front_matter.type.glossary": "Glossary",
+
     "nav.characters": "Characters",
     "nav.world": "World",
     "nav.codex": "Codex",
@@ -68,6 +93,7 @@ const LOCALE_EN = {
     "mobile.action.documentation": "Documentation",
     "mobile.action.languages": "Change Language",
     "mobile.action.pomodoro": "Pomodoro Timer",
+    "mobile.action.interface": "Customize Interface",
     "mobile.group.help": "Help & Language",
     "mobile.toolbar.hide": "Hide formatting tools",
     "mobile.toolbar.show": "Show formatting tools",
@@ -124,6 +150,8 @@ const LOCALE_EN = {
     "header.lang.switch": "Switch Language (FR/EN)",
     "header.focus": "Focus Mode",
     "header.split_text": "Split",
+    "header.interface": "Customize Interface",
+    "header.stats_summary": "Word count (Header)",
     "pomodoro.popup.title": "Pomodoro",
     "pomodoro.stats.sessions": "sessions",
 
@@ -352,9 +380,15 @@ const LOCALE_EN = {
 
     "modal.project.genre.none": "None",
     "modal.project.template.empty": "Empty Project",
-    "modal.project.template.fantasy_desc": "Fantasy (3 acts + archetypal characters)",
-    "modal.project.template.thriller_desc": "Thriller (Suspense structure)",
+    "modal.project.template.acts3_desc": "3-Act Structure (Setup, Confrontation, Resolution)",
+    "modal.project.template.hero_journey_desc": "The Hero's Journey (12 mythical stages)",
+    "modal.project.template.save_the_cat_desc": "Save the Cat! (Snyder's 15 beats)",
+    "modal.project.template.thriller_desc": "Thriller / Investigation (Suspense & Mystery)",
+    "modal.project.template.romance_desc": "Romance (Meeting, Tension & Union)",
+    "modal.project.template.snowflake_desc": "Snowflake Method (Iterative building)",
     "modal.project.template.scifi_desc": "Sci-Fi (Advanced worldbuilding)",
+    "modal.project.template.story_circle_desc": "Story Circle (Dan Harmon's 8 steps)",
+    "modal.project.template.fichtean_curve_desc": "Fichtean Curve (Action & Successive Crises)",
 
     // --- Split View ---
     "split.toggle_active": "Split active",

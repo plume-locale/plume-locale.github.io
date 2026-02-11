@@ -8,7 +8,8 @@ const CharacterModel = {
      * Crée un nouvel objet personnage avec les valeurs par défaut.
      */
     create(data = {}) {
-        const id = data.id || Date.now();
+        // Génération d'un ID plus robuste pour éviter les collisions (Timestamp + Random)
+        const id = data.id || (Date.now() + Math.floor(Math.random() * 1000)).toString();
         const name = data.name || '';
 
         return {

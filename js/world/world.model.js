@@ -10,9 +10,11 @@ const WorldModel = {
      * @returns {Object} A new world element object.
      */
     create: function (data = {}) {
+        // ID unique robuste
         const now = Date.now();
+        const id = data.id || (now + Math.floor(Math.random() * 1000)).toString();
         return {
-            id: data.id || now,
+            id: id,
             name: data.name || '',
             type: data.type || 'Lieu',
             description: data.description || '',

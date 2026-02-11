@@ -36,6 +36,9 @@
                     <button class="lp-btn-lang" onclick="setLanguage('es')">ES</button>
                     <button class="lp-btn-lang" onclick="setLanguage('de')">DE</button>
                 </div>
+                <button class="lp-theme-toggle" onclick="toggleTheme()" id="theme-toggle" title="Changer de thème">
+                    <i data-lucide="moon" id="theme-icon"></i>
+                </button>
                 <a href="#tools" data-t="nav.features">Fonctionnalités</a>
                 <a href="#local-first" data-t="nav.privacy">Confidentialité</a>
                 <a href="app.html" class="lp-btn-primary" data-t="nav.open_app">Ouvrir l'App</a>
@@ -249,7 +252,8 @@
                 <h2 data-t="section.privacy.title">Vos histoires vous appartiennent.</h2>
                 <p data-t="section.privacy.desc">Plume est "Local-First". Vos données sont stockées uniquement dans
                     votre navigateur. Pas de cloud
-                    obligatoire, pas de compte à créer, une confidentialité totale par défaut.</p>
+                    obligatoire, pas de compte à créer, une confidentialité totale par défaut.</br> Vous pourrez bien
+                    sûr sauvegarder vos projets sur Google Drive pour conserver vos travaux sur plusieurs appareils</p>
                 <div class="lp-cta-buttons">
                     <a href="app.html" class="lp-btn-primary-large" data-t="section.privacy.cta">Lancer Plume
                         maintenant</a>
@@ -297,9 +301,32 @@
             updateContent(lang);
         }
 
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            setTheme(newTheme);
+        }
+
+        function setTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('plume_landing_theme', theme);
+
+            const themeIcon = document.getElementById('theme-icon');
+            if (theme === 'light') {
+                themeIcon.setAttribute('data-lucide', 'sun');
+            } else {
+                themeIcon.setAttribute('data-lucide', 'moon');
+            }
+            lucide.createIcons();
+        }
+
         // Init language
         const savedLang = localStorage.getItem('plume_landing_lang') || 'fr';
         setLanguage(savedLang);
+
+        // Init theme
+        const savedTheme = localStorage.getItem('plume_landing_theme') || 'dark';
+        setTheme(savedTheme);
     </script>
 </body>
 

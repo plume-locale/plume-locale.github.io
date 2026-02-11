@@ -165,17 +165,134 @@ const ProjectViewModel = {
         newProject.genre = data.genre || "";
 
         // Application du template
-        if (data.template === 'fantasy') {
+        if (data.template && ProjectTemplates[data.template]) {
+            const template = ProjectTemplates[data.template];
+            const timestamp = Date.now();
+
+            // 1. Génération de la structure (Actes / Chapitres / Scènes)
+            // Note : Pour la structure, on garde des nombres car certains modules font du parseInt()
+            newProject.acts = template.acts.map((actTemplate, actIdx) => ({
+                id: timestamp + (actIdx * 1000),
+                title: actTemplate.title,
+                chapters: actTemplate.chapters.map((chapTemplate, chapIdx) => ({
+                    id: timestamp + (actIdx * 1000) + chapIdx + 1,
+                    title: chapTemplate.title,
+                    summary: chapTemplate.description || "",
+                    scenes: [
+                        {
+                            id: timestamp + (actIdx * 10000) + (chapIdx * 100) + 1,
+                            title: Localization.t('search.default.untitled'),
+                            content: `<i>Note de template : ${chapTemplate.description || ""}</i><br><br>`,
+                            status: 'draft',
+                            createdAt: new Date().toISOString(),
+                            updatedAt: new Date().toISOString()
+                        }
+                    ]
+                }))
+            }));
+
+            // 2. Génération du Plot Grid si défini dans le template
+            if (template.plotGrid) {
+                newProject.plotGrid = {
+                    rows: [],
+                    columns: [],
+                    cards: [],
+                    settings: { showStructure: true, syncEnabled: true }
+                };
+
+                // Colonne Structure (obligatoire pour le sync)
+                newProject.plotGrid.columns.push({
+                    id: 'pg_col_struct',
+                    type: 'structure',
+                    title: Localization.t('nav.structure'),
+                    order: 0,
+                    width: 250
+                });
+
+                // Colonnes additionnelles du template
+                const columnIds = ['pg_col_struct'];
+                if (template.plotGrid.columns) {
+                    template.plotGrid.columns.forEach((colTitle, idx) => {
+                        const colId = 'pg_col_' + (idx + 1) + '_' + timestamp;
+                        columnIds.push(colId);
+                        newProject.plotGrid.columns.push({
+                            id: colId,
+                            type: 'custom',
+                            title: colTitle,
+                            order: idx + 1,
+                            width: 250
+                        });
+                    });
+                }
+
+                // Génération des cartes exemples si définies
+                if (template.plotGrid.cards && typeof PlotGridModel !== 'undefined') {
+                    template.plotGrid.cards.forEach(cardTemplate => {
+                        const actIdx = cardTemplate.actIndex || 0;
+                        const chapIdx = cardTemplate.chapterIndex || 0;
+                        const colIdx = cardTemplate.columnIndex || 0;
+
+                        // Retrouver l'ID de la scène correspondante (basé sur la logique de création ci-dessus)
+                        // Note : Par défaut un template crée 1 scène par chapitre
+                        const sceneId = timestamp + (actIdx * 10000) + (chapIdx * 100) + 1;
+                        const colId = columnIds[colIdx];
+
+                        if (colId) {
+                            const card = PlotGridModel.createCard({
+                                id: 'pg_card_' + timestamp + '_' + Math.random().toString(36).substr(2, 5),
+                                rowId: String(sceneId), // Les scènes servent de lignes en mode sync
+                                colId: colId,
+                                title: cardTemplate.title || "",
+                                content: cardTemplate.content || ""
+                            });
+                            newProject.plotGrid.cards.push(card);
+                        }
+                    });
+                }
+            }
+
+            // 3. Génération des personnages (Archetypes)
+            if (template.characters && typeof CharacterModel !== 'undefined') {
+                template.characters.forEach((charTemplate, idx) => {
+                    const character = CharacterModel.create({
+                        id: String(timestamp + (idx * 500)), // ID en STRING pour le CRUD
+                        name: charTemplate.name,
+                        role: charTemplate.role,
+                        description: charTemplate.description || ""
+                    });
+                    newProject.characters.push(character);
+                });
+            }
+
+            // 4. Génération de l'Univers (Lieux/Eléments)
+            if (template.world && typeof WorldModel !== 'undefined') {
+                template.world.forEach((worldTemplate, idx) => {
+                    const element = WorldModel.create({
+                        id: String(timestamp + (idx * 600)), // ID en STRING
+                        name: worldTemplate.name,
+                        type: worldTemplate.type || 'Lieu',
+                        description: worldTemplate.description || ""
+                    });
+                    newProject.world.push(element);
+                });
+            }
+
+            // 5. Génération du Codex (Lore)
+            if (template.codex && typeof CodexModel !== 'undefined') {
+                template.codex.forEach((codexTemplate, idx) => {
+                    const entry = CodexModel.create({
+                        id: String(timestamp + (idx * 700)), // ID en STRING
+                        title: codexTemplate.title,
+                        category: codexTemplate.category || 'Autre',
+                        summary: codexTemplate.summary || ""
+                    });
+                    newProject.codex.push(entry);
+                });
+            }
+        } else {
+            // Structure par défaut si aucun template
             newProject.acts = [
-                { id: Date.now(), title: Localization.t('project.viewmodel.template_fantasy_act1'), chapters: [] },
-                { id: Date.now() + 1, title: Localization.t('project.viewmodel.template_fantasy_act2'), chapters: [] },
-                { id: Date.now() + 2, title: Localization.t('project.viewmodel.template_fantasy_act3'), chapters: [] }
-            ];
-        } else if (data.template === 'thriller') {
-            newProject.acts = [
-                { id: Date.now(), title: Localization.t('project.viewmodel.template_thriller_act1'), chapters: [] },
-                { id: Date.now() + 1, title: Localization.t('project.viewmodel.template_thriller_act2'), chapters: [] },
-                { id: Date.now() + 2, title: Localization.t('project.viewmodel.template_thriller_act3'), chapters: [] }
+                { id: Date.now(), title: Localization.t('search.default.act') + " 1", chapters: [] }
             ];
         }
 

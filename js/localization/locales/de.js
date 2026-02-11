@@ -10,6 +10,31 @@ const LOCALE_DE = {
     "nav.thriller": "Thriller",
     "nav.storygrid": "StoryGrid",
     "nav.investigation": "Ermittlung",
+
+    // Front Matter / Titelei
+    "nav.front_matter": "Titelei",
+    "front_matter.add_btn": "Element hinzufügen",
+    "front_matter.empty_list": "Keine Titelei- oder Anhang-Elemente.",
+    "front_matter.title_placeholder": "Abschnittstitel",
+    "front_matter.content_placeholder": "Inhalt...",
+    "front_matter.confirm_delete": "Möchten Sie dieses Element wirklich löschen?",
+    "front_matter.auto_save": "Automatische Speicherung...",
+    "front_matter.add_modal_title": "Abschnittstyp wählen",
+
+    // Types
+    "front_matter.type.preface": "Vorwort",
+    "front_matter.type.foreword": "Geleitwort",
+    "front_matter.type.introduction": "Einleitung",
+    "front_matter.type.prologue": "Prolog",
+    "front_matter.type.epigraph": "Epigraph",
+    "front_matter.type.dedication": "Widmung",
+    "front_matter.type.copyright": "Impressum / Rechtliches",
+    "front_matter.type.acknowledgements": "Danksagung",
+    "front_matter.type.postface": "Nachwort",
+    "front_matter.type.epilogue": "Epilog",
+    "front_matter.type.appendix": "Anhang",
+    "front_matter.type.glossary": "Glossar",
+
     "nav.characters": "Charaktere",
     "nav.world": "Welt",
     "nav.codex": "Kodex",
@@ -54,6 +79,7 @@ const LOCALE_DE = {
     "mobile.action.undo": "Rückgängig",
     "mobile.action.redo": "Wiederholen",
     "mobile.action.backup": "Sicherung/Export",
+    "mobile.action.interface": "Benutzeroberfläche anpassen",
     "mobile.toolbar.hide": "Formatierungswerkzeuge ausblenden",
     "mobile.toolbar.show": "Formatierungswerkzeuge anzeigen",
     "mobile.links.hide": "Verknüpfte Charaktere & Orte ausblenden",
@@ -109,6 +135,8 @@ const LOCALE_DE = {
     "header.lang.switch": "Sprache wechseln (FR/EN)",
     "header.focus": "Fokusmodus",
     "header.split_text": "Teilen",
+    "header.interface": "Benutzeroberfläche anpassen",
+    "header.stats_summary": "Wortzähler (Header)",
     "pomodoro.popup.title": "Pomodoro",
     "pomodoro.stats.sessions": "Sitzungen",
 
@@ -322,9 +350,15 @@ const LOCALE_DE = {
 
     "modal.project.genre.none": "Keins",
     "modal.project.template.empty": "Leeres Projekt",
-    "modal.project.template.fantasy_desc": "Fantasy (3 Akte + Archetypen)",
-    "modal.project.template.thriller_desc": "Thriller (Spannungsstruktur)",
+    "modal.project.template.acts3_desc": "3-Akte-Struktur (Exposition, Konfrontation, Auflösung)",
+    "modal.project.template.hero_journey_desc": "Die Heldenreise (12 mythische Etappen)",
+    "modal.project.template.save_the_cat_desc": "Save the Cat! (Snyders 15 Beats)",
+    "modal.project.template.thriller_desc": "Thriller / Ermittlung (Spannung & Mysterium)",
+    "modal.project.template.romance_desc": "Romantik (Begegnung, Spannung & Vereinigung)",
+    "modal.project.template.snowflake_desc": "Snowflake-Methode (Iterativer Aufbau)",
     "modal.project.template.scifi_desc": "Sci-Fi (Erweitertes Worldbuilding)",
+    "modal.project.template.story_circle_desc": "Story Circle (Die 8 Stufen von Dan Harmon)",
+    "modal.project.template.fichtean_curve_desc": "Fichte-Kurve (Action & aufeinanderfolgende Krisen)",
 
     // --- Split View ---
     "split.toggle_active": "Split aktiv",

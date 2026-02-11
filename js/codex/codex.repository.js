@@ -18,7 +18,7 @@ const CodexRepository = {
      * Récupère une entrée par son ID.
      */
     getById(id) {
-        return this.getAll().find(entry => entry.id === id);
+        return this.getAll().find(entry => String(entry.id) === String(id));
     },
 
     /**
@@ -57,7 +57,7 @@ const CodexRepository = {
      */
     delete(id) {
         if (!project.codex) return false;
-        const index = project.codex.findIndex(entry => entry.id === id);
+        const index = project.codex.findIndex(entry => String(entry.id) === String(id));
         if (index > -1) {
             project.codex.splice(index, 1);
             return true;
