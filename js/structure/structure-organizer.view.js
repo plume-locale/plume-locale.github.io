@@ -17,7 +17,7 @@ const ORGANIZER_STYLES = `
         top: 0; left: 0; width: 100%; height: 100%;
         background: rgba(0,0,0,0.85);
         backdrop-filter: blur(8px);
-        z-index: 4000;
+        z-index: 10000;
         display: none;
         align-items: center;
         justify-content: center;
@@ -29,16 +29,17 @@ const ORGANIZER_STYLES = `
     @keyframes orgFadeIn { from{opacity:0; transform:scale(0.98);} to{opacity:1; transform:scale(1);} }
     
     .organizer-content {
-        width: 98%; height: 95%;
-        max-width: 1900px;
+        width: 96vw; height: 85vh;
+        max-width: 1800px;
         background: var(--bg-primary, #ffffff);
         border-radius: 12px;
         display: flex;
         flex-direction: column;
         overflow: hidden;
-        box-shadow: 0 25px 60px rgba(0,0,0,0.5);
+        box-shadow: 0 30px 80px rgba(0,0,0,0.6);
         border: 1px solid var(--border-color, #e0e0e0);
         color: var(--text-primary, #1a1a1a);
+        position: relative;
     }
     
     .organizer-header {
@@ -222,14 +223,19 @@ function ensureOrganizerStyles() {
         const modal = document.createElement('div');
         modal.id = 'organizerModal';
         modal.className = 'organizer-modal';
+        modal.onclick = (e) => { if (e.target === modal) closeOrganizer(); };
         modal.innerHTML = `
             <div class="organizer-content">
                 <div class="organizer-header">
                     <h2><i data-lucide="layout-list"></i> ${Localization.t('dragndrop.organizer.title')}</h2>
-                    <div style="display:flex; gap:10px;">
+                    <div style="display:flex; gap:10px; align-items: center;">
                         <button class="btn btn-secondary" onclick="expandAllOrganizer()">${Localization.t('dragndrop.organizer.expand_all')}</button>
                         <button class="btn btn-secondary" onclick="collapseAllOrganizer()">${Localization.t('dragndrop.organizer.collapse_all')}</button>
+                        <div style="width: 1px; height: 24px; background: var(--border-color, #e0e0e0); margin: 0 5px;"></div>
                         <button class="btn btn-primary" onclick="closeOrganizer()">${Localization.t('dragndrop.organizer.finish')}</button>
+                        <button class="org-icon-btn" onclick="closeOrganizer()" title="${Localization.t('btn.close')}" style="margin-left: 5px;">
+                            <i data-lucide="x" style="width: 20px; height: 20px;"></i>
+                        </button>
                     </div>
                 </div>
                 <div id="organizerBody" class="organizer-body">
@@ -242,16 +248,28 @@ function ensureOrganizerStyles() {
     }
 }
 
+// --- KEYBOARD HANDLER ---
+function handleOrganizerKeyDown(e) {
+    if (e.key === 'Escape') {
+        const modal = document.getElementById('organizerModal');
+        if (modal && modal.classList.contains('active')) {
+            closeOrganizer();
+        }
+    }
+}
+
 // --- MAIN FUNCTIONS ---
 
 function openStructureOrganizer() {
     ensureOrganizerStyles();
     renderOrganizer();
     document.getElementById('organizerModal').classList.add('active');
+    window.addEventListener('keydown', handleOrganizerKeyDown);
 }
 
 function closeOrganizer() {
     document.getElementById('organizerModal').classList.remove('active');
+    window.removeEventListener('keydown', handleOrganizerKeyDown);
     // Refresh main tree view to reflect changes
     if (typeof renderActsList === 'function') renderActsList();
 }

@@ -193,8 +193,10 @@ const ProjectViewModel = {
 
     /**
      * Change le projet actif.
+     * @param {number} projectId 
+     * @param {boolean} shouldSwitchView Si true, bascule vers la vue éditeur.
      */
-    switchTo(projectId) {
+    switchTo(projectId, shouldSwitchView = true) {
         currentProjectId = projectId;
         project = projects.find(p => p.id === projectId);
         window.project = project;
@@ -208,7 +210,7 @@ const ProjectViewModel = {
         currentChapterId = null;
         currentSceneId = null;
 
-        if (typeof switchView === 'function') switchView('editor');
+        if (shouldSwitchView && typeof switchView === 'function') switchView('editor');
         if (typeof renderActsList === 'function') renderActsList();
         if (typeof refreshAllViews === 'function') refreshAllViews();
 
@@ -235,14 +237,14 @@ const ProjectViewModel = {
 
         if (currentProjectId === projectId) {
             if (projects.length > 0) {
-                this.switchTo(projects[0].id);
+                this.switchTo(projects[0].id, false);
             } else {
                 project = ProjectModel.createDefault();
                 window.project = project;
                 projects = [project];
                 currentProjectId = project.id;
                 await ProjectRepository.save(project);
-                this.switchTo(project.id);
+                this.switchTo(project.id, false);
             }
         }
 
