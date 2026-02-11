@@ -451,7 +451,13 @@ const ProductTourStepsModel = {
      * @returns {Array} Steps filtrés.
      */
     filterValidSteps: function (steps) {
+        if (!Array.isArray(steps)) return [];
         return steps.filter(step => {
+            // Un step valide doit exister et avoir un popover
+            if (!step || !step.popover) {
+                console.warn('🎓 Invalid step detected (missing step or popover):', step);
+                return false;
+            }
             if (!step.element) return true;
             return ProductTourStepModel.validateElement(step.element);
         });

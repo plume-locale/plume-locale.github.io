@@ -143,7 +143,11 @@ async function startProductTourVM() {
 
         // Récupérer les steps
         const view = typeof currentView !== 'undefined' ? currentView : 'editor';
-        const steps = await ProductTourStepsRepository.getAllSteps(view);
+        let steps = await ProductTourStepsRepository.getAllSteps(view);
+
+        // Filtrer les steps valides d'abord pour éviter d'enrichir des steps malformés
+        steps = ProductTourStepsRepository.filterValidSteps(steps);
+
         if (steps.length === 0) {
             ProductTourNotificationView.showError(Localization.t('tour.notification.no_steps'));
             return {
@@ -153,9 +157,14 @@ async function startProductTourVM() {
         }
 
         // Enricher les steps avec les actions automatiques (ex: clickBefore) et les médias (images)
-        steps.forEach(step => {
+        steps.forEach((step, index) => {
+            if (!step) {
+                console.warn(`🎓 Step at index ${index} is undefined or null`);
+                return;
+            }
+
             // Support des images : injection dans la description
-            if (step.popover.image) {
+            if (step.popover && typeof step.popover === 'object' && step.popover.image) {
                 const imgHtml = `<img src="${step.popover.image}" class="driver-popover-image">`;
                 step.popover.description = imgHtml + (step.popover.description || '');
             }
