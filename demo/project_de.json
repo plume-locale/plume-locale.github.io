@@ -1,0 +1,1181 @@
+{
+    "id": 1707519130000,
+    "title": "Die Glasnarben",
+    "description": "Ein packender Thriller, in dem ein Detektiv einen Mord in einer Luxusvilla aufklären muss, nur um eine Verschwörung rund um eine verschollene kaiserliche Kommunikationstechnologie zu entdecken.",
+    "genre": "Thriller",
+    "createdAt": "2026-02-09T22:15:00.000Z",
+    "updatedAt": "2026-02-09T22:45:00.000Z",
+    "acts": [
+        {
+            "id": 1,
+            "title": "Akt 1: Die Falle",
+            "createdAt": "2026-02-09T22:15:00.000Z",
+            "updatedAt": "2026-02-09T22:15:00.000Z",
+            "metadata": {
+                "color": "#E53935",
+                "description": "Einführung in das Geheimnis und Vorstellung der Charaktere."
+            },
+            "chapters": [
+                {
+                    "id": 11,
+                    "title": "Kapitel 1: Zerbrochenes Glas",
+                    "createdAt": "2026-02-09T22:15:00.000Z",
+                    "updatedAt": "2026-02-09T22:15:00.000Z",
+                    "metadata": {
+                        "description": "Marc entdeckt die verwüstete Villa und erste Hinweise."
+                    },
+                    "scenes": [
+                        {
+                            "id": 111,
+                            "title": "Szene 1: Ankunft am Tatort",
+                            "content": "Die Villa über dem Abgrund war nur noch ein Schatten der <span class=\"annotation-marker comment\" data-annotation-id=\"11100201\">architektonischen Pracht</span>, die Marc in Fachzeitschriften bewundert hatte. Unter einem bleichen Mond wirkte sie wie das Skelett eines gefallenen Titanen, dessen Stahlträger mit stummer Aggression die Wolken durchbohrten. Marc stellte den Motor seiner alten Limousine ab, die mit einem letzten Röcheln erstarb. Die Stille, die sich über die Klippe legte, war eisig, nur unterbrochen vom furiosen Ansturm des Ozeans gegen den Stein, hundert Meter tiefer.\n\nEr überschritt das Absperrband des Tatorts, seine Sohlen zermalmten luxuriöse Trümmer. Als er sich der Schwelle näherte, änderte das Knirschen seine Tonlage. Es war kein Stein mehr, sondern Glas. Myriaden von sternengleichen Splittern bedeckten den Boden, als wäre dort eine Galaxie zerbrochen. Doch Marc wusste, dass dieser Sternenstaub einen blutigen Preis hatte. Es war die Leiche der monumentalen Fensterfront, das Meisterwerk von Victor Blackwood.\n\nEr betrat die Halle. Der Geruch von Jod prallte auf den kupfernen Geruch des Todes. Die Spurensicherung hatte die Leiche bereits abtransportiert, doch das Echo der Gewalt blieb. Skandinavische Möbel lagen ausgeweidet da, Meisterwerke waren nur noch Fetzen. Im Zentrum dieser Verwüstung, dort wo Blackwood verschieden war, bildeten Spiegelfragmente einen hypnotischen Kreis um eine dunkle Lache.\n\nMarc schaltete seine Taschenlampe ein. Das grelle Licht leckte über den gebürsteten Beton und enthüllte die Narben des Kampfes. Dies war kein Raubüberfall, der schiefgegangen war. Es war eine Hinrichtung, chirurgisch und gnadenlos. Blackwood, der Glas-Tycoon, war inmitten seiner eigenen Illusionen zerbrochen. Marc kniete vor dem purpurnen Fleck nieder, sein Blick gierig. Er suchte den Fehler, das Sandkorn im Getriebe dieser Tragödie. Denn Marc glaubte nicht an den Zufall; er las Ruinen wie ein offenes Buch. Und hier, in diesem Mausoleum aus Kristall, wartete eine Seite auf ihn.",
+                            "wordCount": 410,
+                            "status": "complete",
+                            "activeVersionId": 111002,
+                            "createdAt": "2026-02-09T22:15:00.000Z",
+                            "updatedAt": "2026-02-09T22:18:00.000Z",
+                            "versions": [
+                                {
+                                    "id": 111001,
+                                    "number": 1,
+                                    "label": "Erster Entwurf",
+                                    "content": "Die Villa an der Klippe glich nicht mehr dem architektonischen Kunstwerk, das Marc in Zeitschriften bewundert hatte. Unter dem bleichen Mond wirkte sie eher wie der Kadaver eines gestrandeten Wals, dessen Stahlrippen in einen sternlosen Himmel ragten. Marc parkte seine alte Limousine, deren Motor ein letztes unzufriedenes Röcheln von sich gab, bevor er verstummte. Die Stille, die darauf folgte, war schwer und dick, nur unterbrochen vom Sog des Atlantiks, hundert Meter tiefer, gegen die scharfen Felsen.\n\nEr überschritt das Absperrband des Tatorts, seine Schuhe knirschten auf dem Kies der Einfahrt. Als er sich dem Haupteingang näherte, änderte sich das Geräusch. Es war kein Kies mehr, sondern Glas. Tausende funkelnder Splitter bedeckten den Boden, als hätte der Himmel Diamanten geweint. Doch Marc wusste, dass dieses Glas nichts Himmlisches an sich hatte. Es war der Rest der monumentalen Fensterfront, der Stolz von Victor Blackwood.\n\nEr betrat das Wohnzimmer. Der Geruch von Meersalz vermischte sich mit dem metallischen Geruch von getrocknetem Blut. Die Polizei war bereits durch, sie hatten die Leiche mitgenommen, aber sie hatten einen Ort der Verwüstung zurückgelassen. Die Designermöbel waren umgestürzt, die Meisterwerke zerfetzt. In der Mitte des Raumes, dort wo Blackwood gefunden worden war, waren die Glassplitter dichter und bildeten eine Art makabren Heiligenschein um einen dunklen Fleck.\n\nMarc holte seine Taschenlampe heraus. Der Lichtstrahl strich über die Wände aus Sichtbeton und enthüllte Einschüsse und tiefe Kratzer. Dies war kein einfacher Einbruch, der schiefgegangen war. Es war eine Hinrichtung, methodisch und hasserfüllt. Blackwood, der \"Kristallkönig\", hatte seine Laufbahn inmitten seiner eigenen Kreationen beendet, zerbrochen wie ein gewöhnlicher Flakon. Marc hockte sich neben den Blutfleck, seine Augen suchten jede Lücke ab. Er suchte das, was die Ballistikexperten übersehen hatten, dieses winzige Detail, das nicht zur offensichtlichen Gewalt des Tatorts passte. Denn Marc glaubte nicht an das Chaos; er glaubte an die Absichten, die sich hinter jedem Akt der Zerstörung verbargen. Und hier, inmitten dieser luxuriösen Ruinen, wartete eine ganz bestimmte Absicht auf ihn.",
+                                    "wordCount": 385,
+                                    "createdAt": "2026-02-09T22:15:00.000Z",
+                                    "isActive": false,
+                                    "isFinal": false,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": 111002,
+                                    "number": 2,
+                                    "label": "Literarische Fassung",
+                                    "content": "Die Villa über dem Abgrund war nur noch ein Schatten der <span class=\"annotation-marker comment\" data-annotation-id=\"11100201\">architektonischen Pracht</span>, die Marc in Fachzeitschriften bewundert hatte. Unter einem bleichen Mond wirkte sie wie das Skelett eines gefallenen Titanen, dessen Stahlträger mit stummer Aggression die Wolken durchbohrten. Marc stellte den Motor seiner alten Limousine ab, die mit einem letzten Röcheln erstarb. Die Stille, die sich über die Klippe legte, war eisig, nur unterbrochen vom furiosen Ansturm des Ozeans gegen den Stein, hundert Meter tiefer.\n\nEr überschritt das Absperrband des Tatorts, seine Sohlen zermalmten luxuriöse Trümmer. Als er sich der Schwelle näherte, änderte das Knirschen seine Tonlage. Es war kein Stein mehr, sondern Glas. Myriaden von sternengleichen Splittern bedeckten den Boden, als wäre dort eine Galaxie zerbrochen. Doch Marc wusste, dass dieser Sternenstaub einen blutigen Preis hatte. Es war die Leiche der monumentalen Fensterfront, das Meisterwerk von Victor Blackwood.\n\nEr betrat die Halle. Der Geruch von Jod prallte auf den kupfernen Geruch des Todes. Die Spurensicherung hatte die Leiche bereits abtransportiert, doch das Echo der Gewalt blieb. Skandinavische Möbel lagen ausgeweidet da, Meisterwerke waren nur noch Fetzen. Im Zentrum dieser Verwüstung, dort wo Blackwood verschieden war, bildeten Spiegelfragmente einen hypnotischen Kreis um eine dunkle Lache.\n\nMarc schaltete seine Taschenlampe ein. Das grelle Licht leckte über den gebürsteten Beton und enthüllte die Narben des Kampfes. Dies war kein Raubüberfall, der schiefgegangen war. Es war eine Hinrichtung, chirurgisch und gnadenlos. Blackwood, der Glas-Tycoon, war inmitten seiner eigenen Illusionen zerbrochen. Marc kniete vor dem purpurnen Fleck nieder, sein Blick gierig. Er suchte den Fehler, das Sandkorn im Getriebe dieser Tragödie. Denn Marc glaubte nicht an den Zufall; er las Ruinen wie ein offenes Buch. Und hier, in diesem Mausoleum aus Kristall, wartete eine Seite auf ihn.",
+                                    "wordCount": 410,
+                                    "createdAt": "2026-02-09T22:18:00.000Z",
+                                    "isActive": true,
+                                    "isFinal": false,
+                                    "annotations": [
+                                        {
+                                            "id": 11100201,
+                                            "type": "comment",
+                                            "text": "Vielleicht ein bisschen zu melodramatisch? Bei der Überarbeitung prüfen.",
+                                            "context": "architektonischen Pracht",
+                                            "completed": false,
+                                            "createdAt": "2026-02-09T22:20:00.000Z"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "id": 112,
+                            "title": "Szene 2: Der rote Faden",
+                            "content": "Der Lichtstrahl von Marcs Taschenlampe fror an einer seltsamen Reflexion fest. Inmitten der durchsichtigen Glassplitter und Bergkristallfragmente, die Blackwoods Sammlung ausmachten, passte eine Farbe nicht ins Bild. Ein Purpurton, fast organisch. Marc zog eine Pinzette aus seiner Innentasche und schob mit chirurgischer Präzision zwei Stücke zerbrochenen Spiegels beiseite.\n\nEingebettet in eine Fuge des Parketts wartete ein rubinroter Seidenfaden auf ihn. Er war kurz, kaum drei Zentimeter lang, aber seine Textur war von außergewöhnlicher Feinheit. Marc hielt ihn sich vor die Augen. Dies war kein gewöhnlicher Kleidungsfaden. Es war Damastseide, jene Art, die nur noch in den Restaurierungswerkstätten der Kaiserstadt oder für unerschwingliche textile Kunstwerke verwendet wurde.\n\nDieser Faden war nicht versehentlich dort zurückgelassen worden. Er war zu gut platziert, fast schon in dieser Spalte inszeniert. Marc spürte einen Adrenalinschub durch seinen Rücken fahren. Blackwood empfing oft einflussreiche Persönlichkeiten, aber nur wenige von ihnen trugen Seide dieser Qualität, und noch weniger während eines Kampfes auf Leben und Tod. Es sei denn... Marc erinnerte sich an das Gerücht, das vor einigen Wochen in den Untergründen des Kunstmarktes kursiert war. Man flüsterte, ein einzigartiges Stück, das seit dem Sturz der Zaren verschollen war, sei in einem Privatverkauf wieder aufgetaucht. Man nannte es „Die Träne des Zaren“, ein Objekt aus rotem Glas, so rein, dass man es für einen riesigen Rubin hielt.\n\nPlötzlich ertönte hinter ihm ein Rascheln. Marc schaltete sofort seine Taschenlampe aus. Er blieb unbeweglich, tauchte in völlige Dunkelheit ein, sein Ohr gespannt auf jeden noch so leisen Seufzer der Meeresluft im Gerippe der Villa. Ein leichter, fast unmerklicher Schritt näherte sich. Jemand anderes interessierte sich für die Trümmer der Villa Blackwood. Marc schob seine Hand zu seiner Waffe, aber seine Finger schlossen sich stattdessen um den Beweismittelbeutel mit dem roten Faden. Es war seine einzige Spur, seine einzige Verbindung zu einer Vergangenheit, die viele lieber unter den Kristalltrümmern begraben gelassen hätten. Der unbekannte Besucher blieb am Eingang des Wohnzimmers stehen. Marc hielt den Atem an, sein Herz schlug wie ein gefangener Vogel gegen seine Rippen.",
+                            "wordCount": 392,
+                            "status": "complete",
+                            "createdAt": "2026-02-09T22:15:00.000Z",
+                            "updatedAt": "2026-02-09T22:15:00.000Z"
+                        }
+                    ]
+                },
+                {
+                    "id": 12,
+                    "title": "Kapitel 2: Echos der Vergangenheit",
+                    "createdAt": "2026-02-09T22:15:00.000Z",
+                    "updatedAt": "2026-02-09T22:15:00.000Z",
+                    "metadata": {
+                        "description": "Der Ruf nach einer Expertin und die Entdeckung einer technologischen Bedrohung."
+                    },
+                    "scenes": [
+                        {
+                            "id": 121,
+                            "title": "Szene 1: Die Expertin",
+                            "content": "Elenas Werkstatt war eine Höhle aus Licht und Wärme, gelegen in einer Sackgasse, wo sich der Geruch des Kanals mit dem von Ozon vermischte. Es war ein Ort der Kontraste, an dem Öfen, die orangefarbene Flammen spien, neben Werkbänken standen, die mit Siliziumstaub und Werkzeugen aus einer anderen Zeit bedeckt waren. Elena, deren Haare in einem Lederkopftuch zusammengebunden waren, blickte nicht von ihrem aktuellen Stück auf, als Marc durch die Tür trat. Sie führte eine Glasmacherpfeife mit der Anmut einer Dirigentin und verwandelte eine glühende Masse in eine perfekte Kugel.\n\n„Du bist zehn Jahre zu spät, Marc“, sagte sie, ihre raue Stimme vom Lärm des Ventilators gedämpft.\n„Manche sagen, ich komme nie an, Elena. Ich ziehe nur durch.“\nSie legte den fertigen Gegenstand vorsichtig in den Kühlofen und wandte sich ihm zu, während sie ihre schwieligen Hände an ihrer Schürze abwischte. Ihre schwarzen Augen scannten ihn mit einer Schärfe ab, die Marc unbehaglich machte. Sie hatte sich nicht verändert. Immer noch dieselbe stille Autorität, jene, die man erwirbt, wenn man Feuer und Sand zähmt.\n\nMarc holte den Beutel mit dem roten Faden heraus und legte ihn auf die Werkbank. Elenas Gesicht erstarrte. Sie berührte den Beutel nicht, aber ihre Nasenflügel bebten.\n„Wo hast du das gefunden?“, fragte sie, ihr Tonfall plötzlich bar jeder Ironie.\n„Bei Blackwood. Kurz nachdem er beschlossen hatte, inmitten seiner Spiegel zu sterben.“\nElena näherte sich, ihre Stirnlampe beleuchtete den Rubin-Faden. Ihre Finger zitterten leicht, als sie eine Juwelierlupe ergriff. Die Stille in der Werkstatt wurde schwer, nur unterbrochen vom Brummen der Öfen.\n„Das ist kein Seidenfaden, Marc“, murmelte sie. „Nun ja, die Hülle ist aus Seide. Aber der Kern... der Kern besteht aus Glasfasern von einer Reinheit, die ich in meinem Leben nur einmal gesehen habe. In den Archiven meines Großvaters.“\nSie richtete sich auf, ihr Gesicht ernst.\n„Du spielst mit einem Feuer, das viel heißer ist als meine Öfen. Dieser Faden gehört zur ‚Glasspinne‘, einem Fälscherring, von dem man glaubte, er sei seit dem Kalten Krieg zerschlagen. Wenn sie wieder bei Blackwood sind, dann aus einem Grund.“",
+                            "wordCount": 405,
+                            "status": "complete",
+                            "createdAt": "2026-02-09T22:15:00.000Z",
+                            "updatedAt": "2026-02-09T22:15:00.000Z"
+                        },
+                        {
+                            "id": 122,
+                            "title": "Szene 2: Die Träne des Zaren",
+                            "content": "Elena setzte sich schwerfällig auf einen hohen Hocker, ihre Augen ließen den roten Faden nicht mehr los. „Die Träne des Zaren ist nicht nur eine Legende, Marc. Sie war das Herzstück eines geheimen optischen Mechanismus, den die Ingenieure von Nikolaus II. entwickelt hatten. Nicht für die Schönheit, sondern für die Kommunikation. Ein Lichtreflexionssystem, das in der Lage war, verschlüsselte Nachrichten durch die Steppen zu senden, unauffindbar für jeden, der nicht den Empfangsprismentbesaß.“\nMarc lehnte sich gegen ein Regal voller Glaskugeln. „Und Blackwood hatte sie?“\n„Nein. Er versuchte, sie nachzubauen. Er nutzte sein Vermögen, um die Forschung an intelligentem Glas zu finanzieren. Er glaubte, er könne das Monopol auf Satellitenkommunikation mit einer hundert Jahre alten Technologie brechen. Jemandem gefiel die Idee nicht, diesen Geist wiederauferstehen zu sehen.“\n\nMarcs Handy vibrierte heftig in seiner Tasche. Eine unbekannte Nummer wurde angezeigt. Er nahm ab und erwartete eine Stimme, aber nur ein schrilles Zischen antwortete ihm, gefolgt von einer Reihe rhythmischer Klicklaute. Elena spannte sich an.\n„Leg auf!“, schrie sie.\nAber es war zu spät. Auf dem Bildschirm im angrenzenden Wohnzimmer, der mit der Sicherheitskamera der Gasse verbunden war, erschien eine Silhouette. Ein Mann in einem langen Mantel, unbeweglich im feinen Regen, der gerade einzusetzen begann. Er blickte nicht zur Werkstatt, er blickte auf sein eigenes Handgelenk, als würde er eine Uhr konsultieren. Oder einen Zünder.\n\nPlötzlich erschütterte eine Druckwelle die Fensterscheiben der Werkstatt. Es war keine massive Explosion, sondern eine intensive Vibrationsfrequenz. Elenas Regale fingen an zu singen, dann zu schreien. Mit einem Krachen von Kristall explodierten Dutzende Glaswerke gleichzeitig und verwandelten die Luft in eine Wolke aus fliegenden Rasiermessern. Marc stürzte sich auf Elena, um sie auf den Boden zu drücken, als auch die Glasdecke der Werkstatt nachgab. Inmitten des Chaos projizierte Marcs Handy nun einen roten Laser auf die gegenüberliegende Wand, der geografische Koordinaten zeichnete. Die Drohung war klar: Das Spiel hatte begonnen, und die Zeit für diskrete Ermittlungen war vorbei. Sie waren nun die Beute der Spinne.",
+                            "wordCount": 420,
+                            "status": "complete",
+                            "createdAt": "2026-02-09T22:15:00.000Z",
+                            "updatedAt": "2026-02-09T22:15:00.000Z"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "title": "Akt 2: Die zertrümmerte Wahrheit",
+            "createdAt": "2026-02-09T22:15:00.000Z",
+            "updatedAt": "2026-02-09T22:15:00.000Z",
+            "metadata": {
+                "color": "#1E88E5",
+                "description": "Die Enthüllung der Verschwörung und die ultimative Konfrontation."
+            },
+            "chapters": [
+                {
+                    "id": 21,
+                    "title": "Kapitel 3: Die fragile Spur",
+                    "createdAt": "2026-02-09T22:15:00.000Z",
+                    "updatedAt": "2026-02-09T22:15:00.000Z",
+                    "metadata": {
+                        "description": "Exkursion in Blackwoods Vergangenheit."
+                    },
+                    "scenes": [
+                        {
+                            "id": 211,
+                            "title": "Szene 1: Die Verrerie de l'Oubli",
+                            "content": "Die Koordinaten führten Marc weit weg von der Küste, ins Herz eines Nadelwalds, der so dicht war, dass er das Tageslicht zu ersticken schien. Dort, in einer Talmulde gelegen, erhob sich eine alte Industrieglashütte, ein Monument aus rotem Backstein und geköpften Schornsteinen. Hier hatte der „Kristallkönig“ seine Karriere begonnen, lange vor Luxusvillas und roten Teppichen. Der Ort atmete Verwahrlosung, Wildgras drückte durch den rissigen Asphalt des Parkplatzes.\n\nMarc ging voran und wich den Kadavern verrosteter Maschinen aus. Die Luft war kalt, geladen mit einer Feuchtigkeit, die ihm in die Knochen fuhr. Er hielt seine Waffe mit fester Hand, sein Blick strich über die zerbrochenen Fenster, die wie leere Augenhöhlen wirkten. Warum sollte Blackwood hierher zurückkehren? War es ein Heiligtum oder ein Versteck? Er fand eine Seitentür, die einen Spalt offen stand, ihre Angeln stöhnten im Wind.\n\nIm Inneren änderte sich die Atmosphäre radikal. Die Haupthalle, riesig, war in ein bläuliches Dämmerlicht getaucht. Doch statt des erwarteten Staubs entdeckte Marc ein hochmodernes Labor, das in der Mitte des Kirchenschiffs installiert war. Glasfaserkabel verliefen über den Boden wie technologische Lianen und verbanden lautlose Server mit einer druckgeregelten Glaskammer. In der Mitte dieser Kammer, aufgehängt an roten Seidenfäden, die identisch mit denen in der Villa waren, strahlte eine rubinrote Kugel ein pulsierendes Licht aus. Die Träne des Zaren. Sie war nicht aus altem Glas gefertigt, sondern aus etwas viel Modernerem: einem photonischen Prozessor, der in einer Kristallhülle untergebracht war. Blackwood hatte die Träne nicht einfach nur wiedergefunden; er hatte sie in die ultimative Kommunikationswaffe verwandelt. Marc näherte sich, fasziniert von der toxischen Schönheit des Objekts, und ignorierte die Schatten, die sich allmählich von den Backsteinpfeilern lösten.",
+                            "wordCount": 395,
+                            "status": "complete",
+                            "createdAt": "2026-02-09T22:15:00.000Z",
+                            "updatedAt": "2026-02-09T22:15:00.000Z"
+                        },
+                        {
+                            "id": 212,
+                            "title": "Szene 2: Der Hinterhalt",
+                            "content": "Ein vertrautes metallisches Klickgeräusch ließ Marc innehalten.\n„Sehr beeindruckend, nicht wahr? Eine Träne aus Licht für eine Welt der Finsternis.“\nDie Stimme kam aus einem versteckten Lautsprecher, eine synthetische Stimme, bar jeder Emotion. Marc wirbelte herum, seine Waffe auf die Empore gerichtet. Rote Laserstrahlen durchschnitten den Raum und konzentrierten sich alle auf seine Brust. Er saß in der Falle.\n\n„Sie waren nützlich, Marc. Sie haben die letzte Komponente hergebracht, ohne es zu wissen.“\nMarc spürte den Beutel in seiner Tasche. Den roten Faden. Er begriff plötzlich, dass Elena nicht nur eine Freundin war; sie war der Schlüssel. Der Faden war kein Beweismittel, er war ein Sensor. Durch das Bewegen hatte Marc ein Ortungsfeuer aktiviert.\nPlötzlich spielten die Server um das Labor herum verrückt. Ein schrilles Zischen erfüllte die Glashütte. Flammen schlugen aus den verlassenen Gastanks und verwandelten das Gebäude Augenblicklich in einen Schmelzofen. Das Feuer war kein Zufall; es war ein Reinigungsprotokoll.\n\nMarc blieben nur wenige Sekunden. Er feuerte zwei Schüsse in die Scheibe der Druckkammer, aber das Glas blieb unversehrt. Es war Panzerkristall. Schwarzer Rauch drang allmählich in den Raum ein und erschwerte das Atmen. Er sah die Silhouetten der Angreifer, die sich zu den Notausgängen zurückzogen und ihn lebendig mit Blackwoods Geheimnis verbrennen ließen. Aber Marc hatte eines bemerkt: Die Träne vibrierte im selben Rhythmus wie sein Handy. Er benutzte sein Mobildisplay als Prisma und richtete den roten Laser, den er zuvor erhalten hatte, direkt auf das Herz der Kugel. Die Wechselwirkung war unmittelbar. Eine Überspannung ließ den Panzerkristall springen. In einer Explosion aus purpurnem Licht flog die Kugel in Stücke und zertrümmerte die Trennwand. Marc hechtete durch die Trümmer, ergriff den Kern der Träne, bevor er sich zu einem hohen Fenster hinausschwang, während die Struktur der Glashütte mit einem Krachen aus Glas und Flammen in sich zusammenzustürzen begann.",
+                            "wordCount": 415,
+                            "status": "complete",
+                            "createdAt": "2026-02-09T22:15:00.000Z",
+                            "updatedAt": "2026-02-09T22:15:00.000Z"
+                        }
+                    ]
+                },
+                {
+                    "id": 22,
+                    "title": "Kapitel 4: Auf der anderen Seite des Spiegels",
+                    "createdAt": "2026-02-09T22:15:00.000Z",
+                    "updatedAt": "2026-02-09T22:15:00.000Z",
+                    "metadata": {
+                        "description": "Die finale Konfrontation, in der alles kippt."
+                    },
+                    "scenes": [
+                        {
+                            "id": 221,
+                            "title": "Szene 1: Die Inszenierung",
+                            "content": "Schweißgebadet, die Kleidung von den Flammen versengt, flüchtete Marc in einen alten Beobachtungsposten, der das Tal überragte. Er hielt den Kern der Träne in seinen Händen, ein kleines Prisma, das eine Galaxie von Schaltkreisen zu enthalten schien. Indem er die Speicherkarte seiner Kamera einführte, gelang es ihm, die letzten von Blackwood aufgezeichneten Dateien zu entschlüsseln. Was er sah, ließ ihn sicherer schaudern als der Waldwind.\n\nDas Video zeigte keinen Angriff. Es zeigte Victor Blackwood, sehr wohl lebendig, wie er selbst die Glassplitter in der Villa arrangierte. Er platzierte akribisch den roten Faden in der Fuge des Parketts. Er konfigurierte den Sprengstoff in Elenas Werkstatt. Blackwood war nicht das Opfer; er war der Architekt seines eigenen Verschwindens. Sein „Tod“ war ein massives Ablenkungsmanöver, um seine Schulden zu tilgen, seine Rivalen auszuschalten und vor allem, um sein Kommunikationssystem unter realen Bedingungen zu testen.\n\nMarc erkannte mit wachsendem Entsetzen, dass er von Anfang an Blackwoods Spielfigur gewesen war. Der Musterdetektiv, der Integre, der nach der Wahrheit suchte, war nur ein Bauer, der benutzt wurde, um den Kern aus der Glashütte an einen sichereren Ort zu transportieren. Die Angreifer in der Glashütte? Söldner, die bezahlt wurden, um einen Kampf vorzutäuschen und sicherzustellen, dass Marc mit dem wertvollen Objekt entkommt. Blackwood wollte, dass Marc die Träne des Zaren „rettet“, um sie an ihren endgültigen Übertragungspunkt zu bringen. Marc blickte zum Horizont. In der Ferne leuchtete der alte Leuchtturm von Pointe-Noire auf. Es war der höchste Punkt der Küste, der einzige Ort, der in der Lage war, ein photonisches Signal über den Horizont hinaus zu senden. Dort wartete der Kristallkönig auf seine Auferstehung.",
+                            "wordCount": 380,
+                            "status": "complete",
+                            "createdAt": "2026-02-09T22:15:00.000Z",
+                            "updatedAt": "2026-02-09T22:15:00.000Z"
+                        },
+                        {
+                            "id": 222,
+                            "title": "Szene 2: Der Leuchtturm der Wahrheit",
+                            "content": "Der Leuchtturm von Pointe-Noire erhob sich gegen den aufziehenden Sturm. Marc stieg die steinerne Wendeltreppe hinauf, sein Schritt hallte wie ein Totenglockenschlag. Oben angekommen, fand er die Laternengalerie in blutrotes Licht getaucht. Victor Blackwood war da, stand vor der monumentalen Optik des Leuchtturms, sein Gesicht gelassen. Er hielt ein Kristallglas in der Hand.\n\n„Guten Tag, Marc. Ich schätze Ihre Pünktlichkeit. Haben Sie den Kern?“\nBlackwood trug keine Spuren eines Kampfes. Er wirkte, als käme er gerade von einem Galadinner. Marc blieb wenige Meter vor ihm stehen, das Prisma der Träne in seiner Faust geballt.\n„Warum Elena?“, fragte Marc mit dumpfer Stimme.\n„Opfer sind für die Kunst notwendig, Marc. Elenas Werkstatt war das letzte Glied zur Glasspinne. Dieses Kapitel musste geschlossen werden. Jetzt geben Sie es mir. Das Signal wird in drei Minuten gesendet. Eine neue Ära der Kontrolle beginnt.“\n\nMarc blickte auf den komplexen Mechanismus hinter Blackwood. Er hätte schießen können, aber er wusste, dass Blackwood diesen Ausgang wohl vorgesehen hatte. Stattdessen holte Marc den Originalbeutel mit dem roten Faden heraus.\n„Sie haben einen Fehler gemacht, Victor. Sie dachten, ich würde nur sehen, was Sie von mir wollten. Aber Sie haben vergessen, dass Glas nicht nur reflektiert. Es kann auch die Wahrheit brechen.“\nMarc schob den roten Faden in das Herz des photonischen Prismas und warf das Ganze nicht nach Blackwood, sondern direkt in das Rotationsgetriebe der Laterne. Der Seiden- und Glasfaserfaden verfing sich in den Stahlzähnen. Der Mechanismus schrie auf, ein Funke sprang über, und der Lichtstrahl des Leuchtturms wurde plötzlich blendend weiß, bevor er in einer Ozonwolke erlosch.\n\nBlackwood stürzte zur Laterne, aber es war zu spät. Die Überspannung hatte die Server geröstet. Die Träne des Zaren war nur noch ein Stück totes Glas. Der Kristallkönig sackte gegen die Scheibe und starrte auf das Meer, das wieder dunkel geworden war. Die Polizei traf ein, ihre Blaulichter erklommen die Klippe. Marc blieb nicht für Erklärungen. Er stieg die Stufen wieder hinunter und ließ den erloschenen Leuchtturm und den Geist eines Mannes hinter sich, der geglaubt hatte, durch das Licht herrschen zu können. Draußen wusch der Regen endlich das Blut und das Glas weg und hinterließ die Welt, wie sie war: zerbrechlich, aber endlich befreit von ihren trügerischen Reflexen.",
+                            "wordCount": 435,
+                            "status": "complete",
+                            "createdAt": "2026-02-09T22:15:00.000Z",
+                            "updatedAt": "2026-02-09T22:15:00.000Z"
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "characters": [
+        {
+            "id": "char_marc",
+            "name": "Marc Laroque",
+            "firstName": "Marc",
+            "lastName": "Laroque",
+            "role": "Protagonist / Detektiv",
+            "occupation": "Privatdetektiv",
+            "age": "42",
+            "avatarEmoji": "🕵️",
+            "roleImportance": 5,
+            "traits": [
+                "Analytisch",
+                "Obsessiv",
+                "Melancholisch",
+                "Stoisch"
+            ],
+            "personality": {
+                "intelligence": 18,
+                "force": 12,
+                "robustesse": 14,
+                "empathie": 8,
+                "perception": 19,
+                "agilite": 11,
+                "sociabilite": 7
+            },
+            "physicalDescription": "Groß, gezeichnet von Schlaflosigkeit. Trägt immer einen grauen Regenmantel und scheint der Welt einen Schritt hinterher zu sein, außer wenn es darum geht, Details zu beobachten.",
+            "past": "Ehemaliger Kriminalkommissar, der nach einem Fall, der seinen Partner das Leben kostete, kündigte. Er lebt nun dafür, die Rätsel zu lösen, die andere als abgeschlossen betrachten."
+        },
+        {
+            "id": "char_blackwood",
+            "name": "Victor Blackwood",
+            "firstName": "Victor",
+            "lastName": "Blackwood",
+            "role": "Antagonist / Mutmaßliches Opfer",
+            "occupation": "Glas-Tycoon / Erfinder",
+            "age": "58",
+            "avatarEmoji": "💎",
+            "roleImportance": 5,
+            "traits": [
+                "Ehrgeizig",
+                "Manipulativ",
+                "Perfektionistisch",
+                "Visionär"
+            ],
+            "personality": {
+                "intelligence": 20,
+                "force": 10,
+                "robustesse": 12,
+                "empathie": 4,
+                "perception": 15,
+                "agilite": 10,
+                "sociabilite": 16
+            },
+            "physicalDescription": "Aristokratische Eleganz, silbernes Haar perfekt frisiert. Seine Hände sind von Mikronarben gezeichnet, Stigmata seiner jahrelangen Arbeit mit Glas.",
+            "past": "Gründer von Blackwood Optics. Er baute ein Imperium auf der Reinheit seines Kristalls auf. Leidenschaftlich an vergessenen kaiserlichen Technologien interessiert, verbrachte er sein Leben mit der Suche nach der Träne des Zaren."
+        },
+        {
+            "id": "char_elena",
+            "name": "Elena Kovalev",
+            "firstName": "Elena",
+            "lastName": "Kovalev",
+            "role": "Verbündete / Expertin",
+            "occupation": "Glasmachermeisterin / Optikexpertin",
+            "age": "45",
+            "avatarEmoji": "🔥",
+            "roleImportance": 4,
+            "traits": [
+                "Unabhängig",
+                "Mürrisch",
+                "Loyal",
+                "Präzise"
+            ],
+            "personality": {
+                "intelligence": 17,
+                "force": 14,
+                "robustesse": 16,
+                "empathie": 12,
+                "perception": 18,
+                "agilite": 15,
+                "sociabilite": 10
+            },
+            "physicalDescription": "Muskulöse Arme von der Arbeit am Ofen, stechender Blick, geschützt durch eine Schutzbrille. Ihre Lederschürze trägt die Spuren von tausend Experimenten.",
+            "past": "Enkelin eines kaiserlichen Hofingenieurs. Sie allein besitzt das nötige Know-how, um die Mechanismen der Träne des Zaren zu verstehen."
+        }
+    ],
+    "world": [
+        {
+            "id": "loc_villa",
+            "name": "Villa Blackwood",
+            "type": "Ort",
+            "description": "Ein architektonisches Wunderwerk an den Alabasterklippen.",
+            "details": "Wände aus Sichtbeton, monumentale Glasfronten mit Blick auf den Ozean. Hier beginnt die Geschichte mit dem mutmaßlichen Mord an Victor Blackwood.",
+            "history": "Von Blackwood selbst als Labor für Licht und Privatsphäre erbaut."
+        },
+        {
+            "id": "loc_atelier",
+            "name": "Elenas Werkstatt",
+            "type": "Ort",
+            "description": "Eine versteckte Glashütte in den unteren Industriegebieten der Unterstadt.",
+            "details": "Ertickende Hitze der Öfen, Geruch von Ozon und Stapel seltener optischer Dokumente. Das Nervenzentrum von Marcs technischer Recherche.",
+            "history": "Eine alte Gießerei, die Elena von ihrem Großvater geerbt hat."
+        },
+        {
+            "id": "loc_verrerie",
+            "name": "Verrerie de l'Oubli",
+            "type": "Ort",
+            "description": "Verlassenes Industriegebäude tief im Schwarzwald.",
+            "details": "Verfallene Backsteinhülle, die ein hochmodernes Photonik-Labor verbirgt. Hier hat Blackwood die neue Träne des Zaren zusammengebaut.",
+            "history": "Blackwoods erste Fabrik, offiziell vor zwanzig Jahren geschlossen."
+        },
+        {
+            "id": "loc_phare",
+            "name": "Leuchtturm von Pointe-Noire",
+            "type": "Ort",
+            "description": "Der älteste Leuchtturm an der Küste, der die gefährlichsten Riffe überragt.",
+            "details": "Monumentale Laterne, die von Blackwood modifiziert wurde, um als globale photonische Sendeantenne zu dienen.",
+            "history": "Historisches Denkmal, Ort der finalen Konfrontation."
+        }
+    ],
+    "timeline": [
+        {
+            "id": 1,
+            "title": "Verbrechen in der Villa",
+            "date": "15. Oktober, Mitternacht",
+            "order": 1,
+            "description": "Marc kommt in der Villa an, um nach Blackwoods verschwundener Leiche zu sehen.",
+            "characters": [
+                "Marc Laroque"
+            ]
+        },
+        {
+            "id": 2,
+            "title": "Die Rubin-Spur",
+            "date": "15. Oktober, 02:00",
+            "order": 2,
+            "description": "Entdeckung des rubinroten Seidenfadens im Parkett.",
+            "characters": [
+                "Marc Laroque"
+            ]
+        },
+        {
+            "id": 3,
+            "title": "Analyse bei Elena",
+            "date": "15. Oktober, 10:00",
+            "order": 3,
+            "description": "Marc bringt den Faden zu Elena, die die verbotene Technologie identifiziert.",
+            "characters": [
+                "Marc Laroque",
+                "Elena Kovalev"
+            ]
+        },
+        {
+            "id": 4,
+            "title": "Der Angriff auf die Werkstatt",
+            "date": "15. Oktober, 20:00",
+            "order": 4,
+            "description": "Die Werkstatt wird von einer Vibrationsfrequenz getroffen, massive Zerstörung der Werke.",
+            "characters": [
+                "Marc Laroque",
+                "Elena Kovalev"
+            ]
+        },
+        {
+            "id": 5,
+            "title": "Infiltration der Glashütte",
+            "date": "16. Oktober, 04:00",
+            "order": 5,
+            "description": "Marc findet das versteckte Labor und die photonische Kugel.",
+            "characters": [
+                "Marc Laroque"
+            ]
+        },
+        {
+            "id": 6,
+            "title": "Die Brand-Ablenkung",
+            "date": "16. Oktober, 05:30",
+            "order": 6,
+            "description": "Brand in der Glashütte, Marc entkommt nur knapp.",
+            "characters": [
+                "Marc Laroque"
+            ]
+        },
+        {
+            "id": 7,
+            "title": "Entschlüsselung der Inszenierung",
+            "date": "16. Oktober, 14:00",
+            "order": 7,
+            "description": "Marc erkennt beim Analysieren der Prismadateien, dass Blackwood noch lebt.",
+            "characters": [
+                "Marc Laroque"
+            ]
+        },
+        {
+            "id": 8,
+            "title": "Die finale Konfrontation",
+            "date": "16. Oktober, 22:00",
+            "order": 8,
+            "description": "Das Signal des Leuchtturms wird neutralisiert, Blackwood wird verhaftet.",
+            "characters": [
+                "Marc Laroque",
+                "Victor Blackwood"
+            ]
+        }
+    ],
+    "metroTimeline": [
+        {
+            "id": 101,
+            "title": "Ankunft in der Villa",
+            "date": "15.10.2026",
+            "order": 1,
+            "description": "Marc Laroque betritt Blackwoods Haus bei strömendem Regen.",
+            "characters": [
+                "char_marc"
+            ],
+            "sceneId": 111
+        },
+        {
+            "id": 102,
+            "title": "Optische Expertise",
+            "date": "15.10.2026",
+            "order": 2,
+            "description": "Elena identifiziert den Rubin-Faden als ein Stück kaiserlicher Technologie.",
+            "characters": [
+                "char_marc",
+                "char_elena"
+            ],
+            "sceneId": 121
+        },
+        {
+            "id": 103,
+            "title": "Die Falle schnappt zu",
+            "date": "15.10.2026",
+            "order": 3,
+            "description": "Zerstörerische Vibrationen in Elenas Werkstatt. Marc rettet sie in letzter Sekunde.",
+            "characters": [
+                "char_marc",
+                "char_elena"
+            ],
+            "sceneId": 122
+        },
+        {
+            "id": 104,
+            "title": "Die Verrerie de l'Oubli",
+            "date": "16.10.2026",
+            "order": 4,
+            "description": "Marc infiltriert das Geheimlabor und stiehlt die Träne des Zaren.",
+            "characters": [
+                "char_marc"
+            ],
+            "sceneId": 211
+        },
+        {
+            "id": 105,
+            "title": "Letzte Brechung",
+            "date": "16.10.2026",
+            "order": 5,
+            "description": "Gegenüberstellung oben auf dem Leuchtturm. Marc sabotiert Blackwoods Signal.",
+            "characters": [
+                "char_marc",
+                "char_blackwood"
+            ],
+            "sceneId": 222
+        }
+    ],
+    "characterColors": {
+        "char_marc": "#1E88E5",
+        "char_blackwood": "#FB8C00",
+        "char_elena": "#43A047"
+    },
+    "investigationBoard": {
+        "activeCaseId": "case_blackwood_murder",
+        "cases": [
+            {
+                "id": "case_blackwood_murder",
+                "title": "Der Mord am Kristallkönig",
+                "description": "Victor Blackwood wurde tot in seiner Villa aufgefunden (oder ist verschwunden). Sein Vermögen und seine Patente stehen auf dem Spiel.",
+                "status": "in_progress",
+                "phase": "analysis",
+                "victimId": "char_blackwood",
+                "crimeType": "murder"
+            }
+        ],
+        "facts": [
+            {
+                "id": "fact_death_blackwood",
+                "caseId": "case_blackwood_murder",
+                "type": "crime",
+                "label": "Tod von Victor Blackwood",
+                "description": "Der Körper von Victor Blackwood wurde in seinem Büro entdeckt und ist dann verschwunden.",
+                "truthStatus": "verified",
+                "relatedCharacterIds": [
+                    "char_blackwood"
+                ],
+                "relatedLocationIds": [
+                    "loc_villa"
+                ],
+                "timeline": [
+                    {
+                        "id": "step_death_1",
+                        "characterId": "char_marc",
+                        "sceneId": 111,
+                        "state": "revealed",
+                        "description": "Marc kommt in der Villa an und bemerkt den (scheinbaren) Tod von Blackwood."
+                    },
+                    {
+                        "id": "step_death_2",
+                        "characterId": "char_marc",
+                        "sceneId": 221,
+                        "state": "confirmed",
+                        "description": "Marc entdeckt über Blackwoods Dateien, dass sein Tod eine Inszenierung war."
+                    }
+                ]
+            },
+            {
+                "id": "fact_ruby_thread",
+                "caseId": "case_blackwood_murder",
+                "type": "clue",
+                "label": "Rubin-Seidenfaden",
+                "description": "Ein rubinroter Seidenfaden, der ultra-reine Glasfasern enthält.",
+                "truthStatus": "verified",
+                "relatedCharacterIds": [
+                    "char_blackwood",
+                    "char_elena"
+                ],
+                "timeline": [
+                    {
+                        "id": "step_ruby_1",
+                        "characterId": "char_marc",
+                        "sceneId": 112,
+                        "state": "revealed",
+                        "description": "Marc findet den Faden im Parkett der Villa."
+                    },
+                    {
+                        "id": "step_ruby_2",
+                        "characterId": "char_elena",
+                        "sceneId": 121,
+                        "state": "confirmed",
+                        "description": "Elena identifiziert den Faden als hochreine Glasfaser."
+                    }
+                ]
+            },
+            {
+                "id": "fact_glass_spider",
+                "caseId": "case_blackwood_murder",
+                "type": "testimony",
+                "label": "Die Glasspinne",
+                "description": "Fälscherring, spezialisiert auf optische Technologien des Kalten Krieges.",
+                "truthStatus": "verified",
+                "timeline": [
+                    {
+                        "id": "step_spider_1",
+                        "characterId": "char_elena",
+                        "sceneId": 121,
+                        "state": "hinted",
+                        "description": "Elena erwähnt die Glasspinne als wahrscheinlichen Ursprung des Fadens."
+                    }
+                ]
+            },
+            {
+                "id": "fact_tsar_tear",
+                "caseId": "case_blackwood_murder",
+                "type": "object",
+                "label": "Die Träne des Zaren",
+                "description": "Ein legendäres photonisches Prisma, das in der Lage ist, Kommunikation per Licht zu verschlüsseln.",
+                "truthStatus": "verified",
+                "relatedLocationIds": [
+                    "loc_verrerie",
+                    "loc_phare"
+                ],
+                "timeline": [
+                    {
+                        "id": "step_tear_1",
+                        "characterId": "char_elena",
+                        "sceneId": 122,
+                        "state": "hinted",
+                        "description": "Elena erklärt die technologische Natur der Träne des Zaren."
+                    },
+                    {
+                        "id": "step_tear_2",
+                        "characterId": "char_marc",
+                        "sceneId": 211,
+                        "state": "revealed",
+                        "description": "Marc entdeckt die rötliche Kugel (die Träne) in der Verrerie de l'Oubli."
+                    }
+                ]
+            }
+        ],
+        "knowledge": [
+            {
+                "characterId": "char_marc",
+                "factId": "fact_death_blackwood",
+                "sceneId": 111,
+                "state": "knows"
+            },
+            {
+                "characterId": "char_marc",
+                "factId": "fact_ruby_thread",
+                "sceneId": 112,
+                "state": "knows"
+            },
+            {
+                "characterId": "char_elena",
+                "factId": "fact_ruby_thread",
+                "sceneId": 121,
+                "state": "knows"
+            },
+            {
+                "characterId": "char_marc",
+                "factId": "fact_glass_spider",
+                "sceneId": 121,
+                "state": "suspicious"
+            },
+            {
+                "characterId": "char_elena",
+                "factId": "fact_glass_spider",
+                "sceneId": 121,
+                "state": "knows"
+            },
+            {
+                "characterId": "char_marc",
+                "factId": "fact_tsar_tear",
+                "sceneId": 122,
+                "state": "suspicious"
+            },
+            {
+                "characterId": "char_elena",
+                "factId": "fact_tsar_tear",
+                "sceneId": 122,
+                "state": "knows"
+            }
+        ],
+        "suspectLinks": [
+            {
+                "id": "mmo_marc_blackwood",
+                "caseId": "case_blackwood_murder",
+                "suspectId": "char_marc",
+                "victimId": "fact_death_blackwood",
+                "motive": {
+                    "level": 2,
+                    "description": "Bedürfnis nach Abschluss eines alten Falls, in den Blackwood verwickelt war."
+                },
+                "means": {
+                    "level": 8,
+                    "description": "Besitzt eine Dienstwaffe und taktisches Wissen."
+                },
+                "opportunity": {
+                    "level": 5,
+                    "description": "War kurz nach der Tat vor Ort."
+                }
+            },
+            {
+                "id": "mmo_elena_blackwood",
+                "caseId": "case_blackwood_murder",
+                "suspectId": "char_elena",
+                "victimId": "fact_death_blackwood",
+                "motive": {
+                    "level": 4,
+                    "description": "Blackwood nutzte die Patente ihrer Familie ohne Entschädigung."
+                },
+                "means": {
+                    "level": 10,
+                    "description": "Technische Fähigkeit, die Gläser der Villa zu sabotieren."
+                },
+                "opportunity": {
+                    "level": 3,
+                    "description": "Nicht überprüftes Arbeit-Alibi in ihrer Werkstatt."
+                }
+            }
+        ]
+    },
+    "plotGrid": {
+        "columns": [
+            {
+                "id": "pg_col_struct",
+                "type": "structure",
+                "title": "Narrative Struktur",
+                "order": 0
+            },
+            {
+                "id": "pg_col_spider",
+                "type": "custom",
+                "title": "Arc A: Die Glasspinne",
+                "order": 1
+            },
+            {
+                "id": "pg_col_tear",
+                "type": "custom",
+                "title": "Arc B: Die Träne des Zaren",
+                "order": 2
+            },
+            {
+                "id": "pg_col_chars",
+                "type": "custom",
+                "title": "Arc C: Marc & Elena",
+                "order": 3
+            }
+        ],
+        "rows": [
+            {
+                "id": "pg_row_111",
+                "type": "structure",
+                "structureId": 111,
+                "structureType": "scene",
+                "order": 0
+            },
+            {
+                "id": "pg_row_112",
+                "type": "structure",
+                "structureId": 112,
+                "structureType": "scene",
+                "order": 10
+            },
+            {
+                "id": "pg_row_121",
+                "type": "structure",
+                "structureId": 121,
+                "structureType": "scene",
+                "order": 20
+            },
+            {
+                "id": "pg_row_122",
+                "type": "structure",
+                "structureId": 122,
+                "structureType": "scene",
+                "order": 30
+            },
+            {
+                "id": "pg_row_211",
+                "type": "structure",
+                "structureId": 211,
+                "structureType": "scene",
+                "order": 40
+            },
+            {
+                "id": "pg_row_212",
+                "type": "structure",
+                "structureId": 212,
+                "structureType": "scene",
+                "order": 50
+            },
+            {
+                "id": "pg_row_221",
+                "type": "structure",
+                "structureId": 221,
+                "structureType": "scene",
+                "order": 60
+            },
+            {
+                "id": "pg_row_222",
+                "type": "structure",
+                "structureId": 222,
+                "structureType": "scene",
+                "order": 70
+            }
+        ],
+        "cards": [
+            {
+                "id": "card_1",
+                "rowId": "pg_row_111",
+                "colId": "pg_col_spider",
+                "title": "Die purpurrote Spur",
+                "content": "Marc bemerkt ein Glassplitter, das nicht aus der Villa stammt."
+            },
+            {
+                "id": "card_2",
+                "rowId": "pg_row_112",
+                "colId": "pg_col_spider",
+                "title": "Der Rubin-Faden",
+                "content": "Entdeckung des Seidenfadens. Erste konkrete Verbindung zur Organisation."
+            },
+            {
+                "id": "card_3",
+                "rowId": "pg_row_121",
+                "colId": "pg_col_chars",
+                "title": "Alte Wunden",
+                "content": "Elena und Marc sprechen über ihre gemeinsame Vergangenheit und den Grund für ihre Trennung."
+            },
+            {
+                "id": "card_4",
+                "rowId": "pg_row_121",
+                "colId": "pg_col_tear",
+                "title": "Die Seele aus Glas",
+                "content": "Elena enthüllt, dass der Faden militärische Glasfaser enthält."
+            },
+            {
+                "id": "card_5",
+                "rowId": "pg_row_122",
+                "colId": "pg_col_tear",
+                "title": "Das kaiserliche Projekt",
+                "content": "Ursprung der Träne: ein Prismen-Kommunikationssystem."
+            },
+            {
+                "id": "card_6",
+                "rowId": "pg_row_211",
+                "colId": "pg_col_tear",
+                "title": "Der Prototyp",
+                "content": "Marc findet die Kugel in der stillgelegten Fabrik. Sie ist aktiv."
+            },
+            {
+                "id": "card_7",
+                "rowId": "pg_row_221",
+                "colId": "pg_col_spider",
+                "title": "Der Architekt",
+                "content": "Enthüllung: Blackwood hat alles inszeniert."
+            },
+            {
+                "id": "card_8",
+                "rowId": "pg_row_222",
+                "colId": "pg_col_spider",
+                "title": "Stromausfall",
+                "content": "Marc sabotiert das Leuchtturmsignal und neutralisiert das Netzwerk der Spinne."
+            }
+        ]
+    },
+    "narrativeArcs": [
+        {
+            "id": "arc_spider",
+            "title": "Arc A: Die Glasspinne",
+            "category": "mystery",
+            "color": "#607d8b",
+            "description": "Die Ermittlung über den Fälscherring.",
+            "type": "mystery",
+            "importance": "major",
+            "board": {
+                "items": [
+                    {
+                        "id": "item_1707519130001",
+                        "type": "column",
+                        "x": 50,
+                        "y": 50,
+                        "title": "Ermittlung",
+                        "width": 160,
+                        "cards": [
+                            {
+                                "id": "arc_card_a1",
+                                "type": "scene",
+                                "sceneId": 111,
+                                "sceneTitle": "Szene 1: Ankunft am Tatort",
+                                "breadcrumb": "AKT 1: DIE FALLE › KAPITEL 1: ZERBROCHENES GLAS",
+                                "status": "complete"
+                            },
+                            {
+                                "id": "arc_card_a2",
+                                "type": "scene",
+                                "sceneId": 112,
+                                "sceneTitle": "Szene 2: Der rote Faden",
+                                "breadcrumb": "AKT 1: DIE FALLE › KAPITEL 1: ZERBROCHENES GLAS",
+                                "status": "complete"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "item_1707519130002",
+                        "type": "column",
+                        "x": 710,
+                        "y": 50,
+                        "title": "3. Der Architekt",
+                        "width": 260,
+                        "cards": [
+                            {
+                                "id": "arc_card_a7",
+                                "type": "scene",
+                                "sceneId": 221,
+                                "sceneTitle": "Szene 1: Die Inszenierung",
+                                "breadcrumb": "AKT 2: DIE ZERTRÜMMERTE WAHRHEIT › KAPITEL 4",
+                                "status": "complete"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "item_1707519130003",
+                        "type": "column",
+                        "x": 1040,
+                        "y": 50,
+                        "title": "4. Sabotage",
+                        "width": 260,
+                        "cards": [
+                            {
+                                "id": "arc_card_a8",
+                                "type": "scene",
+                                "sceneId": 222,
+                                "sceneTitle": "Szene 2: Der Leuchtturm der Wahrheit",
+                                "breadcrumb": "AKT 2: DIE ZERTRÜMMERTE WAHRHEIT › KAPITEL 4",
+                                "status": "complete"
+                            }
+                        ]
+                    }
+                ],
+                "connections": [
+                    {
+                        "id": "conn_a1_a2",
+                        "from": "item_1707519130001",
+                        "fromSide": "right",
+                        "to": "item_1707519130002",
+                        "toSide": "left"
+                    },
+                    {
+                        "id": "conn_a2_a3",
+                        "from": "item_1707519130002",
+                        "fromSide": "right",
+                        "to": "item_1707519130003",
+                        "toSide": "left"
+                    }
+                ]
+            },
+            "scenePresence": [
+                {
+                    "sceneId": 111,
+                    "columnId": "item_1707519130001",
+                    "intensity": 3
+                },
+                {
+                    "sceneId": 112,
+                    "columnId": "item_1707519130001",
+                    "intensity": 4
+                },
+                {
+                    "sceneId": 221,
+                    "columnId": "item_1707519130002",
+                    "intensity": 5
+                },
+                {
+                    "sceneId": 222,
+                    "columnId": "item_1707519130003",
+                    "intensity": 5
+                }
+            ]
+        },
+        {
+            "id": "arc_tear",
+            "title": "Arc B: Die Träne des Zaren",
+            "category": "plot",
+            "color": "#e74c3c",
+            "description": "Photonische Technologie und kaiserliches Projekt.",
+            "type": "plot",
+            "importance": "major",
+            "board": {
+                "items": [
+                    {
+                        "id": "item_1707519130004",
+                        "type": "column",
+                        "x": 50,
+                        "y": 50,
+                        "title": "1. Die Gläserne Seele",
+                        "width": 260,
+                        "cards": [
+                            {
+                                "id": "arc_card_b4",
+                                "type": "scene",
+                                "sceneId": 121,
+                                "sceneTitle": "Szene 1: Die Expertin",
+                                "breadcrumb": "AKT 1: DIE FALLE › KAPITEL 2",
+                                "status": "complete"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "item_1707519130005",
+                        "type": "column",
+                        "x": 380,
+                        "y": 50,
+                        "title": "2. Kaiserliches Projekt",
+                        "width": 260,
+                        "cards": [
+                            {
+                                "id": "arc_card_b5",
+                                "type": "scene",
+                                "sceneId": 122,
+                                "sceneTitle": "Szene 2: Die Träne des Zaren",
+                                "breadcrumb": "AKT 1: DIE FALLE › KAPITEL 2",
+                                "status": "complete"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "item_1707519130006",
+                        "type": "column",
+                        "x": 710,
+                        "y": 50,
+                        "title": "3. Der Prototyp",
+                        "width": 260,
+                        "cards": [
+                            {
+                                "id": "arc_card_b6",
+                                "type": "scene",
+                                "sceneId": 211,
+                                "sceneTitle": "Szene 1: Die Verrerie de l'Oubli",
+                                "breadcrumb": "AKT 2: DIE ZERTRÜMMERTE WAHRHEIT › KAPITEL 3",
+                                "status": "complete"
+                            }
+                        ]
+                    }
+                ],
+                "connections": [
+                    {
+                        "id": "conn_b1_b2",
+                        "from": "item_1707519130004",
+                        "fromSide": "right",
+                        "to": "item_1707519130005",
+                        "toSide": "left"
+                    },
+                    {
+                        "id": "conn_b2_b3",
+                        "from": "item_1707519130005",
+                        "fromSide": "right",
+                        "to": "item_1707519130006",
+                        "toSide": "left"
+                    }
+                ]
+            },
+            "scenePresence": [
+                {
+                    "sceneId": 121,
+                    "columnId": "item_1707519130004",
+                    "intensity": 5
+                },
+                {
+                    "sceneId": 122,
+                    "columnId": "item_1707519130005",
+                    "intensity": 3
+                },
+                {
+                    "sceneId": 211,
+                    "columnId": "item_1707519130006",
+                    "intensity": 4
+                }
+            ]
+        },
+        {
+            "id": "arc_relationship",
+            "title": "Arc C: Marc & Elena",
+            "category": "relationship",
+            "color": "#e91e63",
+            "description": "Ihre Wiederbegegnung und die Entwicklung ihrer Dynamik.",
+            "type": "relationship",
+            "importance": "minor",
+            "board": {
+                "items": [
+                    {
+                        "id": "item_1707519130007",
+                        "type": "column",
+                        "x": 50,
+                        "y": 50,
+                        "title": "1. Vergangene Wunden",
+                        "width": 260,
+                        "cards": [
+                            {
+                                "id": "arc_card_c3",
+                                "type": "scene",
+                                "sceneId": 121,
+                                "sceneTitle": "Szene 1: Die Expertin",
+                                "breadcrumb": "AKT 1: DIE FALLE › KAPITEL 2",
+                                "status": "complete"
+                            }
+                        ]
+                    }
+                ],
+                "connections": []
+            },
+            "scenePresence": [
+                {
+                    "sceneId": 121,
+                    "columnId": "item_1707519130007",
+                    "intensity": 4
+                }
+            ]
+        }
+    ],
+    "interArcConnections": [
+        {
+            "id": "inter_a2_b4",
+            "fromArcId": "arc_spider",
+            "fromItemId": "arc_card_a2",
+            "fromSide": "right",
+            "toArcId": "arc_tear",
+            "toItemId": "arc_card_b4",
+            "toSide": "left",
+            "type": "cause",
+            "label": "Ermittlungsbedarf"
+        },
+        {
+            "id": "inter_b6_a7",
+            "fromArcId": "arc_tear",
+            "fromItemId": "arc_card_b6",
+            "fromSide": "right",
+            "toArcId": "arc_spider",
+            "toItemId": "arc_card_a7",
+            "toSide": "left",
+            "type": "cause",
+            "label": "Erdrückender Beweis"
+        },
+        {
+            "id": "inter_c3_b4",
+            "fromArcId": "arc_relationship",
+            "fromItemId": "arc_card_c3",
+            "fromSide": "right",
+            "toArcId": "arc_tear",
+            "toItemId": "arc_card_b4",
+            "toSide": "left",
+            "type": "parallel",
+            "label": "Geteilte Spannung"
+        }
+    ],
+    "arcCategories": {},
+    "collapsedArcCategories": [],
+    "notes": [],
+    "codex": [],
+    "stats": {
+        "dailyGoal": 500,
+        "totalGoal": 80000,
+        "writingSessions": []
+    },
+    "versions": [],
+    "relationships": [],
+    "relations": [
+        {
+            "id": "rel_marc_elena",
+            "char1Id": "char_marc",
+            "char2Id": "char_elena",
+            "type": "amitie",
+            "description": "Vertraute ehemalige Kollegen. Elena hilft Marc, technologische Beweise zu entschlüsseln.",
+            "createdAt": "2026-02-10T21:40:00.000Z"
+        },
+        {
+            "id": "rel_marc_blackwood",
+            "char1Id": "char_marc",
+            "char2Id": "char_blackwood",
+            "type": "rivalite",
+            "description": "Marc versucht, Blackwoods Betrug aufzudecken, während Blackwood ihn manipuliert.",
+            "createdAt": "2026-02-10T21:40:00.000Z"
+        },
+        {
+            "id": "rel_elena_blackwood",
+            "char1Id": "char_elena",
+            "char2Id": "char_blackwood",
+            "type": "rivalite",
+            "description": "Elena verachtet Blackwood dafür, dass er die Patente ihres Großvaters ausgenutzt hat.",
+            "createdAt": "2026-02-10T21:40:00.000Z"
+        }
+    ],
+    "characterPositions": {
+        "char_elena": {
+            "x": 300,
+            "y": 200
+        },
+        "char_marc": {
+            "x": 550,
+            "y": 350
+        },
+        "char_blackwood": {
+            "x": 300,
+            "y": 500
+        }
+    },
+    "maps": [
+        {
+            "id": 1707519130000,
+            "name": "Karte der Alabasterküste",
+            "image": "https://images.unsplash.com/photo-1526772662000-3f88f10405ff?q=80&w=1000",
+            "locations": [
+                {
+                    "name": "Villa Blackwood",
+                    "x": 75,
+                    "y": 25,
+                    "description": "Auf der Klippe thronend, Ausgangspunkt der Untersuchung.",
+                    "typeId": "crime-scene"
+                },
+                {
+                    "name": "Elenas Werkstatt",
+                    "x": 30,
+                    "y": 60,
+                    "description": "Unteres Industriegebiet, technischer Zufluchtsort.",
+                    "typeId": "hideout"
+                },
+                {
+                    "name": "Verrerie de l'Oubli",
+                    "x": 15,
+                    "y": 15,
+                    "description": "Im dichten Wald versteckt, Photonik-Labor.",
+                    "typeId": "default"
+                },
+                {
+                    "name": "Leuchtturm von Pointe-Noire",
+                    "x": 85,
+                    "y": 80,
+                    "description": "Höchster Punkt der Küste, Ort der finalen Konfrontation.",
+                    "typeId": "marker"
+                }
+            ]
+        }
+    ],
+    "globalnotes": {
+        "boards": [],
+        "items": [],
+        "activeBoardId": null
+    }
+}

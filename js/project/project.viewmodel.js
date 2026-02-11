@@ -53,13 +53,19 @@ const ProjectViewModel = {
 
                 // Tentative de chargement du projet de démo
                 try {
-                    // 1. Vérifier si le projet est déjà injecté dans la page (plus fiable)
-                    if (window.PLUME_DEMO_PROJECT) {
+                    const lang = Localization.getLocale();
+                    console.log(`🌍 Premier lancement, chargement démo (${lang})`);
+
+                    // 1. Vérifier si le projet est déjà injecté dans la page
+                    // On ne l'utilise que si la langue correspond ou si c'est le seul choix
+                    if (window.PLUME_DEMO_PROJECT && (lang === 'fr' || !lang)) {
                         project = window.PLUME_DEMO_PROJECT;
                         console.log('✅ Projet de démo trouvé dans window.PLUME_DEMO_PROJECT');
                     } else {
-                        // 2. Sinon, tentative de fetch classique (fallback)
+                        // 2. Sinon, tentative de fetch avec priorité à la langue
                         const paths = [
+                            `./demo/project_${lang}.json`,
+                            `demo/project_${lang}.json`,
                             './demo/project.json',
                             'demo/project.json',
                             '../demo/project.json'
@@ -77,6 +83,8 @@ const ProjectViewModel = {
 
                         if (response && response.ok) {
                             project = await response.json();
+                        } else if (window.PLUME_DEMO_PROJECT) {
+                            project = window.PLUME_DEMO_PROJECT;
                         } else {
                             throw new Error('Démos introuvables via fetch');
                         }
@@ -312,6 +320,71 @@ const ProjectViewModel = {
      */
     importHandler() {
         document.getElementById('importProjectFile')?.click();
+    },
+
+    /**
+     * Importe le projet de démo.
+     */
+    async importDemo() {
+        console.log('📡 Tentative d\'import de la démo...');
+        try {
+            const lang = Localization.getLocale();
+            console.log(`🌍 Langue actuelle : ${lang}`);
+
+            let demoProj = null;
+
+            // Chemins à tester, priorité à la langue actuelle
+            const paths = [
+                `demo/project_${lang}.json`,
+                `demo/projet_${lang}.json`,
+                'demo/project.json',
+                'demo/projet.json',
+                '../demo/project.json'
+            ];
+
+            for (const path of paths) {
+                try {
+                    console.log(`🔍 Test du chemin : ${path}`);
+                    const response = await fetch(path);
+                    if (response.ok) {
+                        demoProj = await response.json();
+                        console.log(`✅ Démo trouvée à : ${path}`);
+                        break;
+                    }
+                } catch (e) {
+                    // On continue vers le chemin suivant
+                }
+            }
+
+            if (!demoProj && window.PLUME_DEMO_PROJECT) {
+                console.log('💡 Utilisation de la démo injectée (fallback)');
+                demoProj = window.PLUME_DEMO_PROJECT;
+            }
+
+            if (!demoProj || !demoProj.title) throw new Error('Démo introuvable ou invalide');
+
+            // On crée une copie profonde pour éviter de modifier l'original
+            const newProject = JSON.parse(JSON.stringify(demoProj));
+            newProject.id = Date.now();
+            newProject.createdAt = new Date().toISOString();
+            newProject.updatedAt = new Date().toISOString();
+
+            // S'assurer que projects est défini
+            if (typeof projects === 'undefined') projects = [];
+
+            projects.push(newProject);
+            await this.saveAll();
+
+            ProjectView.renderSidebarList(projects);
+            if (currentView === 'projects') {
+                ProjectView.renderLandingPage(projects);
+            }
+
+            alert(Localization.t('project.viewmodel.import_success', [newProject.title]));
+        } catch (error) {
+            console.error('❌ Erreur import démo:', error);
+            alert(Localization.t('project.viewmodel.import_error', [error.message]));
+        }
     },
 
     /**

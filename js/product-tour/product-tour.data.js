@@ -465,20 +465,6 @@ const ProductTourData = {
         ],      // Écran d'accueil / Liste des projets
         "editor": [
             {
-                "element": "#headerProjectTitle",
-                "popover": {
-                    "title": "🎉 Visite Terminée !",
-                    "description": "<p>Vous connaissez maintenant les bases de Plume !</p><p>Explorez les autres sections pour découvrir encore plus de fonctionnalités :</p><ul><li>Personnages et Univers</li><li>Visualisations et graphiques</li><li>Outils d'analyse et statistiques</li></ul><p><strong>Bon courage pour votre écriture ! ✍️</strong></p>",
-                    "side": "bottom",
-                    "align": "start"
-                },
-                "onHighlightStarted": null,
-                "onHighlighted": null,
-                "onDeselected": null,
-                "onNext": null,
-                "onPrevious": null
-            },
-            {
                 "element": ".sidebar",
                 "popover": {
                     "title": "📚 Hiérarchie du Récit",
@@ -570,7 +556,6 @@ const ProductTourData = {
                 "popover": {
                     "title": "Créer un version",
                     "description": "Ajoute une capture de votre texte actuel en mémoire, vous pouvez maintenant modifier, faire des tests et si ça na vous plait pas, vous pouvez revenir à la version que vous souhaitez !</br> Etoile : mettez une étoile pour valider cette version dans l'export final.</br> Diff : Utiliser le \"DIFF\" pour comparer les versions de vos textes </br>Stylo : éditer le nom de votre version</br> Corbeille : supprimer cette version",
-                    "image": "tour/STR-version.png",
                     "side": "bottom",
                     "align": "start"
                 },
@@ -618,7 +603,6 @@ const ProductTourData = {
                 "popover": {
                     "title": "Gestions des arcs narratifs",
                     "description": "Dans cette barre, vous pouvez relier la scène en cours à une étape de vos arcs narratifs en indiquant le statut:</br> Introduction </br> Développement </br> Point culminant </br> Résolution. </br> Quelle est la colonne de votre arc avec laquelle cette scène est liée et mettre des notes.",
-                    "image": "tour/STR-arc.png",
                     "side": "bottom",
                     "align": "start"
                 },

@@ -1,0 +1,1181 @@
+{
+    "id": 1707519130000,
+    "title": "The Glass Scars",
+    "description": "A thrilling thriller where a detective must solve a murder case in a luxury villa, only to discover a conspiracy linked to a hidden imperial communication technology.",
+    "genre": "Thriller",
+    "createdAt": "2026-02-09T22:15:00.000Z",
+    "updatedAt": "2026-02-09T22:45:00.000Z",
+    "acts": [
+        {
+            "id": 1,
+            "title": "Act 1: The Trap",
+            "createdAt": "2026-02-09T22:15:00.000Z",
+            "updatedAt": "2026-02-09T22:15:00.000Z",
+            "metadata": {
+                "color": "#E53935",
+                "description": "Intro of the mystery and character setup."
+            },
+            "chapters": [
+                {
+                    "id": 11,
+                    "title": "Chapter 1: Broken Glass",
+                    "createdAt": "2026-02-09T22:15:00.000Z",
+                    "updatedAt": "2026-02-09T22:15:00.000Z",
+                    "metadata": {
+                        "description": "Marc discovers the devastated villa and the first clues."
+                    },
+                    "scenes": [
+                        {
+                            "id": 111,
+                            "title": "Scene 1: Arrival at the Scene",
+                            "content": "The villa overlooking the abyss was nothing more than a shadow of the <span class=\"annotation-marker comment\" data-annotation-id=\"11100201\">architectural splendor</span> that Marc had admired in specialized magazines. Under a livid moon, it evoked the skeleton of a fallen titan, its metallic beams piercing the clouds with a mute aggressiveness. Marc cut the ignition of his old sedan, which died in a rattle of agony. The silence that fell on the cliff was glacial, only disturbed by the ocean's furious assaults against the stone, a hundred meters below.\n\nHe crossed the crime scene tape, his soles crushing pieces of luxury. As he approached the threshold, the crunching changed in texture. It was no longer rock, but glass. Myriads of stellar shards covered the ground, as if a galaxy had broken there. But Marc knew that this star dust had a blood price. It was the corpse of the monumental bay window, Victor Blackwood's masterpiece.\n\nHe entered the hall. The iodine clashed with the coppery smell of death. The forensics technicians had already taken the body, but the echo of violence remained. The Scandinavian furniture lay disemboweled, the master canvases were nothing more than rags. In the center of this devastation, where Blackwood had died, mirror fragments formed a hypnotic circle around a dark pool.\n\nMarc turned on his flashlight. The raw light licked the brushed concrete, revealing the scars of the fight. This was not a robbery gone wrong. It was a slaughter, surgical and pitiless. Blackwood, the Glass Tycoon, had broken among his own illusions. Marc knelt before the purple stain, his gaze greedy. He was looking for the flaw, the grain of sand in the mechanism of this tragedy. For Marc did not believe in chance; he read ruins like an open book. And here, in this mausoleum of crystal, a page was waiting for him.",
+                            "wordCount": 410,
+                            "status": "complete",
+                            "activeVersionId": 111002,
+                            "createdAt": "2026-02-09T22:15:00.000Z",
+                            "updatedAt": "2026-02-09T22:18:00.000Z",
+                            "versions": [
+                                {
+                                    "id": 111001,
+                                    "number": 1,
+                                    "label": "First Draft",
+                                    "content": "The cliff villa no longer looked like the architectural work of art that Marc had admired in magazines. Under the sallow moon, it looked more like a stranded whale carcass, its steel ribs pointing towards a starless sky. Marc parked his old sedan, the engine of which made one last rattle of discontent before falling silent. The silence that followed was heavy, thick, interrupted only by the backwash of the Atlantic, a hundred meters below, against the sharp rocks.\n\nHe crossed the security perimeter, his shoes crunching on the gravel of the driveway. As he approached the main entrance, the noise changed. It was no longer gravel, but glass. Thousands of sparkling fragments littered the ground, as if the sky had cried diamonds. But Marc knew that this glass had nothing celestial about it. It was the rest of the monumental bay window, the one that was Victor Blackwood's pride.\n\nHe entered the living room. The smell of sea salt mingled with the more metallic smell of dried blood. The police had already passed through, taking the body, but they had left behind a scene of desolation. The designer furniture was overturned, the master canvases slashed. In the center of the room, where Blackwood had been found, the glass shards were denser, forming a kind of macabre halo around a dark stain.\n\nMarc took out his flashlight. The beam swept across the raw concrete walls, revealing bullet impacts and deep scratches. This was not a simple burglary gone wrong. It was an execution, methodical and hateful. Blackwood, the \"Crystal King\", had ended his run in the middle of his own creations, broken like a vulgar perfume bottle. Marc crouched near the blood stain, his eyes scanning every gap. He was looking for what the ballistics experts had missed, that tiny detail that did not fit with the apparent violence of the scene. For Marc did not believe in chaos; he believed in the intentions hidden behind every act of destruction. And here, in the middle of these luxury ruins, a very precise intention was waiting for him.",
+                                    "wordCount": 385,
+                                    "createdAt": "2026-02-09T22:15:00.000Z",
+                                    "isActive": false,
+                                    "isFinal": false,
+                                    "annotations": []
+                                },
+                                {
+                                    "id": 111002,
+                                    "number": 2,
+                                    "label": "Literary Version",
+                                    "content": "The villa overlooking the abyss was nothing more than a shadow of the <span class=\"annotation-marker comment\" data-annotation-id=\"11100201\">architectural splendor</span> that Marc had admired in specialized magazines. Under a livid moon, it evoked the skeleton of a fallen titan, its metallic beams piercing the clouds with a mute aggressiveness. Marc cut the ignition of his old sedan, which died in a rattle of agony. The silence that fell on the cliff was glacial, only disturbed by the ocean's furious assaults against the stone, a hundred meters below.\n\nHe crossed the crime scene tape, his soles crushing pieces of luxury. As he approached the threshold, the crunching changed in texture. It was no longer rock, but glass. Myriads of stellar shards covered the ground, as if a galaxy had broken there. But Marc knew that this star dust had a blood price. It was the corpse of the monumental bay window, Victor Blackwood's masterpiece.\n\nHe entered the hall. The iodine clashed with the coppery smell of death. The forensics technicians had already taken the body, but the echo of violence remained. The Scandinavian furniture lay disemboweled, the master canvases were nothing more than rags. In the center of this devastation, where Blackwood had died, mirror fragments formed a hypnotic circle around a dark pool.\n\nMarc turned on his flashlight. The raw light licked the brushed concrete, revealing the scars of the fight. This was not a robbery gone wrong. It was a slaughter, surgical and pitiless. Blackwood, the Glass Tycoon, had broken among his own illusions. Marc knelt before the purple stain, his gaze greedy. He was looking for the flaw, the grain of sand in the mechanism of this tragedy. For Marc did not believe in chance; he read ruins like an open book. And here, in this mausoleum of crystal, a page was waiting for him.",
+                                    "wordCount": 410,
+                                    "createdAt": "2026-02-09T22:18:00.000Z",
+                                    "isActive": true,
+                                    "isFinal": false,
+                                    "annotations": [
+                                        {
+                                            "id": 11100201,
+                                            "type": "comment",
+                                            "text": "Maybe a bit too melodramatic? See on re-reading.",
+                                            "context": "architectural splendor",
+                                            "completed": false,
+                                            "createdAt": "2026-02-09T22:20:00.000Z"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "id": 112,
+                            "title": "Scene 2: The Red Thread",
+                            "content": "The beam of Marc's flashlight froze on a singular reflection. Among the shards of transparent glass and the rock crystal fragments that made up Blackwood's collection, one color did not belong. A shade of purple, almost organic. Marc took a pair of tweezers from his inner pocket and, with surgical precision, he moved aside two pieces of broken mirror.\n\nEmbedded in a groove in the floor, a ruby red silk thread was waiting for him. It was short, barely three centimeters long, but its texture was of exceptional finesse. Marc brought it to his eyes. This was no ordinary clothing thread. It was damask silk, the kind no longer used except in the restoration workshops of the imperial city or for overpriced textile works of art.\n\nThis thread had not been left there by mistake. It was too well placed, almost staged in this crevice. Marc felt a surge of adrenaline go down his spine. Blackwood often received influential personalities, but few of them wore silk of this quality, and even fewer during a fight to the death. Unless... Marc recalled the rumor running through the underworld of the art market a few weeks earlier. It was whispered that a unique piece, missing since the fall of the tsars, had resurfaced in a private sale. It was called \"The Tsar's Tear\", a red glass object so pure it was mistaken for a giant ruby.\n\nSuddenly, a rustling sound rang out behind him. Marc turned off his flashlight instantly. He remained motionless, plunging into total darkness, his ear strained towards the slightest sigh of sea air in the villa's carcass. A light step, almost imperceptible, was approaching. Someone else was interested in the ruins of the Blackwood villa. Marc slipped his hand towards his weapon, but his fingers closed instead on the evidence bag containing the red thread. It was his only lead, his unique link to a past that many would have preferred to leave buried under the crystal debris. The unknown visitor stopped at the entrance to the living room. Marc held his breath, his heart beating against his ribs like a caged bird.",
+                            "wordCount": 392,
+                            "status": "complete",
+                            "createdAt": "2026-02-09T22:15:00.000Z",
+                            "updatedAt": "2026-02-09T22:15:00.000Z"
+                        }
+                    ]
+                },
+                {
+                    "id": 12,
+                    "title": "Chapter 2: Echoes of the Past",
+                    "createdAt": "2026-02-09T22:15:00.000Z",
+                    "updatedAt": "2026-02-09T22:15:00.000Z",
+                    "metadata": {
+                        "description": "The call to an expert and the discovery of a technological threat."
+                    },
+                    "scenes": [
+                        {
+                            "id": 121,
+                            "title": "Scene 1: The Expert",
+                            "content": "Elena's workshop was a den of light and heat, located in a dead-end alley where the smell of the canal mingled with that of ozone. It was a place of contrasts, where furnaces spitting orange flames stood alongside workbenches covered in silica dust and tools from another era. Elena, her hair tied in a leather scarf, did not look up from her current piece when Marc walked through the door. She handled a blowpipe with the grace of a conductor, transforming an incandescent mass into a perfect sphere.\n\n\"You're ten years late, Marc,\" she said, her raspy voice muffled by the noise of the fan.\n\"Some say I never arrive, Elena. I'm just passing through.\"\nShe delicately placed the finished object in the annealing oven and turned to him, wiping her calloused hands on her apron. Her black eyes scanned him with an acuity that made Marc uncomfortable. She hadn't changed. Always that same silent authority, the kind you acquire by taming fire and sand.\n\nMarc took out the bag containing the red thread and placed it on the workbench. Elena's face froze. She didn't touch the bag, but her nostrils flared.\n\"Where did you find that?\" she asked, her tone suddenly devoid of all irony.\n\"At Blackwood's. Just after he decided to die in the middle of his mirrors.\"\nElena approached, her headlamp illuminating the ruby thread. Her fingers trembled slightly as she grabbed a jeweler's loupe. The silence in the workshop became heavy, only broken by the hum of the furnaces.\n\"It's not a silk thread, Marc,\" she whispered. \"Well, yes, the sheath is silk. But the core... the core is made of optical glass fibers of a purity I've only seen once in my life. In my grandfather's archives.\"\nShe stood up, her face grave.\n\"You're playing with a fire much hotter than my furnaces. This thread belongs to 'The Glass Spider', a forgery network thought to have been dismantled since the Cold War. If they're back at Blackwood's, it's for one reason.\"",
+                            "wordCount": 405,
+                            "status": "complete",
+                            "createdAt": "2026-02-09T22:15:00.000Z",
+                            "updatedAt": "2026-02-09T22:15:00.000Z"
+                        },
+                        {
+                            "id": 122,
+                            "title": "Scene 2: The Tsar's Tear",
+                            "content": "Elena sat heavily on a high stool, her eyes never leaving the red thread. \"The Tsar's Tear is not just a legend, Marc. It was the centerpiece of a secret optical mechanism developed by Nicholas II's engineers. Not for beauty, but for communication. A light reflection system capable of sending encrypted messages across the steppes, undetectable by anyone who did not possess the receiving prism.\"\nMarc leaned against a shelf loaded with glass globes. \"And Blackwood had it?\"\n\"No. He was trying to recreate it. He was using his fortune to fund research into smart glass. He thought he could break the monopoly on satellite communications with a hundred-year-old technology. Someone didn't like the idea of seeing this ghost resurface.\"\n\nMarc's phone vibrated violently in his pocket. An unknown number was displayed. He answered, expecting a voice, but only a sharp hiss answered him, followed by a series of rhythmic clicks. Elena tensed.\n\"Hang up!\" she cried.\nBut it was too late. On the screen in the adjoining living room, connected to the alley's security camera, a silhouette appeared. A man dressed in a long coat, motionless under the fine rain that was beginning to fall. He wasn't looking at the workshop, he was looking at his own wrist, as if he was checking a watch. Or a detonator.\n\nSuddenly, a shockwave made the workshop windows shake. It wasn't a massive explosion, but an intense vibratory frequency. Elena's shelves began to sing, then to scream. In a crash of crystal, dozens of glass works exploded simultaneously, turning the air into a cloud of flying razors. Marc rushed at Elena to pin her to the floor as the workshop's glass ceiling gave way in turn. In the middle of the chaos, Marc's phone was now projecting a red laser onto the opposite wall, tracing geographical coordinates. The threat was clear: the game had begun, and the time for discreet investigations was over. They were now the prey of the Spider.",
+                            "wordCount": 420,
+                            "status": "complete",
+                            "createdAt": "2026-02-09T22:15:00.000Z",
+                            "updatedAt": "2026-02-09T22:15:00.000Z"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "title": "Act 2: The Truth Shattered",
+            "createdAt": "2026-02-09T22:15:00.000Z",
+            "updatedAt": "2026-02-09T22:15:00.000Z",
+            "metadata": {
+                "color": "#1E88E5",
+                "description": "The revelation of the conspiracy and the ultimate confrontation."
+            },
+            "chapters": [
+                {
+                    "id": 21,
+                    "title": "Chapter 3: The Fragile Lead",
+                    "createdAt": "2026-02-09T22:15:00.000Z",
+                    "updatedAt": "2026-02-09T22:15:00.000Z",
+                    "metadata": {
+                        "description": "Excursion into Blackwood's past."
+                    },
+                    "scenes": [
+                        {
+                            "id": 211,
+                            "title": "Scene 1: The Glassworks of Oblivion",
+                            "content": "The coordinates led Marc far from the coast, into the heart of a forest of conifers so dense they seemed to want to stifle the daylight. There, nestled in a hollow in the valley, stood an ancient industrial glassworks, a monument of red brick and decapitated chimneys. It was here that the \"Crystal King\" had begun his career, long before luxury villas and red carpets. The place breathed abandonment, wild grass forcing through the cracked asphalt of the parking lot.\n\nMarc moved forward, avoiding the carcasses of rusty machines. The air was cold, loaded with a humidity that chilled his bones. He held his weapon with a firm hand, his gaze sweeping across the broken windows that looked like empty eye sockets. Why would Blackwood come back here? Was it a sanctuary or a hiding place? He found a side door ajar, its hinges groaning in the wind.\n\nInside, the atmosphere changed radically. The main hall, immense, was plunged into a bluish gloom. But instead of the expected dust, Marc discovered a state-of-the-art laboratory installed in the center of the nave. Fiber optic cables ran across the floor like technological vines, connecting silent servers to a pressurized glass chamber. In the center of this chamber, suspended by red silk threads identical to the one in the villa, a ruby sphere radiated a pulsing light. The Tsar's Tear. It was not made of ancient glass, but of something much more modern: a photonic processor housed in a crystal shell. Blackwood had not simply found the Tear; he had transformed it into the ultimate communication weapon. Marc approached, fascinated by the toxic beauty of the object, ignoring the shadows that were beginning to detach themselves from the brick pillars.",
+                            "wordCount": 395,
+                            "status": "complete",
+                            "createdAt": "2026-02-09T22:15:00.000Z",
+                            "updatedAt": "2026-02-09T22:15:00.000Z"
+                        },
+                        {
+                            "id": 212,
+                            "title": "Scene 2: The Ambush",
+                            "content": "A familiar metallic click froze Marc in his tracks.\n\"Very impressive, isn't it? A tear of light for a world of shadows.\"\nThe voice came from a hidden speaker, a synthetic voice, devoid of emotion. Marc turned around, his weapon pointed towards the mezzanine. Red laser beams crossed the room, all converging on his chest. He was trapped.\n\n\"You've been useful, Marc. You brought the final component without even knowing it.\"\nMarc felt the bag in his pocket. The red thread. He suddenly understood that Elena was not just a friend; she was the key. The thread was not evidence, it was a sensor. By moving it, Marc had activated a proximity beacon.\nSuddenly, the servers around the laboratory went wild. A sharp hiss filled the glassworks. Flames burst from the abandoned gas tanks, instantly turning the building into a furnace. The fire was no accident; it was a cleaning protocol.\n\nMarc had only a few seconds. He fired two bullets into the window of the pressurized chamber, but the glass remained intact. It was bulletproof crystal. Black smoke began to fill the space, making breathing difficult. He saw the silhouettes of the attackers retreating towards the emergency exits, leaving him to burn alive with Blackwood's secret. But Marc had noticed one thing: the Tear was vibrating at the same pace as his phone. Using his mobile screen as a prism, he directed the red laser he had received earlier towards the heart of the sphere. The interaction was immediate. An overvoltage cracked the armored crystal. In an explosion of purple light, the sphere flew into pieces, shattering the partition. Marc dived through the debris, grabbing the core of the Tear before lunging towards a high window as the glassworks structure began to collapse in a crash of glass and flames.",
+                            "wordCount": 415,
+                            "status": "complete",
+                            "createdAt": "2026-02-09T22:15:00.000Z",
+                            "updatedAt": "2026-02-09T22:15:00.000Z"
+                        }
+                    ]
+                },
+                {
+                    "id": 22,
+                    "title": "Chapter 4: On the Other Side of the Mirror",
+                    "createdAt": "2026-02-09T22:15:00.000Z",
+                    "updatedAt": "2026-02-09T22:15:00.000Z",
+                    "metadata": {
+                        "description": "The final confrontation where everything tips over."
+                    },
+                    "scenes": [
+                        {
+                            "id": 221,
+                            "title": "Scene 1: The Staging",
+                            "content": "Drenched in sweat, his clothes scorched by the flames, Marc took refuge in an old observation post overlooking the valley. He held the core of the Tear in his hands, a small prism that seemed to contain a galaxy of circuits. By inserting his camera's memory card into it, he managed to decrypt the last files recorded by Blackwood. What he saw chilled him more surely than the forest wind.\n\nThe video did not show an attack. It showed Victor Blackwood, very much alive, arranging the glass shards himself in the villa. He was meticulously placing the red thread in the groove of the floor. He was configuring the explosives in Elena's workshop. Blackwood was not the victim; he was the architect of his own disappearance. His \"death\" was a massive diversion to clear his debts, eliminate his rivals and, above all, test his communication system in real conditions.\n\nMarc realized with growing horror that he had been Blackwood's toy from the beginning. The model detective, the upright one looking for the truth, was only a pawn used to transport the core from the glassworks to a safer place. The attackers at the glassworks? Mercenaries paid to simulate a fight and ensure Marc escaped with the precious object. Blackwood wanting Marc to \"save\" the Tear of the Tsar to bring it to its final point of transmission. Marc looked at the horizon. In the distance, the old Pointe-Noire lighthouse lit up. It was the highest point on the coast, the only place capable of sending a photonic signal beyond the horizon. It was there that the King of Crystal was waiting for his resurrection.",
+                            "wordCount": 380,
+                            "status": "complete",
+                            "createdAt": "2026-02-09T22:15:00.000Z",
+                            "updatedAt": "2026-02-09T22:15:00.000Z"
+                        },
+                        {
+                            "id": 222,
+                            "title": "Scene 2: The Lighthouse of Truth",
+                            "content": "The Pointe-Noire lighthouse stood against the rising storm. Marc climbed the spiral stone steps, his step echoing like a knell. Arriving at the top, he found the lantern gallery bathed in blood-red light. Victor Blackwood was there, standing before the lighthouse's monumental optics, his face serene. He was holding a crystal glass in his hand.\n\n\"Hello, Marc. I appreciate your punctuality. Do you have the core?\"\nBlackwood bore no trace of struggle. He looked like he had just come from a gala dinner. Marc stopped a few meters from him, the Tear's prism clutched in his fist.\n\"Why Elena?\" Marc asked in a dull voice.\n\"Sacrifices are necessary for art, Marc. Elena's workshop was the last link to the Glass Spider. This chapter had to be closed. Now give it to me. The signal will go off in three minutes. A new era of control begins.\"\n\nMarc looked at the complex mechanism behind Blackwood. He could have fired, but he knew Blackwood had probably foreseen this outcome. Instead, Marc took out the original red thread bag.\n\"You made a mistake, Victor. You thought I would only see what you wanted me to see. But you forgot that glass doesn't just reflect. It can also refract the truth.\"\nMarc slipped the red thread into the heart of the photonic prism and threw the whole thing not at Blackwood, but directly into the lantern's rotating gears. The silk and optical glass thread got caught in the steel teeth. The mechanism screamed, a spark flew, and the lighthouse's light beam suddenly turned blinding white before going out in a cloud of ozone.\n\nBlackwood rushed towards the lantern, but it was too late. The surge had fried the servers. The Tsar's Tear was no more than a piece of inert glass. The King of Crystal collapsed against the window, looking at the sea which had become dark again. The police were arriving, their sirens climbing the cliff. Marc did not stay for the explanations. He went back down the stairs, leaving behind the extinguished lighthouse and the ghost of a man who had believed he could rule by light. Outside, the rain finally washed away the blood and glass, leaving the world as it was: fragile, but finally rid of its deceptive reflections.",
+                            "wordCount": 435,
+                            "status": "complete",
+                            "createdAt": "2026-02-09T22:15:00.000Z",
+                            "updatedAt": "2026-02-09T22:15:00.000Z"
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "characters": [
+        {
+            "id": "char_marc",
+            "name": "Marc Laroque",
+            "firstName": "Marc",
+            "lastName": "Laroque",
+            "role": "Protagonist / Detective",
+            "occupation": "Private Detective",
+            "age": "42",
+            "avatarEmoji": "🕵️",
+            "roleImportance": 5,
+            "traits": [
+                "Analytical",
+                "Obsessive",
+                "Melancholy",
+                "Stoic"
+            ],
+            "personality": {
+                "intelligence": 18,
+                "force": 12,
+                "robustesse": 14,
+                "empathie": 8,
+                "perception": 19,
+                "agilite": 11,
+                "sociabilite": 7
+            },
+            "physicalDescription": "Tall, features drawn by insomnia. Always wears a gray raincoat and seems to be one step behind the world, except when it comes to observing details.",
+            "past": "Former homicide inspector, he resigned after a case that cost his partner's life. He now lives to solve the puzzles that others consider closed."
+        },
+        {
+            "id": "char_blackwood",
+            "name": "Victor Blackwood",
+            "firstName": "Victor",
+            "lastName": "Blackwood",
+            "role": "Antagonist / Alleged Victim",
+            "occupation": "Glass Tycoon / Inventor",
+            "age": "58",
+            "avatarEmoji": "💎",
+            "roleImportance": 5,
+            "traits": [
+                "Ambitious",
+                "Manipulative",
+                "Perfectionist",
+                "Visionary"
+            ],
+            "personality": {
+                "intelligence": 20,
+                "force": 10,
+                "robustesse": 12,
+                "empathie": 4,
+                "perception": 15,
+                "agilite": 10,
+                "sociabilite": 16
+            },
+            "physicalDescription": "Aristocratic elegance, silver hair perfectly styled. His hands are marked with micro-scars, stigmata of his years of working with glass.",
+            "past": "Founder of Blackwood Optics. He built an empire on the purity of his crystal. Passionate about forgotten imperial technologies, he spent his life looking for the Tsar's Tear."
+        },
+        {
+            "id": "char_elena",
+            "name": "Elena Kovalev",
+            "firstName": "Elena",
+            "lastName": "Kovalev",
+            "role": "Ally / Expert",
+            "occupation": "Master Glassmaker / Optics Expert",
+            "age": "45",
+            "avatarEmoji": "🔥",
+            "roleImportance": 4,
+            "traits": [
+                "Independent",
+                "Grumpy",
+                "Loyal",
+                "Precise"
+            ],
+            "personality": {
+                "intelligence": 17,
+                "force": 14,
+                "robustesse": 16,
+                "empathie": 12,
+                "perception": 18,
+                "agilite": 15,
+                "sociabilite": 10
+            },
+            "physicalDescription": "Arms muscled from working at the furnace, piercing gaze protected by safety goggles. Her leather apron bears the traces of a thousand experiments.",
+            "past": "Granddaughter of an imperial court engineer. She alone possesses the know-how necessary to understand the mechanisms of the Tsar's Tear."
+        }
+    ],
+    "world": [
+        {
+            "id": "loc_villa",
+            "name": "Blackwood Villa",
+            "type": "Place",
+            "description": "An architectural marvel perched on the alabaster cliffs.",
+            "details": "Brushed concrete walls, monumental bay windows offering a bird's-eye view of the ocean. This is where the story begins with the alleged murder of Victor Blackwood.",
+            "history": "Built by Blackwood himself as a laboratory of light and privacy."
+        },
+        {
+            "id": "loc_atelier",
+            "name": "Elena's Workshop",
+            "type": "Place",
+            "description": "A hidden glassworks in the lower industrial districts of the city.",
+            "details": "Stifling heat of the furnaces, smell of ozone and piles of rare optical documents. This is the nerve center of Marc's technical research.",
+            "history": "An old foundry inherited by Elena from her grandfather."
+        },
+        {
+            "id": "loc_verrerie",
+            "name": "Glassworks of Oblivion",
+            "type": "Place",
+            "description": "Abandoned industrial building deep in the black forest.",
+            "details": "Decrepit brick shell hiding a state-of-the-art photonics laboratory. This is where Blackwood assembled the new Tsar's Tear.",
+            "history": "Blackwood's first factory, officially closed twenty years ago."
+        },
+        {
+            "id": "loc_phare",
+            "name": "Pointe-Noire Lighthouse",
+            "type": "Place",
+            "description": "The oldest lighthouse on the coast, overlooking the most dangerous reefs.",
+            "details": "Monumental lantern modified by Blackwood to serve as a global photonic transmission antenna.",
+            "history": "Historical monument, site of the final confrontation."
+        }
+    ],
+    "timeline": [
+        {
+            "id": 1,
+            "title": "Crime at the Villa",
+            "date": "October 15, Midnight",
+            "order": 1,
+            "description": "Marc arrives at the villa to inspect Blackwood's missing corpse.",
+            "characters": [
+                "Marc Laroque"
+            ]
+        },
+        {
+            "id": 2,
+            "title": "The Ruby Clue",
+            "date": "October 15, 02:00",
+            "order": 2,
+            "description": "Discovery of the red silk thread embedded in the floor.",
+            "characters": [
+                "Marc Laroque"
+            ]
+        },
+        {
+            "id": 3,
+            "title": "Analysis at Elena's",
+            "date": "October 15, 10:00",
+            "order": 3,
+            "description": "Marc brings the thread to Elena who identifies the forbidden technology.",
+            "characters": [
+                "Marc Laroque",
+                "Elena Kovalev"
+            ]
+        },
+        {
+            "id": 4,
+            "title": "The Workshop Attack",
+            "date": "October 15, 20:00",
+            "order": 4,
+            "description": "The workshop is hit by a vibratory frequency, massive destruction of works.",
+            "characters": [
+                "Marc Laroque",
+                "Elena Kovalev"
+            ]
+        },
+        {
+            "id": 5,
+            "title": "Infiltration of the Glassworks",
+            "date": "October 16, 04:00",
+            "order": 5,
+            "description": "Marc finds the hidden laboratory and the photonic sphere.",
+            "characters": [
+                "Marc Laroque"
+            ]
+        },
+        {
+            "id": 6,
+            "title": "Fire Diversion",
+            "date": "October 16, 05:30",
+            "order": 6,
+            "description": "Fire at the glassworks, Marc narrowly escapes.",
+            "characters": [
+                "Marc Laroque"
+            ]
+        },
+        {
+            "id": 7,
+            "title": "Staging Decryption",
+            "date": "October 16, 14:00",
+            "order": 7,
+            "description": "Marc realizes Blackwood is alive by analyzing the prism files.",
+            "characters": [
+                "Marc Laroque"
+            ]
+        },
+        {
+            "id": 8,
+            "title": "Final Confrontation",
+            "date": "October 16, 22:00",
+            "order": 8,
+            "description": "The lighthouse signal is neutralized, Blackwood is arrested.",
+            "characters": [
+                "Marc Laroque",
+                "Victor Blackwood"
+            ]
+        }
+    ],
+    "metroTimeline": [
+        {
+            "id": 101,
+            "title": "Arrival at the Villa",
+            "date": "10/15/2026",
+            "order": 1,
+            "description": "Marc Laroque enters Blackwood's home under heavy rain.",
+            "characters": [
+                "char_marc"
+            ],
+            "sceneId": 111
+        },
+        {
+            "id": 102,
+            "title": "Optical Expertise",
+            "date": "10/15/2026",
+            "order": 2,
+            "description": "Elena identifies the ruby thread as a piece of imperial technology.",
+            "characters": [
+                "char_marc",
+                "char_elena"
+            ],
+            "sceneId": 121
+        },
+        {
+            "id": 103,
+            "title": "The Trap Closes",
+            "date": "10/15/2026",
+            "order": 3,
+            "description": "Destructive vibrations in Elena's workshop. Marc saves her just in time.",
+            "characters": [
+                "char_marc",
+                "char_elena"
+            ],
+            "sceneId": 122
+        },
+        {
+            "id": 104,
+            "title": "The Glassworks of Oblivion",
+            "date": "10/16/2026",
+            "order": 4,
+            "description": "Marc infiltrates the secret laboratory and steals the Tsar's Tear.",
+            "characters": [
+                "char_marc"
+            ],
+            "sceneId": 211
+        },
+        {
+            "id": 105,
+            "title": "Final Refraction",
+            "date": "10/16/2026",
+            "order": 5,
+            "description": "Face to face at the top of the lighthouse. Marc sabotages Blackwood's signal.",
+            "characters": [
+                "char_marc",
+                "char_blackwood"
+            ],
+            "sceneId": 222
+        }
+    ],
+    "characterColors": {
+        "char_marc": "#1E88E5",
+        "char_blackwood": "#FB8C00",
+        "char_elena": "#43A047"
+    },
+    "investigationBoard": {
+        "activeCaseId": "case_blackwood_murder",
+        "cases": [
+            {
+                "id": "case_blackwood_murder",
+                "title": "The Crystal King Murder",
+                "description": "Victor Blackwood has been found dead (or has disappeared) in his villa. His fortune and patents are at stake.",
+                "status": "in_progress",
+                "phase": "analysis",
+                "victimId": "char_blackwood",
+                "crimeType": "murder"
+            }
+        ],
+        "facts": [
+            {
+                "id": "fact_death_blackwood",
+                "caseId": "case_blackwood_murder",
+                "type": "crime",
+                "label": "Death of Victor Blackwood",
+                "description": "Victor Blackwood's body was discovered in his office, then disappeared.",
+                "truthStatus": "verified",
+                "relatedCharacterIds": [
+                    "char_blackwood"
+                ],
+                "relatedLocationIds": [
+                    "loc_villa"
+                ],
+                "timeline": [
+                    {
+                        "id": "step_death_1",
+                        "characterId": "char_marc",
+                        "sceneId": 111,
+                        "state": "revealed",
+                        "description": "Marc arrives at the villa and notices Blackwood's (apparent) death."
+                    },
+                    {
+                        "id": "step_death_2",
+                        "characterId": "char_marc",
+                        "sceneId": 221,
+                        "state": "confirmed",
+                        "description": "Marc discovers via Blackwood's files that his death was a staging."
+                    }
+                ]
+            },
+            {
+                "id": "fact_ruby_thread",
+                "caseId": "case_blackwood_murder",
+                "type": "clue",
+                "label": "Ruby Silk Thread",
+                "description": "A ruby red silk thread containing ultra-pure fiber optics.",
+                "truthStatus": "verified",
+                "relatedCharacterIds": [
+                    "char_blackwood",
+                    "char_elena"
+                ],
+                "timeline": [
+                    {
+                        "id": "step_ruby_1",
+                        "characterId": "char_marc",
+                        "sceneId": 112,
+                        "state": "revealed",
+                        "description": "Marc finds the thread embedded in the villa's floor."
+                    },
+                    {
+                        "id": "step_ruby_2",
+                        "characterId": "char_elena",
+                        "sceneId": 121,
+                        "state": "confirmed",
+                        "description": "Elena identifies the thread as high-purity optical fiber."
+                    }
+                ]
+            },
+            {
+                "id": "fact_glass_spider",
+                "caseId": "case_blackwood_murder",
+                "type": "testimony",
+                "label": "The Glass Spider",
+                "description": "Forgery network specializing in Cold War optical technologies.",
+                "truthStatus": "verified",
+                "timeline": [
+                    {
+                        "id": "step_spider_1",
+                        "characterId": "char_elena",
+                        "sceneId": 121,
+                        "state": "hinted",
+                        "description": "Elena mentions the Glass Spider as the thread's probable origin."
+                    }
+                ]
+            },
+            {
+                "id": "fact_tsar_tear",
+                "caseId": "case_blackwood_murder",
+                "type": "object",
+                "label": "Tsar's Tear",
+                "description": "A legendary photonic prism capable of encrypting communications via light.",
+                "truthStatus": "verified",
+                "relatedLocationIds": [
+                    "loc_verrerie",
+                    "loc_phare"
+                ],
+                "timeline": [
+                    {
+                        "id": "step_tear_1",
+                        "characterId": "char_elena",
+                        "sceneId": 122,
+                        "state": "hinted",
+                        "description": "Elena explains the technological nature of the Tsar's Tear."
+                    },
+                    {
+                        "id": "step_tear_2",
+                        "characterId": "char_marc",
+                        "sceneId": 211,
+                        "state": "revealed",
+                        "description": "Marc discovers the ruby sphere (The Tear) in the glassworks of oblivion."
+                    }
+                ]
+            }
+        ],
+        "knowledge": [
+            {
+                "characterId": "char_marc",
+                "factId": "fact_death_blackwood",
+                "sceneId": 111,
+                "state": "knows"
+            },
+            {
+                "characterId": "char_marc",
+                "factId": "fact_ruby_thread",
+                "sceneId": 112,
+                "state": "knows"
+            },
+            {
+                "characterId": "char_elena",
+                "factId": "fact_ruby_thread",
+                "sceneId": 121,
+                "state": "knows"
+            },
+            {
+                "characterId": "char_marc",
+                "factId": "fact_glass_spider",
+                "sceneId": 121,
+                "state": "suspicious"
+            },
+            {
+                "characterId": "char_elena",
+                "factId": "fact_glass_spider",
+                "sceneId": 121,
+                "state": "knows"
+            },
+            {
+                "characterId": "char_marc",
+                "factId": "fact_tsar_tear",
+                "sceneId": 122,
+                "state": "suspicious"
+            },
+            {
+                "characterId": "char_elena",
+                "factId": "fact_tsar_tear",
+                "sceneId": 122,
+                "state": "knows"
+            }
+        ],
+        "suspectLinks": [
+            {
+                "id": "mmo_marc_blackwood",
+                "caseId": "case_blackwood_murder",
+                "suspectId": "char_marc",
+                "victimId": "fact_death_blackwood",
+                "motive": {
+                    "level": 2,
+                    "description": "Need for closure on a past case involving Blackwood."
+                },
+                "means": {
+                    "level": 8,
+                    "description": "Possesses a service weapon and tactical knowledge."
+                },
+                "opportunity": {
+                    "level": 5,
+                    "description": "Was on site shortly after the crime."
+                }
+            },
+            {
+                "id": "mmo_elena_blackwood",
+                "caseId": "case_blackwood_murder",
+                "suspectId": "char_elena",
+                "victimId": "fact_death_blackwood",
+                "motive": {
+                    "level": 4,
+                    "description": "Blackwood used her family's patents without compensation."
+                },
+                "means": {
+                    "level": 10,
+                    "description": "Technical ability to sabotage the villa's glass."
+                },
+                "opportunity": {
+                    "level": 3,
+                    "description": "Unverified alibi of working in her workshop."
+                }
+            }
+        ]
+    },
+    "plotGrid": {
+        "columns": [
+            {
+                "id": "pg_col_struct",
+                "type": "structure",
+                "title": "Narrative Structure",
+                "order": 0
+            },
+            {
+                "id": "pg_col_spider",
+                "type": "custom",
+                "title": "Arc A: The Glass Spider",
+                "order": 1
+            },
+            {
+                "id": "pg_col_tear",
+                "type": "custom",
+                "title": "Arc B: Tsar's Tear",
+                "order": 2
+            },
+            {
+                "id": "pg_col_chars",
+                "type": "custom",
+                "title": "Arc C: Marc & Elena",
+                "order": 3
+            }
+        ],
+        "rows": [
+            {
+                "id": "pg_row_111",
+                "type": "structure",
+                "structureId": 111,
+                "structureType": "scene",
+                "order": 0
+            },
+            {
+                "id": "pg_row_112",
+                "type": "structure",
+                "structureId": 112,
+                "structureType": "scene",
+                "order": 10
+            },
+            {
+                "id": "pg_row_121",
+                "type": "structure",
+                "structureId": 121,
+                "structureType": "scene",
+                "order": 20
+            },
+            {
+                "id": "pg_row_122",
+                "type": "structure",
+                "structureId": 122,
+                "structureType": "scene",
+                "order": 30
+            },
+            {
+                "id": "pg_row_211",
+                "type": "structure",
+                "structureId": 211,
+                "structureType": "scene",
+                "order": 40
+            },
+            {
+                "id": "pg_row_212",
+                "type": "structure",
+                "structureId": 212,
+                "structureType": "scene",
+                "order": 50
+            },
+            {
+                "id": "pg_row_221",
+                "type": "structure",
+                "structureId": 221,
+                "structureType": "scene",
+                "order": 60
+            },
+            {
+                "id": "pg_row_222",
+                "type": "structure",
+                "structureId": 222,
+                "structureType": "scene",
+                "order": 70
+            }
+        ],
+        "cards": [
+            {
+                "id": "card_1",
+                "rowId": "pg_row_111",
+                "colId": "pg_col_spider",
+                "title": "The Purple Clue",
+                "content": "Marc notices a glass shard that doesn't come from the villa."
+            },
+            {
+                "id": "card_2",
+                "rowId": "pg_row_112",
+                "colId": "pg_col_spider",
+                "title": "The Ruby Thread",
+                "content": "Discovery of the silk thread. First concrete link with the organization."
+            },
+            {
+                "id": "card_3",
+                "rowId": "pg_row_121",
+                "colId": "pg_col_chars",
+                "title": "Old Wounds",
+                "content": "Elena and Marc evoke their shared past and the reason for their breakup."
+            },
+            {
+                "id": "card_4",
+                "rowId": "pg_row_121",
+                "colId": "pg_col_tear",
+                "title": "The Glass Soul",
+                "content": "Elena reveals that the thread contains military fiber optics."
+            },
+            {
+                "id": "card_5",
+                "rowId": "pg_row_122",
+                "colId": "pg_col_tear",
+                "title": "The Imperial Project",
+                "content": "Origin of the Tear: a prism communication system."
+            },
+            {
+                "id": "card_6",
+                "rowId": "pg_row_211",
+                "colId": "pg_col_tear",
+                "title": "The Prototype",
+                "content": "Marc finds the sphere in the disused factory. It is active."
+            },
+            {
+                "id": "card_7",
+                "rowId": "pg_row_221",
+                "colId": "pg_col_spider",
+                "title": "The Architect",
+                "content": "Revelation: Blackwood orchestrated everything."
+            },
+            {
+                "id": "card_8",
+                "rowId": "pg_row_222",
+                "colId": "pg_col_spider",
+                "title": "Power Cut",
+                "content": "Marc sabotages the lighthouse signal, neutralizing the Spider's network."
+            }
+        ]
+    },
+    "narrativeArcs": [
+        {
+            "id": "arc_spider",
+            "title": "Arc A: The Glass Spider",
+            "category": "mystery",
+            "color": "#607d8b",
+            "description": "Investigation into the forgery network.",
+            "type": "mystery",
+            "importance": "major",
+            "board": {
+                "items": [
+                    {
+                        "id": "item_1707519130001",
+                        "type": "column",
+                        "x": 50,
+                        "y": 50,
+                        "title": "Investigation",
+                        "width": 160,
+                        "cards": [
+                            {
+                                "id": "arc_card_a1",
+                                "type": "scene",
+                                "sceneId": 111,
+                                "sceneTitle": "Scene 1: Arrival at the Scene",
+                                "breadcrumb": "ACT 1: THE TRAP › CHAPTER 1: BROKEN GLASS",
+                                "status": "complete"
+                            },
+                            {
+                                "id": "arc_card_a2",
+                                "type": "scene",
+                                "sceneId": 112,
+                                "sceneTitle": "Scene 2: The Red Thread",
+                                "breadcrumb": "ACT 1: THE TRAP › CHAPTER 1: BROKEN GLASS",
+                                "status": "complete"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "item_1707519130002",
+                        "type": "column",
+                        "x": 710,
+                        "y": 50,
+                        "title": "3. The Architect",
+                        "width": 260,
+                        "cards": [
+                            {
+                                "id": "arc_card_a7",
+                                "type": "scene",
+                                "sceneId": 221,
+                                "sceneTitle": "Scene 1: The Staging",
+                                "breadcrumb": "ACT 2: THE TRUTH SHATTERED › CHAPTER 4",
+                                "status": "complete"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "item_1707519130003",
+                        "type": "column",
+                        "x": 1040,
+                        "y": 50,
+                        "title": "4. Sabotage",
+                        "width": 260,
+                        "cards": [
+                            {
+                                "id": "arc_card_a8",
+                                "type": "scene",
+                                "sceneId": 222,
+                                "sceneTitle": "Scene 2: The Lighthouse of Truth",
+                                "breadcrumb": "ACT 2: THE TRUTH SHATTERED › CHAPTER 4",
+                                "status": "complete"
+                            }
+                        ]
+                    }
+                ],
+                "connections": [
+                    {
+                        "id": "conn_a1_a2",
+                        "from": "item_1707519130001",
+                        "fromSide": "right",
+                        "to": "item_1707519130002",
+                        "toSide": "left"
+                    },
+                    {
+                        "id": "conn_a2_a3",
+                        "from": "item_1707519130002",
+                        "fromSide": "right",
+                        "to": "item_1707519130003",
+                        "toSide": "left"
+                    }
+                ]
+            },
+            "scenePresence": [
+                {
+                    "sceneId": 111,
+                    "columnId": "item_1707519130001",
+                    "intensity": 3
+                },
+                {
+                    "sceneId": 112,
+                    "columnId": "item_1707519130001",
+                    "intensity": 4
+                },
+                {
+                    "sceneId": 221,
+                    "columnId": "item_1707519130002",
+                    "intensity": 5
+                },
+                {
+                    "sceneId": 222,
+                    "columnId": "item_1707519130003",
+                    "intensity": 5
+                }
+            ]
+        },
+        {
+            "id": "arc_tear",
+            "title": "Arc B: Tsar's Tear",
+            "category": "plot",
+            "color": "#e74c3c",
+            "description": "Photonic technology and the imperial project.",
+            "type": "plot",
+            "importance": "major",
+            "board": {
+                "items": [
+                    {
+                        "id": "item_1707519130004",
+                        "type": "column",
+                        "x": 50,
+                        "y": 50,
+                        "title": "1. The Glass Soul",
+                        "width": 260,
+                        "cards": [
+                            {
+                                "id": "arc_card_b4",
+                                "type": "scene",
+                                "sceneId": 121,
+                                "sceneTitle": "Scene 1: The Expert",
+                                "breadcrumb": "ACT 1: THE TRAP › CHAPTER 2",
+                                "status": "complete"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "item_1707519130005",
+                        "type": "column",
+                        "x": 380,
+                        "y": 50,
+                        "title": "2. Imperial Project",
+                        "width": 260,
+                        "cards": [
+                            {
+                                "id": "arc_card_b5",
+                                "type": "scene",
+                                "sceneId": 122,
+                                "sceneTitle": "Scene 2: The Tsar's Tear",
+                                "breadcrumb": "ACT 1: THE TRAP › CHAPTER 2",
+                                "status": "complete"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "item_1707519130006",
+                        "type": "column",
+                        "x": 710,
+                        "y": 50,
+                        "title": "3. The Prototype",
+                        "width": 260,
+                        "cards": [
+                            {
+                                "id": "arc_card_b6",
+                                "type": "scene",
+                                "sceneId": 211,
+                                "sceneTitle": "Scene 1: The Glassworks of Oblivion",
+                                "breadcrumb": "ACT 2: THE TRUTH SHATTERED › CHAPTER 3",
+                                "status": "complete"
+                            }
+                        ]
+                    }
+                ],
+                "connections": [
+                    {
+                        "id": "conn_b1_b2",
+                        "from": "item_1707519130004",
+                        "fromSide": "right",
+                        "to": "item_1707519130005",
+                        "toSide": "left"
+                    },
+                    {
+                        "id": "conn_b2_b3",
+                        "from": "item_1707519130005",
+                        "fromSide": "right",
+                        "to": "item_1707519130006",
+                        "toSide": "left"
+                    }
+                ]
+            },
+            "scenePresence": [
+                {
+                    "sceneId": 121,
+                    "columnId": "item_1707519130004",
+                    "intensity": 5
+                },
+                {
+                    "sceneId": 122,
+                    "columnId": "item_1707519130005",
+                    "intensity": 3
+                },
+                {
+                    "sceneId": 211,
+                    "columnId": "item_1707519130006",
+                    "intensity": 4
+                }
+            ]
+        },
+        {
+            "id": "arc_relationship",
+            "title": "Arc C: Marc & Elena",
+            "category": "relationship",
+            "color": "#e91e63",
+            "description": "Their reunion and the evolution of their dynamic.",
+            "type": "relationship",
+            "importance": "minor",
+            "board": {
+                "items": [
+                    {
+                        "id": "item_1707519130007",
+                        "type": "column",
+                        "x": 50,
+                        "y": 50,
+                        "title": "1. Past Wounds",
+                        "width": 260,
+                        "cards": [
+                            {
+                                "id": "arc_card_c3",
+                                "type": "scene",
+                                "sceneId": 121,
+                                "sceneTitle": "Scene 1: The Expert",
+                                "breadcrumb": "ACT 1: THE TRAP › CHAPTER 2",
+                                "status": "complete"
+                            }
+                        ]
+                    }
+                ],
+                "connections": []
+            },
+            "scenePresence": [
+                {
+                    "sceneId": 121,
+                    "columnId": "item_1707519130007",
+                    "intensity": 4
+                }
+            ]
+        }
+    ],
+    "interArcConnections": [
+        {
+            "id": "inter_a2_b4",
+            "fromArcId": "arc_spider",
+            "fromItemId": "arc_card_a2",
+            "fromSide": "right",
+            "toArcId": "arc_tear",
+            "toItemId": "arc_card_b4",
+            "toSide": "left",
+            "type": "cause",
+            "label": "Need for expertise"
+        },
+        {
+            "id": "inter_b6_a7",
+            "fromArcId": "arc_tear",
+            "fromItemId": "arc_card_b6",
+            "fromSide": "right",
+            "toArcId": "arc_spider",
+            "toItemId": "arc_card_a7",
+            "toSide": "left",
+            "type": "cause",
+            "label": "Damning evidence"
+        },
+        {
+            "id": "inter_c3_b4",
+            "fromArcId": "arc_relationship",
+            "fromItemId": "arc_card_c3",
+            "fromSide": "right",
+            "toArcId": "arc_tear",
+            "toItemId": "arc_card_b4",
+            "toSide": "left",
+            "type": "parallel",
+            "label": "Shared tension"
+        }
+    ],
+    "arcCategories": {},
+    "collapsedArcCategories": [],
+    "notes": [],
+    "codex": [],
+    "stats": {
+        "dailyGoal": 500,
+        "totalGoal": 80000,
+        "writingSessions": []
+    },
+    "versions": [],
+    "relationships": [],
+    "relations": [
+        {
+            "id": "rel_marc_elena",
+            "char1Id": "char_marc",
+            "char2Id": "char_elena",
+            "type": "friendship",
+            "description": "Trusted former colleagues. Elena helps Marc decode technological evidence.",
+            "createdAt": "2026-02-10T21:40:00.000Z"
+        },
+        {
+            "id": "rel_marc_blackwood",
+            "char1Id": "char_marc",
+            "char2Id": "char_blackwood",
+            "type": "rivalry",
+            "description": "Marc seeks to expose Blackwood's fraud, while Blackwood manipulates him.",
+            "createdAt": "2026-02-10T21:40:00.000Z"
+        },
+        {
+            "id": "rel_elena_blackwood",
+            "char1Id": "char_elena",
+            "char2Id": "char_blackwood",
+            "type": "rivalry",
+            "description": "Elena despises Blackwood for exploiting her family's patents.",
+            "createdAt": "2026-02-10T21:40:00.000Z"
+        }
+    ],
+    "characterPositions": {
+        "char_elena": {
+            "x": 300,
+            "y": 200
+        },
+        "char_marc": {
+            "x": 550,
+            "y": 350
+        },
+        "char_blackwood": {
+            "x": 300,
+            "y": 500
+        }
+    },
+    "maps": [
+        {
+            "id": 1707519130000,
+            "name": "Map of the Alabaster Coast",
+            "image": "https://images.unsplash.com/photo-1526772662000-3f88f10405ff?q=80&w=1000",
+            "locations": [
+                {
+                    "name": "Blackwood Villa",
+                    "x": 75,
+                    "y": 25,
+                    "description": "Perched on the cliff, starting point of the investigation.",
+                    "typeId": "crime-scene"
+                },
+                {
+                    "name": "Elena's Workshop",
+                    "x": 30,
+                    "y": 60,
+                    "description": "Lower industrial area, technical refuge.",
+                    "typeId": "hideout"
+                },
+                {
+                    "name": "Glassworks of Oblivion",
+                    "x": 15,
+                    "y": 15,
+                    "description": "Hidden in the dense forest, photonics laboratory.",
+                    "typeId": "default"
+                },
+                {
+                    "name": "Pointe-Noire Lighthouse",
+                    "x": 85,
+                    "y": 80,
+                    "description": "Highest point of the coast, site of the final confrontation.",
+                    "typeId": "marker"
+                }
+            ]
+        }
+    ],
+    "globalnotes": {
+        "boards": [],
+        "items": [],
+        "activeBoardId": null
+    }
+}

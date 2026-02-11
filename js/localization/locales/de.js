@@ -165,6 +165,10 @@ const LOCALE_DE = {
     "btn.apply": "Anwenden",
     "btn.add_project": "+ Neues Projekt",
     "btn.import_project": "Projekt importieren",
+    "btn.import_demo": "Demo importieren",
+    "btn.google_drive": "Google Drive",
+    "project.viewmodel.import_success": "Demo-Projekt \"{0}\" erfolgreich importiert!",
+    "project.viewmodel.import_error": "Fehler beim Importieren der Demo: {0}",
 
     // --- Editor Toolbar & Color Palette ---
     "toolbar.bold": "Fett (Strg+B)",
