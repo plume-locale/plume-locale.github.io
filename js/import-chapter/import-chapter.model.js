@@ -754,12 +754,13 @@ const ImportChapterModel = {
      * @param {string} html - Contenu HTML
      * @returns {number}
      */
-    countWords(html) {
-        if (!html) return 0;
-        const temp = document.createElement('div');
-        temp.innerHTML = html;
-        const text = temp.textContent || temp.innerText || '';
-        const words = text.trim().match(/[\p{L}]+/gu);
-        return words ? words.length : 0;
+    countWords(text) {
+        if (typeof StatsModel !== 'undefined' && typeof StatsModel.getWordCount === 'function') {
+            return StatsModel.getWordCount(text);
+        }
+        // Fallback matching StatsModel logic if StatsModel is not available
+        if (!text) return 0;
+        const cleanText = text.replace(/<[^>]*>/g, ' ').replace(/&nbsp;/g, ' ').replace(/&[a-z]+;/g, ' ');
+        return cleanText.split(/\s+/).filter(w => w.length > 0).length;
     }
 };

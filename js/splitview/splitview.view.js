@@ -278,7 +278,7 @@ function renderSplitPanelViewContent(panel) {
 
 /** [MVVM : View] - Génère le HTML complet de l'éditeur pour un panneau split */
 function renderEditorInContainer(act, chapter, scene, container, panel) {
-    const wordCount = typeof getWordCount === 'function' ? getWordCount(scene.content || '') : 0;
+    const wordCount = (scene.content && typeof StatsModel !== 'undefined') ? StatsModel.getWordCount(scene.content) : (scene.wordCount || 0);
 
     // Vérifier si une version finale existe
     const hasFinalVersion = scene.versions && scene.versions.some(v => v.isFinal === true);
@@ -290,56 +290,70 @@ function renderEditorInContainer(act, chapter, scene, container, panel) {
     const toolbarHTML = typeof getEditorToolbarHTML === 'function' ? getEditorToolbarHTML(panel) : '';
 
     container.innerHTML = `
-        <div class="editor-fixed-top" style="position: relative;">
-            <div class="editor-header">
-                <div class="editor-breadcrumb">${act.title} > ${chapter.title}</div>
-                <div style="display: flex; align-items: center; gap: 1rem;">
-                    <div class="editor-title" style="flex: 1;">${scene.title}${finalVersionBadge}</div>
-                </div>
-                <div class="editor-meta">
-                    <span class="split-word-count-${panel}">${Localization.t('editor.word_count', [wordCount])}</span>
-                    <span>${Localization.t('editor.last_modified', [new Date().toLocaleDateString(Localization.getLocale() === 'fr' ? 'fr-FR' : 'en-US')])}</span>
-                </div>
-            </div>
-            <button class="toolbar-mobile-toggle" onclick="toggleSplitEditorToolbar('${panel}')">
-                <span><i data-lucide="pen-line" style="width:14px;height:14px;vertical-align:middle;margin-right:4px;"></i>${Localization.t('split.toolbar_formatting')}</span>
-            </button>
-            <div class="editor-toolbar" id="editorToolbar-${panel}">
-                ${toolbarHTML}
-            </div>
-            <div class="links-panel-sticky" id="linksPanel-${panel}">
-                <div style="display: flex; gap: 2rem; align-items: start;">
-                    <div style="flex: 1;">
-                        <div style="font-size: 0.85rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--text-muted);"><i data-lucide="users" style="width:14px;height:14px;vertical-align:middle;margin-right:4px;"></i>${Localization.t('split.links_characters')}</div>
-                        <div class="quick-links"></div>
+        <div style="height: 100%; display: flex; flex-direction: column; overflow: hidden;">
+            <div class="editor-fixed-top" style="position: relative; flex-shrink: 0;">
+                <div class="editor-header">
+                    <div class="header-main-row">
+                        <div class="editor-breadcrumb">
+                            <span class="breadcrumb-item">${act.title}</span>
+                            <span class="breadcrumb-separator">></span>
+                            <span class="breadcrumb-item">${chapter.title}</span>
+                            <span class="breadcrumb-separator">></span>
+                            <span class="breadcrumb-item scene-title-item">${scene.title}${finalVersionBadge}</span>
+                        </div>
+                        
+                        <div class="header-right-tools">
+                            <div class="header-status" onclick="toggleSceneStatus(${act.id}, ${chapter.id}, ${scene.id}, event)">
+                                <span class="status-indicator status-${scene.status || 'draft'}"></span>
+                                <span class="status-label">${Localization.t('sidebar.status.' + (scene.status || 'draft'))}</span>
+                            </div>
+                            <div class="header-stats">
+                                <span class="split-word-count-${panel}">${Localization.t('editor.word_count', [wordCount])}</span>
+                            </div>
+                            <button class="btn-focus-toggle" onclick="toggleFocusMode()" title="${Localization.t('editor.focus_mode_title')}">
+                                <i data-lucide="maximize" style="width:14px;height:14px;"></i>
+                            </button>
+                        </div>
                     </div>
-                    <div style="flex: 1;">
-                        <div style="font-size: 0.85rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--text-muted);"><i data-lucide="globe" style="width:14px;height:14px;vertical-align:middle;margin-right:4px;"></i>${Localization.t('split.links_world')}</div>
-                        <div class="quick-links"></div>
-                    </div>
-                    <div style="flex: 1;">
-                        <div style="font-size: 0.85rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--text-muted);"><i data-lucide="train-track" style="width:14px;height:14px;vertical-align:middle;margin-right:4px;"></i>${Localization.t('split.links_timeline')}</div>
-                        <div class="quick-links"></div>
+                    
+                    <div class="header-summary-row">
+                        <div class="summary-container">
+                            <div style="font-size: 0.85rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--text-muted); display: flex; align-items: center; gap: 0.5rem;">
+                                <i data-lucide="file-text" style="width:14px;height:14px;color:var(--text-muted);"></i>
+                                <span class="synopsis-header-label">${Localization.t('editor.synopsis_label')}</span>
+                            </div>
+                            <textarea class="synopsis-input" 
+                                      placeholder="${Localization.t('editor.synopsis_placeholder')}"
+                                      onchange="updateSceneSynopsis(${act.id}, ${chapter.id}, ${scene.id}, this.value)"
+                                      oninput="this.style.height = 'auto'; this.style.height = this.scrollHeight + 'px';">${(scene.synopsis || '')}</textarea>
+                        </div>
                     </div>
                 </div>
+
+                <button class="toolbar-mobile-toggle" onclick="toggleSplitEditorToolbar('${panel}')">
+                    <span><i data-lucide="pen-line" style="width:14px;height:14px;vertical-align:middle;margin-right:4px;"></i>${Localization.t('split.toolbar_formatting')}</span>
+                </button>
+                <div class="editor-toolbar" id="editorToolbar-${panel}">
+                    ${toolbarHTML}
+                </div>
             </div>
-        </div>
-        <div class="editor-workspace">
-            <div class="editor-content">
-                <div 
-                    class="editor-textarea" 
-                    contenteditable="true"
-                    spellcheck="true"
-                    id="editor-${panel}"
-                    data-panel="${panel}"
-                    data-scene-id="${scene.id}"
-                    data-chapter-id="${chapter.id}"
-                    data-act-id="${act.id}"
-                    data-placeholder="${Localization.t('split.placeholder_start')}"
-                    oninput="updateSplitSceneContent(this)"
-                    onkeydown="typeof handleEditorKeydown === 'function' ? handleEditorKeydown(event) : null"
-                >${scene.content || ''}</div>
-            </div>
+
+                <div class="editor-workspace" style="flex: 1; min-height: 0; overflow-y: auto; background: var(--bg-primary);">
+                    <div class="editor-content" style="width: 100%; max-width: 900px; margin: 0 auto; padding: 2rem; min-height: 100%;">
+                        <div class="editor-textarea" 
+                             contenteditable="true" 
+                             spellcheck="true" 
+                             id="editor-${panel}"
+                             data-panel="${panel}"
+                             data-scene-id="${scene.id}"
+                             data-chapter-id="${chapter.id}"
+                             data-act-id="${act.id}"
+                             oninput="updateSplitSceneContent(this)"
+                             onkeydown="typeof handleEditorKeydown === 'function' ? handleEditorKeydown(event) : null"
+                             style="width: 100%; background: transparent; min-height: 80vh; outline: none; line-height: 1.8; font-size: 1.1rem;"
+                        >${scene.content || ''}</div>
+                    </div>
+                </div>
         </div>
     `;
 
@@ -347,6 +361,14 @@ function renderEditorInContainer(act, chapter, scene, container, panel) {
     setTimeout(() => {
         if (typeof lucide !== 'undefined') lucide.createIcons();
         if (typeof initializeColorPickers === 'function') initializeColorPickers(panel);
+
+        // Initial Tension Check
+        if (typeof updateLiveTensionMeter === 'function' && scene.content) {
+            // Strip HTML for tension calculation to be safe, or let the handler do it
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = scene.content;
+            updateLiveTensionMeter(tempDiv.innerText || tempDiv.textContent || '', { sceneId: scene.id, chapterId: chapter.id, actId: act.id });
+        }
     }, 50);
 }
 
@@ -373,9 +395,16 @@ function formatTextInPanel(panel, command, value = null) {
     // Focus the editor
     editor.focus();
 
-    // S'assurer que le rendu se fait via CSS
+    // Normalize formatBlock values to <tag> format for cross-browser compatibility
+    if (command === 'formatBlock' && value && !value.startsWith('<')) {
+        value = '<' + value + '>';
+    }
+
+    // Privilégier les balises HTML sémantiques (<strong>, <em>, <u>)
+    // sauf pour les couleurs qui n'ont pas d'équivalent HTML
+    const colorCommands = ['foreColor', 'hiliteColor', 'backColor'];
     try {
-        document.execCommand('styleWithCSS', false, true);
+        document.execCommand('styleWithCSS', false, colorCommands.includes(command));
     } catch (e) { }
 
     // Execute the command

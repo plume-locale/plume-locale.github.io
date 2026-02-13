@@ -124,7 +124,11 @@ function renderWorldList() {
                             <div class="treeview-item" onclick="openWorldDetail('${elem.id}')">
                                 <span class="treeview-item-icon"><i data-lucide="${iconName}" style="width:14px;height:14px;vertical-align:middle;"></i></span>
                                 <span class="treeview-item-label">${elem.name}</span>
-                                <button class="treeview-item-delete" onclick="event.stopPropagation(); handleDeleteWorldElement('${elem.id}')" title="${Localization.t('world.action.delete')}"><i data-lucide="x" style="width:12px;height:12px;"></i></button>
+                                <div class="treeview-item-actions">
+                                    <button class="treeview-action-btn" onclick="event.stopPropagation(); openWorldDetail('${elem.id}', { forceNew: true })" title="${Localization.t('tabs.open_new')}"><i data-lucide="plus-square" style="width:12px;height:12px;"></i></button>
+                                    <button class="treeview-action-btn" onclick="event.stopPropagation(); openWorldDetail('${elem.id}', { replaceCurrent: true })" title="${Localization.t('tabs.replace')}"><i data-lucide="maximize-2" style="width:12px;height:12px;"></i></button>
+                                    <button class="treeview-action-btn delete" onclick="event.stopPropagation(); handleDeleteWorldElement('${elem.id}')" title="${Localization.t('world.action.delete')}"><i data-lucide="x" style="width:12px;height:12px;"></i></button>
+                                </div>
                             </div>
                         `;
         }).join('')}
@@ -140,85 +144,85 @@ function renderWorldList() {
 /**
  * Opens the detail view for a world element.
  */
-function openWorldDetail(id) {
+function openWorldDetail(id, options = {}) {
     const data = getWorldDetailViewModel(id);
     if (!data) return;
 
-    // Handle split view mode
+    // Orchestration Onglets (Préféré)
+    if (typeof openTab === 'function') {
+        openTab('world', { worldId: id }, options);
+        return;
+    }
+
+    // Handle split view mode (Legacy)
     if (typeof splitViewActive !== 'undefined' && splitViewActive) {
-        const state = splitActivePanel === 'left' ? splitViewState.left : splitViewState.right;
-        if (state.view === 'world') {
-            state.worldId = id;
-            if (typeof renderSplitPanelViewContent === 'function') {
-                renderSplitPanelViewContent(splitActivePanel);
-            }
-            if (typeof saveSplitViewState === 'function') {
-                saveSplitViewState();
-            }
-            return;
-        }
+        // ... handled by splitview system if needed
     }
 
     const editorView = document.getElementById('editorView');
     if (!editorView) return;
 
+    const typeIcon = WORLD_TYPE_ICONS[data.element.type] || 'circle';
+
     editorView.innerHTML = `
         <div class="detail-view">
-            <div class="detail-header">
-                <div style="display: flex; align-items: center; gap: 1rem;">
-                    <div class="detail-title">${data.element.name}</div>
-                    <span style="font-size: 0.9rem; padding: 0.5rem 1rem; background: var(--accent-gold); color: var(--bg-primary); border-radius: 2px;">${Localization.t(WORLD_TYPE_I18N[data.element.type] || 'world.type.other')}</span>
+            <div class="detail-header" style="display:flex; align-items:center; justify-content:space-between; gap:1rem;">
+                <div style="display: flex; align-items: center; gap: 1rem; flex:1;">
+                    <div style="width:42px; height:42px; border-radius:10px; background:var(--accent-gold); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                        <i data-lucide="${typeIcon}" style="width:20px;height:20px;color:var(--bg-primary);"></i>
+                    </div>
+                    <div class="detail-title" style="margin-bottom:0;">${data.element.name}</div>
+                    <span style="font-size: 0.75rem; padding: 0.35rem 0.75rem; background: var(--accent-gold); color: var(--bg-primary); border-radius: 12px; font-weight:600; white-space:nowrap;">${Localization.t(WORLD_TYPE_I18N[data.element.type] || 'world.type.other')}</span>
                 </div>
                 <div style="display: flex; gap: 0.5rem;">
                     <button class="btn btn-small" onclick="showReferencesForElement('${id}')"><i data-lucide="link" style="width:14px;height:14px;vertical-align:middle;margin-right:4px;"></i>${Localization.t('world.action.view_refs')}</button>
                     <button class="btn" onclick="switchView('editor')"><i data-lucide="arrow-left" style="width:14px;height:14px;vertical-align:middle;margin-right:4px;"></i> ${Localization.t('world.action.back_editor')}</button>
                 </div>
             </div>
-            
+
             ${renderLinkedScenesFragment(data.linkedScenes)}
-            
-            <div class="detail-section">
-                <div class="detail-section-title">${Localization.t('world.section.base_info')}</div>
-                <div class="detail-field">
-                    <div class="detail-label">${Localization.t('world.field.name')}</div>
-                    <input type="text" class="form-input" value="${data.element.name}" 
+
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1.5rem;">
+                <div class="detail-section">
+                    <div class="detail-section-title"><i data-lucide="pen-line" style="width:16px;height:16px;vertical-align:middle;margin-right:6px;"></i>${Localization.t('world.field.name')}</div>
+                    <input type="text" class="form-input" value="${data.element.name}" style="width:100%;"
                            onchange="handleUpdateWorldField('${id}', 'name', this.value)">
+                </div>
+
+                <div class="detail-section">
+                    <div class="detail-section-title"><i data-lucide="tag" style="width:16px;height:16px;vertical-align:middle;margin-right:6px;"></i>${Localization.t('world.section.type')}</div>
+                    <select class="form-input" onchange="handleUpdateWorldField('${id}', 'type', this.value)" style="width:100%;">
+                        <option value="Lieu" ${data.element.type === 'Lieu' ? 'selected' : ''}>${Localization.t('world.type.place')}</option>
+                        <option value="Objet" ${data.element.type === 'Objet' ? 'selected' : ''}>${Localization.t('world.type.object')}</option>
+                        <option value="Concept" ${data.element.type === 'Concept' ? 'selected' : ''}>${Localization.t('world.type.concept')}</option>
+                        <option value="Organisation" ${data.element.type === 'Organisation' ? 'selected' : ''}>${Localization.t('world.type.organization')}</option>
+                        <option value="Événement" ${data.element.type === 'Événement' || data.element.type === 'événement' ? 'selected' : ''}>${Localization.t('world.type.event')}</option>
+                    </select>
                 </div>
             </div>
 
             <div class="detail-section">
-                <div class="detail-section-title">${Localization.t('world.section.type')}</div>
-                <select class="form-input" onchange="handleUpdateWorldField('${id}', 'type', this.value)">
-                    <option value="Lieu" ${data.element.type === 'Lieu' ? 'selected' : ''}>${Localization.t('world.type.place')}</option>
-                    <option value="Objet" ${data.element.type === 'Objet' ? 'selected' : ''}>${Localization.t('world.type.object')}</option>
-                    <option value="Concept" ${data.element.type === 'Concept' ? 'selected' : ''}>${Localization.t('world.type.concept')}</option>
-                    <option value="Organisation" ${data.element.type === 'Organisation' ? 'selected' : ''}>${Localization.t('world.type.organization')}</option>
-                    <option value="Événement" ${data.element.type === 'Événement' || data.element.type === 'événement' ? 'selected' : ''}>${Localization.t('world.type.event')}</option>
-                </select>
+                <div class="detail-section-title"><i data-lucide="align-left" style="width:16px;height:16px;vertical-align:middle;margin-right:6px;"></i>${Localization.t('world.section.description')}</div>
+                <textarea class="form-input" rows="6" style="width:100%; resize:vertical; line-height:1.7;"
+                          oninput="handleUpdateWorldField('${id}', 'description', this.value)">${data.element.description || ''}</textarea>
             </div>
 
             <div class="detail-section">
-                <div class="detail-section-title">${Localization.t('world.section.description')}</div>
-                <textarea class="form-input" rows="6" 
-                          onchange="handleUpdateWorldField('${id}', 'description', this.value)">${data.element.description}</textarea>
+                <div class="detail-section-title"><i data-lucide="list" style="width:16px;height:16px;vertical-align:middle;margin-right:6px;"></i>${Localization.t('world.section.details')}</div>
+                <textarea class="form-input" rows="6" style="width:100%; resize:vertical; line-height:1.7;"
+                          oninput="handleUpdateWorldField('${id}', 'details', this.value)">${data.element.details || ''}</textarea>
             </div>
 
             <div class="detail-section">
-                <div class="detail-section-title">${Localization.t('world.section.details')}</div>
-                <textarea class="form-input" rows="6" 
-                          onchange="handleUpdateWorldField('${id}', 'details', this.value)">${data.element.details}</textarea>
+                <div class="detail-section-title"><i data-lucide="clock" style="width:16px;height:16px;vertical-align:middle;margin-right:6px;"></i>${Localization.t('world.section.history')}</div>
+                <textarea class="form-input" rows="6" style="width:100%; resize:vertical; line-height:1.7;"
+                          oninput="handleUpdateWorldField('${id}', 'history', this.value)">${data.element.history || ''}</textarea>
             </div>
 
             <div class="detail-section">
-                <div class="detail-section-title">${Localization.t('world.section.history')}</div>
-                <textarea class="form-input" rows="6" 
-                          onchange="handleUpdateWorldField('${id}', 'history', this.value)">${data.element.history}</textarea>
-            </div>
-
-            <div class="detail-section">
-                <div class="detail-section-title">${Localization.t('world.section.notes')}</div>
-                <textarea class="form-input" rows="4" 
-                          onchange="handleUpdateWorldField('${id}', 'notes', this.value)">${data.element.notes}</textarea>
+                <div class="detail-section-title"><i data-lucide="sticky-note" style="width:16px;height:16px;vertical-align:middle;margin-right:6px;"></i>${Localization.t('world.section.notes')}</div>
+                <textarea class="form-input" rows="4" style="width:100%; resize:vertical; line-height:1.7;"
+                          oninput="handleUpdateWorldField('${id}', 'notes', this.value)">${data.element.notes || ''}</textarea>
             </div>
         </div>
     `;

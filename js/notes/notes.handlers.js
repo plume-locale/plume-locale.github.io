@@ -125,7 +125,6 @@ window.addNote = NotesHandlers.onAddNote;
 window.deleteNote = (id) => notesViewModel.deleteNote(id);
 window.renderNotesList = () => {
     notesViewModel.refreshList();
-    notesViewModel.refreshCurrentDetail();
 };
 window.toggleNoteCategory = (cat) => notesViewModel.toggleCategory(cat);
 window.expandAllNoteCategories = () => notesViewModel.expandAll();

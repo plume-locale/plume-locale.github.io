@@ -102,13 +102,16 @@ const GlobalNotesView = {
 
         if (typeof lucide !== 'undefined') lucide.createIcons({ root: boardContent });
 
-        // Init sketches
-        items.forEach(item => {
-            if (item.type === 'sketch') {
-                const canvas = document.querySelector(`.globalnotes-item[data-id="${item.id}"] canvas`);
-                if (canvas) GlobalNotesHandlers.initSketch(item.id, canvas);
-            }
-        });
+        // Init sketches (use rAF to ensure layout is computed before reading dimensions)
+        const sketchItems = items.filter(item => item.type === 'sketch');
+        if (sketchItems.length > 0) {
+            requestAnimationFrame(() => {
+                sketchItems.forEach(item => {
+                    const canvas = document.querySelector(`.globalnotes-item[data-id="${item.id}"] canvas`);
+                    if (canvas) GlobalNotesHandlers.initSketch(item.id, canvas);
+                });
+            });
+        }
 
         this.updateSelection();
     },

@@ -120,6 +120,9 @@ const AutoDetectViewModel = {
         if (hasChanges) {
             AutoDetectRepository.save();
             AutoDetectView.refresh();
+            if (typeof ToolsSidebarViewModel !== 'undefined') {
+                ToolsSidebarViewModel.updateAllBadges();
+            }
         }
     },
 
@@ -155,6 +158,9 @@ const AutoDetectViewModel = {
 
         AutoDetectRepository.save();
         AutoDetectView.refresh();
+        if (typeof ToolsSidebarViewModel !== 'undefined') {
+            ToolsSidebarViewModel.updateAllBadges();
+        }
     },
 
     /**
@@ -173,6 +179,9 @@ const AutoDetectViewModel = {
 
         AutoDetectRepository.save();
         AutoDetectView.refresh();
+        if (typeof ToolsSidebarViewModel !== 'undefined') {
+            ToolsSidebarViewModel.updateAllBadges();
+        }
     },
 
     /**
@@ -194,5 +203,8 @@ const AutoDetectViewModel = {
 
         AutoDetectRepository.save();
         AutoDetectView.refresh();
+        if (typeof ToolsSidebarViewModel !== 'undefined') {
+            ToolsSidebarViewModel.updateAllBadges();
+        }
     }
 };

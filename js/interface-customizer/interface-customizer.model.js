@@ -39,7 +39,14 @@ const InterfaceCustomizerModel = {
 
     // État par défaut (tout visible)
     getDefaultSettings: () => {
-        const settings = {};
+        const settings = {
+            shortcuts: ['projects', 'editor', 'corkboard', 'notes', 'characters', 'world'],
+            progressBarWidth: 8,
+            statusDraftColor: '#ff6b6b',
+            statusProgressColor: '#ffd93d',
+            statusCompleteColor: '#51cf66',
+            statusReviewColor: '#4a9eff'
+        };
         InterfaceCustomizerModel.components.forEach(c => {
             settings[c.id] = true;
         });

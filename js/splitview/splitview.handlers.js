@@ -24,6 +24,12 @@ function updateSplitSceneContent(editor) {
     const wcDisplay = document.querySelector(`.split-word-count-${panel}`);
     if (wcDisplay) wcDisplay.textContent = Localization.t('editor.word_count', [wordCount]);
 
+    // Update Live Tension Meter
+    if (typeof updateLiveTensionMeter === 'function') {
+        const textContent = editor.innerText || editor.textContent || '';
+        updateLiveTensionMeter(textContent, { sceneId, chapterId, actId });
+    }
+
     if (typeof saveProject === 'function') {
         saveProject();
     }

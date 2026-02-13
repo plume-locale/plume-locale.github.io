@@ -24,7 +24,7 @@ const StatsViewModel = {
                     if (chapter.scenes) {
                         totalScenes += chapter.scenes.length;
                         chapter.scenes.forEach(scene => {
-                            totalWords += (scene.wordCount || (scene.content ? StatsModel.getWordCount(scene.content) : 0));
+                            totalWords += (scene.content ? StatsModel.getWordCount(scene.content) : (scene.wordCount || 0));
                         });
                     }
                 });
@@ -47,7 +47,7 @@ const StatsViewModel = {
                 act.chapters.forEach(chapter => {
                     if (chapter.scenes) {
                         chapter.scenes.forEach(scene => {
-                            actWords += (scene.wordCount || (scene.content ? StatsModel.getWordCount(scene.content) : 0));
+                            actWords += (scene.content ? StatsModel.getWordCount(scene.content) : (scene.wordCount || 0));
                         });
                     }
                 });
@@ -65,15 +65,64 @@ const StatsViewModel = {
      */
     getTodayStats() {
         const stats = StatsRepository.getStats();
-        const today = new Date().toDateString();
-        const session = stats.writingSessions.find(s => new Date(s.date).toDateString() === today);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        const session = stats.writingSessions.find(s => new Date(s.date).toDateString() === today.toDateString());
         const words = session ? session.words : 0;
+
+        let dailyGoal = stats.dailyGoal || 500;
+
+        // Smart Goal Logic
+        if (stats.smartGoal && stats.smartGoal.mode === 'date' && stats.smartGoal.targetDate) {
+            const targetDate = new Date(stats.smartGoal.targetDate);
+            targetDate.setHours(0, 0, 0, 0);
+
+            if (targetDate >= today) {
+                const { totalWords } = this.getProjectStats();
+                // Total restant à écrire (en incluant ce qui a déjà été écrit aujourd'hui pour ne pas fausser le calcul)
+                const totalRemaining = Math.max(0, (stats.totalGoal || 0) - (totalWords - words));
+
+                const daysLeft = this._calculateWorkingDays(today, targetDate, stats.smartGoal.daysOff || []);
+
+                if (daysLeft > 0) {
+                    dailyGoal = Math.ceil(totalRemaining / daysLeft);
+                } else {
+                    // Si on est le dernier jour (ou dépassé) mais qu'il reste du travail
+                    dailyGoal = totalRemaining;
+                }
+            }
+        }
 
         return {
             words,
-            goal: stats.dailyGoal,
-            progress: Math.min((words / (stats.dailyGoal || 1)) * 100, 100)
+            goal: dailyGoal,
+            progress: Math.min((words / (dailyGoal || 1)) * 100, 100)
         };
+    },
+
+    /**
+     * Calcule le nombre de jours ouvrables entre deux dates.
+     * @private
+     */
+    _calculateWorkingDays(start, end, daysOff) {
+        let count = 0;
+        let current = new Date(start);
+        const dayOffSet = new Set(daysOff.map(d => parseInt(d))); // Ensure numbers
+
+        // Sécurité pour éviter boucle infinie si dates invalides
+        if (start > end) return 0;
+
+        // Copie pour ne pas modifier l'original
+        current = new Date(current.getTime());
+
+        while (current <= end) {
+            if (!dayOffSet.has(current.getDay())) {
+                count++;
+            }
+            current.setDate(current.getDate() + 1);
+        }
+        return count;
     },
 
     /**
@@ -99,6 +148,48 @@ const StatsViewModel = {
                 words: words,
                 progress: Math.min((words / dailyGoal) * 100, 100),
                 goalReached: words >= dailyGoal
+            });
+        }
+        return history;
+    },
+
+    /**
+     * Récupère l'historique sur une période configurée (1 mois, 3 mois, 6 mois, 1 an).
+     * @param {string} period '1m', '3m', '6m', '1y'
+     * @returns {Array} Array of { date, words }
+     */
+    getHistoryByPeriod(period) {
+        const stats = StatsRepository.getStats();
+        const history = [];
+        const endDate = new Date(); // Aujourd'hui
+        let startDate = new Date();
+
+        // Définir la date de début selon la période
+        switch (period) {
+            case '1w': startDate.setDate(endDate.getDate() - 7); break;
+            case '1m': startDate.setMonth(endDate.getMonth() - 1); break;
+            case '3m': startDate.setMonth(endDate.getMonth() - 3); break;
+            case '6m': startDate.setMonth(endDate.getMonth() - 6); break;
+            case '1y': startDate.setFullYear(endDate.getFullYear() - 1); break;
+            default: startDate.setMonth(endDate.getMonth() - 1); // Par défaut 1 mois
+        }
+
+        // Reset hours
+        startDate.setHours(0, 0, 0, 0);
+        endDate.setHours(0, 0, 0, 0);
+
+        // Créer un array de dates continues
+        const dailyGoal = stats.dailyGoal || 500;
+
+        for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
+            const dateStr = d.toDateString();
+            // On cherche s'il y a une session pour ce jour
+            const session = stats.writingSessions.find(s => new Date(s.date).toDateString() === dateStr);
+            history.push({
+                date: new Date(d),
+                dateStr: d.toLocaleDateString(),
+                words: session ? session.words : 0,
+                goal: dailyGoal // Simplification: on suppose l'objectif constant ou actuel pour l'historique
             });
         }
         return history;

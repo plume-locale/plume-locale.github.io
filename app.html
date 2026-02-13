@@ -9,7 +9,7 @@
         href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@300;400;600;700&family=Noto+Serif+JP:wght@300;500;700&family=Source+Code+Pro:wght@400;500&display=swap"
         rel="stylesheet">
     <!-- Export Libraries -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/docx/7.8.2/docx.min.js"></script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <!-- IndexedDB wrapper for easier usage -->
@@ -26,33 +26,41 @@
     <!-- Driver.js - Product Tour Library (bundled in CSS and JS) -->
     <!-- Generated CSS Links -->
     <link rel="stylesheet" href="./css/driver.css">
-<link rel="stylesheet" href="./css/01.variables.css">
-<link rel="stylesheet" href="./css/02.base.css">
-<link rel="stylesheet" href="./css/03.header.css">
-<link rel="stylesheet" href="./css/04.sidebar.css">
-<link rel="stylesheet" href="./css/05.modals.css">
-<link rel="stylesheet" href="./css/06.editor.css">
-<link rel="stylesheet" href="./css/07.characters.css">
-<link rel="stylesheet" href="./css/08.visualizations.css">
-<link rel="stylesheet" href="./css/09.utilities.css">
-<link rel="stylesheet" href="./css/10.mobile.css">
-<link rel="stylesheet" href="./css/15.colorpalette.css">
+<link rel="stylesheet" href="./css/variables.css">
+<link rel="stylesheet" href="./css/base.css">
+<link rel="stylesheet" href="./css/header.css">
+<link rel="stylesheet" href="./css/sidebar.css">
+<link rel="stylesheet" href="./css/modals.css">
+<link rel="stylesheet" href="./css/editor.css">
+<link rel="stylesheet" href="./css/focus-mode.css">
+<link rel="stylesheet" href="./css/tabs.css">
+<link rel="stylesheet" href="./css/link-panel.css">
+<link rel="stylesheet" href="./css/characters.css">
+<link rel="stylesheet" href="./css/corkboard.css">
+<link rel="stylesheet" href="./css/structure.css">
+<link rel="stylesheet" href="./css/mindmap.css">
+<link rel="stylesheet" href="./css/arc-detail.css">
+<link rel="stylesheet" href="./css/timeline-metro.css">
+<link rel="stylesheet" href="./css/utilities.css">
+<link rel="stylesheet" href="./css/mobile.css">
+<link rel="stylesheet" href="./css/color-palette.css">
 <link rel="stylesheet" href="./css/undo-redo.css">
-<link rel="stylesheet" href="./css/12.arc-board.css">
-<link rel="stylesheet" href="./css/14.word-repetition.css">
-<link rel="stylesheet" href="./css/14.product-tour.css">
+<link rel="stylesheet" href="./css/arc-board.css">
+<link rel="stylesheet" href="./css/word-repetition.css">
+<link rel="stylesheet" href="./css/product-tour.css">
 <link rel="stylesheet" href="./css/investigation-board.css">
 <link rel="stylesheet" href="./css/investigation-board.tabs.css">
-<link rel="stylesheet" href="./css/17.documentation-button.css">
+<link rel="stylesheet" href="./css/documentation-button.css">
 <link rel="stylesheet" href="./css/globalnotes.css">
 <link rel="stylesheet" href="./css/product-tour-editor.css">
 <link rel="stylesheet" href="./css/project-landing.css">
-<link rel="stylesheet" href="./css/13.thriller-board.css">
-<link rel="stylesheet" href="./css/16.theme-manager-premium.css">
+<link rel="stylesheet" href="./css/storygrid.css">
+<link rel="stylesheet" href="./css/thriller-board.css">
+<link rel="stylesheet" href="./css/theme-manager.css">
 <link rel="stylesheet" href="./css/synonyms.css">
-<link rel="stylesheet" href="./css/map.css">
 <link rel="stylesheet" href="./css/keyboard-shortcuts.css">
-<link rel="stylesheet" href="./css/page-preview.css">
+<link rel="stylesheet" href="./css/map.css">
+<link rel="stylesheet" href="./css/stats.css">
 <link rel="stylesheet" href="./css/synonyms.css">
 <link rel="stylesheet" href="./css/map.css">
 <link rel="stylesheet" href="./css/keyboard-shortcuts.css">
@@ -1245,13 +1253,14 @@
     <div class="sidebar-overlay" onclick="toggleMobileSidebar()"></div>
     <!-- Mobile Navigation Dropdown (déplacé hors du grid) -->
     <div class="mobile-nav-dropdown" id="mobileNavDropdown">
+        <!-- Section Écriture -->
         <div class="mobile-nav-section">
             <div class="mobile-nav-section-title">
                 <i data-lucide="pen-tool"></i>
-                <span data-i18n="mobile.group.write">écriture</span>
+                <span data-i18n="sidebar.group.write">Ecriture</span>
             </div>
             <div class="mobile-nav-grid">
-                <button class="mobile-nav-item active" onclick="switchViewMobile('projects')" data-view="projects">
+                <button class="mobile-nav-item" onclick="switchViewMobile('projects')" data-view="projects">
                     <span class="mobile-nav-item-icon"><i data-lucide="folder-open"></i></span>
                     <span data-i18n="nav.projects">Projets</span>
                 </button>
@@ -1263,32 +1272,50 @@
                     <span class="mobile-nav-item-icon"><i data-lucide="layout-grid"></i></span>
                     <span data-i18n="nav.corkboard">Tableau</span>
                 </button>
-                <button class="mobile-nav-item" onclick="switchViewMobile('plot')" data-view="plot">
-                    <span class="mobile-nav-item-icon"><i data-lucide="trending-up"></i></span>
-                    <span data-i18n="nav.plot">Intrigue</span>
-                </button>
-                <button class="mobile-nav-item" onclick="switchViewMobile('arcs')" data-view="arcs">
-                    <span class="mobile-nav-item-icon"><i data-lucide="git-commit-horizontal"></i></span>
-                    <span data-i18n="nav.arcs">Arcs Narratifs</span>
-                </button>
-                
-                
-                <button class="mobile-nav-item" onclick="switchViewMobile('globalnotes')" data-view="globalnotes">
-                    <span class="mobile-nav-item-icon"><i data-lucide="layout"></i></span>
-                    <span data-i18n="nav.globalnotes">globalnotes</span>
-                </button>
-            </div>
-        </div>
-        <div class="mobile-nav-section">
-            <div class="mobile-nav-section-title">
-                <i data-lucide="database"></i>
-                <span data-i18n="mobile.group.db">Base de données</span>
-            </div>
-            <div class="mobile-nav-grid">
                 <button class="mobile-nav-item" onclick="switchViewMobile('characters')" data-view="characters">
                     <span class="mobile-nav-item-icon"><i data-lucide="users"></i></span>
                     <span data-i18n="nav.characters">Personnages</span>
                 </button>
+                <button class="mobile-nav-item" onclick="switchViewMobile('globalnotes')" data-view="globalnotes">
+                    <span class="mobile-nav-item-icon"><i data-lucide="layout"></i></span>
+                    <span data-i18n="nav.globalnotes">Notes Globales</span>
+                </button>
+                <button class="mobile-nav-item" onclick="switchViewMobile('front_matter')" data-view="front_matter">
+                    <span class="mobile-nav-item-icon"><i data-lucide="book-open-check"></i></span>
+                    <span data-i18n="nav.front_matter">Liminaires</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Section Analyse -->
+        <div class="mobile-nav-section">
+            <div class="mobile-nav-section-title">
+                <i data-lucide="scan-search"></i>
+                <span data-i18n="sidebar.group.analyze">Analyse</span>
+            </div>
+            <div class="mobile-nav-grid">
+                <button class="mobile-nav-item" onclick="switchViewMobile('plot')" data-view="plot">
+                    <span class="mobile-nav-item-icon"><i data-lucide="trending-up"></i></span>
+                    <span data-i18n="nav.plot">Intrigue</span>
+                </button>
+                <button class="mobile-nav-item" onclick="switchViewMobile('analysis')" data-view="analysis">
+                    <span class="mobile-nav-item-icon"><i data-lucide="scan-search"></i></span>
+                    <span data-i18n="nav.analysis">Analyse</span>
+                </button>
+                <button class="mobile-nav-item" onclick="switchViewMobile('stats')" data-view="stats">
+                    <span class="mobile-nav-item-icon"><i data-lucide="bar-chart-3"></i></span>
+                    <span data-i18n="nav.stats">Stats</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Section Construction -->
+        <div class="mobile-nav-section">
+            <div class="mobile-nav-section-title">
+                <i data-lucide="wrench"></i>
+                <span data-i18n="sidebar.group.construction">Construction</span>
+            </div>
+            <div class="mobile-nav-grid">
                 <button class="mobile-nav-item" onclick="switchViewMobile('world')" data-view="world">
                     <span class="mobile-nav-item-icon"><i data-lucide="globe"></i></span>
                     <span data-i18n="nav.world">Univers</span>
@@ -1301,14 +1328,14 @@
                     <span class="mobile-nav-item-icon"><i data-lucide="sticky-note"></i></span>
                     <span data-i18n="nav.notes">Notes</span>
                 </button>
-            </div>
-        </div>
-        <div class="mobile-nav-section">
-            <div class="mobile-nav-section-title">
-                <i data-lucide="eye"></i>
-                <span data-i18n="mobile.group.viz">Visualisation</span>
-            </div>
-            <div class="mobile-nav-grid">
+                <button class="mobile-nav-item" onclick="switchViewMobile('arcs')" data-view="arcs">
+                    <span class="mobile-nav-item-icon"><i data-lucide="git-commit-horizontal"></i></span>
+                    <span data-i18n="nav.arcs">Arcs</span>
+                </button>
+                <button class="mobile-nav-item" onclick="switchViewMobile('investigation')" data-view="investigation">
+                    <span class="mobile-nav-item-icon"><i data-lucide="search"></i></span>
+                    <span data-i18n="nav.investigation">Enquête</span>
+                </button>
                 <button class="mobile-nav-item" onclick="switchViewMobile('mindmap')" data-view="mindmap">
                     <span class="mobile-nav-item-icon"><i data-lucide="git-branch"></i></span>
                     <span data-i18n="nav.mindmap">Mindmap</span>
@@ -1325,133 +1352,10 @@
                     <span class="mobile-nav-item-icon"><i data-lucide="clock"></i></span>
                     <span data-i18n="nav.timeline">Timeline</span>
                 </button>
-            </div>
-        </div>
-        <div class="mobile-nav-section">
-            <div class="mobile-nav-section-title">
-                <i data-lucide="wrench"></i>
-                <span data-i18n="mobile.group.tools">Outils</span>
-            </div>
-            <div class="mobile-nav-grid">
-                <button class="mobile-nav-item" onclick="switchViewMobile('stats')" data-view="stats">
-                    <span class="mobile-nav-item-icon"><i data-lucide="bar-chart-3"></i></span>
-                    <span data-i18n="nav.stats">Stats</span>
+                <button class="mobile-nav-item" onclick="switchViewMobile('versions')" data-view="versions">
+                    <span class="mobile-nav-item-icon"><i data-lucide="history"></i></span>
+                    <span data-i18n="nav.snapshots">Snapshots</span>
                 </button>
-                <button class="mobile-nav-item" onclick="switchViewMobile('analysis')" data-view="analysis">
-                    <span class="mobile-nav-item-icon"><i data-lucide="scan-search"></i></span>
-                    <span data-i18n="nav.analysis">Analyse</span>
-                </button>
-            </div>
-        </div>
-        <div class="mobile-nav-section">
-            <div class="mobile-nav-section-title">
-                <i data-lucide="history"></i>
-                <span data-i18n="mobile.group.history">Historique</span>
-            </div>
-            <button class="mobile-nav-item" onclick="switchViewMobile('versions')" data-view="versions">
-                <span class="mobile-nav-item-icon"><i data-lucide="history"></i></span>
-                <span data-i18n="nav.snapshots">Snapshots</span>
-            </button>
-        </div>
-        <div class="mobile-nav-section">
-            <div class="mobile-nav-section-title">
-                <i data-lucide="settings"></i>
-                <span data-i18n="mobile.group.actions">Actions</span>
-            </div>
-            <div class="mobile-nav-grid">
-                <button class="mobile-nav-item" onclick="switchViewMobile('projects'); toggleMobileNav();"
-                    data-view="projects">
-                    <span class="mobile-nav-item-icon"><i data-lucide="folder-open"></i></span>
-                    <span data-i18n="mobile.action.projects">Mes Projets</span>
-                </button>
-                <button class="mobile-nav-item" onclick="
-                        openThemeManager();
-                        toggleMobileNav();
-                    ">
-                    <span class="mobile-nav-item-icon"><i data-lucide="palette"></i></span>
-                    <span data-i18n="mobile.action.themes">Thèmes</span>
-                </button>
-                <button class="mobile-nav-item" onclick="
-                        undo();
-                        toggleMobileNav();
-                    " id="mobileUndoBtn">
-                    <span class="mobile-nav-item-icon"><i data-lucide="undo-2"></i></span>
-                    <span data-i18n="mobile.action.undo">Annuler</span>
-                </button>
-                <button class="mobile-nav-item" onclick="
-                        redo();
-                        toggleMobileNav();
-                    " id="mobileRedoBtn">
-                    <span class="mobile-nav-item-icon"><i data-lucide="redo-2"></i></span>
-                    <span data-i18n="mobile.action.redo">Rétablir</span>
-                </button>
-                <button class="mobile-nav-item" onclick="
-                        showBackupMenu();
-                        toggleMobileNav();
-                    ">
-                    <span class="mobile-nav-item-icon"><i data-lucide="file-up"></i></span>
-                    <span data-i18n="mobile.action.backup">Sauvegarde/Export</span>
-                </button>
-                <button class="mobile-nav-item" onclick="
-                        openImportChapterModal();
-                        toggleMobileNav();
-                    ">
-                    <span class="mobile-nav-item-icon"><i data-lucide="download"></i></span>
-                    <span data-i18n="mobile.action.import">Importer un texte</span>
-                </button>
-                <button class="mobile-nav-item" onclick="
-                        KeyboardShortcutsHandlers.openShortcutsModal();
-                        toggleMobileNav();
-                    ">
-                    <span class="mobile-nav-item-icon"><i data-lucide="keyboard"></i></span>
-                    <span data-i18n="mobile.action.shortcuts">Raccourcis clavier</span>
-                </button>
-                <button class="mobile-nav-item" onclick="
-                        togglePomodoroPopup();
-                        toggleMobileNav();
-                    ">
-                    <span class="mobile-nav-item-icon"><i data-lucide="timer"></i></span>
-                    <span data-i18n="mobile.action.pomodoro">Timer Pomodoro</span>
-                </button>
-                <button class="mobile-nav-item" onclick="
-                        InterfaceCustomizerViewModel.startEditing();
-                        toggleMobileNav();
-                    ">
-                    <span class="mobile-nav-item-icon"><i data-lucide="settings-2"></i></span>
-                    <span data-i18n="mobile.action.interface">Personnaliser l'interface</span>
-                </button>
-            </div>
-        </div>
-        <div class="mobile-nav-section">
-            <div class="mobile-nav-section-title">
-                <i data-lucide="languages"></i>
-                <span data-i18n="mobile.group.help">Langue & Aide</span>
-            </div>
-
-            <div class="mobile-lang-container">
-                <div class="mobile-lang-row">
-                    <div class="mobile-lang-label">INTERFACE</div>
-                    <div class="mobile-lang-flags">
-                        <button class="mobile-lang-btn" onclick="Localization.setLocale('fr'); toggleMobileNav();"
-                            title="Français">🇫🇷</button>
-                        <button class="mobile-lang-btn" onclick="Localization.setLocale('en'); toggleMobileNav();"
-                            title="English">🇬🇧</button>
-                        <button class="mobile-lang-btn" onclick="Localization.setLocale('es'); toggleMobileNav();"
-                            title="Español">🇪🇸</button>
-                        <button class="mobile-lang-btn" onclick="Localization.setLocale('de'); toggleMobileNav();"
-                            title="Deutsch">🇩🇪</button>
-                    </div>
-                </div>
-
-                <div class="mobile-lang-row">
-                    <div class="mobile-lang-label">DOCS / AIDE</div>
-                    <div class="mobile-lang-flags">
-                        <a href="doc/fr/" class="mobile-lang-btn">🇫🇷</a>
-                        <a href="doc/en/" class="mobile-lang-btn">🇬🇧</a>
-                        <a href="doc/es/" class="mobile-lang-btn">🇪🇸</a>
-                        <a href="doc/de/" class="mobile-lang-btn">🇩🇪</a>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -1473,101 +1377,32 @@
             <button class="mobile-nav-toggle-btn" onclick="toggleMobileNav()" id="mobileNavToggleBtn">
                 <i data-lucide="menu"></i>
             </button>
-            <nav class="header-nav">
-                <!-- Section 1 : Structure, Tableau, Intrigue -->
-                <div class="nav-group">
-                    <button class="nav-btn active" onclick="switchView('projects')" id="header-tab-projects">
-                        <span class="nav-btn-icon"><i data-lucide="folder-open"></i></span>
-                        <span class="nav-btn-text" data-i18n="nav.projects">Projets</span>
+
+            <!-- Navigation déplacée dans l'accordéon latérale -->
+            <div class="header-nav" style="display: none;"></div>
+
+            <!-- Search Bar + Global Actions -->
+            <div class="search-container header-search">
+                <div class="header-global-actions">
+                    <button class="header-action-btn" onclick="undo()" id="headerUndoBtn" title="Annuler (Ctrl+Z)"
+                        data-i18n-title="header.undo" disabled>
+                        <i data-lucide="undo-2"></i>
                     </button>
-                    <button class="nav-btn" onclick="switchView('editor')" id="header-tab-editor">
-                        <span class="nav-btn-icon"><i data-lucide="pen-line"></i></span>
-                        <span class="nav-btn-text" data-i18n="nav.structure">Structure</span>
-                    </button>
-                    <button class="nav-btn" onclick="switchView('front_matter')" id="header-tab-front_matter">
-                        <span class="nav-btn-icon"><i data-lucide="book-open-check"></i></span>
-                        <span class="nav-btn-text" data-i18n="nav.front_matter">Liminaires</span>
-                    </button>
-                    <button class="nav-btn" onclick="switchView('corkboard')" id="header-tab-corkboard">
-                        <span class="nav-btn-icon"><i data-lucide="layout-grid"></i></span>
-                        <span class="nav-btn-text" data-i18n="nav.corkboard">Tableau</span>
-                    </button>
-                    <button class="nav-btn" onclick="switchView('plot')" id="header-tab-plot">
-                        <span class="nav-btn-icon"><i data-lucide="trending-up"></i></span>
-                        <span class="nav-btn-text" data-i18n="nav.plot">Intrigue</span>
-                    </button>
-                    <button class="nav-btn" onclick="switchView('arcs')" id="header-tab-arcs">
-                        <span class="nav-btn-icon"><i data-lucide="git-commit-horizontal"></i></span>
-                        <span class="nav-btn-text" data-i18n="nav.arcs">Arcs</span>
-                    </button>
-                    
-                    
-                    <button class="nav-btn" onclick="switchView('investigation')" id="header-tab-investigation">
-                        <span class="nav-btn-icon"><i data-lucide="search"></i></span>
-                        <span class="nav-btn-text" data-i18n="nav.investigation">Enquête</span>
-                    </button>
-                    <button class="nav-btn" onclick="switchView('globalnotes')" id="header-tab-globalnotes">
-                        <span class="nav-btn-icon"><i data-lucide="layout"></i></span>
-                        <span class="nav-btn-text" data-i18n="nav.globalnotes">globalnotes</span>
+                    <button class="header-action-btn" onclick="redo()" id="headerRedoBtn" title="Rétablir (Ctrl+Y)"
+                        data-i18n-title="header.redo" disabled>
+                        <i data-lucide="redo-2"></i>
                     </button>
                 </div>
-                <!-- Section 2 : Personnages, Univers, Codex, Notes -->
-                <div class="nav-group">
-                    <button class="nav-btn" onclick="switchView('characters')" id="header-tab-characters">
-                        <span class="nav-btn-icon"><i data-lucide="users"></i></span>
-                        <span class="nav-btn-text" data-i18n="nav.characters">Personnages</span>
-                    </button>
-                    <button class="nav-btn" onclick="switchView('world')" id="header-tab-world">
-                        <span class="nav-btn-icon"><i data-lucide="globe"></i></span>
-                        <span class="nav-btn-text" data-i18n="nav.world">Univers</span>
-                    </button>
-                    <button class="nav-btn" onclick="switchView('codex')" id="header-tab-codex">
-                        <span class="nav-btn-icon"><i data-lucide="book-open"></i></span>
-                        <span class="nav-btn-text" data-i18n="nav.codex">Codex</span>
-                    </button>
-                    <button class="nav-btn" onclick="switchView('notes')" id="header-tab-notes">
-                        <span class="nav-btn-icon"><i data-lucide="sticky-note"></i></span>
-                        <span class="nav-btn-text" data-i18n="nav.notes">Notes</span>
-                    </button>
+                <div class="search-input-wrapper">
+                    <input type="text" class="search-input" id="globalSearch"
+                        placeholder="Rechercher dans tout le projet..."
+                        data-i18n-placeholder="sidebar.search.placeholder" oninput="performGlobalSearch(this.value)"
+                        onfocus="this.select()" />
+                    <i data-lucide="search" class="search-icon"></i>
                 </div>
-                <!-- Section 3 : Mindmap, Relations, Carte, Timeline -->
-                <div class="nav-group">
-                    <button class="nav-btn" onclick="switchView('mindmap')" id="header-tab-mindmap">
-                        <span class="nav-btn-icon"><i data-lucide="git-branch"></i></span>
-                        <span class="nav-btn-text" data-i18n="nav.mindmap">Mindmap</span>
-                    </button>
-                    <button class="nav-btn" onclick="switchView('relations')" id="header-tab-relations">
-                        <span class="nav-btn-icon"><i data-lucide="link"></i></span>
-                        <span class="nav-btn-text" data-i18n="nav.relations">Relations</span>
-                    </button>
-                    <button class="nav-btn" onclick="switchView('map')" id="header-tab-map">
-                        <span class="nav-btn-icon"><i data-lucide="map"></i></span>
-                        <span class="nav-btn-text" data-i18n="nav.map">Carte</span>
-                    </button>
-                    <button class="nav-btn" onclick="switchView('timelineviz')" id="header-tab-timeline-viz">
-                        <span class="nav-btn-icon"><i data-lucide="clock"></i></span>
-                        <span class="nav-btn-text" data-i18n="nav.timeline">Timeline</span>
-                    </button>
-                </div>
-                <!-- Section 4 : Stats, Analyse -->
-                <div class="nav-group">
-                    <button class="nav-btn" onclick="switchView('stats')" id="header-tab-stats">
-                        <span class="nav-btn-icon"><i data-lucide="bar-chart-3"></i></span>
-                        <span class="nav-btn-text" data-i18n="nav.stats">Stats</span>
-                    </button>
-                    <button class="nav-btn" onclick="switchView('analysis')" id="header-tab-analysis">
-                        <span class="nav-btn-icon"><i data-lucide="scan-search"></i></span>
-                        <span class="nav-btn-text" data-i18n="nav.analysis">Analyse</span>
-                    </button>
-                </div>
-                <!-- Section 5 : Snapshots -->
-                <div class="nav-group">
-                    <button class="nav-btn" onclick="switchView('versions')" id="header-tab-versions">
-                        <span class="nav-btn-icon"><i data-lucide="history"></i></span>
-                        <span class="nav-btn-text" data-i18n="nav.snapshots">Snapshots</span>
-                    </button>
-                </div>
-            </nav>
+                <div class="search-results" id="searchResults"></div>
+            </div>
+
             <!-- Actions à droite -->
             <div class="header-actions">
                 <div id="headerStatsContainer"
@@ -1582,91 +1417,95 @@
                     <i data-lucide="columns-2" style="width: 14px; height: 14px"></i>
                     <span data-i18n="header.split_text">Split</span>
                 </button>
-                <!-- Storage badge intégré dans le header -->
-                <div class="storage-badge-header status-ok" id="storage-badge" onclick="showStorageDetails()"
-                    title="Espace de stockage" data-i18n-title="header.storage">
-                    <span class="storage-icon"><i data-lucide="hard-drive"></i></span>
-                    <span id="storage-percentage">...</span>
-                </div>
-                <button class="header-action-btn" onclick="undo()" id="headerUndoBtn" title="Annuler (Ctrl+Z)"
-                    data-i18n-title="header.undo" disabled>
-                    <i data-lucide="undo-2"></i>
-                </button>
-                <button class="header-action-btn" onclick="redo()" id="headerRedoBtn" title="Rétablir (Ctrl+Y)"
-                    data-i18n-title="header.redo" disabled>
-                    <i data-lucide="redo-2"></i>
-                </button>
+
                 <button class="header-action-btn" onclick="togglePomodoroPopup()" id="pomodoroHeaderBtn"
                     title="Timer Pomodoro" data-i18n-title="header.pomodoro">
                     <i data-lucide="timer"></i>
                 </button>
-                <button class="header-action-btn" onclick="openImportChapterModal()" title="Importer un texte"
-                    data-i18n-title="header.import" id="headerImportBtn">
-                    <i data-lucide="download"></i>
-                </button>
-                <button class="header-action-btn" onclick="KeyboardShortcutsHandlers.openShortcutsModal()"
-                    title="Raccourcis clavier" data-i18n-title="header.shortcuts" id="headerShortcutsBtn">
-                    <i data-lucide="keyboard"></i>
-                </button>
-                <button class="header-action-btn" onclick="openThemeManager()" title="Gérer les thèmes"
-                    data-i18n-title="header.themes" id="headerThemesBtn">
-                    <i data-lucide="palette"></i>
-                </button>
-                <button class="header-action-btn" onclick="InterfaceCustomizerViewModel.startEditing()" title="Personnaliser l'interface"
-                    data-i18n-title="header.interface" id="headerInterfaceBtn">
-                    <i data-lucide="settings-2"></i>
-                </button>
 
-                <div class="doc-dropdown" id="docDropdown">
-                    <button class="header-action-btn" title="Documentation" data-i18n-title="header.documentation"
+
+
+
+                <!-- Extra Menu Dropdown -->
+                <div class="extra-menu-dropdown" id="extraMenuDropdown">
+                    <button class="header-action-btn" title="Menu supplémentaire" data-i18n-title="header.extra_menu"
                         onclick="this.parentElement.classList.toggle('open'); event.stopPropagation();">
-                        <i data-lucide="book-open-text"></i>
+                        <i data-lucide="more-horizontal"></i>
                     </button>
-                    <div class="doc-dropdown-menu">
-                        <a href="doc/fr/" class="doc-option">
-                            <span class="doc-flag">🇫🇷</span>
-                            <span class="doc-name">Français</span>
-                        </a>
-                        <a href="doc/en/" class="doc-option">
-                            <span class="doc-flag">🇬🇧</span>
-                            <span class="doc-name">English</span>
-                        </a>
-                        <a href="doc/de/" class="doc-option">
-                            <span class="doc-flag">🇩🇪</span>
-                            <span class="doc-name">Deutsch</span>
-                        </a>
-                        <a href="doc/es/" class="doc-option">
-                            <span class="doc-flag">🇪🇸</span>
-                            <span class="doc-name">Español</span>
-                        </a>
-                    </div>
-                </div>
-                <div class="lang-dropdown" id="langDropdown">
-                    <button class="header-action-btn" title="Changer la langue" data-i18n-title="header.lang.switch"
-                        onclick="this.parentElement.classList.toggle('open'); event.stopPropagation();">
-                        <i data-lucide="languages"></i>
-                    </button>
-                    <div class="lang-dropdown-menu">
-                        <button class="lang-option" data-lang="fr"
-                            onclick="Localization.setLocale('fr'); this.closest('.lang-dropdown').classList.remove('open');">
-                            <span class="lang-flag">🇫🇷</span>
-                            <span class="lang-name">Français</span>
+                    <div class="extra-menu-dropdown-content">
+                        <!-- Storage -->
+                        <button class="extra-menu-item" id="storage-badge" onclick="showStorageDetails()">
+                            <i data-lucide="hard-drive" class="storage-icon"></i>
+                            <span data-i18n="header.storage">Stockage</span>
+                            <span id="storage-percentage"
+                                style="margin-left: auto; font-size: 0.8em; opacity: 0.7;">...</span>
                         </button>
-                        <button class="lang-option" data-lang="en"
-                            onclick="Localization.setLocale('en'); this.closest('.lang-dropdown').classList.remove('open');">
-                            <span class="lang-flag">🇬🇧</span>
-                            <span class="lang-name">English</span>
+                        <!-- Import -->
+                        <button class="extra-menu-item" onclick="openImportChapterModal()" id="headerImportBtn">
+                            <i data-lucide="download"></i>
+                            <span data-i18n="header.import">Importer un texte</span>
                         </button>
-                        <button class="lang-option" data-lang="de"
-                            onclick="Localization.setLocale('de'); this.closest('.lang-dropdown').classList.remove('open');">
-                            <span class="lang-flag">🇩🇪</span>
-                            <span class="lang-name">Deutsch</span>
+                        <!-- Backup / GDrive -->
+                        <button class="extra-menu-item" onclick="ImportExportViewModel.showBackupMenu()"
+                            id="headerBackupBtn">
+                            <i data-lucide="cloud"></i>
+                            <span data-i18n="btn.google_drive">Import/Export & Google Drive</span>
                         </button>
-                        <button class="lang-option" data-lang="es"
-                            onclick="Localization.setLocale('es'); this.closest('.lang-dropdown').classList.remove('open');">
-                            <span class="lang-flag">🇪🇸</span>
-                            <span class="lang-name">Español</span>
+                        <!-- Shortcuts -->
+                        <button class="extra-menu-item" onclick="KeyboardShortcutsHandlers.openShortcutsModal()"
+                            id="headerShortcutsBtn">
+                            <i data-lucide="keyboard"></i>
+                            <span data-i18n="header.shortcuts">Raccourcis clavier</span>
                         </button>
+                        <!-- Themes -->
+                        <button class="extra-menu-item" onclick="openThemeManager()" id="headerThemesBtn">
+                            <i data-lucide="palette"></i>
+                            <span data-i18n="header.themes">Thèmes</span>
+                        </button>
+                        <!-- Interface (déplacé dans la sidebar, bouton désactivé ici) -->
+                        <!-- <button class="extra-menu-item" onclick="InterfaceCustomizerViewModel.startEditing()"
+                            id="headerInterfaceBtn">
+                            <i data-lucide="settings-2"></i>
+                            <span data-i18n="header.interface">Interface</span>
+                        </button> -->
+
+                        <div class="extra-menu-separator"></div>
+
+                        <!-- Language -->
+                        <div class="extra-menu-item-group" id="langDropdown">
+                            <div class="extra-menu-label">
+                                <i data-lucide="languages"></i>
+                                <span data-i18n="header.lang.switch">Langue</span>
+                            </div>
+                            <div class="extra-menu-row-flags">
+                                <button class="extra-menu-flag-btn"
+                                    onclick="Localization.setLocale('fr'); this.closest('.extra-menu-dropdown').classList.remove('open');"
+                                    title="Français">🇫🇷</button>
+                                <button class="extra-menu-flag-btn"
+                                    onclick="Localization.setLocale('en'); this.closest('.extra-menu-dropdown').classList.remove('open');"
+                                    title="English">🇬🇧</button>
+                                <button class="extra-menu-flag-btn"
+                                    onclick="Localization.setLocale('de'); this.closest('.extra-menu-dropdown').classList.remove('open');"
+                                    title="Deutsch">🇩🇪</button>
+                                <button class="extra-menu-flag-btn"
+                                    onclick="Localization.setLocale('es'); this.closest('.extra-menu-dropdown').classList.remove('open');"
+                                    title="Español">🇪🇸</button>
+                            </div>
+                        </div>
+
+                        <!-- Documentation -->
+                        <div class="extra-menu-item-group" id="docDropdown">
+                            <div class="extra-menu-label">
+                                <i data-lucide="book-open-text"></i>
+                                <span data-i18n="header.documentation">Documentation</span>
+                            </div>
+                            <div class="extra-menu-row-flags">
+                                <a href="doc/fr/" class="extra-menu-flag-btn" target="_blank" title="Français">🇫🇷</a>
+                                <a href="doc/en/" class="extra-menu-flag-btn" target="_blank" title="English">🇬🇧</a>
+                                <a href="doc/de/" class="extra-menu-flag-btn" target="_blank" title="Deutsch">🇩🇪</a>
+                                <a href="doc/es/" class="extra-menu-flag-btn" target="_blank" title="Español">🇪🇸</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1701,186 +1540,206 @@
         </div>
         <!-- Conteneur principal (sidebar + versions + éditeur) -->
         <div class="app-content">
-            <!-- Sidebar Navigation -->
-            <div class="sidebar" id="sidebar">
-                <!-- Poignée de redimensionnement -->
-                <div class="sidebar-resize-handle" id="sidebarResizeHandle">
-                    <div class="resize-handle-line"></div>
-                </div>
-                <div class="sidebar-header">
-                    <div class="search-container">
-                        <input type="text" class="search-input" id="globalSearch"
-                            placeholder="Rechercher dans tout le projet..."
-                            data-i18n-placeholder="sidebar.search.placeholder" oninput="performGlobalSearch(this.value)"
-                            onfocus="this.select()" />
-                        <i data-lucide="search" class="search-icon"></i>
-                        <div class="search-results" id="searchResults"></div>
+            <!-- Sidebar Wrapper (Column) -->
+            <div class="sidebar-column" id="sidebarColumn">
+                <!-- Sidebar Shortcuts (Customize Interface) -->
+                <div class="sidebar-shortcuts" id="sidebarShortcuts"></div>
+
+                <!-- Sidebar Accordion (New Navigation) -->
+                <div class="sidebar-accordion open" id="sidebarAccordion">
+                    <div class="sidebar-accordion-header" onclick="toggleSidebarAccordion()">
+                        <div class="sidebar-accordion-title">
+                            <i data-lucide="menu" class="accordion-icon"></i>
+                            <span id="currentViewTitle">Navigation</span>
+                        </div>
+                        <i data-lucide="chevron-down" class="accordion-chevron"></i>
+                    </div>
+                    <div class="sidebar-accordion-content" id="sidebarAccordionContent">
+                        <!-- Navigation Items will be injected here via JS -->
                     </div>
                 </div>
-                <!-- Barre de progression globale -->
-                <div class="project-progress-bar" id="projectProgressBar">
-                    <div class="progress-stats">
-                        <span id="progressStatsText">0 scènes</span>
-                        <span id="progressPercent">0%</span>
+
+                <!-- Sidebar Navigation -->
+                <div class="sidebar" id="sidebar">
+                    <!-- Poignée de redimensionnement -->
+                    <div class="sidebar-resize-handle" id="sidebarResizeHandle">
+                        <div class="resize-handle-line"></div>
                     </div>
-                    <div class="progress-track">
-                        <div class="progress-segment complete" id="progressComplete" style="width: 0%"></div>
-                        <div class="progress-segment review" id="progressReview" style="width: 0%"></div>
-                        <div class="progress-segment progress" id="progressProgress" style="width: 0%"></div>
-                        <div class="progress-segment draft" id="progressDraft" style="width: 0%"></div>
+
+                    <!-- Barre de progression globale -->
+                    <div class="project-progress-bar" id="projectProgressBar">
+                        <div class="progress-stats">
+                            <span id="progressStatsText">0 scènes</span>
+                            <span id="progressPercent">0%</span>
+                        </div>
+                        <div class="progress-track">
+                            <div class="progress-segment complete" id="progressComplete" style="width: 0%">
+                            </div>
+                            <div class="progress-segment review" id="progressReview" style="width: 0%"></div>
+                            <div class="progress-segment progress" id="progressProgress" style="width: 0%">
+                            </div>
+                            <div class="progress-segment draft" id="progressDraft" style="width: 0%"></div>
+                        </div>
                     </div>
-                </div>
-                <!-- Filtres de statut -->
-                <div class="status-filters" id="statusFilters">
-                    <button class="status-filter-btn draft active" onclick="toggleStatusFilter('draft')"
-                        data-status="draft">
-                        <span class="status-filter-dot draft"></span>
-                        <span data-i18n="sidebar.status.draft">Brouillon</span>
-                        <span class="status-filter-count" id="countDraft">0</span>
-                    </button>
-                    <button class="status-filter-btn progress active" onclick="toggleStatusFilter('progress')"
-                        data-status="progress">
-                        <span class="status-filter-dot progress"></span>
-                        <span data-i18n="sidebar.status.progress">En cours</span>
-                        <span class="status-filter-count" id="countProgress">0</span>
-                    </button>
-                    <button class="status-filter-btn complete active" onclick="toggleStatusFilter('complete')"
-                        data-status="complete">
-                        <span class="status-filter-dot complete"></span>
-                        <span data-i18n="sidebar.status.complete">Terminé</span>
-                        <span class="status-filter-count" id="countComplete">0</span>
-                    </button>
-                    <button class="status-filter-btn review active" onclick="toggleStatusFilter('review')"
-                        data-status="review">
-                        <span class="status-filter-dot review"></span>
-                        <span data-i18n="sidebar.status.review">À réviser</span>
-                        <span class="status-filter-count" id="countReview">0</span>
-                    </button>
-                </div>
-                <!-- Outils de scène -->
-                <div class="scene-tools" id="sceneTools">
-                    <button class="scene-tool-btn" onclick="toggleVersionsSidebar()" id="headerVersionsToggle"
-                        title="Afficher/masquer les versions de scène">
-                        <i data-lucide="git-branch"></i>
-                        <span data-i18n="tool.versions">Versions</span>
-                    </button>
-                    <button class="scene-tool-btn" onclick="toggleAnnotationsPanel()" id="sidebarAnnotationsBtn"
-                        title="Afficher/masquer les annotations" data-i18n-title="tool.annotations">
-                        <i data-lucide="message-square"></i>
-                        <span data-i18n="tool.annotations">Annotations</span>
-                        <span class="scene-tool-badge" id="annotationsBadge" style="display: none">0</span>
-                    </button>
-                    <button class="scene-tool-btn" onclick="toggleTodosPanel()" id="sidebarTodosBtn"
-                        title="Afficher/masquer les TODOs" data-i18n-title="tool.todos">
-                        <i data-lucide="check-square"></i>
-                        <span data-i18n="tool.todos">TODOs</span>
-                        <span class="scene-tool-badge" id="todosBadge" style="display: none">0</span>
-                    </button>
-                    <button class="scene-tool-btn" onclick="toggleArcScenePanel()" id="sidebarArcsBtn"
-                        title="Afficher/masquer les Arcs Narratifs" data-i18n-title="tool.arcs">
-                        <i data-lucide="git-commit-horizontal"></i>
-                        <span data-i18n="tool.arcs">Arcs</span>
-                    </button>
-                    <button class="scene-tool-btn" onclick="PlotGridUI.toggleSidebar()" id="sidebarPlotBtn"
-                        title="Afficher/masquer l'Intrigue" data-i18n-title="tool.plot">
-                        <i data-lucide="trending-up"></i>
-                        <span data-i18n="tool.plot">Intrigue</span>
-                    </button>
-                    <button class="scene-tool-btn" onclick="InvestigationSidebarUI.toggleSidebar()"
-                        id="sidebarInvestigationBtn" title="Afficher/masquer l'Enquête"
-                        data-i18n-title="tool.investigation">
-                        <i data-lucide="search"></i>
-                        <span data-i18n="tool.investigation">Enquête</span>
-                    </button>
-                </div>
-                <!-- Boutons déplier/replier tout -->
-                <div class="tree-collapse-toolbar" id="treeCollapseToolbar">
-                    <button class="tree-collapse-btn" onclick="expandAllTree()" title="Tout déplier"
-                        data-i18n-title="tool.tree.expand">
-                        <i data-lucide="unfold-vertical" style="width: 12px; height: 12px"></i>
-                        <span data-i18n="tool.tree.expand">Déplier</span>
-                    </button>
-                    <button class="tree-collapse-btn" onclick="collapseAllTree()" title="Tout replier"
-                        data-i18n-title="tool.tree.collapse">
-                        <i data-lucide="fold-vertical" style="width: 12px; height: 12px"></i>
-                        <span data-i18n="tool.tree.collapse">Replier</span>
-                    </button>
-                    <button class="tree-collapse-btn" onclick="openStructureOrganizer()"
-                        title="Réorganiser la structure (vue globale)" data-i18n-title="tool.tree.organize">
-                        <i data-lucide="layout-list" style="width: 12px; height: 12px"></i>
-                        <span data-i18n="tool.tree.organize">Organiser</span>
-                    </button>
-                </div>
-                <div class="chapters-list" id="chaptersList">
-                    <!-- Structure will be dynamically inserted here -->
-                </div>
-                <div class="database-list" id="frontMatterList" style="display: none">
-                    <!-- Front Matter elements will be dynamically inserted here -->
-                </div>
-                <div class="database-list" id="charactersList" style="display: none">
-                    <!-- Characters will be dynamically inserted here -->
-                </div>
-                <div class="database-list" id="worldList" style="display: none">
-                    <!-- World elements will be dynamically inserted here -->
-                </div>
-                <div class="database-list" id="timelineList" style="display: none">
-                    <!-- Timeline events will be dynamically inserted here -->
-                </div>
-                <div class="database-list" id="notesList" style="display: none">
-                    <!-- Notes will be dynamically inserted here -->
-                </div>
-                <div class="database-list" id="codexList" style="display: none">
-                    <!-- Codex entries will be dynamically inserted here -->
-                </div>
-                <div class="database-list" id="arcsList" style="display: none">
-                    <!-- Narrative arcs will be dynamically inserted here -->
-                </div>
-                <div class="database-list" id="statsList" style="display: none">
-                    <!-- Statistics will be dynamically inserted here -->
-                </div>
-                <div class="database-list" id="versionsList" style="display: none">
-                    <!-- Versions will be dynamically inserted here -->
-                </div>
-                <div class="database-list" id="analysisList" style="display: none">
-                    <!-- Analysis will be dynamically inserted here -->
-                </div>
-                <div class="database-list" id="corkboardList" style="display: none">
-                    <!-- Cork Board info will be here -->
-                </div>
-                <div class="database-list" id="mindmapList" style="display: none">
-                    <!-- Mindmap will be here -->
-                </div>
-                <div class="database-list" id="plotList" style="display: none">
-                    <!-- Plot graph will be here -->
-                </div>
-                <div class="database-list" id="relationsList" style="display: none">
-                    <!-- Relations graph will be here -->
-                </div>
-                <div class="database-list" id="mapList" style="display: none">
-                    <!-- World map will be here -->
-                </div>
-                <div class="database-list" id="timelineVizList" style="display: none">
-                    <!-- Visual timeline will be here -->
-                </div>
-                <div class="database-list" id="investigationList" style="display: none">
-                    <!-- Investigation cases will be here -->
-                </div>
-                <div class="database-list" id="globalnotesList" style="display: none">
-                    <!-- globalnotes boards will be here -->
-                </div>
-                <div class="database-list" id="todosList" style="display: none">
-                    <!-- TODOs list will be here -->
-                </div>
-                
-                <div class="database-list" id="noSidebarMessage" style="display: none">
-                    <!-- Message for views without sidebar -->
-                </div>
-                <div class="sidebar-actions" id="sidebarActions">
-                    <button class="btn btn-primary" onclick="openAddActModal()" data-i18n="btn.add_act">+ Acte</button>
-                    <button class="btn btn-primary" onclick="openAddChapterModal()" data-i18n="btn.add_chapter">+
-                        Chapitre</button>
-                    <button class="btn btn-primary" onclick="openAddSceneModalQuick()" data-i18n="btn.add_scene">+
-                        Scène</button>
+                    <!-- Filtres de statut -->
+                    <div class="status-filters" id="statusFilters">
+                        <button class="status-filter-btn draft active" onclick="toggleStatusFilter('draft')"
+                            data-status="draft" title="Brouillon">
+                            <span class="status-filter-dot draft"></span>
+                            <span data-i18n="sidebar.status.draft">Brouillon</span>
+                            <span class="status-filter-count" id="countDraft">0</span>
+                        </button>
+                        <button class="status-filter-btn progress active" onclick="toggleStatusFilter('progress')"
+                            data-status="progress" title="En cours">
+                            <span class="status-filter-dot progress"></span>
+                            <span data-i18n="sidebar.status.progress">En cours</span>
+                            <span class="status-filter-count" id="countProgress">0</span>
+                        </button>
+                        <button class="status-filter-btn complete active" onclick="toggleStatusFilter('complete')"
+                            data-status="complete" title="Terminé">
+                            <span class="status-filter-dot complete"></span>
+                            <span data-i18n="sidebar.status.complete">Terminé</span>
+                            <span class="status-filter-count" id="countComplete">0</span>
+                        </button>
+                        <button class="status-filter-btn review active" onclick="toggleStatusFilter('review')"
+                            data-status="review" title="À réviser">
+                            <span class="status-filter-dot review"></span>
+                            <span data-i18n="sidebar.status.review">À réviser</span>
+                            <span class="status-filter-count" id="countReview">0</span>
+                        </button>
+                    </div>
+                    <!-- Outils de scène -->
+                    <div class="scene-tools" id="sceneTools">
+                        <button class="scene-tool-btn" onclick="toggleVersionsSidebar()" id="headerVersionsToggle"
+                            title="Afficher/masquer les versions de scène">
+                            <i data-lucide="git-branch"></i>
+                            <span data-i18n="tool.versions">Versions</span>
+                        </button>
+                        <button class="scene-tool-btn" onclick="toggleAnnotationsPanel()" id="sidebarAnnotationsBtn"
+                            title="Afficher/masquer les annotations" data-i18n-title="tool.annotations">
+                            <i data-lucide="message-square"></i>
+                            <span data-i18n="tool.annotations">Annotations</span>
+                            <span class="scene-tool-badge" id="annotationsBadge" style="display: none">0</span>
+                        </button>
+                        <button class="scene-tool-btn" onclick="toggleTodosPanel()" id="sidebarTodosBtn"
+                            title="Afficher/masquer les TODOs" data-i18n-title="tool.todos">
+                            <i data-lucide="check-square"></i>
+                            <span data-i18n="tool.todos">TODOs</span>
+                            <span class="scene-tool-badge" id="todosBadge" style="display: none">0</span>
+                        </button>
+                        <button class="scene-tool-btn" onclick="toggleArcScenePanel()" id="sidebarArcsBtn"
+                            title="Afficher/masquer les Arcs Narratifs" data-i18n-title="tool.arcs">
+                            <i data-lucide="git-commit-horizontal"></i>
+                            <span data-i18n="tool.arcs">Arcs</span>
+                        </button>
+                        <button class="scene-tool-btn" onclick="PlotGridUI.toggleSidebar()" id="sidebarPlotBtn"
+                            title="Afficher/masquer l'Intrigue" data-i18n-title="tool.plot">
+                            <i data-lucide="trending-up"></i>
+                            <span data-i18n="tool.plot">Intrigue</span>
+                        </button>
+                        <button class="scene-tool-btn" onclick="InvestigationSidebarUI.toggleSidebar()"
+                            id="sidebarInvestigationBtn" title="Afficher/masquer l'Enquête"
+                            data-i18n-title="tool.investigation">
+                            <i data-lucide="search"></i>
+                            <span data-i18n="tool.investigation">Enquête</span>
+                        </button>
+                    </div>
+                    <!-- Boutons déplier/replier tout -->
+                    <div class="tree-collapse-toolbar" id="treeCollapseToolbar">
+                        <button class="tree-collapse-btn" onclick="expandAllTree()" title="Tout déplier"
+                            data-i18n-title="tool.tree.expand">
+                            <i data-lucide="unfold-vertical" style="width: 12px; height: 12px"></i>
+                            <span data-i18n="tool.tree.expand">Déplier</span>
+                        </button>
+                        <button class="tree-collapse-btn" onclick="collapseAllTree()" title="Tout replier"
+                            data-i18n-title="tool.tree.collapse">
+                            <i data-lucide="fold-vertical" style="width: 12px; height: 12px"></i>
+                            <span data-i18n="tool.tree.collapse">Replier</span>
+                        </button>
+                        <button class="tree-collapse-btn" onclick="openStructureOrganizer()"
+                            title="Réorganiser la structure (vue globale)" data-i18n-title="tool.tree.organize">
+                            <i data-lucide="layout-list" style="width: 12px; height: 12px"></i>
+                            <span data-i18n="tool.tree.organize">Organiser</span>
+                        </button>
+                        <button class="tree-collapse-btn tree-customize-btn"
+                            onclick="InterfaceCustomizerView.toggleStructureSettings()"
+                            title="Personnaliser la vue structure" data-i18n-title="customizer.structure.btn_title"
+                            id="structureCustomizeBtn">
+                            <i data-lucide="settings-2" style="width: 12px; height: 12px"></i>
+                        </button>
+                    </div>
+                    <div class="chapters-list" id="chaptersList">
+                        <!-- Structure will be dynamically inserted here -->
+                    </div>
+                    <div class="database-list" id="frontMatterList" style="display: none">
+                        <!-- Front Matter elements will be dynamically inserted here -->
+                    </div>
+                    <div class="database-list" id="charactersList" style="display: none">
+                        <!-- Characters will be dynamically inserted here -->
+                    </div>
+                    <div class="database-list" id="worldList" style="display: none">
+                        <!-- World elements will be dynamically inserted here -->
+                    </div>
+                    <div class="database-list" id="timelineList" style="display: none">
+                        <!-- Timeline events will be dynamically inserted here -->
+                    </div>
+                    <div class="database-list" id="notesList" style="display: none">
+                        <!-- Notes will be dynamically inserted here -->
+                    </div>
+                    <div class="database-list" id="codexList" style="display: none">
+                        <!-- Codex entries will be dynamically inserted here -->
+                    </div>
+                    <div class="database-list" id="arcsList" style="display: none">
+                        <!-- Narrative arcs will be dynamically inserted here -->
+                    </div>
+                    <div class="database-list" id="statsList" style="display: none">
+                        <!-- Statistics will be dynamically inserted here -->
+                    </div>
+                    <div class="database-list" id="versionsList" style="display: none">
+                        <!-- Versions will be dynamically inserted here -->
+                    </div>
+                    <div class="database-list" id="analysisList" style="display: none">
+                        <!-- Analysis will be dynamically inserted here -->
+                    </div>
+                    <div class="database-list" id="corkboardList" style="display: none">
+                        <!-- Cork Board info will be here -->
+                    </div>
+                    <div class="database-list" id="mindmapList" style="display: none">
+                        <!-- Mindmap will be here -->
+                    </div>
+                    <div class="database-list" id="plotList" style="display: none">
+                        <!-- Plot graph will be here -->
+                    </div>
+                    <div class="database-list" id="relationsList" style="display: none">
+                        <!-- Relations graph will be here -->
+                    </div>
+                    <div class="database-list" id="mapList" style="display: none">
+                        <!-- World map will be here -->
+                    </div>
+                    <div class="database-list" id="timelineVizList" style="display: none">
+                        <!-- Visual timeline will be here -->
+                    </div>
+                    <div class="database-list" id="investigationList" style="display: none">
+                        <!-- Investigation cases will be here -->
+                    </div>
+                    <div class="database-list" id="globalnotesList" style="display: none">
+                        <!-- globalnotes boards will be here -->
+                    </div>
+                    <div class="database-list" id="todosList" style="display: none">
+                        <!-- TODOs list will be here -->
+                    </div>
+                    
+                    <div class="database-list" id="noSidebarMessage" style="display: none">
+                        <!-- Message for views without sidebar -->
+                    </div>
+                    <div class="sidebar-actions" id="sidebarActions">
+                        <button class="btn btn-primary" onclick="openAddActModal()" data-i18n="btn.add_act">+
+                            Acte</button>
+                        <button class="btn btn-primary" onclick="openAddChapterModal()" data-i18n="btn.add_chapter">+
+                            Chapitre</button>
+                        <button class="btn btn-primary" onclick="openAddSceneModalQuick()" data-i18n="btn.add_scene">+
+                            Scène</button>
+                    </div>
                 </div>
             </div>
             <!-- Vertical Tools Sidebar -->
@@ -1888,6 +1747,7 @@
                 <button class="tool-btn" onclick="toggleVersionsSidebar()" id="toolVersionsBtn"
                     title="Versions de scène" data-i18n-title="tools.versions">
                     <i data-lucide="git-branch"></i>
+                    <span class="tool-badge" id="toolVersionsBadge" style="display: none">0</span>
                 </button>
                 <button class="tool-btn" onclick="toggleAnnotationsPanel()" id="toolAnnotationsBtn" title="Annotations"
                     data-i18n-title="tools.annotations">
@@ -1902,19 +1762,23 @@
                 <button class="tool-btn" onclick="toggleArcScenePanel()" id="toolArcsBtn" title="Arcs Narratifs"
                     data-i18n-title="tools.arcs">
                     <i data-lucide="git-commit-horizontal"></i>
+                    <span class="tool-badge" id="toolArcsBadge" style="display: none">0</span>
                 </button>
                 <button class="tool-btn" onclick="PlotGridUI.toggleSidebar()" id="toolPlotBtn" title="Plot Grid"
                     data-i18n-title="tools.plot">
                     <i data-lucide="layout-grid"></i>
+                    <span class="tool-badge" id="toolPlotBadge" style="display: none">0</span>
                 </button>
                 <button class="tool-btn" onclick="InvestigationSidebarUI.toggleSidebar()" id="toolInvestigationBtn"
                     title="Enquête" data-i18n-title="tools.investigation">
                     <i data-lucide="search"></i>
+                    <span class="tool-badge" id="toolInvestigationBadge" style="display: none">0</span>
                 </button>
                 <div style="width: 100%; height: 1px; background: var(--border-color); margin: 0.5rem 0"></div>
                 <button class="tool-btn" onclick="toggleLinksPanelVisibility()" id="toolLinksPanelBtn"
                     title="Afficher/Masquer les liens (Personnages, Univers, Timeline)" data-i18n-title="tools.links">
                     <i data-lucide="link-2"></i>
+                    <span class="tool-badge" id="toolLinksBadge" style="display: none">0</span>
                 </button>
                 <button class="tool-btn" onclick="toggleWordRepetitionPanel()" id="toolRepetitionBtn"
                     title="Analyseur de répétitions de mots" data-i18n-title="tools.repetition">
@@ -1933,7 +1797,9 @@
                             <i data-lucide="x" style="width: 14px; height: 14px"></i>
                         </button>
                     </div>
-                    <div class="sidebar-versions-scene" id="versionsSceneName" data-i18n="sidebar.no_scene">Aucune scène
+                    <div class="sidebar-versions-scene" id="versionsSceneName" data-i18n="sidebar.no_scene">
+                        Aucune
+                        scène
                         sélectionnée</div>
                 </div>
                 <div class="sidebar-versions-actions" id="versionsActionsArea">
@@ -1964,7 +1830,9 @@
                             <i data-lucide="x" style="width: 14px; height: 14px"></i>
                         </button>
                     </div>
-                    <div class="sidebar-plot-scene" id="plotSidebarSceneName" data-i18n="sidebar.no_scene">Aucune scène
+                    <div class="sidebar-plot-scene" id="plotSidebarSceneName" data-i18n="sidebar.no_scene">
+                        Aucune
+                        scène
                         sélectionnée</div>
                 </div>
                 <div class="sidebar-plot-list" id="plotSidebarList">
@@ -2016,7 +1884,8 @@
             <div id="linksPanel" class="links-panel-sidebar hidden">
                 <div class="links-panel-header">
                     <h3 data-i18n="tools.links_title"><i data-lucide="link-2"
-                            style="width: 16px; height: 16px; vertical-align: middle; margin-right: 6px"></i>Liens</h3>
+                            style="width: 16px; height: 16px; vertical-align: middle; margin-right: 6px"></i>Liens
+                    </h3>
                     <button class="links-panel-close" onclick="toggleLinksPanelVisibility()" data-i18n-title="btn.hide">
                         <i data-lucide="x" style="width: 14px; height: 14px"></i>
                     </button>
@@ -2059,7 +1928,8 @@
                 <div class="empty-state">
                     <div class="empty-state-icon"><i data-lucide="pen-tool"></i></div>
                     <div class="empty-state-title" data-i18n="empty.start">Commencez votre histoire</div>
-                    <div class="empty-state-text" data-i18n="empty.create_chapter">Créez votre premier chapitre pour
+                    <div class="empty-state-text" data-i18n="empty.create_chapter">Créez votre premier chapitre
+                        pour
                         commencer à écrire.</div>
                     <button class="btn btn-primary" onclick="openAddChapterModal()" data-i18n="btn.create_chapter">+
                         Créer un
@@ -2271,7 +2141,8 @@
     <div class="modal" id="splitSelectorModal">
         <div class="modal-content" style="max-width: 600px">
             <div class="modal-title" data-i18n="modal.split_selector.title"><i data-lucide="layout"
-                    style="width: 20px; height: 20px; vertical-align: middle; margin-right: 8px"></i>Choisir la vue
+                    style="width: 20px; height: 20px; vertical-align: middle; margin-right: 8px"></i>Choisir la
+                vue
             </div>
             <div id="splitSelectorContent" style="max-height: 600px; overflow-y: auto">
                 <!-- Content will be populated by JavaScript -->
@@ -2524,7 +2395,8 @@
                             <option value="">Aucune scène</option>
                             <!-- Populated dynamically -->
                         </select>
-                        <small style="color: var(--text-muted); display: block; margin-top: 4px">Associez cet événement
+                        <small style="color: var(--text-muted); display: block; margin-top: 4px">Associez cet
+                            événement
                             à une scène de votre roman</small>
                     </div>
 
@@ -2558,7 +2430,8 @@
             <div class="modal-title">Ouvrir l'événement Timeline</div>
             <input type="hidden" id="metroViewChoiceEventId" />
             <div style="padding: 1rem 0">
-                <p style="color: var(--text-secondary); margin-bottom: 1.5rem">Comment souhaitez-vous visualiser cet
+                <p style="color: var(--text-secondary); margin-bottom: 1.5rem">Comment souhaitez-vous visualiser
+                    cet
                     événement ?</p>
                 <div style="display: flex; flex-direction: column; gap: 1rem">
                     <button class="btn" onclick="openMetroEventFullView()"
@@ -2567,7 +2440,8 @@
                             style="width: 24px; height: 24px; flex-shrink: 0; color: var(--accent-blue)"></i>
                         <div>
                             <div style="font-weight: 600; margin-bottom: 0.25rem">Vue complète</div>
-                            <div style="font-size: 0.85rem; color: var(--text-muted)">Basculer vers la vue Timeline
+                            <div style="font-size: 0.85rem; color: var(--text-muted)">Basculer vers la vue
+                                Timeline
                                 Métro (quitte la vue actuelle)</div>
                         </div>
                     </button>
@@ -2577,7 +2451,8 @@
                             style="width: 24px; height: 24px; flex-shrink: 0; color: var(--accent-green)"></i>
                         <div>
                             <div style="font-weight: 600; margin-bottom: 0.25rem">Split-view</div>
-                            <div style="font-size: 0.85rem; color: var(--text-muted)">Ouvrir la Timeline en vue séparée
+                            <div style="font-size: 0.85rem; color: var(--text-muted)">Ouvrir la Timeline en vue
+                                séparée
                                 (conserve l'éditeur)</div>
                         </div>
                     </button>
@@ -2692,7 +2567,8 @@
                 </select>
             </div>
             <div class="form-group">
-                <label class="form-label" data-i18n="modal.note.label_tags">Tags (séparés par des virgules)</label>
+                <label class="form-label" data-i18n="modal.note.label_tags">Tags (séparés par des
+                    virgules)</label>
                 <input type="text" class="form-input" id="noteTagsInput" placeholder="shinto, religion, japon"
                     data-i18n-placeholder="modal.note.placeholder_tags" />
             </div>
@@ -2724,7 +2600,8 @@
                     <option value="Technologie" data-i18n="codex.category.Technologie">Technologie</option>
                     <option value="Géographie" data-i18n="codex.category.Géographie">Géographie</option>
                     <option value="Politique" data-i18n="codex.category.Politique">Politique</option>
-                    <option value="Magie/Pouvoir" data-i18n="codex.category.Magie/Pouvoir">Magie/Pouvoir</option>
+                    <option value="Magie/Pouvoir" data-i18n="codex.category.Magie/Pouvoir">Magie/Pouvoir
+                    </option>
                     <option value="Religion" data-i18n="codex.category.Religion">Religion</option>
                     <option value="Société" data-i18n="codex.category.Société">Société</option>
                     <option value="Autre" data-i18n="codex.category.Autre">Autre</option>
@@ -2773,26 +2650,37 @@
                 </select>
             </div>
             <div class="form-group">
-                <label class="form-label" data-i18n="modal.project.label_template">Utiliser un template ?</label>
+                <label class="form-label" data-i18n="modal.project.label_template">Utiliser un template
+                    ?</label>
                 <select class="form-input" id="newProjectTemplate">
                     <option value="" data-i18n="modal.project.template.empty">Projet vide</option>
                     <option value="acts3" data-i18n="modal.project.template.acts3_desc">Structure en 3 Actes
                         (Exposition, Confrontation, Résolution)</option>
-                    <option value="hero_journey" data-i18n="modal.project.template.hero_journey_desc">Le Voyage du Héros
+                    <option value="hero_journey" data-i18n="modal.project.template.hero_journey_desc">Le Voyage
+                        du
+                        Héros
                         (12 étapes mythiques)</option>
-                    <option value="save_the_cat" data-i18n="modal.project.template.save_the_cat_desc">Save the Cat! (Les
+                    <option value="save_the_cat" data-i18n="modal.project.template.save_the_cat_desc">Save the
+                        Cat!
+                        (Les
                         15 beats de Snyder)</option>
                     <option value="thriller" data-i18n="modal.project.template.thriller_desc">Thriller / Enquête
                         (Suspense & Mystère)</option>
-                    <option value="romance" data-i18n="modal.project.template.romance_desc">Romance (Rencontre, Tension
+                    <option value="romance" data-i18n="modal.project.template.romance_desc">Romance (Rencontre,
+                        Tension
                         & Union)</option>
-                    <option value="snowflake" data-i18n="modal.project.template.snowflake_desc">Méthode Snowflake
+                    <option value="snowflake" data-i18n="modal.project.template.snowflake_desc">Méthode
+                        Snowflake
                         (Construction itérative)</option>
-                    <option value="scifi" data-i18n="modal.project.template.scifi_desc">Science-Fiction (Worldbuilding
+                    <option value="scifi" data-i18n="modal.project.template.scifi_desc">Science-Fiction
+                        (Worldbuilding
                         avancé)</option>
-                    <option value="story_circle" data-i18n="modal.project.template.story_circle_desc">Story Circle (Les
+                    <option value="story_circle" data-i18n="modal.project.template.story_circle_desc">Story
+                        Circle
+                        (Les
                         8 étapes de Dan Harmon)</option>
-                    <option value="fichtean_curve" data-i18n="modal.project.template.fichtean_curve_desc">Courbe de
+                    <option value="fichtean_curve" data-i18n="modal.project.template.fichtean_curve_desc">Courbe
+                        de
                         Fichte (Action & Crises successives)</option>
                 </select>
             </div>
@@ -2807,14 +2695,16 @@
     <!-- Backup Menu Modal -->
     <div class="modal" id="backupModal">
         <div class="modal-content" style="max-width: 600px; max-height: 90vh; overflow-y: auto">
-            <div class="modal-title" data-i18n="modal.backup.title"><i data-lucide="hard-drive"></i> Sauvegardes et
+            <div class="modal-title" data-i18n="modal.backup.title"><i data-lucide="hard-drive"></i> Sauvegardes
+                et
                 Exports</div>
             <div style="margin-bottom: 2rem">
-                <div style="font-size: 1rem; font-weight: 600; margin-bottom: 1rem; color: var(--text-primary)"><i
-                        data-lucide="download"
+                <div style="font-size: 1rem; font-weight: 600; margin-bottom: 1rem; color: var(--text-primary)">
+                    <i data-lucide="download"
                         style="width: 16px; height: 16px; vertical-align: middle; margin-right: 6px"></i><span
                         data-i18n="modal.backup.import_section">Importer des
-                        données</span></div>
+                        données</span>
+                </div>
                 <div style="display: flex; flex-direction: column; gap: 0.75rem">
                     <button class="btn btn-primary" onclick="
                             openImportChapterModal();
@@ -2834,11 +2724,12 @@
                 </div>
             </div>
             <div style="margin-bottom: 2rem">
-                <div style="font-size: 1rem; font-weight: 600; margin-bottom: 1rem; color: var(--text-primary)"><i
-                        data-lucide="upload"
+                <div style="font-size: 1rem; font-weight: 600; margin-bottom: 1rem; color: var(--text-primary)">
+                    <i data-lucide="upload"
                         style="width: 16px; height: 16px; vertical-align: middle; margin-right: 6px"></i><span
                         data-i18n="modal.backup.export_section">Exporter les
-                        données</span></div>
+                        données</span>
+                </div>
                 <div style="display: flex; flex-direction: column; gap: 0.75rem">
                     <button class="btn btn-primary" onclick="openExportNovelModal()" style="font-weight: 600"><i
                             data-lucide="book-open"
@@ -2856,16 +2747,20 @@
                 </div>
             </div>
             <div style="margin-bottom: 2rem">
-                <div style="font-size: 1rem; font-weight: 600; margin-bottom: 1rem; color: var(--text-primary)"><i
-                        data-lucide="cloud"
-                        style="width: 16px; height: 16px; vertical-align: middle; margin-right: 6px"></i>Google Drive
-                    (Automatique)</div>
+                <div style="font-size: 1rem; font-weight: 600; margin-bottom: 1rem; color: var(--text-primary)">
+                    <i data-lucide="cloud"
+                        style="width: 16px; height: 16px; vertical-align: middle; margin-right: 6px"></i>Google
+                    Drive
+                    (Automatique)
+                </div>
                 <div id="gdrive-container"
                     style="padding: 1rem; background: var(--bg-secondary); border-radius: 4px; border: 1px solid var(--border-color)">
                     <div id="gdrive-logged-out">
                         <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1rem; line-height: 1.6"
                             data-i18n="modal.backup.gdrive_desc">
-                            Connectez votre compte Google Drive pour sauvegarder automatiquement votre projet dans le
+                            Connectez votre compte Google Drive pour sauvegarder automatiquement votre projet
+                            dans
+                            le
                             cloud.</p>
                         <button class="btn btn-primary" onclick="handleAuthClick()" style="width: 100%">
                             <i data-lucide="log-in"
@@ -2934,8 +2829,8 @@
                 </div>
             </div>
             <div style="margin-bottom: 2rem">
-                <div style="font-size: 1rem; font-weight: 600; margin-bottom: 1rem; color: var(--text-primary)"><i
-                        data-lucide="help-circle"
+                <div style="font-size: 1rem; font-weight: 600; margin-bottom: 1rem; color: var(--text-primary)">
+                    <i data-lucide="help-circle"
                         style="width: 16px; height: 16px; vertical-align: middle; margin-right: 6px"></i><span
                         data-i18n="modal.backup.cloud.manual_title">Cloud (manuel)</span>
                 </div>
@@ -2947,10 +2842,13 @@
                     <ol
                         style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.8; padding-left: 1.5rem">
                         <li data-i18n="modal.backup.cloud.manual_step1">Clique sur "Télécharger en JSON"</li>
-                        <li data-i18n="modal.backup.cloud.manual_step2">Le fichier contient TOUTES tes données</li>
-                        <li data-i18n="modal.backup.cloud.manual_step3">Uploade-le manuellement sur ton service cloud
+                        <li data-i18n="modal.backup.cloud.manual_step2">Le fichier contient TOUTES tes données
+                        </li>
+                        <li data-i18n="modal.backup.cloud.manual_step3">Uploade-le manuellement sur ton service
+                            cloud
                             préféré</li>
-                        <li data-i18n="modal.backup.cloud.manual_step4">Pour restaurer : télécharge le fichier et
+                        <li data-i18n="modal.backup.cloud.manual_step4">Pour restaurer : télécharge le fichier
+                            et
                             utilise "Importer depuis un fichier"</li>
                     </ol>
                 </div>
@@ -2964,7 +2862,9 @@
                 </div>
                 <p style="font-size: 0.8rem; color: #b71c1c; line-height: 1.6" data-i18n="modal.backup.important_text">
                     Le stockage local (IndexedDB) peut être
-                    effacé par le navigateur. L'utilisation du Cloud (Google Drive) est fortement recommandée pour ne
+                    effacé par le navigateur. L'utilisation du Cloud (Google Drive) est fortement recommandée
+                    pour
+                    ne
                     jamais perdre votre travail.</p>
             </div>
             <div class="modal-actions" style="margin-top: 1.5rem">
@@ -2975,7 +2875,8 @@
     <!-- Import Chapter Modal (multi-format) -->
     <div class="modal" id="importChapterModal">
         <div class="modal-content" style="max-width: 650px; max-height: 85vh; overflow-y: auto">
-            <div class="modal-title"><i data-lucide="file-plus"></i> <span data-i18n="modal.import.title">Importer un
+            <div class="modal-title"><i data-lucide="file-plus"></i> <span data-i18n="modal.import.title">Importer
+                    un
                     texte</span></div>
             <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1.5rem; line-height: 1.5"
                 data-i18n="modal.import.desc">Importez
@@ -2992,11 +2893,13 @@
     <!-- Export Novel Modal -->
     <div class="modal" id="exportNovelModal">
         <div class="modal-content" style="max-width: 700px; max-height: 90vh; overflow-y: auto">
-            <div class="modal-title"><i data-lucide="book-open"></i> <span data-i18n="modal.export.title">Exporter votre
+            <div class="modal-title"><i data-lucide="book-open"></i> <span data-i18n="modal.export.title">Exporter
+                    votre
                     roman</span></div>
             <p style="font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 1.5rem; line-height: 1.6"
                 data-i18n="modal.export.desc">Vous
-                pouvez exporter votre roman dans plusieurs formats. Vous pouvez ensuite importer les données dans
+                pouvez exporter votre roman dans plusieurs formats. Vous pouvez ensuite importer les données
+                dans
                 d'autres logiciels d'écriture.</p>
             <!-- Toggle All Button -->
             <div style="margin-bottom: 1.5rem">
@@ -3020,12 +2923,212 @@
                     <option value="txt">Texte brut (.txt)</option>
                     <option value="html">HTML (.html)</option>
                     <option value="epub">EPUB (.epub)</option>
+                    <option value="docx">DOCX (.docx)</option>
                 </select>
                 <div id="formatInfoBox"
                     style="margin-top: 0.75rem; padding: 0.75rem; background: rgba(212, 175, 55, 0.1); border-radius: 4px; border: 1px solid var(--accent-gold); font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5">
-                    <strong style="color: var(--text-primary)">Note :</strong>
-                    Toutes les fonctionnalités ne sont pas supportées en format DOCX. Le texte exporté pourrait ne pas
-                    ressembler exactement à l'éditeur. Pour une compatibilité complète, utilisez un autre format.
+                    <strong style="color: var(--text-primary)" data-i18n="modal.export.note.title">Note :</strong>
+                    <span data-i18n="modal.export.note.docx_warning">Toutes les fonctionnalités ne sont pas
+                        supportées
+                        en format DOCX. Le texte exporté pourrait
+                        ne pas ressembler exactement à l'éditeur. Pour une compatibilité complète, utilisez un autre
+                        format.</span>
+                </div>
+            </div>
+            <!-- DOCX Advanced Settings Panel (auto-show when DOCX selected) -->
+            <div id="docxSettingsPanel"
+                style="display: none; margin-bottom: 1.5rem; padding: 1rem; background: var(--bg-secondary); border-radius: 8px; border: 1px solid var(--border-color);">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; cursor: pointer;"
+                    onclick="document.getElementById('docxSettingsInner').style.display = document.getElementById('docxSettingsInner').style.display === 'none' ? 'block' : 'none'">
+                    <label style="font-weight: 600; color: var(--text-primary); cursor: pointer;">
+                        <i data-lucide="settings-2"
+                            style="width: 16px; height: 16px; vertical-align: middle; margin-right: 4px;"></i>
+                        <span data-i18n="modal.export.docx.settings_title">Paramètres DOCX avancés</span>
+                    </label>
+                    <span style="font-size: 0.8rem; color: var(--text-muted);"
+                        data-i18n="modal.export.docx.collapse_hint">cliquer pour déplier</span>
+                </div>
+                <div id="docxSettingsInner" style="display: none;">
+                    <!-- Row 1: Page format & Margins -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 0.75rem;">
+                        <div>
+                            <label style="font-size: 0.85rem; font-weight: 500; display: block; margin-bottom: 0.3rem;"
+                                data-i18n="modal.export.docx.page_format">Format de page</label>
+                            <select id="docxPageFormat"
+                                style="width: 100%; padding: 0.5rem; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 4px; color: var(--text-primary); font-size: 0.9rem;">
+                                <option value="a4" data-i18n="modal.export.docx.page_format.a4">A4 (210 × 297 mm)
+                                </option>
+                                <option value="letter" data-i18n="modal.export.docx.page_format.letter">Letter (8.5
+                                    × 11
+                                    in)</option>
+                                <option value="a5" data-i18n="modal.export.docx.page_format.a5">A5 (148 × 210 mm)
+                                </option>
+                                <option value="b5" data-i18n="modal.export.docx.page_format.b5">B5 (176 × 250 mm)
+                                </option>
+                                <option value="poche_11_18" data-i18n="modal.export.docx.page_format.poche_11_18">
+                                    Livre
+                                    de poche (110 × 180 mm)</option>
+                                <option value="broche_13_20" data-i18n="modal.export.docx.page_format.broche_13_20">
+                                    Broché (130 × 200 mm)</option>
+                                <option value="broche_14_22" data-i18n="modal.export.docx.page_format.broche_14_22">
+                                    Broché (140 × 220 mm)</option>
+                                <option value="us_trade" data-i18n="modal.export.docx.page_format.us_trade">US Trade
+                                    (6
+                                    × 9 in)</option>
+                                <option value="us_digest" data-i18n="modal.export.docx.page_format.us_digest">US
+                                    Digest
+                                    (5.5 × 8.5 in)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="font-size: 0.85rem; font-weight: 500; display: block; margin-bottom: 0.3rem;"
+                                data-i18n="modal.export.docx.margins">Marges</label>
+                            <select id="docxMargins"
+                                style="width: 100%; padding: 0.5rem; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 4px; color: var(--text-primary); font-size: 0.9rem;">
+                                <option value="narrow" data-i18n="modal.export.docx.margins.narrow">Étroites (~1.27
+                                    cm)
+                                </option>
+                                <option value="normal" data-i18n="modal.export.docx.margins.normal">Normales (~2.54
+                                    cm)
+                                </option>
+                                <option value="wide" selected data-i18n="modal.export.docx.margins.wide">Larges (~3
+                                    cm)
+                                </option>
+                                <option value="editorial" data-i18n="modal.export.docx.margins.editorial">
+                                    Éditoriales
+                                    (gauche 4 cm)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!-- Row 2: Font & Size -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 0.75rem;">
+                        <div>
+                            <label style="font-size: 0.85rem; font-weight: 500; display: block; margin-bottom: 0.3rem;"
+                                data-i18n="modal.export.docx.font">Police</label>
+                            <select id="docxFont"
+                                style="width: 100%; padding: 0.5rem; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 4px; color: var(--text-primary); font-size: 0.9rem;">
+                                <option value="Times New Roman" selected>Times New Roman</option>
+                                <option value="Georgia">Georgia</option>
+                                <option value="Garamond">Garamond</option>
+                                <option value="Palatino Linotype">Palatino Linotype</option>
+                                <option value="Book Antiqua">Book Antiqua</option>
+                                <option value="Crimson Pro">Crimson Pro</option>
+                                <option value="Arial">Arial</option>
+                                <option value="Calibri">Calibri</option>
+                                <option value="Cambria">Cambria</option>
+                                <option value="Courier New">Courier New</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="font-size: 0.85rem; font-weight: 500; display: block; margin-bottom: 0.3rem;"
+                                data-i18n="modal.export.docx.body_size">Taille du corps</label>
+                            <select id="docxBodySize"
+                                style="width: 100%; padding: 0.5rem; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 4px; color: var(--text-primary); font-size: 0.9rem;">
+                                <option value="20">10 pt</option>
+                                <option value="22">11 pt</option>
+                                <option value="24" selected>12 pt</option>
+                                <option value="26">13 pt</option>
+                                <option value="28">14 pt</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!-- Row 3: Line spacing & Indent -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 0.75rem;">
+                        <div>
+                            <label style="font-size: 0.85rem; font-weight: 500; display: block; margin-bottom: 0.3rem;"
+                                data-i18n="modal.export.docx.line_spacing">Interligne</label>
+                            <select id="docxLineSpacing"
+                                style="width: 100%; padding: 0.5rem; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 4px; color: var(--text-primary); font-size: 0.9rem;">
+                                <option value="240" data-i18n="modal.export.docx.spacing.single">Simple (1.0)
+                                </option>
+                                <option value="276" data-i18n="modal.export.docx.spacing.1_15">1.15</option>
+                                <option value="360" selected data-i18n="modal.export.docx.spacing.1_5">1.5</option>
+                                <option value="480" data-i18n="modal.export.docx.spacing.double">Double (2.0)
+                                </option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="font-size: 0.85rem; font-weight: 500; display: block; margin-bottom: 0.3rem;"
+                                data-i18n="modal.export.docx.indent">Alinéa (1ère ligne)</label>
+                            <select id="docxIndent"
+                                style="width: 100%; padding: 0.5rem; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 4px; color: var(--text-primary); font-size: 0.9rem;">
+                                <option value="0" data-i18n="modal.export.docx.indent.none">Aucun</option>
+                                <option value="360" data-i18n="modal.export.docx.indent.small">~0.63 cm</option>
+                                <option value="709" selected data-i18n="modal.export.docx.indent.standard">~1.25 cm
+                                    (Standard)</option>
+                                <option value="1440" data-i18n="modal.export.docx.indent.large">~2.54 cm</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!-- Row 4: Header & Footer -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 0.75rem;">
+                        <div>
+                            <label style="font-size: 0.85rem; font-weight: 500; display: block; margin-bottom: 0.3rem;"
+                                data-i18n="modal.export.docx.header_content">En-tête</label>
+                            <select id="docxHeaderContent"
+                                style="width: 100%; padding: 0.5rem; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 4px; color: var(--text-primary); font-size: 0.9rem;">
+                                <option value="title" selected data-i18n="modal.export.docx.header.title">Titre du
+                                    roman
+                                </option>
+                                <option value="author" data-i18n="modal.export.docx.header.author">Nom de l'auteur
+                                </option>
+                                <option value="title_author" data-i18n="modal.export.docx.header.both">Titre —
+                                    Auteur
+                                </option>
+                                <option value="none" data-i18n="modal.export.docx.header.none">Aucun</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="font-size: 0.85rem; font-weight: 500; display: block; margin-bottom: 0.3rem;"
+                                data-i18n="modal.export.docx.footer">Pied de page</label>
+                            <select id="docxFooter"
+                                style="width: 100%; padding: 0.5rem; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 4px; color: var(--text-primary); font-size: 0.9rem;">
+                                <option value="pagenum" selected data-i18n="modal.export.docx.footer.pagenum">Numéro
+                                    de
+                                    page</option>
+                                <option value="none" data-i18n="modal.export.docx.footer.none">Aucun</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!-- Row 5: Page Breaks -->
+                    <div style="margin-bottom: 0.75rem;">
+                        <label style="font-size: 0.85rem; font-weight: 500; display: block; margin-bottom: 0.3rem;"
+                            data-i18n="modal.export.docx.page_breaks">Sauts de page</label>
+                        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                            <label
+                                style="display: flex; align-items: center; gap: 0.4rem; cursor: pointer; font-size: 0.9rem;">
+                                <input type="checkbox" id="docxBreakBeforeAct" checked style="cursor: pointer;" />
+                                <span data-i18n="modal.export.docx.break_act">Avant chaque acte</span>
+                            </label>
+                            <label
+                                style="display: flex; align-items: center; gap: 0.4rem; cursor: pointer; font-size: 0.9rem;">
+                                <input type="checkbox" id="docxBreakBeforeChapter" checked style="cursor: pointer;" />
+                                <span data-i18n="modal.export.docx.break_chapter">Avant chaque chapitre</span>
+                            </label>
+                            <label
+                                style="display: flex; align-items: center; gap: 0.4rem; cursor: pointer; font-size: 0.9rem;">
+                                <input type="checkbox" id="docxBreakBeforeScene" style="cursor: pointer;" />
+                                <span data-i18n="modal.export.docx.break_scene">Avant chaque scène</span>
+                            </label>
+                        </div>
+                    </div>
+                    <!-- Row 6: Front Matter -->
+                    <div style="margin-bottom: 0.5rem;">
+                        <label style="font-size: 0.85rem; font-weight: 500; display: block; margin-bottom: 0.3rem;"
+                            data-i18n="modal.export.docx.front_matter_title">Pages liminaires</label>
+                        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                            <label
+                                style="display: flex; align-items: center; gap: 0.4rem; cursor: pointer; font-size: 0.9rem;">
+                                <input type="checkbox" id="docxIncludeTitlePage" checked style="cursor: pointer;" />
+                                <span data-i18n="modal.export.docx.title_page">Page de titre</span>
+                            </label>
+                            <label
+                                style="display: flex; align-items: center; gap: 0.4rem; cursor: pointer; font-size: 0.9rem;">
+                                <input type="checkbox" id="docxIncludeFrontMatter" checked style="cursor: pointer;" />
+                                <span data-i18n="modal.export.docx.front_matter">Dédicace, épigraphe…</span>
+                            </label>
+                        </div>
+                    </div>
                 </div>
             </div>
             <!-- General Options -->
@@ -3045,7 +3148,8 @@
                     <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.95rem">
                         <input type="checkbox" id="includeActTitlesCheck" checked style="cursor: pointer" />
                         <span data-i18n="modal.export.act_titles">Inclure les titres d'actes <span
-                                style="color: var(--text-muted); font-size: 0.85rem">(désactiver pour ex. Vellum,
+                                style="color: var(--text-muted); font-size: 0.85rem">(désactiver pour ex.
+                                Vellum,
                                 Atticus)</span></span>
                     </label>
                     <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.95rem">
@@ -3076,7 +3180,8 @@
                     Export du projet complet </label>
                 <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem; line-height: 1.5"
                     data-i18n="modal.export.full_project_desc">En
-                    exportant le projet complet, le fichier résultant sera une archive ZIP contenant tout le contenu
+                    exportant le projet complet, le fichier résultant sera une archive ZIP contenant tout le
+                    contenu
                     sélectionné.</p>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem">
                     <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.95rem">
@@ -3126,12 +3231,16 @@
     <!-- Tension Words Editor Modal -->
     <div class="modal" id="tensionWordsModal">
         <div class="modal-content" style="max-width: 900px">
-            <div class="modal-title" data-i18n="modal.tension.title"><i data-lucide="pencil"></i> Personnaliser les mots
+            <div class="modal-title" data-i18n="modal.tension.title"><i data-lucide="pencil"></i> Personnaliser
+                les
+                mots
                 de tension</div>
             <div
                 style="margin-bottom: 1.5rem; padding: 1rem; background: var(--bg-secondary); border-radius: 6px; border: 1px solid var(--border-color)">
-                <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; margin: 0">Ces mots sont
-                    utilisés pour calculer automatiquement la tension narrative de vos scènes. Personnalisez-les selon
+                <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; margin: 0">Ces mots
+                    sont
+                    utilisés pour calculer automatiquement la tension narrative de vos scènes. Personnalisez-les
+                    selon
                     votre style d'écriture et le genre de votre roman.</p>
             </div>
             <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem">
@@ -3166,7 +3275,8 @@
                     <h3
                         style="margin: 0 0 0.75rem 0; font-size: 1rem; color: #e6a23c; display: flex; align-items: center; gap: 0.5rem">
                         Tension moyenne
-                        <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: normal">(+1.5 pts
+                        <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: normal">(+1.5
+                            pts
                             chacun)</span>
                     </h3>
                     <div style="margin-bottom: 0.75rem">
@@ -3246,7 +3356,9 @@
                 <textarea id="bulkImportText"
                     placeholder="Ex: combat, bataille, mort&#10;tuer, danger, peur&#10;terreur, cri, hurler"
                     style="width: 100%; min-height: 200px; padding: 0.75rem; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 4px; color: var(--text-primary); font-size: 0.85rem; font-family: monospace; resize: vertical"> </textarea>
-                <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem">Formats acceptés : un mot
+                <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem">Formats acceptés :
+                    un
+                    mot
                     par ligne, ou plusieurs mots séparés par des virgules</div>
             </div>
             <div style="margin-bottom: 1.5rem">
@@ -3256,7 +3368,8 @@
             </div>
             <div
                 style="padding: 1rem; background: rgba(74, 144, 226, 0.1); border-radius: 4px; border: 1px solid var(--accent-blue); margin-bottom: 1.5rem">
-                <div style="font-size: 0.85rem; font-weight: 600; color: var(--accent-blue); margin-bottom: 0.5rem">Mode
+                <div style="font-size: 0.85rem; font-weight: 600; color: var(--accent-blue); margin-bottom: 0.5rem">
+                    Mode
                     de fusion</div>
                 <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; margin-bottom: 0.5rem">
                     <input type="radio" name="importMode" value="add" checked />
@@ -3271,7 +3384,8 @@
             </div>
             <div class="modal-actions">
                 <button class="btn" onclick="closeModal('bulkImportModal')">Annuler</button>
-                <button class="btn btn-primary" onclick="processBulkImport()"><i data-lucide="download"></i> Importer
+                <button class="btn btn-primary" onclick="processBulkImport()"><i data-lucide="download"></i>
+                    Importer
                     les mots</button>
             </div>
         </div>
@@ -3279,7 +3393,8 @@
     <!-- References Panel Modal -->
     <div class="modal" id="referencesModal">
         <div class="modal-content" style="max-width: 700px">
-            <div class="modal-title" id="referencesModalTitle" data-i18n="tools.links_title">Références et Liens</div>
+            <div class="modal-title" id="referencesModalTitle" data-i18n="tools.links_title">Références et Liens
+            </div>
             <div id="referencesModalContent"></div>
             <div class="modal-actions">
                 <button class="btn" onclick="closeModal('referencesModal')">Fermer</button>
@@ -3304,7 +3419,9 @@
             </div>
             <div class="guide-item">
                 <span class="guide-tag todo" data-i18n="revision.type.todo">TODO</span>
-                <p data-i18n="revision.guide.todo_desc">Tâche concrète à réaliser (corriger, supprimer, réécrire).</p>
+                <p data-i18n="revision.guide.todo_desc">Tâche concrète à réaliser (corriger, supprimer,
+                    réécrire).
+                </p>
             </div>
             <div class="guide-item">
                 <span class="guide-tag note" data-i18n="revision.type.note">Note</span>
@@ -3318,7 +3435,8 @@
 
         <div class="annotation-type-selector">
             <div class="annotation-type-btn comment active" onclick="selectAnnotationType('comment')"><i
-                    data-lucide="message-circle"></i><span data-i18n="revision.type.comment">Commentaire</span></div>
+                    data-lucide="message-circle"></i><span data-i18n="revision.type.comment">Commentaire</span>
+            </div>
             <div class="annotation-type-btn todo" onclick="selectAnnotationType('todo')"><i
                     data-lucide="check-square"></i><span data-i18n="revision.type.todo">TODO</span></div>
             <div class="annotation-type-btn note" onclick="selectAnnotationType('note')"><i
@@ -3338,7 +3456,8 @@
         data-i18n-title="floating.title.toggle"><i data-lucide="pen-line"></i></button>
     <!-- Floating Editor Menu (Mobile) -->
     <div id="floatingEditorMenu">
-        <div id="floatingMenuHandle" title="Faire glisser pour déplacer" data-i18n-title="floating.title.drag"></div>
+        <div id="floatingMenuHandle" title="Faire glisser pour déplacer" data-i18n-title="floating.title.drag">
+        </div>
         <div id="floatingMenuContent">
             <!-- Annuler/Rétablir -->
             <button class="floating-btn-mini" onmousedown="event.preventDefault()" onclick="undo()" title="Annuler"
@@ -3483,7 +3602,8 @@
                             </div>
                         </div>
                         <div class="shortcut-item">
-                            <span class="shortcut-description" data-i18n="shortcuts.desc.save_project">Sauvegarder le
+                            <span class="shortcut-description" data-i18n="shortcuts.desc.save_project">Sauvegarder
+                                le
                                 projet</span>
                             <div class="shortcut-keys">
                                 <span class="shortcut-key">Ctrl</span>
@@ -3492,7 +3612,8 @@
                             </div>
                         </div>
                         <div class="shortcut-item">
-                            <span class="shortcut-description" data-i18n="shortcuts.desc.focus_mode">Mode Focus (Plein
+                            <span class="shortcut-description" data-i18n="shortcuts.desc.focus_mode">Mode Focus
+                                (Plein
                                 écran)</span>
                             <div class="shortcut-keys">
                                 <span class="shortcut-key">F11</span>
@@ -3563,7 +3684,8 @@
                             </div>
                         </div>
                         <div class="shortcut-item">
-                            <span class="shortcut-description" data-i18n="shortcuts.desc.em_dash">Tiret cadratin ( —
+                            <span class="shortcut-description" data-i18n="shortcuts.desc.em_dash">Tiret cadratin
+                                ( —
                                 )</span>
                             <div class="shortcut-keys">
                                 <span class="shortcut-key">Ctrl</span>
@@ -3583,7 +3705,8 @@
                         Style du texte</div>
                     <div class="shortcut-list">
                         <div class="shortcut-item">
-                            <span class="shortcut-description" data-i18n="shortcuts.desc.bold">Mettre en gras</span>
+                            <span class="shortcut-description" data-i18n="shortcuts.desc.bold">Mettre en
+                                gras</span>
                             <div class="shortcut-keys">
                                 <span class="shortcut-key">Ctrl</span>
                                 <span class="shortcut-plus">+</span>
@@ -3658,7 +3781,8 @@
                             </div>
                         </div>
                         <div class="shortcut-item">
-                            <span class="shortcut-description" data-i18n="shortcuts.desc.paste_no_format">Coller sans
+                            <span class="shortcut-description" data-i18n="shortcuts.desc.paste_no_format">Coller
+                                sans
                                 mise en forme</span>
                             <div class="shortcut-keys">
                                 <span class="shortcut-key">Maj</span>
@@ -3679,7 +3803,8 @@
                     </div>
                     <div class="shortcut-list">
                         <div class="shortcut-item">
-                            <span class="shortcut-description" data-i18n="shortcuts.desc.close_cancel">Fermer la fenêtre
+                            <span class="shortcut-description" data-i18n="shortcuts.desc.close_cancel">Fermer la
+                                fenêtre
                                 / Annuler</span>
                             <div class="shortcut-keys">
                                 <span class="shortcut-key">Échap</span>
@@ -3693,7 +3818,9 @@
                             </div>
                         </div>
                         <div class="shortcut-item">
-                            <span class="shortcut-description" data-i18n="shortcuts.desc.line_start_end">Début / Fin de
+                            <span class="shortcut-description" data-i18n="shortcuts.desc.line_start_end">Début /
+                                Fin
+                                de
                                 ligne</span>
                             <div class="shortcut-keys">
                                 <span class="shortcut-key">Origine</span>
@@ -3702,7 +3829,9 @@
                             </div>
                         </div>
                         <div class="shortcut-item">
-                            <span class="shortcut-description" data-i18n="shortcuts.desc.doc_start_end">Début / Fin du
+                            <span class="shortcut-description" data-i18n="shortcuts.desc.doc_start_end">Début /
+                                Fin
+                                du
                                 document</span>
                             <div class="shortcut-keys">
                                 <span class="shortcut-key">Ctrl</span>
@@ -3728,7 +3857,8 @@
                                 <i data-lucide="arrow-right-to-line"></i>
                             </div>
                             <div class="gesture-info">
-                                <span class="gesture-name" data-i18n="shortcuts.desc.open_sidebar">Ouvrir la barre
+                                <span class="gesture-name" data-i18n="shortcuts.desc.open_sidebar">Ouvrir la
+                                    barre
                                     latérale</span>
                                 <span class="gesture-description" data-i18n="shortcuts.desc.open_sidebar_detail">Glisser
                                     depuis le bord gauche vers la droite</span>
@@ -3739,10 +3869,12 @@
                                 <i data-lucide="arrow-left-to-line"></i>
                             </div>
                             <div class="gesture-info">
-                                <span class="gesture-name" data-i18n="shortcuts.desc.close_sidebar">Fermer la barre
+                                <span class="gesture-name" data-i18n="shortcuts.desc.close_sidebar">Fermer la
+                                    barre
                                     latérale</span>
                                 <span class="gesture-description"
-                                    data-i18n="shortcuts.desc.close_sidebar_detail">Glisser vers la gauche n'importe
+                                    data-i18n="shortcuts.desc.close_sidebar_detail">Glisser vers la gauche
+                                    n'importe
                                     où</span>
                             </div>
                         </div>
@@ -3761,6 +3893,7 @@
 </body>
     <!-- Generated JS Scripts -->
     <script src="./js/vendor/driver.js.iife.js"></script>
+<script src="./js/vendor/docx.js"></script>
 <script src="./js/vendor/idb.js"></script>
 <script src="./js/01.app.refactor.js"></script>
 <script src="./js/localization/locales/fr.js"></script>
@@ -3806,12 +3939,12 @@
 <script src="./js/undo-redo/undo-redo.view.js"></script>
 <script src="./js/undo-redo/undo-redo.handlers.js"></script>
 <script src="./js/undo-redo/undo-redo.main.js"></script>
-<script src="./js/page-preview.js"></script>
 <script src="./js/pagination.js"></script>
 <script src="./js/structure/structure.model.js"></script>
 <script src="./js/structure/structure.repository.js"></script>
 <script src="./js/structure/structure.viewmodel.js"></script>
 <script src="./js/00.app.view.js"></script>
+<script src="./js/tools-sidebar.viewmodel.js"></script>
 <script src="./js/structure/structure.view.js"></script>
 <script src="./js/structure/structure-organizer.view.js"></script>
 <script src="./js/structure/structure.helpers.js"></script>
@@ -3854,6 +3987,10 @@
 <script src="./js/splitview/splitview.coordinator.js"></script>
 <script src="./js/splitview/splitview.handlers.js"></script>
 <script src="./js/splitview/splitview.main.js"></script>
+<script src="./js/tabs/tabs.repository.js"></script>
+<script src="./js/tabs/tabs.viewmodel.js"></script>
+<script src="./js/tabs/tabs.view.js"></script>
+<script src="./js/tabs/tabs.main.js"></script>
 <script src="./js/world/world.model.js"></script>
 <script src="./js/world/world.repository.js"></script>
 <script src="./js/world/world.viewmodel.js"></script>
@@ -3962,6 +4099,7 @@
 <script src="./js/theme-manager/theme-manager.view.js"></script>
 <script src="./js/theme-manager/theme-manager.main.js"></script>
 <script src="./js/import-export/import-export.model.js"></script>
+<script src="./js/import-export/docx-export.config.js"></script>
 <script src="./js/import-export/import-export.repository.js"></script>
 <script src="./js/import-export/google-drive.service.js"></script>
 <script src="./js/import-export/import-export.viewmodel.js"></script>
@@ -4016,6 +4154,10 @@
 <script src="./js/synonyms/synonyms.repository.js"></script>
 <script src="./js/synonyms/synonyms.viewmodel.js"></script>
 <script src="./js/synonyms/synonyms.view.js"></script>
+<script src="./js/ai-assistant/ai-assistant.service.js"></script>
+<script src="./js/ai-assistant/ai-assistant.view.js"></script>
+<script src="./js/corrector/corrector.service.js"></script>
+<script src="./js/corrector/corrector.view.js"></script>
 <script src="./js/import-chapter/import-chapter.model.js"></script>
 <script src="./js/import-chapter/import-chapter.viewmodel.js"></script>
 <script src="./js/import-chapter/import-chapter.view.js"></script>

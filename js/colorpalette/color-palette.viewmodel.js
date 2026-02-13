@@ -30,6 +30,9 @@ const ColorPaletteViewModel = {
         // Focus BEFORE applying command to ensure selection is active
         if (textarea) textarea.focus();
 
+        // Les couleurs n'ont pas d'équivalent HTML, on utilise les inline styles
+        try { document.execCommand('styleWithCSS', false, true); } catch (e) { }
+
         if (panel) {
             if (typeof formatTextInPanel === 'function') {
                 formatTextInPanel(panel, 'foreColor', color);
@@ -65,6 +68,9 @@ const ColorPaletteViewModel = {
 
         // Focus BEFORE applying command to ensure selection is active
         if (textarea) textarea.focus();
+
+        // Les couleurs n'ont pas d'équivalent HTML, on utilise les inline styles
+        try { document.execCommand('styleWithCSS', false, true); } catch (e) { }
 
         if (panel) {
             if (typeof formatTextInPanel === 'function') {

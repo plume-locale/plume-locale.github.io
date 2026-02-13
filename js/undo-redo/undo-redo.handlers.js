@@ -31,7 +31,8 @@ const UndoRedoHandlers = {
 
                 UndoRedoViewModel._textEditDebounceTimer = setTimeout(() => {
                     if (!window.isUndoRedoAction) {
-                        UndoRedoViewModel.saveToHistory('edit');
+                        const content = isText ? target.value : null;
+                        UndoRedoViewModel.saveToHistory('edit', { text: content });
                     }
                     UndoRedoViewModel._textEditDebounceTimer = null;
                 }, UndoRedoViewModel._textEditDebounceDelay);
@@ -49,7 +50,8 @@ const UndoRedoHandlers = {
                 }
 
                 if (!window.isUndoRedoAction) {
-                    UndoRedoViewModel.saveToHistoryImmediate('edit-end');
+                    const content = isText ? target.value : null;
+                    UndoRedoViewModel.saveToHistoryImmediate('edit-end', { text: content });
                 }
             }
         }, true);
@@ -63,9 +65,13 @@ const UndoRedoHandlers = {
 
             if (isSelect || isCheckbox || isRange || this._isSignificantSelect(target)) {
                 if (!window.isUndoRedoAction) {
+                    let value = target.value;
+                    if (isCheckbox) value = target.checked;
+                    else if (isSelect && target.options[target.selectedIndex]) value = target.options[target.selectedIndex].text;
+
                     // On laisse un petit délai pour que le handler métier ait mis à jour le modèle
                     setTimeout(() => {
-                        UndoRedoViewModel.saveToHistoryImmediate('change');
+                        UndoRedoViewModel.saveToHistoryImmediate('change', { value: value });
                     }, 50);
                 }
             }

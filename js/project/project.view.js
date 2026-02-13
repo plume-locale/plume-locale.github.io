@@ -304,10 +304,15 @@ const ProjectView = {
                         if (chap.scenes) {
                             sceneCount += chap.scenes.length;
                             chap.scenes.forEach(scene => {
-                                const text = scene.content ? ProjectModel.stripHTML(scene.content) : '';
-                                if (text.trim().length > 0) {
-                                    const words = text.trim().match(/[\w\u00C0-\u00FF]+(?:[''’][\w\u00C0-\u00FF]+)*/g);
-                                    if (words) wordCount += words.length;
+                                if (typeof StatsModel !== 'undefined' && typeof StatsModel.getWordCount === 'function') {
+                                    wordCount += StatsModel.getWordCount(scene.content);
+                                } else {
+                                    // Fallback if StatsModel is not available
+                                    const text = scene.content ? ProjectModel.stripHTML(scene.content) : '';
+                                    if (text.trim().length > 0) {
+                                        const words = text.trim().match(/[\w\u00C0-\u00FF]+(?:[''’][\w\u00C0-\u00FF]+)*/g);
+                                        if (words) wordCount += words.length;
+                                    }
                                 }
                             });
                         }
@@ -551,8 +556,8 @@ const ProjectView = {
         const wordCount = typeof getWordCount === 'function' ? getWordCount(scene.content || '') : 0;
 
         container.innerHTML = `
-            <div class="split-scene-view" style="height: 100%; display: flex; flex-direction: column;">
-                <div style="padding: 0.75rem 1rem; background: var(--bg-secondary); border-bottom: 1px solid var(--border-color);">
+            <div class="split-scene-view" style="height: 100%; display: flex; flex-direction: column; overflow: hidden;">
+                <div style="padding: 0.75rem 1rem; background: var(--bg-secondary); border-bottom: 1px solid var(--border-color); flex-shrink: 0;">
                     <div style="font-size: 0.8rem; color: var(--text-muted);">${act.title} > ${chapter.title}</div>
                     <div style="font-size: 1.1rem; font-weight: 600;">${scene.title || Localization.t('project.view.untitled')}</div>
                     <div style="font-size: 0.75rem; color: var(--text-muted);">${wordCount} ${Localization.t('project.view.words')}</div>
@@ -567,5 +572,12 @@ const ProjectView = {
                      style="flex: 1; padding: 1.5rem; overflow-y: auto; outline: none; line-height: 1.8; font-size: 1.1rem;"
                 >${scene.content || ''}</div>
             </div>`;
+
+        // Initial Tension Check
+        if (typeof updateLiveTensionMeter === 'function' && scene.content) {
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = scene.content;
+            updateLiveTensionMeter(tempDiv.innerText || tempDiv.textContent || '', { sceneId: scene.id, chapterId: chapter.id, actId: act.id });
+        }
     }
 };

@@ -91,7 +91,8 @@ const ColorPaletteView = {
      * Initialise la logique de redimensionnement de la sidebar
      */
     initSidebarResize: () => {
-        const sidebar = document.querySelector('.sidebar');
+        // CIBLE LA COLONNE CONTENEUR (Sidebar + Accordéon) et non juste la sidebar interne
+        const sidebar = document.querySelector('.sidebar-column') || document.querySelector('.sidebar');
         const resizeHandle = document.getElementById('sidebarResizeHandle');
         const appContainer = document.querySelector('.app-container');
 
@@ -120,7 +121,8 @@ const ColorPaletteView = {
 
             if (newWidth >= 200 && newWidth <= 600) {
                 sidebar.style.width = newWidth + 'px';
-                if (appContainer) {
+                // Legacy support for grid layout if still used
+                if (appContainer && getComputedStyle(appContainer).display === 'grid') {
                     appContainer.style.gridTemplateColumns = `${newWidth}px 1fr`;
                 }
             }
@@ -132,16 +134,20 @@ const ColorPaletteView = {
                 document.body.style.cursor = '';
                 document.body.style.userSelect = '';
 
-                ColorPaletteViewModel.updateSidebarWidth(sidebar.offsetWidth);
+                if (typeof ColorPaletteViewModel !== 'undefined') {
+                    ColorPaletteViewModel.updateSidebarWidth(sidebar.offsetWidth);
+                }
             }
         });
 
         // Load saved width
-        const savedWidth = ColorPaletteViewModel.getSavedSidebarWidth();
-        if (savedWidth && savedWidth >= 200 && savedWidth <= 600) {
-            sidebar.style.width = savedWidth + 'px';
-            if (appContainer) {
-                appContainer.style.gridTemplateColumns = `${savedWidth}px 1fr`;
+        if (typeof ColorPaletteViewModel !== 'undefined') {
+            const savedWidth = ColorPaletteViewModel.getSavedSidebarWidth();
+            if (savedWidth && savedWidth >= 200 && savedWidth <= 600) {
+                sidebar.style.width = savedWidth + 'px';
+                if (appContainer && getComputedStyle(appContainer).display === 'grid') {
+                    appContainer.style.gridTemplateColumns = `${savedWidth}px 1fr`;
+                }
             }
         }
     }

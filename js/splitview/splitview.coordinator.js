@@ -10,7 +10,7 @@ function renderViewInSplitPanel(view, container, state, panel) {
     // Créer un conteneur temporaire avec l'ID editorView
     const tempContainer = document.createElement('div');
     tempContainer.id = 'editorView';
-    tempContainer.style.cssText = 'height: 100%; overflow: auto;';
+    tempContainer.style.cssText = 'height: 100%; display: flex; flex-direction: column; overflow: hidden; position: relative;';
     container.innerHTML = '';
     container.appendChild(tempContainer);
 
@@ -31,24 +31,53 @@ function renderViewInSplitPanel(view, container, state, panel) {
 
     switch (view) {
         case 'editor':
+            // 1. Scene Editor
             if (state.sceneId) {
-                const act = project.acts.find(a => a.id === state.actId);
-                const chapter = act?.chapters.find(c => c.id === state.chapterId);
-                const scene = chapter?.scenes.find(s => s.id === state.sceneId);
+                const act = project.acts.find(a => a.id == state.actId);
+                const chapter = act?.chapters.find(c => c.id == state.chapterId);
+                const scene = chapter?.scenes.find(s => s.id == state.sceneId);
                 if (act && chapter && scene) {
                     renderEditorInContainer(act, chapter, scene, container, panel);
                     restoreEditorView();
-                    return; // On sort car renderEditorInContainer gère tout
+                    return;
                 }
-            } else {
-                tempContainer.innerHTML = `
-                    <div class="empty-state">
-                        <div class="empty-state-icon"><i data-lucide="pencil" style="width:48px;height:48px;stroke-width:1;"></i></div>
-                        <div class="empty-state-title">${Localization.t('split.empty_state_select_scene')}</div>
-                        <div class="empty-state-text">${Localization.t('split.empty_state_select_sidebar')}</div>
-                    </div>
-                `;
             }
+            // 2. Full Book Editor
+            else if (state.actId === 'all') {
+                if (typeof renderFullBookEditor === 'function') {
+                    renderFullBookEditor();
+                    restoreEditorView();
+                    return;
+                }
+            }
+            // 3. Chapter Editor
+            else if (state.chapterId) {
+                const act = project.acts.find(a => a.id == state.actId);
+                const chapter = act?.chapters.find(c => c.id == state.chapterId);
+                if (act && chapter && typeof renderChapterEditor === 'function') {
+                    renderChapterEditor(act, chapter);
+                    restoreEditorView();
+                    return;
+                }
+            }
+            // 4. Act Editor
+            else if (state.actId) {
+                const act = project.acts.find(a => a.id === state.actId);
+                if (act && typeof renderActEditor === 'function') {
+                    renderActEditor(act);
+                    restoreEditorView();
+                    return;
+                }
+            }
+
+            // 5. Fallback / Empty State
+            tempContainer.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-state-icon"><i data-lucide="pencil" style="width:48px;height:48px;stroke-width:1;"></i></div>
+                    <div class="empty-state-title">${Localization.t('split.empty_state_select_scene')}</div>
+                    <div class="empty-state-text">${Localization.t('split.empty_state_select_sidebar')}</div>
+                </div>
+            `;
             break;
 
         case 'characters':
@@ -79,7 +108,7 @@ function renderViewInSplitPanel(view, container, state, panel) {
 
         case 'world':
             if (state.worldId) {
-                const elem = project.world?.find(e => e.id === state.worldId);
+                const elem = project.world?.find(e => e.id == state.worldId);
                 if (elem) {
                     if (typeof renderWorldDetailFull === 'function') {
                         renderWorldDetailFull(elem, tempContainer);
@@ -100,7 +129,7 @@ function renderViewInSplitPanel(view, container, state, panel) {
 
         case 'notes':
             if (state.noteId) {
-                const note = project.notes?.find(n => n.id === state.noteId);
+                const note = project.notes?.find(n => n.id == state.noteId);
                 if (note) {
                     if (typeof renderNoteDetailInContainer === 'function') {
                         renderNoteDetailInContainer(note, tempContainer);
@@ -153,45 +182,46 @@ function renderViewInSplitPanel(view, container, state, panel) {
 
         case 'codex':
             if (state.codexId) {
-                const entry = project.codex?.find(c => c.id === state.codexId);
+                const entry = project.codex?.find(c => c.id == state.codexId);
                 if (entry) {
+                    const codexCatIcon = typeof getCodexCategoryIcon === 'function' ? getCodexCategoryIcon(entry.category) : 'book';
+                    const codexCategories = typeof getCodexCategories === 'function' ? getCodexCategories() : ['Culture','Histoire','Technologie','Géographie','Politique','Magie/Pouvoir','Religion','Société','Autre'];
+                    const codexCatOptions = codexCategories.map(cat =>
+                        `<option value="${cat}" ${entry.category === cat ? 'selected' : ''}>${Localization.t('codex.category.' + cat)}</option>`
+                    ).join('');
+
                     tempContainer.innerHTML = `
-                        <div class="detail-view">
-                            <div class="detail-header">
-                                <div style="display: flex; align-items: center; gap: 1rem; flex: 1;">
-                                    <input type="text" class="form-input" value="${entry.title}" 
-                                           style="font-size: 1.8rem; font-weight: 600; font-family: 'Noto Serif JP', serif; padding: 0.5rem;"
-                                           onchange="typeof updateCodexField === 'function' ? updateCodexField(${entry.id}, 'title', this.value) : null"
-                                           placeholder="${Localization.t('split.codex_title_placeholder')}">
-                                    <span style="font-size: 0.8rem; padding: 0.4rem 0.8rem; background: var(--accent-gold); color: var(--bg-primary); border-radius: 2px;">${Localization.t(`codex.category.${entry.category}`)}</span>
+                        <div class="detail-view" style="height:100%; overflow-y:auto;">
+                            <div class="detail-header" style="position:sticky; top:0; background:var(--bg-primary); z-index:10; padding:1rem; border-bottom:1px solid var(--border-color); display:flex; align-items:center; gap:0.75rem;">
+                                <div style="width:36px; height:36px; border-radius:8px; background:var(--accent-gold); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                                    <i data-lucide="${codexCatIcon}" style="width:18px;height:18px;color:var(--bg-primary);"></i>
                                 </div>
-                            </div>
-                            
-                            <div class="detail-section">
-                                <div class="detail-section-title">${Localization.t('split.codex_category')}</div>
-                                <select class="form-input" onchange="typeof updateCodexField === 'function' ? updateCodexField(${entry.id}, 'category', this.value) : null">
-                                    <option value="Culture" ${entry.category === 'Culture' ? 'selected' : ''}>${Localization.t('codex.category.Culture')}</option>
-                                    <option value="Histoire" ${entry.category === 'Histoire' ? 'selected' : ''}>${Localization.t('codex.category.Histoire')}</option>
-                                    <option value="Technologie" ${entry.category === 'Technologie' ? 'selected' : ''}>${Localization.t('codex.category.Technologie')}</option>
-                                    <option value="Géographie" ${entry.category === 'Géographie' ? 'selected' : ''}>${Localization.t('codex.category.Géographie')}</option>
-                                    <option value="Politique" ${entry.category === 'Politique' ? 'selected' : ''}>${Localization.t('codex.category.Politique')}</option>
-                                    <option value="Magie/Pouvoir" ${entry.category === 'Magie/Pouvoir' ? 'selected' : ''}>${Localization.t('codex.category.Magie/Pouvoir')}</option>
-                                    <option value="Religion" ${entry.category === 'Religion' ? 'selected' : ''}>${Localization.t('codex.category.Religion')}</option>
-                                    <option value="Société" ${entry.category === 'Société' ? 'selected' : ''}>${Localization.t('codex.category.Société')}</option>
-                                    <option value="Autre" ${entry.category === 'Autre' ? 'selected' : ''}>${Localization.t('codex.category.Autre')}</option>
-                                </select>
+                                <input type="text" class="form-input" value="${entry.title}"
+                                       style="font-size: 1.3rem; font-weight: 600; font-family: 'Noto Serif JP', serif; flex:1; border:none; background:transparent; padding:0.3rem;"
+                                       onchange="typeof updateCodexField === 'function' ? updateCodexField(${entry.id}, 'title', this.value) : null"
+                                       placeholder="${Localization.t('split.codex_title_placeholder')}">
+                                <span style="font-size: 0.75rem; padding: 0.3rem 0.6rem; background: var(--accent-gold); color: var(--bg-primary); border-radius: 10px; font-weight:600; white-space:nowrap;">${Localization.t('codex.category.' + entry.category)}</span>
                             </div>
 
-                            <div class="detail-section">
-                                <div class="detail-section-title">${Localization.t('split.codex_summary')}</div>
-                                <textarea class="form-input" rows="3" 
-                                          onchange="typeof updateCodexField === 'function' ? updateCodexField(${entry.id}, 'summary', this.value) : null">${entry.summary || ''}</textarea>
-                            </div>
+                            <div style="padding:1.5rem;">
+                                <div class="detail-section" style="margin-bottom:1.5rem;">
+                                    <div class="detail-section-title" style="font-size:0.9rem; font-weight:600; color:var(--text-muted); margin-bottom:0.5rem;"><i data-lucide="tag" style="width:14px;height:14px;vertical-align:middle;margin-right:6px;"></i>${Localization.t('split.codex_category')}</div>
+                                    <select class="form-input" onchange="typeof updateCodexField === 'function' ? updateCodexField(${entry.id}, 'category', this.value) : null" style="width:100%;">
+                                        ${codexCatOptions}
+                                    </select>
+                                </div>
 
-                            <div class="detail-section">
-                                <div class="detail-section-title">${Localization.t('split.codex_content')}</div>
-                                <textarea class="form-input" rows="20" 
-                                          oninput="typeof updateCodexField === 'function' ? updateCodexField(${entry.id}, 'content', this.value) : null">${entry.content || ''}</textarea>
+                                <div class="detail-section" style="margin-bottom:1.5rem;">
+                                    <div class="detail-section-title" style="font-size:0.9rem; font-weight:600; color:var(--text-muted); margin-bottom:0.5rem;"><i data-lucide="file-text" style="width:14px;height:14px;vertical-align:middle;margin-right:6px;"></i>${Localization.t('split.codex_summary')}</div>
+                                    <textarea class="form-input" rows="4" style="width:100%; resize:vertical; line-height:1.6;"
+                                              oninput="typeof updateCodexField === 'function' ? updateCodexField(${entry.id}, 'summary', this.value) : null">${entry.summary || ''}</textarea>
+                                </div>
+
+                                <div class="detail-section" style="margin-bottom:1.5rem;">
+                                    <div class="detail-section-title" style="font-size:0.9rem; font-weight:600; color:var(--text-muted); margin-bottom:0.5rem;"><i data-lucide="book-open" style="width:14px;height:14px;vertical-align:middle;margin-right:6px;"></i>${Localization.t('split.codex_content')}</div>
+                                    <textarea class="form-input" rows="20" style="width:100%; resize:vertical; line-height:1.7; font-size:1rem;"
+                                              oninput="typeof updateCodexField === 'function' ? updateCodexField(${entry.id}, 'content', this.value) : null">${entry.content || ''}</textarea>
+                                </div>
                             </div>
                         </div>
                     `;
@@ -224,7 +254,7 @@ function renderViewInSplitPanel(view, container, state, panel) {
             break;
 
         case 'timelineviz':
-            if (typeof renderTimelineVizList === 'function' && typeof renderMetroSVG === 'function') {
+            if (typeof MetroTimelineView !== 'undefined') {
                 const charCount = project.characters?.length || 0;
                 if (charCount === 0) {
                     tempContainer.innerHTML = `
@@ -247,18 +277,20 @@ function renderViewInSplitPanel(view, container, state, panel) {
                                     ${Localization.t('split.metro_sort_date')}
                                 </button>
                             </div>
-                            
+
                             <div class="metro-timeline-container" id="metroTimelineContainer-split-${panel}">
-                                ${renderMetroSVG()}
+                                ${MetroTimelineView.renderMetroSVG()}
                             </div>
-                            
+
                             <div class="metro-legend" style="margin-top: 1rem;">
-                                ${project.characters.map(char => `
+                                ${project.characters.map(char => {
+                                    const color = typeof MetroTimelineRepository !== 'undefined' ? MetroTimelineRepository.getCharacterColor(char.id) : '#999';
+                                    return `
                                     <div class="metro-legend-item" onclick="typeof openMetroColorPicker === 'function' ? openMetroColorPicker(${char.id}) : null" style="cursor: pointer;" title="${Localization.t('split.metro_legend_hint')}">
-                                        <div class="metro-legend-line" style="background: ${project.characterColors[char.id] || '#999'};"></div>
+                                        <div class="metro-legend-line" style="background: ${color};"></div>
                                         <span>${char.name}</span>
                                     </div>
-                                `).join('')}
+                                `}).join('')}
                             </div>
                         </div>
                     `;
@@ -281,9 +313,37 @@ function renderViewInSplitPanel(view, container, state, panel) {
         case 'timeline':
             if (typeof renderTimelineList === 'function') {
                 renderTimelineList();
-            } else if (typeof renderTimelineInSplitPanel === 'function') {
+            }
+            if (typeof renderTimelineInSplitPanel === 'function') {
                 renderTimelineInSplitPanel(tempContainer);
             }
+            break;
+
+        case 'globalnotes':
+            if (typeof renderGlobalNotes === 'function') {
+                renderGlobalNotes();
+            }
+            break;
+
+        case 'front_matter':
+            if (window.FrontMatterView) {
+                window.FrontMatterView.render('editorView');
+            }
+            break;
+
+        case 'projects':
+            if (typeof ProjectView !== 'undefined' && typeof ProjectView.renderLandingPage === 'function') {
+                ProjectView.renderLandingPage(projects);
+            }
+            break;
+
+        case 'arcs':
+            if (typeof renderArcsList === 'function') renderArcsList();
+            if (typeof renderArcsWelcome === 'function') renderArcsWelcome();
+            break;
+
+        case 'investigation':
+            if (typeof renderInvestigationBoard === 'function') renderInvestigationBoard();
             break;
 
         default:
@@ -304,72 +364,89 @@ function renderViewInSplitPanel(view, container, state, panel) {
 
 /** [View] - Génère le HTML des détails d'un élément de l'univers pour un conteneur */
 function renderWorldDetailInContainer(element, container) {
+    const worldTypeIcon = (typeof WORLD_TYPE_ICONS !== 'undefined') ? (WORLD_TYPE_ICONS[element.type] || 'circle') : 'globe';
+    const worldTypeLabel = (typeof WORLD_TYPE_I18N !== 'undefined' && WORLD_TYPE_I18N[element.type])
+        ? Localization.t(WORLD_TYPE_I18N[element.type])
+        : element.type;
+
     container.innerHTML = `
         <div class="detail-view" style="height: 100%; overflow-y: auto;">
-            <div class="detail-header" style="position: sticky; top: 0; background: var(--bg-primary); z-index: 10; padding: 1rem; border-bottom: 1px solid var(--border-color);">
-                <div style="display: flex; align-items: center; gap: 1rem;">
-                    <div class="detail-title" style="font-size: 1.5rem; font-weight: 600;">${element.name}</div>
-                    <span style="font-size: 0.85rem; padding: 0.4rem 0.8rem; background: var(--primary-color); color: white; border-radius: 4px;">${element.type}</span>
+            <div class="detail-header" style="position: sticky; top: 0; background: var(--bg-primary); z-index: 10; padding: 1rem; border-bottom: 1px solid var(--border-color); display:flex; align-items:center; gap:0.75rem;">
+                <div style="width:36px; height:36px; border-radius:8px; background:var(--accent-gold); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                    <i data-lucide="${worldTypeIcon}" style="width:18px;height:18px;color:var(--bg-primary);"></i>
                 </div>
+                <div class="detail-title" style="font-size: 1.3rem; font-weight: 600; margin-bottom:0; flex:1;">${element.name}</div>
+                <span style="font-size: 0.75rem; padding: 0.3rem 0.6rem; background: var(--accent-gold); color: var(--bg-primary); border-radius: 10px; font-weight:600; white-space:nowrap;">${worldTypeLabel}</span>
             </div>
-            
+
             <div style="padding: 1.5rem;">
-                <div class="detail-section" style="margin-bottom: 1.5rem;">
-                    <div class="detail-section-title" style="font-size: 0.9rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.5rem;">${Localization.t('modal.world.name')}</div>
-                    <input type="text" class="form-input" value="${element.name}" 
-                           onchange="typeof updateWorldField === 'function' ? updateWorldField(${element.id}, 'name', this.value) : null" style="width: 100%;">
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem; margin-bottom:1.5rem;">
+                    <div class="detail-section" style="margin-bottom:0;">
+                        <div class="detail-section-title" style="font-size: 0.9rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.5rem;"><i data-lucide="pen-line" style="width:14px;height:14px;vertical-align:middle;margin-right:6px;"></i>${Localization.t('modal.world.name')}</div>
+                        <input type="text" class="form-input" value="${element.name}"
+                               onchange="typeof updateWorldField === 'function' ? updateWorldField(${element.id}, 'name', this.value) : null" style="width: 100%;">
+                    </div>
+
+                    <div class="detail-section" style="margin-bottom:0;">
+                        <div class="detail-section-title" style="font-size: 0.9rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.5rem;"><i data-lucide="tag" style="width:14px;height:14px;vertical-align:middle;margin-right:6px;"></i>${Localization.t('modal.world.type')}</div>
+                        <select class="form-input" onchange="typeof updateWorldField === 'function' ? updateWorldField(${element.id}, 'type', this.value) : null" style="width: 100%;">
+                            <option value="Lieu" ${element.type === 'Lieu' ? 'selected' : ''}>${Localization.t('world.type.place')}</option>
+                            <option value="Objet" ${element.type === 'Objet' ? 'selected' : ''}>${Localization.t('world.type.object')}</option>
+                            <option value="Concept" ${element.type === 'Concept' ? 'selected' : ''}>${Localization.t('world.type.concept')}</option>
+                            <option value="Organisation" ${element.type === 'Organisation' ? 'selected' : ''}>${Localization.t('world.type.organization')}</option>
+                            <option value="Événement" ${element.type === 'Événement' ? 'selected' : ''}>${Localization.t('world.type.event')}</option>
+                        </select>
+                    </div>
                 </div>
 
                 <div class="detail-section" style="margin-bottom: 1.5rem;">
-                    <div class="detail-section-title" style="font-size: 0.9rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.5rem;">${Localization.t('modal.world.type')}</div>
-                    <select class="form-input" onchange="typeof updateWorldField === 'function' ? updateWorldField(${element.id}, 'type', this.value) : null" style="width: 100%;">
-                        <option value="Lieu" ${element.type === 'Lieu' ? 'selected' : ''}>Lieu</option>
-                        <option value="Objet" ${element.type === 'Objet' ? 'selected' : ''}>Objet</option>
-                        <option value="Concept" ${element.type === 'Concept' ? 'selected' : ''}>Concept</option>
-                        <option value="Organisation" ${element.type === 'Organisation' ? 'selected' : ''}>Organisation</option>
-                        <option value="Événement" ${element.type === 'Événement' ? 'selected' : ''}>Événement</option>
-                    </select>
+                    <div class="detail-section-title" style="font-size: 0.9rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.5rem;"><i data-lucide="align-left" style="width:14px;height:14px;vertical-align:middle;margin-right:6px;"></i>${Localization.t('modal.world.desc')}</div>
+                    <textarea class="form-input" rows="6" style="width: 100%; resize: vertical; line-height:1.7;"
+                              oninput="typeof updateWorldField === 'function' ? updateWorldField(${element.id}, 'description', this.value) : null">${element.description || ''}</textarea>
                 </div>
 
                 <div class="detail-section" style="margin-bottom: 1.5rem;">
-                    <div class="detail-section-title" style="font-size: 0.9rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.5rem;">${Localization.t('modal.world.desc')}</div>
-                    <textarea class="form-input" rows="6" style="width: 100%; resize: vertical;"
-                              onchange="typeof updateWorldField === 'function' ? updateWorldField(${element.id}, 'description', this.value) : null">${element.description || ''}</textarea>
+                    <div class="detail-section-title" style="font-size: 0.9rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.5rem;"><i data-lucide="list" style="width:14px;height:14px;vertical-align:middle;margin-right:6px;"></i>${Localization.t('modal.world.details')}</div>
+                    <textarea class="form-input" rows="6" style="width: 100%; resize: vertical; line-height:1.7;"
+                              oninput="typeof updateWorldField === 'function' ? updateWorldField(${element.id}, 'details', this.value) : null">${element.details || ''}</textarea>
                 </div>
 
                 <div class="detail-section" style="margin-bottom: 1.5rem;">
-                    <div class="detail-section-title" style="font-size: 0.9rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.5rem;">${Localization.t('modal.world.details')}</div>
-                    <textarea class="form-input" rows="6" style="width: 100%; resize: vertical;"
-                              onchange="typeof updateWorldField === 'function' ? updateWorldField(${element.id}, 'details', this.value) : null">${element.details || ''}</textarea>
+                    <div class="detail-section-title" style="font-size: 0.9rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.5rem;"><i data-lucide="clock" style="width:14px;height:14px;vertical-align:middle;margin-right:6px;"></i>${Localization.t('modal.world.history')}</div>
+                    <textarea class="form-input" rows="6" style="width: 100%; resize: vertical; line-height:1.7;"
+                              oninput="typeof updateWorldField === 'function' ? updateWorldField(${element.id}, 'history', this.value) : null">${element.history || ''}</textarea>
                 </div>
 
                 <div class="detail-section" style="margin-bottom: 1.5rem;">
-                    <div class="detail-section-title" style="font-size: 0.9rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.5rem;">${Localization.t('modal.world.history')}</div>
-                    <textarea class="form-input" rows="6" style="width: 100%; resize: vertical;"
-                              onchange="typeof updateWorldField === 'function' ? updateWorldField(${element.id}, 'history', this.value) : null">${element.history || ''}</textarea>
-                </div>
-
-                <div class="detail-section" style="margin-bottom: 1.5rem;">
-                    <div class="detail-section-title" style="font-size: 0.9rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.5rem;">${Localization.t('modal.world.notes')}</div>
-                    <textarea class="form-input" rows="4" style="width: 100%; resize: vertical;"
-                              onchange="typeof updateWorldField === 'function' ? updateWorldField(${element.id}, 'notes', this.value) : null">${element.notes || ''}</textarea>
+                    <div class="detail-section-title" style="font-size: 0.9rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.5rem;"><i data-lucide="sticky-note" style="width:14px;height:14px;vertical-align:middle;margin-right:6px;"></i>${Localization.t('modal.world.notes')}</div>
+                    <textarea class="form-input" rows="4" style="width: 100%; resize: vertical; line-height:1.7;"
+                              oninput="typeof updateWorldField === 'function' ? updateWorldField(${element.id}, 'notes', this.value) : null">${element.notes || ''}</textarea>
                 </div>
             </div>
         </div>
     `;
+    if (typeof lucide !== 'undefined') lucide.createIcons();
 }
 
 /** [View] - Génère le HTML des détails d'une note pour un conteneur */
 function renderNoteDetailInContainer(note, container) {
+    const catIcon = (typeof NotesModel !== 'undefined' && NotesModel.CATEGORIES) ? (NotesModel.CATEGORIES[note.category] || 'file-text') : 'file-text';
+    const tagsHtml = (note.tags || []).length > 0
+        ? (note.tags || []).map(t => `<span style="display:inline-block; padding:0.15rem 0.5rem; background:var(--bg-tertiary); border:1px solid var(--border-color); border-radius:10px; font-size:0.75rem; color:var(--text-secondary);">${t.trim()}</span>`).join(' ')
+        : '';
+
     container.innerHTML = `
         <div class="detail-view" style="height: 100%; display: flex; flex-direction: column; overflow: hidden;">
-            <div class="detail-header" style="padding: 1rem; background: var(--bg-secondary); border-bottom: 1px solid var(--border-color);">
-                <div style="display: flex; align-items: center; gap: 1rem;">
-                    <input type="text" class="form-input" value="${note.title || ''}" 
-                           style="font-size: 1.3rem; font-weight: 600; flex: 1; border: none; background: transparent;"
+            <div style="padding: 0.75rem 1rem; background: var(--bg-secondary); border-bottom: 1px solid var(--border-color); flex-shrink:0;">
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                    <div style="width:32px; height:32px; border-radius:8px; background:var(--accent-gold); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                        <i data-lucide="${catIcon}" style="width:16px;height:16px;color:var(--bg-primary);"></i>
+                    </div>
+                    <input type="text" class="form-input" value="${note.title || ''}"
+                           style="font-size: 1.2rem; font-weight: 600; flex: 1; border: none; background: transparent; padding:0.3rem;"
                            onchange="typeof updateNoteField === 'function' ? updateNoteField(${note.id}, 'title', this.value) : null"
                            placeholder="${Localization.t('split.note_placeholder_title')}">
-                    <select class="form-input" onchange="typeof updateNoteField === 'function' ? updateNoteField(${note.id}, 'category', this.value) : null" style="width: auto;">
+                    <select class="form-input" onchange="typeof updateNoteField === 'function' ? updateNoteField(${note.id}, 'category', this.value) : null" style="width: auto; font-size:0.85rem;">
                         <option value="Recherche" ${note.category === 'Recherche' ? 'selected' : ''}>${Localization.t('notes.category.research')}</option>
                         <option value="Idée" ${note.category === 'Idée' ? 'selected' : ''}>${Localization.t('notes.category.idea')}</option>
                         <option value="Référence" ${note.category === 'Référence' ? 'selected' : ''}>${Localization.t('notes.category.reference')}</option>
@@ -378,25 +455,29 @@ function renderNoteDetailInContainer(note, container) {
                         <option value="Autre" ${note.category === 'Autre' ? 'selected' : ''}>${Localization.t('notes.category.other')}</option>
                     </select>
                 </div>
-                <div style="margin-top: 0.5rem;">
-                    <input type="text" class="form-input" value="${(note.tags || []).join(', ')}" 
-                           style="font-size: 0.85rem; width: 100%;"
+                <div style="margin-top: 0.5rem; display:flex; align-items:center; gap:0.5rem;">
+                    <i data-lucide="hash" style="width:14px;height:14px;color:var(--text-muted);flex-shrink:0;"></i>
+                    <input type="text" class="form-input" value="${(note.tags || []).join(', ')}"
+                           style="font-size: 0.85rem; flex:1; border:none; background:transparent; padding:0.2rem;"
                            onchange="typeof updateNoteTags === 'function' ? updateNoteTags(${note.id}, this.value) : null"
                            placeholder="${Localization.t('split.note_placeholder_tags')}">
                 </div>
+                ${tagsHtml ? `<div style="margin-top:0.4rem; display:flex; flex-wrap:wrap; gap:0.3rem;">${tagsHtml}</div>` : ''}
             </div>
             <div style="flex: 1; padding: 1rem; overflow: hidden;">
-                <textarea class="form-input" 
+                <textarea class="form-input"
                           style="width: 100%; height: 100%; resize: none; font-size: 1rem; line-height: 1.7; border: none; background: var(--bg-primary);"
                           oninput="typeof updateNoteField === 'function' ? updateNoteField(${note.id}, 'content', this.value) : null"
                           placeholder="${Localization.t('split.note_placeholder_content')}">${note.content || ''}</textarea>
             </div>
-            <div style="padding: 0.5rem 1rem; font-size: 0.75rem; color: var(--text-muted); background: var(--bg-secondary); border-top: 1px solid var(--border-color);">
-                ${Localization.t('split.note_created_on', [new Date(note.createdAt).toLocaleDateString(Localization.getLocale() === 'fr' ? 'fr-FR' : 'en-US')])} • 
+            <div style="padding: 0.5rem 1rem; font-size: 0.75rem; color: var(--text-muted); background: var(--bg-secondary); border-top: 1px solid var(--border-color); display:flex; align-items:center; gap:0.5rem;">
+                <i data-lucide="clock" style="width:12px;height:12px;opacity:0.5;"></i>
+                ${Localization.t('split.note_created_on', [new Date(note.createdAt).toLocaleDateString(Localization.getLocale() === 'fr' ? 'fr-FR' : 'en-US')])} •
                 ${Localization.t('split.note_updated_on', [new Date(note.updatedAt).toLocaleDateString(Localization.getLocale() === 'fr' ? 'fr-FR' : 'en-US')])}
             </div>
         </div>
     `;
+    if (typeof lucide !== 'undefined') lucide.createIcons();
 }
 
 /** [View] - Génère le HTML de la vue "Tableau de liège" en mode split */

@@ -922,6 +922,7 @@
     width: 100%;
     border-collapse: collapse;
     background: white;
+    table-layout: fixed;
 }
 
 .globalnotes-table th {
@@ -984,9 +985,11 @@
     border: 1px solid #e2e8f0;
     padding: 8px;
     font-size: 13px;
-    min-width: 80px;
     color: #334155;
     outline: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
 }
 
 .table-action-col {
@@ -1164,6 +1167,24 @@
 
 .color-dot:hover {
     transform: scale(1.2);
+}
+
+.ctx-color-preview {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    margin-left: auto;
+    flex-shrink: 0;
+}
+
+.context-menu-item.delete {
+    color: #ef4444;
+}
+
+.context-menu-item.delete:hover {
+    background-color: #fef2f2;
+    color: #dc2626;
 }
 
 .empty-board-message {

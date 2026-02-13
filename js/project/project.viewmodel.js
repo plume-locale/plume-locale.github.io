@@ -327,6 +327,35 @@ const ProjectViewModel = {
         currentChapterId = null;
         currentSceneId = null;
 
+        // Conserver les onglets de vue globale, retirer ceux liés à des entités spécifiques
+        if (typeof tabsState !== 'undefined') {
+            ['left', 'right'].forEach(paneId => {
+                const pane = tabsState.panes[paneId];
+                // Garder uniquement les onglets de vue (view-*), retirer ceux liés à des entités
+                pane.tabs = pane.tabs.filter(tab => tab.id.startsWith('view-'));
+                // Rafraîchir les titres avec les données du nouveau projet
+                if (typeof getTabTitle === 'function') {
+                    pane.tabs.forEach(tab => {
+                        tab.title = getTabTitle(tab.view, tab.params);
+                    });
+                }
+                // Si l'onglet actif a été supprimé, activer le premier disponible
+                if (pane.tabs.length > 0 && !pane.tabs.find(t => t.id === pane.activeTabId)) {
+                    pane.activeTabId = pane.tabs[0].id;
+                } else if (pane.tabs.length === 0) {
+                    pane.activeTabId = null;
+                }
+            });
+
+            // Désactiver le split si le panneau droit est vide après nettoyage
+            if (tabsState.panes.right.tabs.length === 0) {
+                tabsState.isSplit = false;
+                tabsState.activePane = 'left';
+            }
+
+            if (typeof saveTabsState === 'function') saveTabsState();
+        }
+
         if (shouldSwitchView && typeof switchView === 'function') switchView('editor');
         if (typeof renderActsList === 'function') renderActsList();
         if (typeof refreshAllViews === 'function') refreshAllViews();

@@ -25,9 +25,9 @@ const ProductTourEditorView = {
         this._createSidebar();
         this._initShortcuts();
 
-        // Active le rendu via CSS plutôt que via les vieilles balises <font>
+        // Privilégier les balises HTML sémantiques (<strong>, <em>, <u>)
         try {
-            document.execCommand('styleWithCSS', false, true);
+            document.execCommand('styleWithCSS', false, false);
         } catch (e) { }
     },
 
@@ -54,9 +54,11 @@ const ProductTourEditorView = {
             sel.addRange(editor._lastRange);
         }
 
-        // S'assurer que le rendu se fait via CSS (indispensable pour les couleurs)
+        // Privilégier les balises HTML sémantiques (<strong>, <em>, <u>)
+        // sauf pour les couleurs qui n'ont pas d'équivalent HTML
+        const colorCommands = ['foreColor', 'hiliteColor', 'backColor'];
         try {
-            document.execCommand('styleWithCSS', false, true);
+            document.execCommand('styleWithCSS', false, colorCommands.includes(command));
         } catch (e) { }
 
         if (command === 'removeFormat') {

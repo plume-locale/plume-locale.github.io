@@ -60,10 +60,15 @@ const GlobalNotesViewModel = {
         const projectId = window.project?.id;
         localStorage.setItem(`globalnotes_active_board_${projectId}`, boardId);
 
-        if (window.GlobalNotesView) {
+        if (typeof tabsState !== 'undefined' && tabsState.panes.left.tabs.length > 0 && typeof renderTabs === 'function') {
+            renderTabs();
+        } else if (window.GlobalNotesView) {
             window.GlobalNotesView.render();
         }
 
+        if (typeof syncSidebarWithView === 'function') {
+            syncSidebarWithView('globalnotes');
+        }
         if (typeof updateSidebarActions === 'function') {
             updateSidebarActions('globalnotes');
         }
@@ -94,6 +99,9 @@ const GlobalNotesViewModel = {
             window.GlobalNotesView.renderContent();
         }
 
+        if (typeof syncSidebarWithView === 'function') {
+            syncSidebarWithView('globalnotes');
+        }
         if (typeof updateSidebarActions === 'function') {
             updateSidebarActions('globalnotes');
         }
@@ -215,6 +223,9 @@ const GlobalNotesViewModel = {
             window.GlobalNotesView.renderContent();
         }
 
+        if (typeof syncSidebarWithView === 'function') {
+            syncSidebarWithView('globalnotes');
+        }
         if (typeof updateSidebarActions === 'function') {
             updateSidebarActions('globalnotes');
         }

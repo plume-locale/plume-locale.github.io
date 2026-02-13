@@ -498,8 +498,11 @@ function openSceneFromCard(event, sceneId) {
     ArcBoardEventHandlers.openScene(sceneId);
 }
 
-// Formatage texte
+// Formatage texte — balises HTML sémantiques par défaut
 function formatArcText(command) {
+    try {
+        document.execCommand('styleWithCSS', false, false);
+    } catch (e) { }
     document.execCommand(command, false, null);
 }
 

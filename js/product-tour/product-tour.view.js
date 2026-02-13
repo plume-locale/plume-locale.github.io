@@ -136,36 +136,57 @@ const ProductTourButtonView = {
             return document.getElementById('tourTriggerBtn');
         }
 
-        // Trouver le conteneur des actions du header
-        const headerActions = document.querySelector('.header-actions');
-        if (!headerActions) {
-            console.warn('Header actions container not found');
-            return null;
+        // Trouver le conteneur du menu supplémentaire
+        const extraMenuContent = document.querySelector('#extraMenuDropdown .extra-menu-dropdown-content');
+        if (!extraMenuContent) {
+            // Fallback: chercher header-actions si le menu n'est pas trouvé
+            const headerActions = document.querySelector('.header-actions');
+            if (!headerActions) {
+                console.warn('Header actions container not found');
+                return null;
+            }
+
+            // Créer le bouton style header (fallback)
+            const button = document.createElement('button');
+            button.id = 'tourTriggerBtn';
+            button.className = 'header-action-btn tour-trigger-btn';
+            button.title = Localization.t('tour.btn.trigger.title');
+            button.setAttribute('aria-label', Localization.t('tour.btn.trigger.title'));
+            button.innerHTML = '<i data-lucide="help-circle"></i>';
+
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (onClick) onClick();
+            });
+
+            headerActions.appendChild(button);
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+            return button;
         }
 
-        // Créer le bouton
+        // Créer le bouton style menu item
         const button = document.createElement('button');
         button.id = 'tourTriggerBtn';
-        button.className = 'header-action-btn tour-trigger-btn';
+        button.className = 'extra-menu-item tour-trigger-btn';
         button.title = Localization.t('tour.btn.trigger.title');
         button.setAttribute('aria-label', Localization.t('tour.btn.trigger.title'));
-        button.innerHTML = '<i data-lucide="help-circle"></i>';
+        const label = Localization.t('tour.btn.trigger.title') || 'Visite guidée';
+        button.innerHTML = `<i data-lucide="help-circle"></i><span>${label}</span>`;
 
         // Attacher l'événement
         button.addEventListener('click', (e) => {
             e.preventDefault();
+            // Fermer le menu
+            const dropdown = button.closest('.extra-menu-dropdown');
+            if (dropdown) dropdown.classList.remove('open');
+
             if (onClick) {
                 onClick();
             }
         });
 
-        // Ajouter au header (avant le bouton des projets si possible)
-        const projectsBtn = headerActions.querySelector('[onclick*="showProjectsModal"]');
-        if (projectsBtn) {
-            headerActions.insertBefore(button, projectsBtn);
-        } else {
-            headerActions.appendChild(button);
-        }
+        // Ajouter au menu
+        extraMenuContent.appendChild(button);
 
         // Initialiser l'icône Lucide
         if (typeof lucide !== 'undefined') {

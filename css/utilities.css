@@ -1,0 +1,252 @@
+/* Storage Quota Badge Styles */
+        .storage-badge {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 12px 18px;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            border-radius: 25px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-primary);
+            box-shadow: 0 4px 12px var(--shadow);
+            z-index: 10001;
+            transition: all 0.3s;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            gap: 8px;
+            min-width: 120px;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        /* Version header du badge de stockage */
+        .storage-badge-header {
+            padding: 6px 12px;
+            background: var(--bg-secondary);
+            border: 1.5px solid var(--border-color);
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            transition: all 0.2s;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        .storage-badge-header:hover {
+            border-color: var(--accent-gold);
+            background: var(--bg-tertiary);
+        }
+        
+        .storage-badge-header .storage-icon {
+            font-size: 14px;
+            line-height: 1;
+        }
+        
+        .storage-badge-header.status-ok {
+            border-color: #4caf50;
+        }
+
+        .storage-badge-header.status-warning {
+            border-color: #ffc107;
+        }
+
+        .storage-badge-header.status-danger {
+            border-color: #f44336;
+        }
+
+        .storage-badge:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px var(--shadow);
+            border-color: var(--accent-gold);
+        }
+
+        .storage-badge:active {
+            transform: translateY(0);
+        }
+
+        .storage-icon {
+            font-size: 18px;
+            line-height: 1;
+        }
+
+        .storage-badge.status-ok {
+            border-color: #4caf50;
+        }
+
+        .storage-badge.status-warning {
+            border-color: #ffc107;
+            animation: pulse-warning 2s infinite;
+        }
+
+        .storage-badge.status-danger {
+            border-color: #f44336;
+            animation: pulse-danger 1.5s infinite;
+        }
+
+        @keyframes pulse-warning {
+            0%, 100% {
+                box-shadow: 0 4px 12px var(--shadow);
+            }
+            50% {
+                box-shadow: 0 4px 20px rgba(255, 193, 7, 0.4);
+            }
+        }
+
+        @keyframes pulse-danger {
+            0%, 100% {
+                box-shadow: 0 4px 12px var(--shadow);
+            }
+            50% {
+                box-shadow: 0 4px 20px rgba(244, 67, 54, 0.5);
+            }
+        }
+
+        .storage-details-modal .modal-content {
+            max-width: 500px;
+        }
+
+        .storage-info {
+            margin: 20px 0;
+        }
+
+        .storage-bar {
+            width: 100%;
+            height: 30px;
+            background: var(--bg-tertiary);
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 15px 0;
+            position: relative;
+        }
+
+        .storage-bar-fill {
+            height: 100%;
+            transition: width 0.5s ease, background-color 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .storage-bar-fill.ok {
+            background: linear-gradient(90deg, #4caf50, #20c997);
+        }
+
+        .storage-bar-fill.warning {
+            background: linear-gradient(90deg, #ffc107, #ffb800);
+        }
+
+        .storage-bar-fill.danger {
+            background: linear-gradient(90deg, #f44336, #c62828);
+        }
+
+        .storage-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .storage-stat {
+            background: var(--bg-tertiary);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .storage-stat-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 5px;
+        }
+
+        .storage-stat-value {
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--accent-gold);
+        }
+
+        .storage-recommendations {
+            background: var(--bg-tertiary);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 3px solid var(--accent-gold);
+            margin: 20px 0;
+        }
+
+        .storage-recommendations h4 {
+            color: var(--accent-gold);
+            margin-bottom: 10px;
+        }
+
+        .storage-recommendations ul {
+            margin-left: 20px;
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+/* Import Chapter from DOCX Styles */
+.import-chapter-upload {
+    padding: 1rem 0;
+}
+
+.import-chapter-dropzone {
+    border: 2px dashed var(--border-color);
+    border-radius: 12px;
+    padding: 3rem 2rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    background: var(--bg-secondary);
+}
+
+.import-chapter-dropzone:hover,
+.import-chapter-dropzone.dragover {
+    border-color: var(--accent-gold);
+    background: rgba(212, 175, 55, 0.05);
+}
+
+.import-chapter-dropzone.dragover {
+    transform: scale(1.01);
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+}
+
+.import-chapter-spinner {
+    width: 48px;
+    height: 48px;
+    border: 4px solid var(--bg-tertiary);
+    border-top-color: var(--accent-gold);
+    border-radius: 50%;
+    animation: import-spin 1s linear infinite;
+    margin: 0 auto;
+}
+
+@keyframes import-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.import-chapter-preview {
+    padding: 0.5rem 0;
+}
+
+.import-chapter-list {
+    background: var(--bg-secondary);
+}
+
+.import-chapter-item:last-child {
+    border-bottom: none;
+}
+
+.import-chapter-item:hover {
+    background: var(--bg-tertiary);
+}

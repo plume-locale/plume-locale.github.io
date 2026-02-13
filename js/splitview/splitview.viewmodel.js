@@ -4,6 +4,12 @@
 
 /** [MVVM : ViewModel] - Gère le basculement de l'état global du mode split */
 function toggleSplitView() {
+    // Gestion Onglets (Préféré)
+    if (typeof toggleTabsSplit === 'function') {
+        toggleTabsSplit();
+        return;
+    }
+
     if (splitViewActive) {
         closeSplitView();
     } else {

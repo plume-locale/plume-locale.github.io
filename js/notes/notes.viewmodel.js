@@ -125,25 +125,20 @@ class NotesViewModel {
      * Open note detail
      * @param {number} id 
      */
-    openDetail(id) {
+    openDetail(id, options = {}) {
         this.currentNoteId = id;
         const note = NotesRepository.getById(id);
         if (!note) return;
 
-        // Handle split view mode
+        // Handle tabs system (Preferred)
+        if (typeof window.openTab === 'function') {
+            window.openTab('notes', { noteId: id }, options);
+            return;
+        }
+
+        // Handle split view mode (Legacy)
         if (window.splitViewActive) {
-            const panel = window.splitActivePanel === 'left' ? 'left' : 'right';
-            const state = window.splitViewState[panel];
-            if (state.view === 'notes') {
-                state.noteId = id;
-                if (typeof window.renderSplitPanelViewContent === 'function') {
-                    window.renderSplitPanelViewContent(panel);
-                }
-                if (typeof window.saveSplitViewState === 'function') {
-                    window.saveSplitViewState();
-                }
-                return;
-            }
+            // ... handled by splitview system if needed
         }
 
         NotesView.renderDetail(note);

@@ -1,0 +1,129 @@
+/* =========================================
+   STYLES POUR LE PANNEAU DE LIENS (Auto-detect)
+   ========================================= */
+
+/* Conteneur de base pour un item (perso ou lieu) */
+.link-item .quick-links {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /*padding: 6px 8px;*/
+    margin-bottom: 2px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    font-size: 0.9rem;
+    border: 1px solid transparent;
+}
+
+/* --- ZONES D'ÉTAT --- */
+
+/* 1. Présent (Validé) - Vert subtil */
+.link-item.present {
+    background-color: rgba(var(--accent-green-rgb), 0.1);
+    /* Vert très clair */
+    border-left: 3px solid var(--accent-green);
+}
+
+.link-item.present:hover {
+    background-color: rgba(46, 204, 113, 0.2);
+}
+
+/* 2. Suggéré (En attente) - Orange/Accent */
+.link-item.suggested {
+    background-color: rgba(var(--accent-gold-rgb), 0.1);
+    /* Orange très clair */
+    border-left: 3px solid var(--accent-gold);
+}
+
+.link-item.suggested:hover {
+    background-color: rgba(255, 165, 0, 0.2);
+}
+
+/* 3. Absent (Ignoré) - Grisé et discret */
+.link-item.absent {
+    background-color: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-color, #ccc);
+    opacity: 0.7;
+    filter: grayscale(0.8);
+}
+
+.link-item.absent:hover {
+    opacity: 1;
+    filter: grayscale(0);
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+.link-item.absent span {
+    text-decoration: line-through;
+    color: var(--text-muted, #888);
+}
+
+/* --- ÉLÉMENTS INTERNES --- */
+
+/* Avatar et Nom */
+.link-item>div:first-child {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    overflow: hidden;
+    /* Pour les noms très longs */
+}
+
+.link-item span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* --- BOUTONS D'ACTION (Icônes) --- */
+.btn-icon {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s, background-color 0.2s, color 0.2s;
+    color: var(--text-muted, #888);
+}
+
+.btn-icon:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+    /* Ou blanc semi-transparent en thème sombre */
+    transform: scale(1.1);
+    color: var(--text-main, #000);
+}
+
+/* Couleurs spécifiques au survol des boutons */
+.btn-icon[title*="Valider"]:hover {
+    color: #2ecc71;
+    /* Vert au survol */
+    background-color: rgba(46, 204, 113, 0.15);
+}
+
+.btn-icon[title*="Retirer"]:hover,
+.btn-icon[title*="Ignorer"]:hover {
+    color: #e74c3c;
+    /* Rouge au survol */
+    background-color: rgba(231, 76, 60, 0.15);
+}
+
+.btn-icon[title*="Rétablir"]:hover {
+    color: #3498db;
+    /* Bleu au survol */
+    background-color: rgba(52, 152, 219, 0.15);
+}
+
+/* AJOUT/MODIFICATION DANS VOTRE FICHIER CSS */
+
+#linksPanel .quick-links h4 {
+    /* Garantit que le texte est aligné à gauche */
+    text-align: left;
+    /* S'assure qu'ils prennent toute la largeur pour être bien distincts */
+    width: 100%;
+    /* S'assure qu'ils sont des blocs distincts, ce qui est le défaut de <h4> */
+    display: block;
+}
+

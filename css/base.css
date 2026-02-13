@@ -1,0 +1,57 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Crimson Pro', serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    overflow: hidden;
+}
+
+.app-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.app-header {
+    flex-shrink: 0;
+    height: 60px;
+}
+
+.app-content {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+.sidebar {
+    flex-shrink: 0;
+    flex: 1;
+}
+
+.sidebar-versions {
+    flex-shrink: 0;
+    width: 280px;
+}
+
+.sidebar-versions.hidden {
+    display: none;
+}
+
+.editor-container {
+    flex: 1;
+    overflow: auto;
+    min-height: 0;
+}
+
+textarea {
+    resize: vertical;
+}

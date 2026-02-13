@@ -10,10 +10,31 @@ const StatsRepository = {
      */
     getStats() {
         if (typeof project === 'undefined' || !project.stats) {
-            return StatsModel.getDefaultStats();
+            if (typeof project !== 'undefined') {
+                project.stats = StatsModel.getDefaultStats();
+            }
+            return (typeof project !== 'undefined' ? project.stats : StatsModel.getDefaultStats());
         }
+
+        // Migration à la volée pour les projets existants
+        if (!project.stats.smartGoal) {
+            project.stats.smartGoal = StatsModel.getDefaultStats().smartGoal;
+        }
+
         return project.stats;
     },
+
+    /**
+     * Sauvegarde les statistiques et déclenche l'événement global.
+     */
+    _save() {
+        if (typeof saveProject === 'function') {
+            saveProject();
+        }
+        // Dispatch event for UI update
+        window.dispatchEvent(new CustomEvent('statsUpdated'));
+    },
+
 
     /**
      * Met à jour un objectif spécifique.
@@ -28,13 +49,17 @@ const StatsRepository = {
         }
 
         project.stats[type] = parseInt(value) || 0;
+        this._save();
+    },
 
-        if (typeof saveProject === 'function') {
-            saveProject();
-        }
-
-        // Dispatch event for UI update
-        window.dispatchEvent(new CustomEvent('statsUpdated'));
+    /**
+     * Met à jour la configuration des objectifs intelligents.
+     * @param {Object} config ({ mode, targetDate, daysOff, sessionDuration })
+     */
+    updateSmartGoal(config) {
+        const stats = this.getStats();
+        stats.smartGoal = { ...stats.smartGoal, ...config };
+        this._save();
     },
 
     /**
@@ -59,8 +84,6 @@ const StatsRepository = {
             });
         }
 
-        if (typeof saveProject === 'function') {
-            saveProject();
-        }
+        this._save();
     }
 };

@@ -294,7 +294,12 @@ const CorkBoardView = {
      */
     renderSceneCard(scene, viewType, statusId = null) {
         const synopsis = scene.synopsis || '';
-        const wordCount = scene.content ? scene.content.split(/\s+/).filter(w => w.length > 0).length : 0;
+        let wordCount = 0;
+        if (typeof StatsModel !== 'undefined' && typeof StatsModel.getWordCount === 'function') {
+            wordCount = StatsModel.getWordCount(scene.content);
+        } else {
+            wordCount = scene.content ? scene.content.split(/\s+/).filter(w => w.length > 0).length : 0;
+        }
         const color = scene.corkColor || 'default';
         const status = statusId || scene.status || 'draft';
 

@@ -127,8 +127,10 @@ const GlobalNotesHandlers = {
         menu.style.top = y + 'px';
 
         const typeActions = this.getTypeSpecificActions(item);
+        const isInColumn = !!item.columnId;
 
         menu.innerHTML = `
+            ${typeActions ? `<div class="context-menu-group">${typeActions}</div><div class="context-menu-divider"></div>` : ''}
             <div class="context-menu-group">
                 <div class="context-menu-item" onclick="GlobalNotesHandlers.duplicateItem('${itemId}')">
                     <i data-lucide="copy"></i> ${Localization.t('globalnotes.menu.duplicate') || 'Duplicate'}
@@ -137,33 +139,26 @@ const GlobalNotesHandlers = {
                     <i data-lucide="${item.config.isLocked ? 'unlock' : 'lock'}"></i> ${item.config.isLocked ? Localization.t('globalnotes.menu.unlock') || 'Unlock' : Localization.t('globalnotes.menu.lock') || 'Lock'}
                 </div>
             </div>
-            
-            ${typeActions ? `<div class="context-menu-divider"></div><div class="context-menu-group">${typeActions}</div>` : ''}
-
+            <div class="context-menu-divider"></div>
+            <div class="context-menu-group">
+                <div class="context-menu-item" onclick="GlobalNotesHandlers.bringToFront('${itemId}')">
+                    <i data-lucide="bring-to-front"></i> ${Localization.t('globalnotes.menu.bring_front') || 'Bring to Front'}
+                </div>
+                <div class="context-menu-item" onclick="GlobalNotesHandlers.sendToBack('${itemId}')">
+                    <i data-lucide="send-to-back"></i> ${Localization.t('globalnotes.menu.send_back') || 'Send to Back'}
+                </div>
+                ${isInColumn ? `
+                <div class="context-menu-item" onclick="GlobalNotesHandlers.removeFromColumn('${itemId}'); GlobalNotesView.renderContent();">
+                    <i data-lucide="log-out"></i> ${Localization.t('globalnotes.menu.extract_column') || 'Extract from Column'}
+                </div>` : ''}
+            </div>
             ${item.type !== 'color' ? `
             <div class="context-menu-divider"></div>
-            <div class="context-menu-title">${Localization.t('globalnotes.menu.bg_color') || 'Background Color'}</div>
-            <div class="context-color-grid">
-                <div class="color-dot" title="Yellow" style="background:#fff9c4" onclick="GlobalNotesHandlers.setItemColor('${itemId}', '#fff9c4')"></div>
-                <div class="color-dot" title="Blue" style="background:#e3f2fd" onclick="GlobalNotesHandlers.setItemColor('${itemId}', '#e3f2fd')"></div>
-                <div class="color-dot" title="Green" style="background:#e8f5e9" onclick="GlobalNotesHandlers.setItemColor('${itemId}', '#e8f5e9')"></div>
-                <div class="color-dot" title="Pink" style="background:#fce4ec" onclick="GlobalNotesHandlers.setItemColor('${itemId}', '#fce4ec')"></div>
-                <div class="color-dot" title="White" style="background:#ffffff" onclick="GlobalNotesHandlers.setItemColor('${itemId}', '#ffffff')"></div>
-                <div class="color-dot" title="Purple" style="background:#f3e5f5" onclick="GlobalNotesHandlers.setItemColor('${itemId}', '#f3e5f5')"></div>
-            </div>
-            <div class="context-menu-divider"></div>
-            <div class="context-menu-title">${Localization.t('globalnotes.menu.border_style') || 'Border Style'}</div>
-            <div class="context-color-grid">
-                <div class="color-dot" style="border:2px solid #000" onclick="GlobalNotesHandlers.setItemBorderColor('${itemId}', '#000000')"></div>
-                <div class="color-dot" style="border:2px solid #cbd5e1" onclick="GlobalNotesHandlers.setItemBorderColor('${itemId}', '#cbd5e1')"></div>
-                <div class="color-dot" style="border:2px solid #ef4444" onclick="GlobalNotesHandlers.setItemBorderColor('${itemId}', '#ef4444')"></div>
-                <div class="color-dot" style="border:2px solid #3b82f6" onclick="GlobalNotesHandlers.setItemBorderColor('${itemId}', '#3b82f6')"></div>
-                <div class="color-dot" style="border:2px solid transparent" onclick="GlobalNotesHandlers.setItemBorderColor('${itemId}', 'transparent')"></div>
-            </div>
-            <div class="context-menu-group horizontal">
-                <div class="context-menu-btn" onclick="GlobalNotesHandlers.setItemBorderThickness('${itemId}', 0)">${Localization.t('globalnotes.menu.border_none') || 'None'}</div>
-                <div class="context-menu-btn" onclick="GlobalNotesHandlers.setItemBorderThickness('${itemId}', 2)">${Localization.t('globalnotes.menu.border_thin') || 'Thin'}</div>
-                <div class="context-menu-btn" onclick="GlobalNotesHandlers.setItemBorderThickness('${itemId}', 5)">${Localization.t('globalnotes.menu.border_thick') || 'Thick'}</div>
+            <div class="context-menu-group">
+                <div class="context-menu-item" onclick="GlobalNotesHandlers.hideContextMenu(); GlobalNotesHandlers.openColorPalette('${itemId}')">
+                    <i data-lucide="palette"></i> ${Localization.t('globalnotes.menu.color') || 'Color'}
+                    <span class="ctx-color-preview" style="background: ${item.config.color || '#ffffff'};"></span>
+                </div>
             </div>
             ` : ''}
             <div class="context-menu-divider"></div>
@@ -173,47 +168,133 @@ const GlobalNotesHandlers = {
         `;
 
         document.body.appendChild(menu);
+
+        // Repositionner si le menu déborde de l'écran
+        const menuRect = menu.getBoundingClientRect();
+        if (menuRect.right > window.innerWidth) menu.style.left = (x - menuRect.width) + 'px';
+        if (menuRect.bottom > window.innerHeight) menu.style.top = (y - menuRect.height) + 'px';
+
         if (typeof lucide !== 'undefined') lucide.createIcons({ root: menu });
     },
 
     getTypeSpecificActions: function (item) {
         const id = item.id;
         switch (item.type) {
-            case 'map':
+            case 'note':
                 return `
-                    <div class="context-menu-item" onclick="GlobalNotesHandlers.promptMapUrl('${id}')">
-                        <i data-lucide="link"></i> ${Localization.t('globalnotes.menu.map_url') || 'Google Maps Link'}
+                    <div class="context-menu-item" onclick="GlobalNotesHandlers.convertItemTo('${id}', 'checklist')">
+                        <i data-lucide="list-checks"></i> ${Localization.t('globalnotes.menu.to_checklist') || 'Convert to Checklist'}
+                    </div>
+                    <div class="context-menu-item" onclick="GlobalNotesHandlers.convertItemTo('${id}', 'heading')">
+                        <i data-lucide="heading"></i> ${Localization.t('globalnotes.menu.to_heading') || 'Convert to Heading'}
+                    </div>
+                `;
+            case 'heading':
+                return `
+                    <div class="context-menu-item" onclick="GlobalNotesHandlers.convertItemTo('${id}', 'note')">
+                        <i data-lucide="sticky-note"></i> ${Localization.t('globalnotes.menu.to_note') || 'Convert to Note'}
+                    </div>
+                `;
+            case 'checklist':
+                return `
+                    <div class="context-menu-item" onclick="GlobalNotesHandlers.sortChecklist('${id}')">
+                        <i data-lucide="arrow-down-narrow-wide"></i> ${Localization.t('globalnotes.menu.sort_checked') || 'Sort Checked to Bottom'}
+                    </div>
+                    <div class="context-menu-item" onclick="GlobalNotesHandlers.clearCompleted('${id}')">
+                        <i data-lucide="check-check"></i> ${Localization.t('globalnotes.menu.clear_completed') || 'Clear Completed'}
+                    </div>
+                    <div class="context-menu-item" onclick="GlobalNotesHandlers.convertItemTo('${id}', 'note')">
+                        <i data-lucide="sticky-note"></i> ${Localization.t('globalnotes.menu.to_note') || 'Convert to Note'}
                     </div>
                 `;
             case 'image':
                 return `
                     <div class="context-menu-item" onclick="GlobalNotesHandlers.triggerImageUpload('${id}')">
-                        <i data-lucide="upload"></i> ${Localization.t('globalnotes.menu.upload') || 'Upload Image'}
+                        <i data-lucide="replace"></i> ${Localization.t('globalnotes.menu.replace_image') || 'Replace Image'}
+                    </div>
+                    <div class="context-menu-item" onclick="GlobalNotesHandlers.promptImageUrl('${id}')">
+                        <i data-lucide="link"></i> ${Localization.t('globalnotes.menu.image_url') || 'Image from URL'}
+                    </div>
+                    ${item.data.url ? `
+                    <div class="context-menu-item" onclick="GlobalNotesHandlers.downloadItemData('${id}')">
+                        <i data-lucide="download"></i> ${Localization.t('globalnotes.menu.download') || 'Download'}
+                    </div>` : ''}
+                `;
+            case 'link':
+                return `
+                    <div class="context-menu-item" onclick="window.open('${(item.data.url || '').replace(/'/g, "\\'")}', '_blank')">
+                        <i data-lucide="external-link"></i> ${Localization.t('globalnotes.menu.open_link') || 'Open Link'}
+                    </div>
+                    <div class="context-menu-item" onclick="GlobalNotesHandlers.copyToClipboard('${(item.data.url || '').replace(/'/g, "\\'")}')">
+                        <i data-lucide="clipboard-copy"></i> ${Localization.t('globalnotes.menu.copy_url') || 'Copy URL'}
+                    </div>
+                    <div class="context-menu-item" onclick="GlobalNotesHandlers.promptLinkUrl('${id}')">
+                        <i data-lucide="edit-3"></i> ${Localization.t('globalnotes.menu.change_source') || 'Change URL'}
                     </div>
                 `;
             case 'video':
                 return `
-                    <div class="context-menu-item" onclick="GlobalNotesHandlers.promptVideoUrl('${id}')">
-                        <i data-lucide="link"></i> ${Localization.t('globalnotes.menu.change_source') || 'Change URL'}
+                    <div class="context-menu-item" onclick="window.open('${(item.data.url || '').replace(/'/g, "\\'")}', '_blank')">
+                        <i data-lucide="external-link"></i> ${Localization.t('globalnotes.menu.open_link') || 'Open in Browser'}
                     </div>
-                `;
-            case 'note':
-            case 'heading':
-                return `
-                    <div class="context-menu-item" onclick="GlobalNotesHandlers.clearContent('${id}')">
-                        <i data-lucide="eraser"></i> ${Localization.t('globalnotes.menu.clear') || 'Clear Content'}
+                    <div class="context-menu-item" onclick="GlobalNotesHandlers.promptVideoUrl('${id}')">
+                        <i data-lucide="edit-3"></i> ${Localization.t('globalnotes.menu.change_source') || 'Change URL'}
                     </div>
                 `;
             case 'board':
                 return `
                     <div class="context-menu-item" onclick="GlobalNotesViewModel.setActiveBoard('${item.data.targetBoardId}'); updateSidebarActions();">
-                        <i data-lucide="external-link"></i> ${Localization.t('globalnotes.menu.open_board') || 'Open Board'}
+                        <i data-lucide="arrow-right-circle"></i> ${Localization.t('globalnotes.menu.open_board') || 'Open Board'}
                     </div>
                 `;
-            case 'link':
+            case 'table':
                 return `
-                    <div class="context-menu-item" onclick="GlobalNotesHandlers.promptLinkUrl('${id}')">
-                        <i data-lucide="edit-3"></i> ${Localization.t('globalnotes.menu.change_source') || 'Change Link'}
+                    <div class="context-menu-item" onclick="GlobalNotesHandlers.addTableRow('${id}')">
+                        <i data-lucide="rows-3"></i> ${Localization.t('globalnotes.menu.add_row') || 'Add Row'}
+                    </div>
+                    <div class="context-menu-item" onclick="GlobalNotesHandlers.addTableColumn('${id}')">
+                        <i data-lucide="columns-3"></i> ${Localization.t('globalnotes.menu.add_col') || 'Add Column'}
+                    </div>
+                    <div class="context-menu-item" onclick="GlobalNotesHandlers.exportTableCSV('${id}')">
+                        <i data-lucide="file-spreadsheet"></i> ${Localization.t('globalnotes.menu.export_csv') || 'Export as CSV'}
+                    </div>
+                `;
+            case 'column':
+                return `
+                    <div class="context-menu-item" onclick="GlobalNotesHandlers.releaseColumnItems('${id}')">
+                        <i data-lucide="ungroup"></i> ${Localization.t('globalnotes.menu.release_items') || 'Release All Items'}
+                    </div>
+                `;
+            case 'map':
+                return `
+                    ${item.data.url ? `
+                    <div class="context-menu-item" onclick="window.open('${(item.data.url || '').replace(/'/g, "\\'")}', '_blank')">
+                        <i data-lucide="map-pin"></i> ${Localization.t('globalnotes.menu.open_map') || 'Open in Google Maps'}
+                    </div>` : ''}
+                    <div class="context-menu-item" onclick="GlobalNotesHandlers.promptMapUrl('${id}')">
+                        <i data-lucide="edit-3"></i> ${Localization.t('globalnotes.menu.map_url') || 'Change Location'}
+                    </div>
+                `;
+            case 'sketch':
+                return `
+                    <div class="context-menu-item" onclick="GlobalNotesHandlers.clearSketch('${id}')">
+                        <i data-lucide="eraser"></i> ${Localization.t('globalnotes.menu.clear_sketch') || 'Clear Drawing'}
+                    </div>
+                `;
+            case 'file':
+                return `
+                    <div class="context-menu-item" onclick="GlobalNotesHandlers.triggerFileUpload('${id}')">
+                        <i data-lucide="replace"></i> ${Localization.t('globalnotes.menu.replace_file') || 'Replace File'}
+                    </div>
+                    ${item.data.url ? `
+                    <div class="context-menu-item" onclick="GlobalNotesHandlers.downloadItemData('${id}')">
+                        <i data-lucide="download"></i> ${Localization.t('globalnotes.menu.download') || 'Download'}
+                    </div>` : ''}
+                `;
+            case 'color':
+                return `
+                    <div class="context-menu-item" onclick="GlobalNotesHandlers.promptColorChange('${id}')">
+                        <i data-lucide="pipette"></i> ${Localization.t('globalnotes.menu.change_color') || 'Change Color'}
                     </div>
                 `;
             default:
@@ -471,6 +552,158 @@ const GlobalNotesHandlers = {
             GlobalNotesRepository.saveItem(item);
             GlobalNotesView.renderContent();
         }
+    },
+
+    // ---- Actions contextuelles avancées ----
+
+    bringToFront: function (itemId) {
+        const items = GlobalNotesRepository.getItems();
+        const item = items.find(i => i.id == itemId);
+        if (!item) return;
+        const maxZ = items.reduce((max, i) => Math.max(max, i.zIndex || 1), 1);
+        item.zIndex = maxZ + 1;
+        GlobalNotesRepository.saveItem(item);
+        GlobalNotesView.renderContent();
+        this.hideContextMenu();
+    },
+
+    sendToBack: function (itemId) {
+        const items = GlobalNotesRepository.getItems();
+        const item = items.find(i => i.id == itemId);
+        if (!item) return;
+        const minZ = items.reduce((min, i) => Math.min(min, i.zIndex || 1), 1);
+        item.zIndex = Math.max(minZ - 1, 0);
+        GlobalNotesRepository.saveItem(item);
+        GlobalNotesView.renderContent();
+        this.hideContextMenu();
+    },
+
+    convertItemTo: function (itemId, targetType) {
+        const item = GlobalNotesRepository.getItems().find(i => i.id == itemId);
+        if (!item) return;
+
+        const oldType = item.type;
+
+        if (oldType === 'note' && targetType === 'checklist') {
+            // Extraire les lignes du HTML et les convertir en items
+            const div = document.createElement('div');
+            div.innerHTML = item.data.content || '';
+            const text = div.innerText || '';
+            const lines = text.split('\n').filter(l => l.trim());
+            item.type = 'checklist';
+            item.data = {
+                title: lines[0] || '',
+                items: lines.slice(1).map((line, i) => ({ id: 'ci_' + Date.now() + '_' + i, text: line.trim(), checked: false }))
+            };
+            if (item.data.items.length === 0) item.data.items = [{ id: 'ci_' + Date.now(), text: '', checked: false }];
+            item.height = 'auto';
+        } else if (oldType === 'note' && targetType === 'heading') {
+            const div = document.createElement('div');
+            div.innerHTML = item.data.content || '';
+            item.type = 'heading';
+            item.data = { text: div.innerText || '' };
+            item.width = Math.max(item.width, 300);
+            item.height = 'auto';
+        } else if (oldType === 'heading' && targetType === 'note') {
+            item.type = 'note';
+            item.data = { content: item.data.text || '' };
+            item.height = 150;
+        } else if (oldType === 'checklist' && targetType === 'note') {
+            const title = item.data.title || '';
+            const lines = (item.data.items || []).map(ci => (ci.checked ? '✓ ' : '○ ') + ci.text);
+            item.type = 'note';
+            item.data = { content: (title ? title + '\n' : '') + lines.join('\n') };
+            item.height = 150;
+        } else {
+            return;
+        }
+
+        GlobalNotesRepository.saveItem(item);
+        GlobalNotesView.renderContent();
+        this.hideContextMenu();
+    },
+
+    sortChecklist: function (itemId) {
+        const item = GlobalNotesRepository.getItems().find(i => i.id == itemId);
+        if (!item || item.type !== 'checklist' || !item.data.items) return;
+        item.data.items.sort((a, b) => (a.checked === b.checked) ? 0 : a.checked ? 1 : -1);
+        GlobalNotesRepository.saveItem(item);
+        GlobalNotesView.renderContent();
+        this.hideContextMenu();
+    },
+
+    clearCompleted: function (itemId) {
+        const item = GlobalNotesRepository.getItems().find(i => i.id == itemId);
+        if (!item || item.type !== 'checklist' || !item.data.items) return;
+        item.data.items = item.data.items.filter(ci => !ci.checked);
+        if (item.data.items.length === 0) item.data.items = [{ id: 'ci_' + Date.now(), text: '', checked: false }];
+        GlobalNotesRepository.saveItem(item);
+        GlobalNotesView.renderContent();
+        this.hideContextMenu();
+    },
+
+    exportTableCSV: function (itemId) {
+        const item = GlobalNotesRepository.getItems().find(i => i.id == itemId);
+        if (!item || item.type !== 'table') return;
+        const headers = item.data.headers || [];
+        const rows = item.data.data || [];
+        const escape = (v) => '"' + String(v || '').replace(/"/g, '""') + '"';
+        let csv = headers.map(escape).join(',') + '\n';
+        rows.forEach(row => { csv += row.map(escape).join(',') + '\n'; });
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'table_export.csv';
+        a.click();
+        URL.revokeObjectURL(a.href);
+        this.hideContextMenu();
+    },
+
+    releaseColumnItems: function (columnId) {
+        const items = GlobalNotesRepository.getItems();
+        const column = items.find(i => i.id == columnId);
+        if (!column || column.type !== 'column') return;
+        const childIds = [...(column.data.items || [])];
+        childIds.forEach((childId, index) => {
+            const child = items.find(i => i.id === childId);
+            if (child) {
+                child.columnId = null;
+                child.x = column.x + 20 + (index * 15);
+                child.y = column.y + 60 + (index * 15);
+                GlobalNotesRepository.saveItem(child);
+            }
+        });
+        column.data.items = [];
+        GlobalNotesRepository.saveItem(column);
+        GlobalNotesView.renderContent();
+        this.hideContextMenu();
+    },
+
+    downloadItemData: function (itemId) {
+        const item = GlobalNotesRepository.getItems().find(i => i.id == itemId);
+        if (!item) return;
+        const url = item.data.url;
+        if (!url) return;
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = item.data.name || item.data.caption || 'download';
+        a.click();
+        this.hideContextMenu();
+    },
+
+    copyToClipboard: function (text) {
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(text);
+        } else {
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand('copy');
+            ta.remove();
+        }
+        if (typeof showNotification === 'function') showNotification(Localization.t('globalnotes.notify.copied') || 'Copied!');
+        this.hideContextMenu();
     },
 
     toggleMoreMenu: function (e) {
@@ -1008,10 +1241,15 @@ const GlobalNotesHandlers = {
         if (!canvas) return;
         const ctx = canvas.getContext('2d');
         const dpr = window.devicePixelRatio || 1;
+        const zoom = (typeof GlobalNotesViewModel !== 'undefined') ? GlobalNotesViewModel.state.zoom : 1;
         const rect = canvas.getBoundingClientRect();
 
-        canvas.width = rect.width * dpr;
-        canvas.height = rect.height * dpr;
+        // getBoundingClientRect returns dimensions scaled by zoom, so divide to get CSS size
+        const cssWidth = rect.width / zoom;
+        const cssHeight = rect.height / zoom;
+
+        canvas.width = cssWidth * dpr;
+        canvas.height = cssHeight * dpr;
         ctx.scale(dpr, dpr);
 
         ctx.strokeStyle = canvas.getAttribute('data-color') || '#333';
@@ -1029,7 +1267,7 @@ const GlobalNotesHandlers = {
         const item = GlobalNotesRepository.getItems().find(i => i.id == itemId);
         if (item && item.data.image) {
             const img = new Image();
-            img.onload = () => ctx.drawImage(img, 0, 0, rect.width, rect.height);
+            img.onload = () => ctx.drawImage(img, 0, 0, cssWidth, cssHeight);
             img.src = item.data.image;
         }
     },
@@ -1062,9 +1300,10 @@ const GlobalNotesHandlers = {
         if (!data) return;
 
         data.isDrawing = true;
+        const zoom = (typeof GlobalNotesViewModel !== 'undefined') ? GlobalNotesViewModel.state.zoom : 1;
         const rect = e.target.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
+        const x = (e.clientX - rect.left) / zoom;
+        const y = (e.clientY - rect.top) / zoom;
         data.points = [{ x, y }];
     },
 
@@ -1073,9 +1312,10 @@ const GlobalNotesHandlers = {
         const data = this.sketchData[itemId];
         if (!data || !data.isDrawing) return;
 
+        const zoom = (typeof GlobalNotesViewModel !== 'undefined') ? GlobalNotesViewModel.state.zoom : 1;
         const rect = e.target.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
+        const x = (e.clientX - rect.left) / zoom;
+        const y = (e.clientY - rect.top) / zoom;
 
         data.points.push({ x, y });
 

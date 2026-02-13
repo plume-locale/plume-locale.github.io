@@ -19,7 +19,7 @@ const SceneVersionView = {
     },
 
     getEditorContent() {
-        const editor = this.get('editor');
+        const editor = document.querySelector('.editor-textarea');
         return editor ? editor.innerHTML : null;
     },
 
@@ -92,15 +92,19 @@ const SceneVersionView = {
             return;
         }
 
-        // Sort
-        const sorted = [...versions].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        // Sort (safely handle missing createdAt)
+        const sorted = [...versions].sort((a, b) => {
+            const dateA = a.createdAt ? new Date(a.createdAt) : new Date(0);
+            const dateB = b.createdAt ? new Date(b.createdAt) : new Date(0);
+            return dateB - dateA;
+        });
 
         let html = '';
         sorted.forEach(version => {
-            const date = new Date(version.createdAt);
+            const date = version.createdAt ? new Date(version.createdAt) : null;
             const locale = Localization.getLocale() === 'fr' ? 'fr-FR' : 'en-US';
-            const dateStr = date.toLocaleDateString(locale);
-            const timeStr = date.toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' });
+            const dateStr = date && !isNaN(date) ? date.toLocaleDateString(locale) : '---';
+            const timeStr = date && !isNaN(date) ? date.toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' }) : '';
             const canCompare = versions.length >= 2;
             const isFinal = version.isFinal === true;
             const finalClass = isFinal ? 'final' : '';

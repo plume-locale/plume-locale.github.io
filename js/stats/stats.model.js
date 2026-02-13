@@ -26,7 +26,13 @@ const StatsModel = {
         return {
             totalGoal: 50000,
             dailyGoal: 500,
-            writingSessions: []
+            writingSessions: [],
+            smartGoal: {
+                mode: 'fixed', // 'fixed' | 'date'
+                targetDate: null,
+                daysOff: [], // [0, 6] for Sunday, Saturday
+                sessionDuration: 60 // minutes
+            }
         };
     }
 };

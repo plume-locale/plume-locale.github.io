@@ -348,6 +348,9 @@ class MetroTimelineViewModel {
      * Rafraîchit toutes les vues.
      */
     static refreshAll() {
+        // Toujours rafraîchir la sidebar
+        if (typeof renderTimelineVizList === 'function') renderTimelineVizList();
+
         if (splitViewActive) {
             if (splitViewState.left.view === 'timelineviz') renderSplitPanelViewContent('left');
             if (splitViewState.right.view === 'timelineviz') renderSplitPanelViewContent('right');
@@ -355,6 +358,8 @@ class MetroTimelineViewModel {
             // Refraîchir l'éditeur si une scène est ouverte
             if (splitViewState.left.view === 'editor' && splitViewState.left.sceneId) renderSplitPanelViewContent('left');
             if (splitViewState.right.view === 'editor' && splitViewState.right.sceneId) renderSplitPanelViewContent('right');
+        } else if (typeof tabsState !== 'undefined' && tabsState.panes.left.tabs.length > 0 && typeof renderTabs === 'function') {
+            renderTabs();
         } else if (currentView === 'timelineviz') {
             MetroTimelineView.renderTimelineVizView();
         } else if (currentSceneId && currentView === 'editor') {

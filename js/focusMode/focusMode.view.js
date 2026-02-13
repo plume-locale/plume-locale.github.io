@@ -6,11 +6,15 @@ const FocusModeView = {
     renderFocusMode(isActive) {
         const appContainer = document.querySelector('.app-container');
         const sidebar = document.querySelector('.sidebar');
+        const sidebarAccordion = document.querySelector('.sidebar-accordion');
+        const sidebarColumn = document.querySelector('.sidebar-column');
         const toolsSidebar = document.getElementById('toolsSidebar');
 
         if (isActive) {
             if (appContainer) appContainer.classList.add('focus-mode');
             if (sidebar) sidebar.style.display = 'none';
+            if (sidebarAccordion) sidebarAccordion.style.display = 'none';
+            if (sidebarColumn) sidebarColumn.style.display = 'none';
             if (toolsSidebar) {
                 toolsSidebar.style.display = 'flex';
                 toolsSidebar.style.zIndex = '105';
@@ -28,6 +32,22 @@ const FocusModeView = {
             if (appContainer) appContainer.classList.remove('focus-mode');
 
             if (sidebar) sidebar.style.cssText = '';
+            if (sidebarAccordion) sidebarAccordion.style.cssText = '';
+
+            if (sidebarColumn) {
+                sidebarColumn.style.cssText = '';
+                // Restore saved width if available
+                if (typeof ColorPaletteViewModel !== 'undefined' && typeof ColorPaletteViewModel.getSavedSidebarWidth === 'function') {
+                    const savedWidth = ColorPaletteViewModel.getSavedSidebarWidth();
+                    if (savedWidth && savedWidth >= 200) {
+                        sidebarColumn.style.width = savedWidth + 'px';
+                        if (appContainer && getComputedStyle(appContainer).display === 'grid') {
+                            appContainer.style.gridTemplateColumns = `${savedWidth}px 1fr`;
+                        }
+                    }
+                }
+            }
+
             if (toolsSidebar) toolsSidebar.style.cssText = '';
 
             this.setPanelsFocusStyle(false);

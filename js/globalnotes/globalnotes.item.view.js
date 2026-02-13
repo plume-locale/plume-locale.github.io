@@ -228,13 +228,15 @@ const GlobalNotesItemView = {
                             <thead>
                                 <tr>
                                     ${(data.headers || []).map((h, c) => `
-                                        <th class="table-header-cell">
-                                            <div class="header-content" contenteditable="true" onblur="GlobalNotesHandlers.updateTableHeader('${item.id}', ${c}, this.innerText)">
-                                                ${h || ''}
+                                        <th>
+                                            <div class="table-header-cell">
+                                                <div class="header-content" contenteditable="true" onblur="GlobalNotesHandlers.updateTableHeader('${item.id}', ${c}, this.innerText)">
+                                                    ${h || ''}
+                                                </div>
+                                                <button class="btn-delete-col" onclick="GlobalNotesHandlers.deleteTableColumn('${item.id}', ${c})" title="${Localization.t('globalnotes.action.delete_column') || 'Delete Column'}">
+                                                    <i data-lucide="x"></i>
+                                                </button>
                                             </div>
-                                            <button class="btn-delete-col" onclick="GlobalNotesHandlers.deleteTableColumn('${item.id}', ${c})" title="${Localization.t('globalnotes.action.delete_column') || 'Delete Column'}">
-                                                <i data-lucide="x"></i>
-                                            </button>
                                         </th>
                                     `).join('')}
                                     <th class="table-action-col"></th>

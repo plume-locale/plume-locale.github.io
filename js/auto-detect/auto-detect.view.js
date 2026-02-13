@@ -255,14 +255,23 @@ const AutoDetectView = {
         }
         html += '</div>';
 
-        // SECTION 2 : UNIVERS (Simplifiée pour sidebar)
+        // SECTION 2 : UNIVERS (Simplifié pour sidebar)
         html += '<div style="margin-bottom: 1.5rem;">';
         html += `<div class="quick-links-title" style="font-size: 0.85rem; font-weight: 600; margin-bottom: 0.75rem; color: var(--text-muted);"><i data-lucide="globe" style="width:14px;height:14px;vertical-align:middle;margin-right:4px;"></i> ${Localization.t('nav.world')}</div>`;
+
+        // World Elements
+        const elementLinks = (scene.linkedElements || []).map(id => {
+            const elem = project.world ? project.world.find(e => e.id === id) : null;
+            return elem ? `<div class="link-item" style="margin-bottom: 4px;"><i data-lucide="${this.getElementIcon(elem.type)}" style="width:12px;height:12px;vertical-align:middle;margin-right:4px;"></i>${elem.name}</div>` : '';
+        }).join('');
+
+        // Map Locations
         const locationLinks = (scene.locations || []).map(loc => {
-            const locData = project.locations ? project.locations.find(l => l.id === loc.id) : null;
+            const locData = project.locations ? project.locations.find(l => l.id === (loc.id || loc)) : null;
             return locData ? `<div class="link-item" style="margin-bottom: 4px;"><i data-lucide="map-pin" style="width:12px;height:12px;vertical-align:middle;margin-right:4px;"></i>${locData.name}</div>` : '';
         }).join('');
-        html += locationLinks || `<p class="text-muted small" style="font-size: 0.75rem; opacity: 0.7;">${Localization.t('autodetect.elements.none_locations')}</p>`;
+
+        html += (elementLinks + locationLinks) || `<p class="text-muted small" style="font-size: 0.75rem; opacity: 0.7;">${Localization.t('autodetect.elements.none_locations')}</p>`;
         html += '</div>';
 
         // SECTION 3 : TIMELINE
@@ -336,6 +345,18 @@ const AutoDetectView = {
             }
             editor.focus();
         }
+
+        // Normalize formatBlock values to <tag> format for cross-browser compatibility
+        if (command === 'formatBlock' && value && !value.startsWith('<')) {
+            value = '<' + value + '>';
+        }
+
+        // Privilégier les balises HTML sémantiques (<strong>, <em>, <u>)
+        // sauf pour les couleurs qui n'ont pas d'équivalent HTML
+        const colorCommands = ['foreColor', 'hiliteColor', 'backColor'];
+        try {
+            document.execCommand('styleWithCSS', false, colorCommands.includes(command));
+        } catch (e) { }
 
         document.execCommand(command, false, value);
 

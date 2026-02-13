@@ -50,6 +50,14 @@ class MindmapView {
     }
 
     render() {
+        // When tabs are active, delegate to tab system
+        if (typeof tabsState !== 'undefined' && tabsState.panes.left.tabs.length > 0 && typeof renderTabs === 'function') {
+            if (!document.getElementById('editorView-backup')) {
+                renderTabs();
+                return;
+            }
+        }
+
         const editorView = document.getElementById('editorView');
         if (!editorView) return;
 

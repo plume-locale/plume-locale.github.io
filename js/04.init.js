@@ -208,3 +208,11 @@ function renameProject() {
 window.addEventListener('load', init);
 
 
+
+// Close extra menu when clicking outside
+window.addEventListener('click', (e) => {
+    const extraMenu = document.getElementById('extraMenuDropdown');
+    if (extraMenu && extraMenu.classList.contains('open') && !extraMenu.contains(e.target)) {
+        extraMenu.classList.remove('open');
+    }
+});

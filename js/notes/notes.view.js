@@ -59,7 +59,11 @@ class NotesView {
                                 <div class="treeview-item" onclick="notesViewModel.openDetail(${note.id})">
                                     <span class="treeview-item-title">${note.title}</span>
                                     ${mediaIcon ? `<span class="treeview-media-icon"><i data-lucide="${mediaIcon}" style="width:14px; height:14px;"></i></span>` : ''}
-                                    <button class="btn btn-icon btn-small delete-btn" onclick="event.stopPropagation(); notesViewModel.deleteNote(${note.id})" title="${Localization.t('btn.delete')}">×</button>
+                                    <div class="treeview-item-actions">
+                                        <button class="treeview-action-btn" onclick="event.stopPropagation(); notesViewModel.openDetail(${note.id}, { forceNew: true })" title="${Localization.t('tabs.open_new')}"><i data-lucide="plus-square" style="width:12px;height:12px;"></i></button>
+                                        <button class="treeview-action-btn" onclick="event.stopPropagation(); notesViewModel.openDetail(${note.id}, { replaceCurrent: true })" title="${Localization.t('tabs.replace')}"><i data-lucide="maximize-2" style="width:12px;height:12px;"></i></button>
+                                        <button class="treeview-action-btn delete" onclick="event.stopPropagation(); notesViewModel.deleteNote(${note.id})" title="${Localization.t('btn.delete')}">×</button>
+                                    </div>
                                 </div>
                             `;
             }).join('')}
@@ -80,45 +84,56 @@ class NotesView {
         const editorView = document.getElementById('editorView');
         if (!editorView) return;
 
+        const catIcon = NotesModel.CATEGORIES[note.category] || 'file-text';
+        const tagsHtml = (note.tags || []).length > 0
+            ? (note.tags || []).map(t => `<span style="display:inline-block; padding:0.2rem 0.6rem; background:var(--bg-tertiary); border:1px solid var(--border-color); border-radius:12px; font-size:0.8rem; color:var(--text-secondary);">${t.trim()}</span>`).join(' ')
+            : '';
+
         editorView.innerHTML = `
             <div class="detail-view">
-                <div class="detail-header">
+                <div class="detail-header" style="display:flex; align-items:center; justify-content:space-between; gap:1rem;">
                     <div style="display: flex; align-items: center; gap: 1rem; flex: 1;">
-                        <input type="text" class="form-input" value="${note.title}" 
-                               style="font-size: 1.8rem; font-weight: 600; font-family: 'Noto Serif JP', serif; padding: 0.5rem;"
+                        <div style="width:42px; height:42px; border-radius:10px; background:var(--accent-gold); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                            <i data-lucide="${catIcon}" style="width:20px;height:20px;color:var(--bg-primary);"></i>
+                        </div>
+                        <input type="text" class="form-input" value="${note.title}"
+                               style="font-size: 1.6rem; font-weight: 600; font-family: 'Noto Serif JP', serif; padding: 0.5rem; border:none; background:transparent;"
                                onchange="notesViewModel.updateField(${note.id}, 'title', this.value)"
                                placeholder="${Localization.t('notes.detail.title_placeholder')}">
-                        <span style="font-size: 0.8rem; padding: 0.4rem 0.8rem; background: var(--accent-gold); color: var(--bg-primary); border-radius: 2px;">${NotesView.getCategoryLabel(note.category)}</span>
+                        <span style="font-size: 0.75rem; padding: 0.35rem 0.75rem; background: var(--accent-gold); color: var(--bg-primary); border-radius: 12px; font-weight:600; white-space:nowrap;">${NotesView.getCategoryLabel(note.category)}</span>
                     </div>
-                    <button class="btn" onclick="switchView('editor')">${Localization.t('notes.detail.back')}</button>
+                    <button class="btn" onclick="switchView('editor')"><i data-lucide="arrow-left" style="width:14px;height:14px;vertical-align:middle;margin-right:4px;"></i>${Localization.t('notes.detail.back')}</button>
                 </div>
-                
-                <div class="detail-section">
-                    <div class="detail-section-title">${Localization.t('notes.detail.category')}</div>
-                    <select class="form-input" onchange="notesViewModel.updateField(${note.id}, 'category', this.value)">
-                        ${NotesModel.CATEGORY_ORDER.map(cat => `
-                            <option value="${cat}" ${note.category === cat ? 'selected' : ''}>${NotesView.getCategoryLabel(cat)}</option>
-                        `).join('')}
-                    </select>
+
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1.5rem;">
+                    <div class="detail-section">
+                        <div class="detail-section-title"><i data-lucide="tag" style="width:16px;height:16px;vertical-align:middle;margin-right:6px;"></i>${Localization.t('notes.detail.category')}</div>
+                        <select class="form-input" onchange="notesViewModel.updateField(${note.id}, 'category', this.value)" style="width:100%;">
+                            ${NotesModel.CATEGORY_ORDER.map(cat => `
+                                <option value="${cat}" ${note.category === cat ? 'selected' : ''}>${NotesView.getCategoryLabel(cat)}</option>
+                            `).join('')}
+                        </select>
+                    </div>
+
+                    <div class="detail-section">
+                        <div class="detail-section-title"><i data-lucide="hash" style="width:16px;height:16px;vertical-align:middle;margin-right:6px;"></i>${Localization.t('notes.detail.tags')}</div>
+                        <input type="text" class="form-input" value="${(note.tags || []).join(', ')}"
+                               onchange="notesViewModel.updateTags(${note.id}, this.value)" style="width:100%;">
+                        <div style="margin-top:0.5rem; display:flex; flex-wrap:wrap; gap:0.4rem;">${tagsHtml}</div>
+                        <small style="color: var(--text-muted); font-style: italic; display:block; margin-top:0.4rem;">${Localization.t('notes.detail.tags_help')}</small>
+                    </div>
                 </div>
 
                 <div class="detail-section">
-                    <div class="detail-section-title">${Localization.t('notes.detail.tags')}</div>
-                    <input type="text" class="form-input" value="${(note.tags || []).join(', ')}" 
-                           onchange="notesViewModel.updateTags(${note.id}, this.value)">
-                    <small style="color: var(--text-muted); font-style: italic;">${Localization.t('notes.detail.tags_help')}</small>
-                </div>
-
-                <div class="detail-section">
-                    <div class="detail-section-title">${Localization.t('notes.detail.content')}</div>
-                    <textarea class="form-input" rows="12" 
+                    <div class="detail-section-title"><i data-lucide="align-left" style="width:16px;height:16px;vertical-align:middle;margin-right:6px;"></i>${Localization.t('notes.detail.content')}</div>
+                    <textarea class="form-input" rows="14" style="width:100%; resize:vertical; line-height:1.7; font-size:1rem;"
                               oninput="notesViewModel.updateField(${note.id}, 'content', this.value)">${note.content || ''}</textarea>
                 </div>
 
                 <div class="detail-section">
-                    <div class="detail-section-title">
-                        ${Localization.t('notes.detail.media')}
-                        <button class="btn btn-small" onclick="NotesHandlers.openAddMediaModal(${note.id})" style="margin-left: 1rem;">
+                    <div class="detail-section-title" style="display:flex; align-items:center; justify-content:space-between;">
+                        <span><i data-lucide="paperclip" style="width:16px;height:16px;vertical-align:middle;margin-right:6px;"></i>${Localization.t('notes.detail.media')}</span>
+                        <button class="btn btn-small" onclick="NotesHandlers.openAddMediaModal(${note.id})">
                             <i data-lucide="plus" style="width:14px;height:14px;margin-right:0.3rem;"></i>${Localization.t('notes.detail.add_media_btn')}
                         </button>
                     </div>
@@ -127,8 +142,9 @@ class NotesView {
                     </div>
                 </div>
 
-                <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 2rem; font-family: 'Source Code Pro', monospace;">
-                    ${Localization.t('notes.detail.created', new Date(note.createdAt).toLocaleDateString())} • 
+                <div style="display:flex; align-items:center; gap:1rem; font-size: 0.8rem; color: var(--text-muted); margin-top: 1.5rem; padding:0.75rem 1rem; background:var(--bg-secondary); border-radius:6px; font-family: 'Source Code Pro', monospace;">
+                    <i data-lucide="clock" style="width:14px;height:14px;opacity:0.5;"></i>
+                    ${Localization.t('notes.detail.created', new Date(note.createdAt).toLocaleDateString())} •
                     ${Localization.t('notes.detail.updated', new Date(note.updatedAt).toLocaleDateString())}
                 </div>
             </div>

@@ -96,9 +96,27 @@ const UndoRedoView = {
                 <ul class="undo-redo-list">
                     ${displayStack.map((snap, idx) => {
                 const label = Localization.t('undoredo.label.' + snap.label) || snap.label || Localization.t('undoredo.default_label') || 'Action sans nom';
+
+                let detailsHTML = '';
+                if (snap.details) {
+                    let text = '';
+                    if (typeof snap.details.text === 'string') {
+                        text = snap.details.text.length > 60 ? snap.details.text.substring(0, 60) + '...' : snap.details.text;
+                    } else if (typeof snap.details.value === 'string' || typeof snap.details.value === 'boolean') {
+                        text = String(snap.details.value);
+                    }
+
+                    if (text) {
+                        detailsHTML = `<div class="undo-redo-item-details" style="font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; font-style: italic; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 200px;">"${text}"</div>`;
+                    }
+                }
+
                 return `
                             <li class="undo-redo-item" onclick="UndoRedoViewModel.jumpToHistoryState('${type}', ${stack.length - 1 - idx})">
-                                <span class="undo-redo-item-label">${label}</span>
+                                <div style="display: flex; flex-direction: column; overflow: hidden;">
+                                    <span class="undo-redo-item-label">${label}</span>
+                                    ${detailsHTML}
+                                </div>
                                 <span class="undo-redo-item-time">${this.formatTimestamp(snap.timestamp)}</span>
                             </li>
                         `;

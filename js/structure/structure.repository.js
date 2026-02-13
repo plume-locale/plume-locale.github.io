@@ -145,7 +145,7 @@ const SceneRepository = {
     getById: (actId, chapterId, sceneId) => {
         const chapter = ChapterRepository.getById(actId, chapterId);
         if (!chapter || !chapter.scenes) return null;
-        return chapter.scenes.find(s => s.id === sceneId) || null;
+        return chapter.scenes.find(s => s.id == sceneId) || null;
     },
 
     add: (actId, chapterId, scene) => {
@@ -165,7 +165,7 @@ const SceneRepository = {
         const chapter = ChapterRepository.getById(actId, chapterId);
         if (!chapter || !chapter.scenes) return null;
 
-        const sceneIndex = chapter.scenes.findIndex(s => s.id === sceneId);
+        const sceneIndex = chapter.scenes.findIndex(s => s.id == sceneId);
         if (sceneIndex === -1) return null;
 
         const scene = chapter.scenes[sceneIndex];
@@ -187,7 +187,7 @@ const SceneRepository = {
         if (sceneIndex === -1) return null;
 
         const removed = chapter.scenes[sceneIndex];
-        chapter.scenes = chapter.scenes.filter(s => s.id !== sceneId);
+        chapter.scenes = chapter.scenes.filter(s => s.id != sceneId);
         chapter.updatedAt = new Date().toISOString();
 
         const act = ActRepository.getById(actId);

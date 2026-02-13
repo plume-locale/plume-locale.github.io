@@ -78,7 +78,7 @@ const UndoRedoViewModel = {
     /**
      * Sauvegarde l'état actuel avec debounce
      */
-    saveToHistory(actionType = 'edit') {
+    saveToHistory(actionType = 'edit', metadata = null) {
         if (window.isUndoRedoAction) return;
 
         const isImmediate = UndoRedoConfig.immediateActions.some(
@@ -86,14 +86,14 @@ const UndoRedoViewModel = {
         );
 
         if (isImmediate) {
-            this.saveToHistoryImmediate(actionType);
+            this.saveToHistoryImmediate(actionType, metadata);
             return;
         }
 
         if (this._debounceTimer) clearTimeout(this._debounceTimer);
 
         this._debounceTimer = setTimeout(() => {
-            this._saveInternal(actionType);
+            this._saveInternal(actionType, metadata);
             this._debounceTimer = null;
         }, UndoRedoConfig.debounceDelay);
     },
@@ -101,17 +101,17 @@ const UndoRedoViewModel = {
     /**
      * Sauvegarde l'état actuel immédiatement
      */
-    saveToHistoryImmediate(actionType = 'immediate') {
+    saveToHistoryImmediate(actionType = 'immediate', metadata = null) {
         if (window.isUndoRedoAction) return;
 
         this._cancelDebounce();
-        this._saveInternal(actionType);
+        this._saveInternal(actionType, metadata);
     },
 
     /**
      * Fonction de sauvegarde interne
      */
-    _saveInternal(actionType) {
+    _saveInternal(actionType, metadata = null) {
         // On stocke le type (clé de traduction) comme label du snapshot
         const snapshotType = actionType;
         const currentSnapshot = UndoRedoRepository.createSnapshot(snapshotType);
@@ -131,6 +131,11 @@ const UndoRedoViewModel = {
 
         // Pousser l'ANCIEN état avec le type de l'action actuelle
         lastSnap.label = snapshotType;
+        // Ajouter les métadonnées si présentes (ex: texte tapé)
+        if (metadata) {
+            lastSnap.details = metadata;
+        }
+
         window.historyStack.push(lastSnap);
 
         // Limiter la taille

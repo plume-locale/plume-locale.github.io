@@ -27,7 +27,7 @@ const SceneVersionApp = {
     refreshList: () => {
         const current = SceneVersionRepository.getCurrentScene();
         if (current) SceneVersionView.renderList(current.scene);
-        // else SceneVersionView.renderList(null); // Clear might be desired
+        else SceneVersionView.renderList(null);
     },
 
     updateContent: (content) => SceneVersionViewModel.updateCurrentContent(content),

@@ -104,6 +104,17 @@ function setSceneStatus(actId, chapterId, sceneId, status) {
         closeStatusMenu();
         renderActsList();
         updateProgressBar();
+
+        // Mettre à jour le header si c'est la scène actuellement ouverte
+        const activeSceneId = (typeof currentSceneId !== 'undefined') ? currentSceneId : (window.currentSceneId || null);
+        if (activeSceneId == sceneId && typeof updateEditorHeaderStatus === 'function') {
+            updateEditorHeaderStatus(status);
+        }
+
+        // Toujours tenter de mettre à jour l'indicateur de progression de l'éditeur (Acte/Livre/Chapitre)
+        if (typeof updateEditorProgressIndicator === 'function') {
+            updateEditorProgressIndicator();
+        }
     }
 }
 
@@ -204,7 +215,7 @@ function renderActsList() {
     const container = document.getElementById('chaptersList');
     if (!container) return;
 
-    // Sauvegarder la position du scroll avant le rendu
+    // Save scroll position before rendering
     const scrollTop = container.scrollTop;
 
     const vm = getStructureViewModel();
@@ -214,84 +225,108 @@ function renderActsList() {
                 <div style="margin-bottom: 1rem;">${Localization.t('sidebar.empty.no_chapters')}</div>
                 <button class="btn btn-primary" onclick="openAddChapterModal()">${Localization.t('btn.add_chapter')}</button>
             </div>`;
-        if (typeof updateStats === 'function') updateStats();
         return;
     }
 
     let html = '<div style="padding: 0 0.5rem;">';
 
-    vm.acts.forEach((act, actIndex) => {
-        const actStats = typeof getActStats === 'function' ? getActStats(act) : { totalWords: 0 };
-        const actExpanded = typeof expandedActs !== 'undefined' && expandedActs.has(act.id);
-
-        html += `<div class="act-group" id="act-${act.id}" data-act-id="${act.id}">
-            <div class="act-header ${typeof currentActId !== 'undefined' && currentActId === act.id ? 'active' : ''}" data-act-id="${act.id}">
-                <span class="drag-handle" draggable="true" onclick="event.stopPropagation()"><i data-lucide="grip-vertical" style="width:12px;height:12px;vertical-align:middle;"></i></span>
-                <span class="act-icon ${actExpanded ? 'expanded' : ''}" onclick="toggleAct(${act.id}); event.stopPropagation();" style="cursor: pointer;"><i data-lucide="${actExpanded ? 'chevron-down' : 'chevron-right'}" style="width:14px;height:14px;vertical-align:middle;"></i></span>
-                <span class="auto-number">${actIndex + 1}.</span>
-                <span class="act-title" ondblclick="event.stopPropagation(); startEditingAct(${act.id}, this)" onclick="${act.chapters.length > 0 ? `openAct(${act.id})` : ''}">${act.title}</span>
-                <span class="edit-hint"><i data-lucide="pencil" style="width:10px;height:10px;"></i></span>
-                <span class="word-count-badge" title="${actStats.totalWords.toLocaleString()} mots">${typeof formatWordCount === 'function' ? formatWordCount(actStats.totalWords) : actStats.totalWords}</span>
-                <button class="btn btn-icon btn-small delete-btn" onclick="event.stopPropagation(); deleteAct(${act.id})"><i data-lucide="x" style="width:12px;height:12px;"></i></button>
-            </div>
-            <div class="act-chapters ${actExpanded ? 'visible' : ''}">`;
-
-        act.chapters.forEach((chapter, chapterIndex) => {
-            const chStats = typeof getChapterStats === 'function' ? getChapterStats(chapter) : { totalWords: 0, progressPercent: 0 };
-            const chStatus = chStats.progressPercent === 100 ? 'complete' : chStats.progressPercent > 0 ? 'progress' : 'draft';
-            const chExpanded = typeof expandedChapters !== 'undefined' && expandedChapters.has(chapter.id);
-            const chNumber = `${actIndex + 1}.${chapterIndex + 1}`;
-
-            html += `<div class="chapter-group" id="chapter-${chapter.id}" data-chapter-id="${chapter.id}" data-act-id="${act.id}">
-                <div class="chapter-header ${typeof currentChapterId !== 'undefined' && currentChapterId === chapter.id ? 'active' : ''}" data-chapter-id="${chapter.id}" data-act-id="${act.id}">
-                    <span class="drag-handle" draggable="true" onclick="event.stopPropagation()"><i data-lucide="grip-vertical" style="width:12px;height:12px;vertical-align:middle;"></i></span>
-                    <span class="chapter-icon ${chExpanded ? 'expanded' : ''}" onclick="toggleChapter(${act.id}, ${chapter.id}); event.stopPropagation();" style="cursor: pointer;"><i data-lucide="${chExpanded ? 'chevron-down' : 'chevron-right'}" style="width:14px;height:14px;vertical-align:middle;"></i></span>
-                    <span class="auto-number">${chNumber}</span>
-                    <span class="chapter-title" ondblclick="event.stopPropagation(); startEditingChapter(${act.id}, ${chapter.id}, this)" onclick="${chapter.scenes.length > 0 ? `openChapter(${act.id}, ${chapter.id})` : ''}">${chapter.title}</span>
-                    <span class="edit-hint"><i data-lucide="pencil" style="width:10px;height:10px;"></i></span>
-                    <span class="word-count-badge" title="${chStats.totalWords.toLocaleString()} mots">${typeof formatWordCount === 'function' ? formatWordCount(chStats.totalWords) : chStats.totalWords}</span>
-                    <span class="status-badge status-${chStatus}" title="${chStats.progressPercent}%"></span>
-                    <span class="chapter-count" title="Nombre de scènes" style="cursor: default;">${chapter.scenes.length}</span>
-                    <button class="btn btn-icon btn-small delete-btn" onclick="event.stopPropagation(); deleteChapter(${act.id}, ${chapter.id})"><i data-lucide="x" style="width:12px;height:12px;"></i></button>
+    // Item "Tout le livre"
+    const isFullBookActive = (typeof currentActId !== 'undefined' && currentActId === 'all');
+    html += `
+        <div class="act-group" id="full-book-item">
+            <div class="act-header ${isFullBookActive ? 'active' : ''}" onclick="openFullBook()" style="margin-bottom: 0.5rem; border-left: 3px solid var(--accent-gold); position: relative;">
+                <span class="act-icon"><i data-lucide="book" style="width:14px;height:14px;vertical-align:middle;"></i></span>
+                <span class="act-title" style="text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">${Localization.t('structure.all_book')}</span>
+                <div class="treeview-item-actions">
+                    <button class="treeview-action-btn" onclick="event.stopPropagation(); openFullBook({ forceNew: true })" title="${Localization.t('tabs.open_new')}"><i data-lucide="plus-square" style="width:12px;height:12px;"></i></button>
+                    <button class="treeview-action-btn" onclick="event.stopPropagation(); openFullBook({ replaceCurrent: true })" title="${Localization.t('tabs.replace')}"><i data-lucide="maximize-2" style="width:12px;height:12px;"></i></button>
                 </div>
-                <div class="scenes-list ${chExpanded ? 'visible' : ''}">`;
+            </div>
+        </div>`;
 
-            chapter.scenes.forEach((scene, sceneIndex) => {
+    vm.acts.forEach((act) => {
+        const actStats = getActStats(act);
+        const isActExpanded = typeof expandedActs !== 'undefined' && expandedActs.has(act.id);
+        const sAct = formatWordCount(actStats.totalWords);
+
+        html += `
+            <div class="act-group" id="act-${act.id}" data-act-id="${act.id}">
+                <div class="act-header ${typeof currentActId !== 'undefined' && currentActId === act.id ? 'active' : ''}" data-act-id="${act.id}" style="position: relative; display: flex; align-items: center;">
+                    <span class="act-icon ${isActExpanded ? 'expanded' : ''}" onclick="toggleAct(${act.id}); event.stopPropagation();" style="cursor: pointer;"><i data-lucide="${isActExpanded ? 'chevron-down' : 'chevron-right'}" style="width:14px;height:14px;vertical-align:middle;"></i></span>
+                    <span class="act-title" ondblclick="event.stopPropagation(); startEditingAct(${act.id}, this)" onclick="${act.chapters.length > 0 ? `openAct(${act.id})` : ''}">${act.title}</span>
+                    <span class="word-count-badge" style="margin-left: auto; margin-right: 55px;" title="${actStats.totalWords.toLocaleString()} mots">${sAct}</span>
+                    <span class="drag-handle" draggable="true" onclick="event.stopPropagation()"><i data-lucide="grip-vertical" style="width:12px;height:12px;vertical-align:middle;"></i></span>
+                    <div class="treeview-item-actions">
+                        <button class="treeview-action-btn" onclick="event.stopPropagation(); openAct(${act.id}, { forceNew: true })" title="${Localization.t('tabs.open_new')}"><i data-lucide="plus-square" style="width:12px;height:12px;"></i></button>
+                        <button class="treeview-action-btn" onclick="event.stopPropagation(); openAct(${act.id}, { replaceCurrent: true })" title="${Localization.t('tabs.replace')}"><i data-lucide="maximize-2" style="width:12px;height:12px;"></i></button>
+                        <button class="treeview-action-btn delete" onclick="event.stopPropagation(); deleteAct(${act.id})"><i data-lucide="x" style="width:12px;height:12px;"></i></button>
+                    </div>
+                </div>
+                <div class="act-chapters ${isActExpanded ? 'visible' : ''}">`;
+
+        act.chapters.forEach((chapter) => {
+            const chStats = getChapterStats(chapter);
+            const isChExpanded = typeof expandedChapters !== 'undefined' && expandedChapters.has(chapter.id);
+            const sCh = formatWordCount(chStats.totalWords);
+
+            html += `
+                <div class="chapter-group" id="chapter-${chapter.id}" data-chapter-id="${chapter.id}" data-act-id="${act.id}">
+                    <div class="chapter-header ${typeof currentChapterId !== 'undefined' && currentChapterId === chapter.id ? 'active' : ''}" data-chapter-id="${chapter.id}" data-act-id="${act.id}" style="position: relative; display: flex; align-items: center;">
+                        <span class="chapter-icon ${isChExpanded ? 'expanded' : ''}" onclick="toggleChapter(${act.id}, ${chapter.id}); event.stopPropagation();" style="cursor: pointer;"><i data-lucide="${isChExpanded ? 'chevron-down' : 'chevron-right'}" style="width:14px;height:14px;vertical-align:middle;"></i></span>
+                        <span class="chapter-title" ondblclick="event.stopPropagation(); startEditingChapter(${act.id}, ${chapter.id}, this)" onclick="${chapter.scenes.length > 0 ? `openChapter(${act.id}, ${chapter.id})` : ''}">${chapter.title}</span>
+                        <span class="word-count-badge" style="margin-left: auto; margin-right: 55px;" title="${chStats.totalWords.toLocaleString()} mots">${sCh}</span>
+                        <span class="drag-handle" draggable="true" onclick="event.stopPropagation()"><i data-lucide="grip-vertical" style="width:12px;height:12px;vertical-align:middle;"></i></span>
+                        <div class="treeview-item-actions">
+                            <button class="treeview-action-btn" onclick="event.stopPropagation(); openChapter(${act.id}, ${chapter.id}, { forceNew: true })" title="${Localization.t('tabs.open_new')}"><i data-lucide="plus-square" style="width:12px;height:12px;"></i></button>
+                            <button class="treeview-action-btn" onclick="event.stopPropagation(); openChapter(${act.id}, ${chapter.id}, { replaceCurrent: true })" title="${Localization.t('tabs.replace')}"><i data-lucide="maximize-2" style="width:12px;height:12px;"></i></button>
+                            <button class="treeview-action-btn delete" onclick="event.stopPropagation(); deleteChapter(${act.id}, ${chapter.id})"><i data-lucide="x" style="width:12px;height:12px;"></i></button>
+                        </div>
+                    </div>
+                    <div class="scenes-list ${isChExpanded ? 'visible' : ''}">`;
+
+            chapter.scenes.forEach((scene) => {
                 const sStatus = scene.status || 'draft';
-                const sWords = scene.wordCount || 0;
+                const sWords = (scene.content && typeof StatsModel !== 'undefined') ? StatsModel.getWordCount(scene.content) : (scene.wordCount || 0);
                 const synopsis = scene.synopsis ? (scene.synopsis.substring(0, 100) + (scene.synopsis.length > 100 ? '...' : '')) : '';
                 const tooltip = scene.synopsis ? scene.synopsis.replace(/"/g, '&quot;').replace(/'/g, '&#39;') : '';
-                const sNumber = `${actIndex + 1}.${chapterIndex + 1}.${sceneIndex + 1}`;
-                const isActive = typeof currentSceneId !== 'undefined' && currentSceneId === scene.id;
+                const isActive = typeof currentSceneId !== 'undefined' && currentSceneId == scene.id;
+                const sLabel = formatWordCount(sWords);
 
-                html += `<div class="scene-item ${isActive ? 'active' : ''}" data-scene-id="${scene.id}" data-chapter-id="${chapter.id}" data-act-id="${act.id}" onclick="openScene(${act.id}, ${chapter.id}, ${scene.id})" ${tooltip ? `title="${tooltip}"` : ''}>
-                    <div style="display: flex; align-items: center; gap: 0.4rem; flex: 1; min-width: 0;">
-                        <span class="drag-handle" draggable="true" onclick="event.stopPropagation()"><i data-lucide="grip-vertical" style="width:12px;height:12px;vertical-align:middle;"></i></span>
-                        <span class="auto-number">${sNumber}</span>
-                        <div style="flex: 1; min-width: 0; overflow: hidden;">
-                            <span ondblclick="event.stopPropagation(); startEditingScene(${act.id}, ${chapter.id}, ${scene.id}, this)" style="display: block;">${scene.title}</span>
-                            ${synopsis ? `<span class="scene-synopsis">${synopsis}</span>` : ''}
+                html += `
+                    <div class="scene-item ${isActive ? 'active' : ''}" data-scene-id="${scene.id}" data-chapter-id="${chapter.id}" data-act-id="${act.id}" onclick="openScene(${act.id}, ${chapter.id}, ${scene.id})" ${tooltip ? `title="${tooltip}"` : ''} style="position: relative; display: flex; align-items: center;">
+                        <div style="display: flex; align-items: center; gap: 0.6rem; flex: 1; min-width: 0;">
+                            <span class="status-badge status-${sStatus}" onclick="event.stopPropagation(); toggleSceneStatus(${act.id}, ${chapter.id}, ${scene.id}, event)" style="cursor: pointer;" title="Cliquez pour changer le statut"></span>
+                            <div style="flex: 1; min-width: 0; overflow: hidden;">
+                                <span ondblclick="event.stopPropagation(); startEditingScene(${act.id}, ${chapter.id}, ${scene.id}, this)" style="display: block;">${scene.title}</span>
+                                ${synopsis ? `<span class="scene-synopsis">${synopsis}</span>` : ''}
+                            </div>
                         </div>
-                        <span class="edit-hint"><i data-lucide="pencil" style="width:10px;height:10px;"></i></span>
-                    </div>
-                    <span class="word-count-badge" title="${sWords.toLocaleString()} mots">${typeof formatWordCount === 'function' ? formatWordCount(sWords) : sWords}</span>
-                    <span class="status-badge status-${sStatus}" onclick="event.stopPropagation(); toggleSceneStatus(${act.id}, ${chapter.id}, ${scene.id}, event)" style="cursor: pointer;" title="Cliquez pour changer le statut"></span>
-                    <button class="btn btn-icon btn-small delete-btn" onclick="event.stopPropagation(); deleteScene(${act.id}, ${chapter.id}, ${scene.id})"><i data-lucide="x" style="width:12px;height:12px;"></i></button>
-                </div>`;
+                        <span class="word-count-badge" style="margin-left: auto; margin-right: 55px; flex-shrink: 0; min-width: 30px; text-align: right;">${sLabel}</span>
+                        <span class="drag-handle" draggable="true" onclick="event.stopPropagation()"><i data-lucide="grip-vertical" style="width:12px;height:12px;vertical-align:middle;"></i></span>
+                        <div class="treeview-item-actions">
+                            <button class="treeview-action-btn" onclick="event.stopPropagation(); openScene(${act.id}, ${chapter.id}, ${scene.id}, { forceNew: true })" title="${Localization.t('tabs.open_new')}"><i data-lucide="plus-square" style="width:12px;height:12px;"></i></button>
+                            <button class="treeview-action-btn" onclick="event.stopPropagation(); openScene(${act.id}, ${chapter.id}, ${scene.id}, { replaceCurrent: true })" title="${Localization.t('tabs.replace')}"><i data-lucide="maximize-2" style="width:12px;height:12px;"></i></button>
+                            <button class="treeview-action-btn delete" onclick="event.stopPropagation(); deleteScene(${act.id}, ${chapter.id}, ${scene.id})"><i data-lucide="x" style="width:12px;height:12px;"></i></button>
+                        </div>
+                    </div>`;
             });
 
-            html += `<div class="scene-item" onclick="openAddSceneModal(${act.id}, ${chapter.id})" style="opacity: 0.6; font-style: italic;">${Localization.t('sidebar.btn.add_scene')}</div>
-                </div></div>`;
+            // Add Scene button
+            html += `<div class="scene-item action-btn" onclick="openAddSceneModal(${act.id}, ${chapter.id})" style="opacity: 0.4; font-size: 0.85rem; padding-left: 2.2rem;">${Localization.t('sidebar.btn.add_scene')}</div>
+                    </div>
+                </div>`;
         });
 
-        html += `<div class="scene-item" onclick="openAddChapterModal(${act.id})" style="opacity: 0.6; font-style: italic; margin-left: 1rem;">${Localization.t('sidebar.btn.add_chapter')}</div>
-            </div></div>`;
+        // Add Chapter button
+        html += `<div class="chapter-header action-btn" onclick="openAddChapterModal(${act.id})" style="opacity: 0.4; font-size: 0.85rem; padding-left: 1.5rem;">${Localization.t('sidebar.btn.add_chapter')}</div>
+                </div>
+            </div>`;
     });
 
     html += '</div>';
     container.innerHTML = html;
 
-    // Post-rendu
+    // Post-render actions
     if (typeof setupActDragAndDrop === 'function') setupActDragAndDrop();
     if (typeof setupChapterDragAndDrop === 'function') setupChapterDragAndDrop();
     if (typeof setupSceneDragAndDrop === 'function') setupSceneDragAndDrop();
@@ -302,8 +337,42 @@ function renderActsList() {
 
     if (typeof lucide !== 'undefined') lucide.createIcons();
 
-    // Restaurer la position du scroll
+    // Restore scroll position
     container.scrollTop = scrollTop;
+}
+
+// --- STATS HELPERS ---
+
+function getActStats(act) {
+    let totalWords = 0;
+    if (act.chapters) {
+        act.chapters.forEach(chapter => {
+            const chStats = getChapterStats(chapter);
+            totalWords += chStats.totalWords;
+        });
+    }
+    return { totalWords };
+}
+
+function getChapterStats(chapter) {
+    let totalWords = 0;
+    if (chapter.scenes) {
+        chapter.scenes.forEach(scene => {
+            const words = (scene.content && typeof StatsModel !== 'undefined') ? StatsModel.getWordCount(scene.content) : (scene.wordCount || 0);
+            totalWords += words;
+        });
+    }
+    return { totalWords };
+}
+
+function formatWordCount(count) {
+    if (typeof StatsViewModel !== 'undefined' && typeof StatsViewModel.formatWordCount === 'function') {
+        return StatsViewModel.formatWordCount(count);
+    }
+    if (count >= 1000) {
+        return (count / 1000).toFixed(1).replace('.0', '') + 'k';
+    }
+    return count.toString() || '0';
 }
 
 // --- ORCHESTRATION ---
@@ -423,7 +492,7 @@ function openAddChapterModal(actId) {
         if (vm.acts.length > 0) {
             activeActId = vm.acts[0].id;
         } else {
-            activeActId = null; // Will be created in addChapter
+            activeActId = null;
         }
     }
     const modal = document.getElementById('addChapterModal');
@@ -599,7 +668,7 @@ function toggleSceneStatus(actId, chapterId, sceneId, event) {
             `;
 
     // Positionner le menu en position fixe près du clic
-    const badge = event.target.closest('.status-badge');
+    const badge = event.target.closest('.status-badge') || event.target.closest('.header-status');
     if (badge) {
         const rect = badge.getBoundingClientRect();
         menu.style.top = (rect.bottom + 5) + 'px';

@@ -114,7 +114,11 @@ function renderCharactersList() {
                             <i data-lucide="user" style="width:14px;height:14px;vertical-align:middle;"></i>
                         </span>
                         <span class="treeview-item-label">${displayName}</span>
-                        <button class="treeview-item-delete" onclick="event.stopPropagation(); deleteCharacter('${char.id}')" title="${Localization.t('char.action.delete')}"><i data-lucide="x" style="width:12px;height:12px;"></i></button>
+                        <div class="treeview-item-actions">
+                            <button class="treeview-action-btn" onclick="event.stopPropagation(); openCharacterDetail('${char.id}', { forceNew: true })" title="${Localization.t('tabs.open_new')}"><i data-lucide="plus-square" style="width:12px;height:12px;"></i></button>
+                            <button class="treeview-action-btn" onclick="event.stopPropagation(); openCharacterDetail('${char.id}', { replaceCurrent: true })" title="${Localization.t('tabs.replace')}"><i data-lucide="maximize-2" style="width:12px;height:12px;"></i></button>
+                            <button class="treeview-action-btn delete" onclick="event.stopPropagation(); deleteCharacter('${char.id}')" title="${Localization.t('char.action.delete')}"><i data-lucide="x" style="width:12px;height:12px;"></i></button>
+                        </div>
                     </div>
                 `;
             });
@@ -141,23 +145,21 @@ function renderCharactersList() {
  * [MVVM : View]
  * Ouvre la fiche détaillée d'un personnage.
  */
-function openCharacterDetail(id) {
+function openCharacterDetail(id, options = {}) {
     const data = getCharacterDetailViewModel(id);
     if (!data) return;
 
     const { character, races, groups, linkedScenes } = data;
 
-    // Orchestration globale si on est en split view
+    // Orchestration Onglets (Préféré)
+    if (typeof openTab === 'function') {
+        openTab('characters', { characterId: id }, options);
+        return;
+    }
+
+    // Orchestration globale si on est en split view (Legacy)
     if (typeof splitViewActive !== 'undefined' && splitViewActive) {
-        const state = splitActivePanel === 'left' ? splitViewState.left : splitViewState.right;
-        if (state.view === 'characters') {
-            state.characterId = id;
-            if (typeof renderSplitPanelViewContent === 'function') {
-                renderSplitPanelViewContent(splitActivePanel);
-            }
-            if (typeof saveSplitViewState === 'function') saveSplitViewState();
-            return;
-        }
+        // ... handled by splitview system if needed
     }
 
     const editorView = document.getElementById('editorView');
@@ -447,14 +449,14 @@ function renderCharacterSheet(character, racesList, groupsList, linkedScenes) {
                         <label class="character-field-label">${Localization.t('char.field.traits_selected')}</label>
                         <div class="selected-traits-container" id="selectedTraits-${character.id}">
                             ${(character.traits || []).map((t, i) => `
-                                <span class="selected-trait">${t}<span class="trait-remove" onclick="removeCharacterTrait('${character.id}', ${i})"><i data-lucide="x" style="width:10px;height:10px;"></i></span></span>
+                                <span class="selected-trait">${t}<span class="trait-remove" data-trait="${String(t).replace(/"/g, '&quot;')}" data-char-id="${character.id}" onclick="removeCharacterTrait(this.dataset.charId, this.dataset.trait)"><i data-lucide="x" style="width:10px;height:10px;"></i></span></span>
                             `).join('') || `<span class="no-traits">${Localization.t('char.field.traits_hint')}</span>`}
                         </div>
                     </div>
                     
                     <!-- Catégories de traits -->
                     <div class="traits-categories">
-                        ${renderTraitsCategories('${character.id}', character.traits || [])}
+                        ${renderTraitsCategories(character.id, character.traits || [])}
                     </div>
                     
                     <div class="character-field" style="margin-top: 1rem;">
@@ -513,7 +515,7 @@ function renderCharacterSheet(character, racesList, groupsList, linkedScenes) {
                 </div>
                 <div class="character-section-content">
                     <div id="inventory-list-${character.id}">
-                        ${(character.inventory || []).map((item, i) => renderInventoryItem('${character.id}', 'inventory', item, i)).join('')}
+                        ${(character.inventory || []).map((item, i) => renderInventoryItem(character.id, 'inventory', item, i)).join('')}
                     </div>
                     <button class="inventory-add-btn" onclick="addInventoryItem('${character.id}', 'inventory')">
                         ${Localization.t('char.field.inventory_add')} <i data-lucide="plus-circle" style="width:16px;height:16px;"></i>
@@ -773,8 +775,9 @@ function renderTraitsCategories(charId, selectedTraits) {
                         <div class="trait-category-header">${Localization.t(`char.trait.category.${catKey}`)}</div>
                         <div class="trait-category-content">
                             ${category.traits.map(trait => `
-                                <span class="trait-option ${selectedTraits.includes(trait) ? 'selected' : ''}" 
-                                    onclick="toggleCharacterTrait(${charId}, '${trait.replace(/'/g, "\\'")}')">${Localization.t(trait)}</span>
+                                <span class="trait-option ${selectedTraits.includes(trait) ? 'selected' : ''}"
+                                    data-trait="${trait.replace(/"/g, '&quot;')}" data-char-id="${charId}"
+                                    onclick="toggleCharacterTrait(this.dataset.charId, this.dataset.trait)">${Localization.t(trait)}</span>
                             `).join('')}
                         </div>
                     </div>
@@ -800,7 +803,7 @@ function refreshTraitsDisplay(character) {
 
     if (container) {
         container.innerHTML = traits.length > 0
-            ? traits.map((t, i) => `<span class="selected-trait">${Localization.t(t)}<span class="trait-remove" onclick="removeCharacterTrait(${character.id}, '${t.replace(/'/g, "\\'")}')"><i data-lucide="x" style="width:10px;height:10px;"></i></span></span>`).join('')
+            ? traits.map((t, i) => `<span class="selected-trait">${Localization.t(String(t))}<span class="trait-remove" data-trait="${String(t).replace(/"/g, '&quot;')}" data-char-id="${character.id}" onclick="removeCharacterTrait(this.dataset.charId, this.dataset.trait)"><i data-lucide="x" style="width:10px;height:10px;"></i></span></span>`).join('')
             : `<span class="no-traits">${Localization.t('char.field.traits_hint')}</span>`;
     }
 

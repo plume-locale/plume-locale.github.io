@@ -24,7 +24,25 @@ class PlotView {
      * @param {Object} data - Données pour les onglets (analysis, suggestions)
      */
     render(plotPoints, activeTab = 'overview', data = {}) {
-        const container = document.getElementById(this.containerId);
+        let container = null;
+
+        // [MVVM : View] Quand le plot est affiché dans un onglet, le conteneur réel
+        // est un splitPanelContent-{paneId} à l'intérieur du tab-content-area.
+        // On doit le cibler pour ne pas écraser le système d'onglets.
+        if (typeof tabsState !== 'undefined' && tabsState.panes) {
+            for (const paneId of ['left', 'right']) {
+                const pane = tabsState.panes[paneId];
+                if (pane.activeTabId === 'view-plot') {
+                    container = document.getElementById(`splitPanelContent-${paneId}`);
+                    break;
+                }
+            }
+        }
+
+        if (!container) {
+            container = document.getElementById(this.containerId);
+        }
+
         if (!container) {
             console.error('PlotView: container not found');
             return;

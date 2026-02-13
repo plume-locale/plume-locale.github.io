@@ -90,6 +90,7 @@ const ImportExportView = {
     updateExportFormatInfo: function () {
         const formatSelect = document.getElementById('exportFormatSelect');
         const infoBox = document.getElementById('formatInfoBox');
+        const docxPanel = document.getElementById('docxSettingsPanel');
         if (!formatSelect || !infoBox) return;
 
         const format = formatSelect.value;
@@ -101,11 +102,17 @@ const ImportExportView = {
             epub: Localization.t('export.info.epub')
         };
         infoBox.innerHTML = messages[format] || messages.docx;
+
+        // Show/hide DOCX advanced settings panel
+        if (docxPanel) {
+            docxPanel.style.display = (format === 'docx') ? 'block' : 'none';
+        }
     },
 
     getOptions: function () {
-        return {
-            format: document.getElementById('exportFormatSelect')?.value || 'txt',
+        const format = document.getElementById('exportFormatSelect')?.value || 'txt';
+        const options = {
+            format: format,
             exportSummaries: document.getElementById('exportSummariesCheck')?.checked,
             exportProse: document.getElementById('exportProseCheck')?.checked,
             includeActTitles: document.getElementById('includeActTitlesCheck')?.checked,
@@ -118,6 +125,58 @@ const ImportExportView = {
             includeCodex: document.getElementById('includeCodexCheck')?.checked,
             includeNotes: document.getElementById('includeNotesCheck')?.checked
         };
+
+        // Collect DOCX-specific options when DOCX is selected
+        if (format === 'docx') {
+            const marginsPreset = document.getElementById('docxMargins')?.value || 'wide';
+            const marginPresets = (typeof DocxExportConfig !== 'undefined') ? DocxExportConfig.marginPresets : null;
+            const margins = (marginPresets && marginPresets[marginsPreset]) || { top: 1700, bottom: 1700, left: 1700, right: 1700 };
+
+            const headerContent = document.getElementById('docxHeaderContent')?.value || 'title';
+            const footerValue = document.getElementById('docxFooter')?.value || 'pagenum';
+
+            options.docxConfig = {
+                page: {
+                    format: document.getElementById('docxPageFormat')?.value || 'a4',
+                    margins: {
+                        ...margins,
+                        header: 720,
+                        footer: 720
+                    }
+                },
+                font: {
+                    body: document.getElementById('docxFont')?.value || 'Times New Roman',
+                    heading: document.getElementById('docxFont')?.value || 'Times New Roman',
+                    bodySize: parseInt(document.getElementById('docxBodySize')?.value) || 24
+                },
+                spacing: {
+                    lineSpacing: parseInt(document.getElementById('docxLineSpacing')?.value) || 360,
+                    firstLineIndent: parseInt(document.getElementById('docxIndent')?.value) || 709
+                },
+                header: {
+                    enabled: headerContent !== 'none',
+                    content: headerContent
+                },
+                footer: {
+                    enabled: footerValue !== 'none',
+                    showPageNumber: footerValue === 'pagenum'
+                },
+                pageBreaks: {
+                    beforeAct: document.getElementById('docxBreakBeforeAct')?.checked !== false,
+                    beforeChapter: document.getElementById('docxBreakBeforeChapter')?.checked !== false,
+                    beforeScene: document.getElementById('docxBreakBeforeScene')?.checked || false
+                },
+                frontMatter: {
+                    includeTitlePage: document.getElementById('docxIncludeTitlePage')?.checked !== false,
+                    includeProjectFrontMatter: document.getElementById('docxIncludeFrontMatter')?.checked !== false
+                },
+                sceneDivider: {
+                    style: options.sceneDivider
+                }
+            };
+        }
+
+        return options;
     },
 
     setAllOptions: function (checked) {

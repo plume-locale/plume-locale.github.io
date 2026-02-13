@@ -27,17 +27,26 @@ const ColorPaletteHandlers = {
                 case 'b':
                     event.preventDefault();
                     if (typeof formatText === 'function') formatText('bold');
-                    else document.execCommand('bold', false, null);
+                    else {
+                        try { document.execCommand('styleWithCSS', false, false); } catch (e) { }
+                        document.execCommand('bold', false, null);
+                    }
                     break;
                 case 'i':
                     event.preventDefault();
                     if (typeof formatText === 'function') formatText('italic');
-                    else document.execCommand('italic', false, null);
+                    else {
+                        try { document.execCommand('styleWithCSS', false, false); } catch (e) { }
+                        document.execCommand('italic', false, null);
+                    }
                     break;
                 case 'u':
                     event.preventDefault();
                     if (typeof formatText === 'function') formatText('underline');
-                    else document.execCommand('underline', false, null);
+                    else {
+                        try { document.execCommand('styleWithCSS', false, false); } catch (e) { }
+                        document.execCommand('underline', false, null);
+                    }
                     break;
             }
         }

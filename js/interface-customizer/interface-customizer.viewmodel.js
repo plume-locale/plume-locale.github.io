@@ -53,13 +53,32 @@ const InterfaceCustomizerViewModel = {
      * Bascule la visibilité d'un composant (en mode tempo ou réel)
      */
     toggleComponent: (componentId) => {
-        // Sécurité : ne jamais masquer le bouton d'entrée lui-même
-        if (componentId === 'headerInterfaceBtn') return;
+        // Sécurité : ne jamais masquer les boutons d'entrée du customizer
+        if (componentId === 'headerInterfaceBtn' || componentId === 'sidebarCustomizeBtn') return;
 
         if (InterfaceCustomizerViewModel.state.isEditing) {
             InterfaceCustomizerViewModel.state.tempSettings[componentId] = !InterfaceCustomizerViewModel.state.tempSettings[componentId];
             InterfaceCustomizerView.refreshComponentsVisuals();
         }
+    },
+
+    /**
+     * Met à jour un réglage spécifique (couleur, largeur, etc) - mode édition
+     */
+    updateSetting: (key, value) => {
+        if (InterfaceCustomizerViewModel.state.isEditing) {
+            InterfaceCustomizerViewModel.state.tempSettings[key] = value;
+            InterfaceCustomizerViewModel.applySettings();
+        }
+    },
+
+    /**
+     * Met à jour un réglage structure et sauvegarde immédiatement (hors mode édition)
+     */
+    updateStructureSetting: (key, value) => {
+        InterfaceCustomizerViewModel.state.settings[key] = value;
+        InterfaceCustomizerRepository.saveSettings(InterfaceCustomizerViewModel.state.settings);
+        InterfaceCustomizerViewModel.applySettings();
     },
 
     /**
@@ -71,10 +90,23 @@ const InterfaceCustomizerViewModel = {
             : InterfaceCustomizerViewModel.state.settings;
         const isEditing = InterfaceCustomizerViewModel.state.isEditing;
 
+        // Render Shortcuts if defined (or use default inside function)
+        if (typeof renderSidebarShortcuts === 'function') {
+            renderSidebarShortcuts(settings.shortcuts, isEditing);
+        }
+
+        // 0. Appliquer les variables CSS de personnalisation
+        const root = document.documentElement;
+        if (settings.progressBarWidth) root.style.setProperty('--progress-bar-width', `${settings.progressBarWidth}px`);
+        if (settings.statusDraftColor) root.style.setProperty('--status-draft-color', settings.statusDraftColor);
+        if (settings.statusProgressColor) root.style.setProperty('--status-progress-color', settings.statusProgressColor);
+        if (settings.statusCompleteColor) root.style.setProperty('--status-complete-color', settings.statusCompleteColor);
+        if (settings.statusReviewColor) root.style.setProperty('--status-review-color', settings.statusReviewColor);
+
         // 1. Appliquer aux éléments du header (via ID)
         Object.entries(settings).forEach(([id, isVisible]) => {
             // Sécurité absolue
-            if (id === 'headerInterfaceBtn') return;
+            if (id === 'headerInterfaceBtn' || id === 'sidebarCustomizeBtn') return;
 
             const el = document.getElementById(id);
             if (!el) return;

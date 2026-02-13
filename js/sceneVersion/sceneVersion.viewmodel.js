@@ -52,14 +52,14 @@ const SceneVersionViewModel = {
         const currentActiveFn = this.getActiveVersion(scene);
         if (currentActiveFn) {
             currentActiveFn.content = currentContent;
-            currentActiveFn.wordCount = typeof getWordCount === 'function' ? getWordCount(currentContent) : 0;
+            currentActiveFn.wordCount = (currentContent && typeof StatsModel !== 'undefined') ? StatsModel.getWordCount(currentContent) : 0;
         }
 
         // Create new version
         const newVersion = SceneVersionModel.create(currentContent, currentAnnotations);
         newVersion.number = scene.versions.length + 1;
         newVersion.isActive = true;
-        newVersion.wordCount = typeof getWordCount === 'function' ? getWordCount(currentContent) : 0;
+        newVersion.wordCount = (currentContent && typeof StatsModel !== 'undefined') ? StatsModel.getWordCount(currentContent) : 0;
 
         // Deactivate others
         scene.versions.forEach(v => v.isActive = false);
@@ -93,7 +93,7 @@ const SceneVersionViewModel = {
         if (currentActive) {
             const content = SceneVersionView.getEditorContent() || scene.content || '';
             currentActive.content = content;
-            currentActive.wordCount = typeof getWordCount === 'function' ? getWordCount(content) : 0;
+            currentActive.wordCount = (content && typeof StatsModel !== 'undefined') ? StatsModel.getWordCount(content) : 0;
         }
 
         // Deactivate all
@@ -200,7 +200,7 @@ const SceneVersionViewModel = {
 
         const { scene } = current;
         scene.content = content;
-        scene.wordCount = typeof getWordCount === 'function' ? getWordCount(content) : 0;
+        scene.wordCount = (content && typeof StatsModel !== 'undefined') ? StatsModel.getWordCount(content) : 0;
 
         // Update active version
         if (scene.versions && scene.versions.length > 0) {

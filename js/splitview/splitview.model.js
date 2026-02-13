@@ -17,7 +17,10 @@ const viewLabels = {
     get plot() { return Localization.t('nav.plot'); },
     get relations() { return Localization.t('nav.relations'); },
     get map() { return Localization.t('nav.map'); },
-    get timelineviz() { return Localization.t('nav.timeline'); }
+    get timelineviz() { return Localization.t('nav.timeline'); },
+    get investigation() { return Localization.t('nav.investigation'); },
+    get globalnotes() { return Localization.t('nav.globalnotes'); },
+    get front_matter() { return Localization.t('nav.front_matter'); }
 };
 
 const viewIcons = {
@@ -35,5 +38,8 @@ const viewIcons = {
     'plot': 'trending-up',
     'relations': 'link',
     'map': 'map',
-    'timelineviz': 'clock'
+    'timelineviz': 'clock',
+    'investigation': 'search',
+    'globalnotes': 'layout',
+    'front_matter': 'book-open-check'
 };
