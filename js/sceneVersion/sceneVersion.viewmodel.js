@@ -108,14 +108,16 @@ const SceneVersionViewModel = {
         SceneVersionRepository.save();
         SceneVersionView.renderList(scene);
 
-        // Refresh editor
-        if (typeof renderEditor === 'function') {
+        // Refresh editor — use tabs system if active to avoid destroying the tab strip
+        if (typeof tabsState !== 'undefined' && tabsState.panes.left.tabs.length > 0) {
+            renderTabs();
+        } else if (typeof renderEditor === 'function') {
             renderEditor(act, chapter, scene);
-            setTimeout(() => {
-                if (typeof reattachAnnotationMarkerListeners === 'function') reattachAnnotationMarkerListeners(); // Or use local view logic
-                SceneVersionView.reattachAnnotationListeners();
-            }, 50);
         }
+        setTimeout(() => {
+            if (typeof reattachAnnotationMarkerListeners === 'function') reattachAnnotationMarkerListeners();
+            SceneVersionView.reattachAnnotationListeners();
+        }, 50);
 
         if (typeof renderAnnotationsPanel === 'function') renderAnnotationsPanel();
         if (typeof updateAnnotationsButton === 'function') updateAnnotationsButton(false);
@@ -150,7 +152,11 @@ const SceneVersionViewModel = {
             scene.content = last.content;
             scene.wordCount = last.wordCount;
 
-            if (window.renderEditor) window.renderEditor(act, chapter, scene);
+            if (typeof tabsState !== 'undefined' && tabsState.panes.left.tabs.length > 0) {
+                renderTabs();
+            } else if (window.renderEditor) {
+                window.renderEditor(act, chapter, scene);
+            }
         }
 
         SceneVersionRepository.save();
