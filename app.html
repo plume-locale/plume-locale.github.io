@@ -1478,16 +1478,16 @@
                             <div class="extra-menu-row-flags">
                                 <button class="extra-menu-flag-btn"
                                     onclick="Localization.setLocale('fr'); this.closest('.extra-menu-dropdown').classList.remove('open');"
-                                    title="Français">🇫🇷</button>
+                                    title="Français" data-i18n-title="lang.fr">🇫🇷</button>
                                 <button class="extra-menu-flag-btn"
                                     onclick="Localization.setLocale('en'); this.closest('.extra-menu-dropdown').classList.remove('open');"
-                                    title="English">🇬🇧</button>
+                                    title="English" data-i18n-title="lang.en">🇬🇧</button>
                                 <button class="extra-menu-flag-btn"
                                     onclick="Localization.setLocale('de'); this.closest('.extra-menu-dropdown').classList.remove('open');"
-                                    title="Deutsch">🇩🇪</button>
+                                    title="Deutsch" data-i18n-title="lang.de">🇩🇪</button>
                                 <button class="extra-menu-flag-btn"
                                     onclick="Localization.setLocale('es'); this.closest('.extra-menu-dropdown').classList.remove('open');"
-                                    title="Español">🇪🇸</button>
+                                    title="Español" data-i18n-title="lang.es">🇪🇸</button>
                             </div>
                         </div>
 
@@ -1498,10 +1498,14 @@
                                 <span data-i18n="header.documentation">Documentation</span>
                             </div>
                             <div class="extra-menu-row-flags">
-                                <a href="doc/fr/" class="extra-menu-flag-btn" target="_blank" title="Français">🇫🇷</a>
-                                <a href="doc/en/" class="extra-menu-flag-btn" target="_blank" title="English">🇬🇧</a>
-                                <a href="doc/de/" class="extra-menu-flag-btn" target="_blank" title="Deutsch">🇩🇪</a>
-                                <a href="doc/es/" class="extra-menu-flag-btn" target="_blank" title="Español">🇪🇸</a>
+                                <a href="doc/fr/" class="extra-menu-flag-btn" target="_blank" title="Français"
+                                    data-i18n-title="lang.fr">🇫🇷</a>
+                                <a href="doc/en/" class="extra-menu-flag-btn" target="_blank" title="English"
+                                    data-i18n-title="lang.en">🇬🇧</a>
+                                <a href="doc/de/" class="extra-menu-flag-btn" target="_blank" title="Deutsch"
+                                    data-i18n-title="lang.de">🇩🇪</a>
+                                <a href="doc/es/" class="extra-menu-flag-btn" target="_blank" title="Español"
+                                    data-i18n-title="lang.es">🇪🇸</a>
                             </div>
                         </div>
                     </div>
@@ -1582,25 +1586,25 @@
                     <!-- Filtres de statut -->
                     <div class="status-filters" id="statusFilters">
                         <button class="status-filter-btn draft active" onclick="toggleStatusFilter('draft')"
-                            data-status="draft" title="Brouillon">
+                            data-status="draft" title="Brouillon" data-i18n-title="sidebar.status.draft">
                             <span class="status-filter-dot draft"></span>
                             <span data-i18n="sidebar.status.draft">Brouillon</span>
                             <span class="status-filter-count" id="countDraft">0</span>
                         </button>
                         <button class="status-filter-btn progress active" onclick="toggleStatusFilter('progress')"
-                            data-status="progress" title="En cours">
+                            data-status="progress" title="En cours" data-i18n-title="sidebar.status.progress">
                             <span class="status-filter-dot progress"></span>
                             <span data-i18n="sidebar.status.progress">En cours</span>
                             <span class="status-filter-count" id="countProgress">0</span>
                         </button>
                         <button class="status-filter-btn complete active" onclick="toggleStatusFilter('complete')"
-                            data-status="complete" title="Terminé">
+                            data-status="complete" title="Terminé" data-i18n-title="sidebar.status.complete">
                             <span class="status-filter-dot complete"></span>
                             <span data-i18n="sidebar.status.complete">Terminé</span>
                             <span class="status-filter-count" id="countComplete">0</span>
                         </button>
                         <button class="status-filter-btn review active" onclick="toggleStatusFilter('review')"
-                            data-status="review" title="À réviser">
+                            data-status="review" title="À réviser" data-i18n-title="sidebar.status.review">
                             <span class="status-filter-dot review"></span>
                             <span data-i18n="sidebar.status.review">À réviser</span>
                             <span class="status-filter-count" id="countReview">0</span>
@@ -1609,35 +1613,35 @@
                     <!-- Outils de scène -->
                     <div class="scene-tools" id="sceneTools">
                         <button class="scene-tool-btn" onclick="toggleVersionsSidebar()" id="headerVersionsToggle"
-                            title="Afficher/masquer les versions de scène">
+                            title="Afficher/masquer les versions de scène" data-i18n-title="tool.versions_title">
                             <i data-lucide="git-branch"></i>
                             <span data-i18n="tool.versions">Versions</span>
                         </button>
                         <button class="scene-tool-btn" onclick="toggleAnnotationsPanel()" id="sidebarAnnotationsBtn"
-                            title="Afficher/masquer les annotations" data-i18n-title="tool.annotations">
+                            title="Afficher/masquer les annotations" data-i18n-title="tool.annotations_title">
                             <i data-lucide="message-square"></i>
                             <span data-i18n="tool.annotations">Annotations</span>
                             <span class="scene-tool-badge" id="annotationsBadge" style="display: none">0</span>
                         </button>
                         <button class="scene-tool-btn" onclick="toggleTodosPanel()" id="sidebarTodosBtn"
-                            title="Afficher/masquer les TODOs" data-i18n-title="tool.todos">
+                            title="Afficher/masquer les TODOs" data-i18n-title="tool.todos_title">
                             <i data-lucide="check-square"></i>
                             <span data-i18n="tool.todos">TODOs</span>
                             <span class="scene-tool-badge" id="todosBadge" style="display: none">0</span>
                         </button>
                         <button class="scene-tool-btn" onclick="toggleArcScenePanel()" id="sidebarArcsBtn"
-                            title="Afficher/masquer les Arcs Narratifs" data-i18n-title="tool.arcs">
+                            title="Afficher/masquer les Arcs Narratifs" data-i18n-title="tool.arcs_title">
                             <i data-lucide="git-commit-horizontal"></i>
                             <span data-i18n="tool.arcs">Arcs</span>
                         </button>
                         <button class="scene-tool-btn" onclick="PlotGridUI.toggleSidebar()" id="sidebarPlotBtn"
-                            title="Afficher/masquer l'Intrigue" data-i18n-title="tool.plot">
+                            title="Afficher/masquer l'Intrigue" data-i18n-title="tool.plot_title">
                             <i data-lucide="trending-up"></i>
                             <span data-i18n="tool.plot">Intrigue</span>
                         </button>
                         <button class="scene-tool-btn" onclick="InvestigationSidebarUI.toggleSidebar()"
                             id="sidebarInvestigationBtn" title="Afficher/masquer l'Enquête"
-                            data-i18n-title="tool.investigation">
+                            data-i18n-title="tool.investigation_title">
                             <i data-lucide="search"></i>
                             <span data-i18n="tool.investigation">Enquête</span>
                         </button>
@@ -2354,7 +2358,7 @@
     <div class="modal" id="metroEventModal">
         <div class="modal-content" style="max-width: 600px">
             <div class="modal-header">
-                <h2 id="metroEventModalTitle">Nouvel événement</h2>
+                <h2 id="metroEventModalTitle" data-i18n="modal.event.title">Nouvel événement</h2>
                 <button class="modal-close" onclick="closeModal('metroEventModal')">&times;</button>
             </div>
 
@@ -2362,18 +2366,19 @@
                 <input type="hidden" id="metroEventId" />
                 <div class="metro-event-form">
                     <div class="form-group">
-                        <label class="form-label">Titre de l'événement *</label>
-                        <input type="text" class="form-input" id="metroEventTitle" placeholder="La grande bataille" />
+                        <label class="form-label" data-i18n="modal.event.label_title">Titre de l'événement *</label>
+                        <input type="text" class="form-input" id="metroEventTitle" placeholder="La grande bataille"
+                            data-i18n-placeholder="placeholder.event_title" />
                     </div>
 
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem">
                         <div class="form-group">
-                            <label class="form-label">Date / Moment</label>
+                            <label class="form-label" data-i18n="modal.event.label_date">Date / Moment</label>
                             <input type="text" class="form-input" id="metroEventDate"
-                                placeholder="An 2157, Printemps..." />
+                                placeholder="An 2157, Printemps..." data-i18n-placeholder="placeholder.event_date" />
                         </div>
                         <div class="form-group">
-                            <label class="form-label">Position sur la timeline</label>
+                            <label class="form-label" data-i18n="modal.event.label_pos">Position sur la timeline</label>
                             <select class="form-input" id="metroEventPosition">
                                 <!-- Populated dynamically -->
                             </select>
@@ -2382,15 +2387,15 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label">Description</label>
+                        <label class="form-label" data-i18n="modal.event.label_desc">Description</label>
                         <textarea class="form-input" id="metroEventDesc" placeholder="Ce qui se passe..."
-                            rows="3"></textarea>
+                            data-i18n-placeholder="placeholder.event_desc" rows="3"></textarea>
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label">Scène liée</label>
+                        <label class="form-label" data-i18n="modal.event.label_scene">Scène liée</label>
                         <select class="form-input" id="metroEventScene">
-                            <option value="">Aucune scène</option>
+                            <option value="" data-i18n="modal.event.no_scene">Aucune scène</option>
                             <!-- Populated dynamically -->
                         </select>
                         <small style="color: var(--text-muted); display: block; margin-top: 4px">Associez cet
@@ -2399,7 +2404,7 @@
                     </div>
 
                     <div class="form-group" style="margin-bottom: 0">
-                        <label class="form-label">Personnages impliqués</label>
+                        <label class="form-label" data-i18n="modal.event.label_chars">Personnages impliqués</label>
                         <div id="metroCharactersSelector" class="metro-characters-selector">
                             <!-- Populated dynamically -->
                         </div>
@@ -2425,10 +2430,11 @@
     <!-- Metro Event View Choice Modal -->
     <div class="modal" id="metroViewChoiceModal">
         <div class="modal-content" style="max-width: 500px">
-            <div class="modal-title">Ouvrir l'événement Timeline</div>
+            <div class="modal-title" data-i18n="modal.event.open_timeline">Ouvrir l'événement Timeline</div>
             <input type="hidden" id="metroViewChoiceEventId" />
             <div style="padding: 1rem 0">
-                <p style="color: var(--text-secondary); margin-bottom: 1.5rem">Comment souhaitez-vous visualiser
+                <p style="color: var(--text-secondary); margin-bottom: 1.5rem" data-i18n="modal.event.choose_view">
+                    Comment souhaitez-vous visualiser
                     cet
                     événement ?</p>
                 <div style="display: flex; flex-direction: column; gap: 1rem">
@@ -2437,8 +2443,10 @@
                         <i data-lucide="maximize-2"
                             style="width: 24px; height: 24px; flex-shrink: 0; color: var(--accent-blue)"></i>
                         <div>
-                            <div style="font-weight: 600; margin-bottom: 0.25rem">Vue complète</div>
-                            <div style="font-size: 0.85rem; color: var(--text-muted)">Basculer vers la vue
+                            <div style="font-weight: 600; margin-bottom: 0.25rem" data-i18n="modal.event.view_complete">
+                                Vue complète</div>
+                            <div style="font-size: 0.85rem; color: var(--text-muted)"
+                                data-i18n="modal.event.bascule_metro">Basculer vers la vue
                                 Timeline
                                 Métro (quitte la vue actuelle)</div>
                         </div>
@@ -2448,8 +2456,10 @@
                         <i data-lucide="columns-2"
                             style="width: 24px; height: 24px; flex-shrink: 0; color: var(--accent-green)"></i>
                         <div>
-                            <div style="font-weight: 600; margin-bottom: 0.25rem">Split-view</div>
-                            <div style="font-size: 0.85rem; color: var(--text-muted)">Ouvrir la Timeline en vue
+                            <div style="font-weight: 600; margin-bottom: 0.25rem" data-i18n="modal.event.view_split">
+                                Split-view</div>
+                            <div style="font-size: 0.85rem; color: var(--text-muted)"
+                                data-i18n="modal.event.open_split">Ouvrir la Timeline en vue
                                 séparée
                                 (conserve l'éditeur)</div>
                         </div>
@@ -2457,17 +2467,17 @@
                 </div>
             </div>
             <div class="modal-actions">
-                <button class="btn" onclick="closeModal('metroViewChoiceModal')">Annuler</button>
+                <button class="btn" onclick="closeModal('metroViewChoiceModal')" data-i18n="btn.cancel">Annuler</button>
             </div>
         </div>
     </div>
     <!-- Metro Character Color Picker Modal -->
     <div class="modal" id="metroColorModal">
         <div class="modal-content" style="max-width: 350px">
-            <div class="modal-title">Couleur de la ligne</div>
+            <div class="modal-title" data-i18n="modal.metro.color_title">Couleur de la ligne</div>
             <input type="hidden" id="metroColorCharId" />
             <div class="form-group">
-                <label class="form-label" id="metroColorCharName">Personnage</label>
+                <label class="form-label" id="metroColorCharName" data-i18n="modal.metro.character">Personnage</label>
                 <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem">
                     <div class="metro-color-option" data-color="#E53935" style="background: #e53935"
                         onclick="selectMetroColor('#E53935')"></div>
@@ -2511,7 +2521,7 @@
                         onclick="selectMetroColor('#263238')"></div>
                 </div>
                 <div style="margin-top: 1rem">
-                    <label class="form-label">Couleur personnalisée</label>
+                    <label class="form-label" data-i18n="modal.metro.custom_color">Couleur personnalisée</label>
                     <input type="color" id="metroCustomColor" class="form-input"
                         style="width: 100%; height: 40px; padding: 0; cursor: pointer" />
                 </div>
@@ -2634,17 +2644,17 @@
             <div class="form-group">
                 <label class="form-label" data-i18n="modal.project.label_genre">Genre</label>
                 <select class="form-input" id="newProjectGenre">
-                    <option value="">Aucun</option>
-                    <option value="Fantasy">Fantasy</option>
-                    <option value="Science-Fiction">Science-Fiction</option>
-                    <option value="Thriller">Thriller</option>
-                    <option value="Romance">Romance</option>
-                    <option value="Policier">Policier</option>
-                    <option value="Horreur">Horreur</option>
-                    <option value="Historique">Historique</option>
-                    <option value="Aventure">Aventure</option>
-                    <option value="Drame">Drame</option>
-                    <option value="Autre">Autre</option>
+                    <option value="" data-i18n="genre.none">Aucun</option>
+                    <option value="Fantasy" data-i18n="genre.fantasy">Fantasy</option>
+                    <option value="Science-Fiction" data-i18n="genre.science_fiction">Science-Fiction</option>
+                    <option value="Thriller" data-i18n="genre.thriller">Thriller</option>
+                    <option value="Romance" data-i18n="genre.romance">Romance</option>
+                    <option value="Policier" data-i18n="genre.police">Policier</option>
+                    <option value="Horreur" data-i18n="genre.horror">Horreur</option>
+                    <option value="Historique" data-i18n="genre.history">Historique</option>
+                    <option value="Aventure" data-i18n="genre.adventure">Aventure</option>
+                    <option value="Drame" data-i18n="genre.drama">Drame</option>
+                    <option value="Autre" data-i18n="genre.other">Autre</option>
                 </select>
             </div>
             <div class="form-group">
@@ -2683,8 +2693,8 @@
                 </select>
             </div>
             <div class="modal-actions">
-                <button class="btn" onclick="closeModal('newProjectModal')">Annuler</button>
-                <button class="btn btn-primary" onclick="createNewProject()">Créer</button>
+                <button class="btn" onclick="closeModal('newProjectModal')" data-i18n="btn.cancel">Annuler</button>
+                <button class="btn btn-primary" onclick="createNewProject()" data-i18n="btn.create">Créer</button>
             </div>
         </div>
     </div>
@@ -2745,7 +2755,8 @@
                 </div>
             </div>
             <div style="margin-bottom: 2rem">
-                <div style="font-size: 1rem; font-weight: 600; margin-bottom: 1rem; color: var(--text-primary)">
+                <div style="font-size: 1rem; font-weight: 600; margin-bottom: 1rem; color: var(--text-primary)"
+                    data-i18n="modal.backup.gdrive_auto">
                     <i data-lucide="cloud"
                         style="width: 16px; height: 16px; vertical-align: middle; margin-right: 6px"></i>Google
                     Drive
@@ -2776,7 +2787,8 @@
                                 </div>
                                 <div>
                                     <div id="gdrive-user-name"
-                                        style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary)">
+                                        style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary)"
+                                        data-i18n="modal.backup.gdrive_user">
                                         Utilisateur Google</div>
                                     <div id="gdrive-user-email" style="font-size: 0.75rem; color: var(--text-muted)">
                                         email@gmail.com</div>
@@ -2884,7 +2896,7 @@
             </div>
             <div class="modal-actions"
                 style="margin-top: 1.5rem; border-top: 1px solid var(--border-color); padding-top: 1rem">
-                <button class="btn" onclick="closeImportChapterModal()">Annuler</button>
+                <button class="btn" onclick="closeImportChapterModal()" data-i18n="btn.cancel">Annuler</button>
             </div>
         </div>
     </div>
@@ -2917,11 +2929,11 @@
                     Format du fichier </label>
                 <select id="exportFormatSelect" onchange="updateExportFormatInfo()"
                     style="width: 100%; padding: 0.75rem; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 4px; color: var(--text-primary); font-size: 0.95rem; font-family: &quot;Crimson Pro&quot;, serif">
-                    <option value="markdown">Markdown (.md)</option>
-                    <option value="txt">Texte brut (.txt)</option>
-                    <option value="html">HTML (.html)</option>
-                    <option value="epub">EPUB (.epub)</option>
-                    <option value="docx">DOCX (.docx)</option>
+                    <option value="markdown" data-i18n="modal.export.format.markdown">Markdown (.md)</option>
+                    <option value="txt" data-i18n="modal.export.format.txt">Texte brut (.txt)</option>
+                    <option value="html" data-i18n="modal.export.format.html">HTML (.html)</option>
+                    <option value="epub" data-i18n="modal.export.format.epub">EPUB (.epub)</option>
+                    <option value="docx" data-i18n="modal.export.format.docx">DOCX (.docx)</option>
                 </select>
                 <div id="formatInfoBox"
                     style="margin-top: 0.75rem; padding: 0.75rem; background: rgba(212, 175, 55, 0.1); border-radius: 4px; border: 1px solid var(--accent-gold); font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5">
@@ -3163,11 +3175,11 @@
                     Séparateurs de scènes </label>
                 <select id="sceneDividerSelect"
                     style="width: 100%; padding: 0.75rem; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 4px; color: var(--text-primary); font-size: 0.95rem; font-family: &quot;Crimson Pro&quot;, serif">
-                    <option value="asterisks">Astérisques ( * * * )</option>
-                    <option value="hash">Dièse ( ### )</option>
-                    <option value="line">Ligne horizontale (---)</option>
-                    <option value="space">Espace vide</option>
-                    <option value="none">Aucun séparateur</option>
+                    <option value="asterisks" data-i18n="modal.export.divider.asterisks">Astérisques ( * * * )</option>
+                    <option value="hash" data-i18n="modal.export.divider.hash">Dièse ( ### )</option>
+                    <option value="line" data-i18n="modal.export.divider.line">Ligne horizontale (---)</option>
+                    <option value="space" data-i18n="modal.export.divider.space">Espace vide</option>
+                    <option value="none" data-i18n="modal.export.divider.none">Aucun séparateur</option>
                 </select>
             </div>
             <!-- Project Export (ZIP with all data) -->
@@ -3184,35 +3196,37 @@
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem">
                     <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.95rem">
                         <input type="checkbox" id="includeCharactersCheck" style="cursor: pointer" />
-                        <span>Personnages</span>
+                        <span data-i18n="nav.characters">Personnages</span>
                     </label>
                     <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.95rem">
                         <input type="checkbox" id="includeWorldCheck" style="cursor: pointer" />
-                        <span>Univers</span>
+                        <span data-i18n="nav.world">Univers</span>
                     </label>
                     <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.95rem">
                         <input type="checkbox" id="includeTimelineCheck" style="cursor: pointer" />
-                        <span>Timeline</span>
+                        <span data-i18n="nav.timeline">Timeline</span>
                     </label>
                     <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.95rem">
                         <input type="checkbox" id="includeRelationsCheck" style="cursor: pointer" />
-                        <span>Relations</span>
+                        <span data-i18n="nav.relations">Relations</span>
                     </label>
                     <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.95rem">
                         <input type="checkbox" id="includeCodexCheck" style="cursor: pointer" />
-                        <span>Codex</span>
+                        <span data-i18n="nav.codex">Codex</span>
                     </label>
                     <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.95rem">
                         <input type="checkbox" id="includeNotesCheck" style="cursor: pointer" />
-                        <span>Notes</span>
+                        <span data-i18n="nav.notes">Notes</span>
                     </label>
                 </div>
                 <div style="margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px dashed var(--border-color)">
                     <button onclick="toggleAllExportOptions(true)" class="btn btn-small"
-                        style="margin-right: 0.5rem; font-size: 0.8rem; padding: 0.3rem 0.6rem">Tout
+                        style="margin-right: 0.5rem; font-size: 0.8rem; padding: 0.3rem 0.6rem"
+                        data-i18n="modal.export.btn_select_all">Tout
                         sélectionner</button>
                     <button onclick="toggleAllExportOptions(false)" class="btn btn-small"
-                        style="font-size: 0.8rem; padding: 0.3rem 0.6rem">Tout désélectionner</button>
+                        style="font-size: 0.8rem; padding: 0.3rem 0.6rem" data-i18n="modal.export.btn_deselect_all">Tout
+                        désélectionner</button>
                 </div>
             </div>
             <!-- Export Button -->
@@ -3222,7 +3236,7 @@
                     data-i18n="btn.create">Exporter</button>
             </div>
             <div class="modal-actions" style="margin-top: 1rem">
-                <button class="btn" onclick="closeModal('exportNovelModal')">Annuler</button>
+                <button class="btn" onclick="closeModal('exportNovelModal')" data-i18n="btn.cancel">Annuler</button>
             </div>
         </div>
     </div>
@@ -3235,7 +3249,8 @@
                 de tension</div>
             <div
                 style="margin-bottom: 1.5rem; padding: 1rem; background: var(--bg-secondary); border-radius: 6px; border: 1px solid var(--border-color)">
-                <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; margin: 0">Ces mots
+                <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; margin: 0"
+                    data-i18n="modal.tension.desc">Ces mots
                     sont
                     utilisés pour calculer automatiquement la tension narrative de vos scènes. Personnalisez-les
                     selon
@@ -3247,19 +3262,22 @@
                     style="background: var(--bg-secondary); border-radius: 8px; padding: 1.25rem; border: 2px solid rgba(196, 69, 54, 0.3)">
                     <h3
                         style="margin: 0 0 0.75rem 0; font-size: 1rem; color: var(--accent-red); display: flex; align-items: center; gap: 0.5rem">
-                        Haute tension
-                        <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: normal">(+3 pts
+                        <span data-i18n="modal.tension.high.title">Haute tension</span>
+                        <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: normal"
+                            data-i18n="modal.tension.high.pts">(+3 pts
                             chacun)</span>
                     </h3>
                     <div style="margin-bottom: 0.75rem">
                         <input type="text" id="highTensionInput" placeholder="Ajouter un mot..."
+                            data-i18n-placeholder="btn.add_word"
                             style="width: 100%; padding: 0.5rem; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 4px; color: var(--text-primary); font-size: 0.85rem"
                             onkeypress="if (event.key === 'Enter') addTensionWord('high');" />
                         <button onclick="addTensionWord('high')"
                             style="width: 100%; margin-top: 0.5rem; padding: 0.5rem; background: var(--accent-red); color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.85rem; font-weight: 500">+
-                            Ajouter</button>
+                            <span data-i18n="btn.add">Ajouter</span></button>
                         <button onclick="openBulkImport('high')"
-                            style="width: 100%; margin-top: 0.5rem; padding: 0.5rem; background: rgba(196, 69, 54, 0.2); color: var(--accent-red); border: 1px solid var(--accent-red); border-radius: 4px; cursor: pointer; font-size: 0.85rem; font-weight: 500">Import
+                            style="width: 100%; margin-top: 0.5rem; padding: 0.5rem; background: rgba(196, 69, 54, 0.2); color: var(--accent-red); border: 1px solid var(--accent-red); border-radius: 4px; cursor: pointer; font-size: 0.85rem; font-weight: 500"
+                            data-i18n="modal.tension.bulk_import">Import
                             en masse</button>
                     </div>
                     <div id="highTensionList"
@@ -3272,20 +3290,23 @@
                     style="background: var(--bg-secondary); border-radius: 8px; padding: 1.25rem; border: 2px solid rgba(230, 162, 60, 0.3)">
                     <h3
                         style="margin: 0 0 0.75rem 0; font-size: 1rem; color: #e6a23c; display: flex; align-items: center; gap: 0.5rem">
-                        Tension moyenne
-                        <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: normal">(+1.5
+                        <span data-i18n="modal.tension.medium.title">Tension moyenne</span>
+                        <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: normal"
+                            data-i18n="modal.tension.medium.pts">(+1.5
                             pts
                             chacun)</span>
                     </h3>
                     <div style="margin-bottom: 0.75rem">
                         <input type="text" id="mediumTensionInput" placeholder="Ajouter un mot..."
+                            data-i18n-placeholder="btn.add_word"
                             style="width: 100%; padding: 0.5rem; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 4px; color: var(--text-primary); font-size: 0.85rem"
                             onkeypress="if (event.key === 'Enter') addTensionWord('medium');" />
                         <button onclick="addTensionWord('medium')"
                             style="width: 100%; margin-top: 0.5rem; padding: 0.5rem; background: #e6a23c; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.85rem; font-weight: 500">+
-                            Ajouter</button>
+                            <span data-i18n="btn.add">Ajouter</span></button>
                         <button onclick="openBulkImport('medium')"
-                            style="width: 100%; margin-top: 0.5rem; padding: 0.5rem; background: rgba(230, 162, 60, 0.2); color: #e6a23c; border: 1px solid #e6a23c; border-radius: 4px; cursor: pointer; font-size: 0.85rem; font-weight: 500">Import
+                            style="width: 100%; margin-top: 0.5rem; padding: 0.5rem; background: rgba(230, 162, 60, 0.2); color: #e6a23c; border: 1px solid #e6a23c; border-radius: 4px; cursor: pointer; font-size: 0.85rem; font-weight: 500"
+                            data-i18n="modal.tension.bulk_import">Import
                             en masse</button>
                     </div>
                     <div id="mediumTensionList"
@@ -3298,19 +3319,22 @@
                     style="background: var(--bg-secondary); border-radius: 8px; padding: 1.25rem; border: 2px solid rgba(74, 144, 226, 0.3)">
                     <h3
                         style="margin: 0 0 0.75rem 0; font-size: 1rem; color: var(--accent-blue); display: flex; align-items: center; gap: 0.5rem">
-                        Faible tension
-                        <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: normal">(-2 pts
+                        <span data-i18n="modal.tension.low.title">Baisse de tension</span>
+                        <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: normal"
+                            data-i18n="modal.tension.low.pts">(-2 pts
                             chacun)</span>
                     </h3>
                     <div style="margin-bottom: 0.75rem">
                         <input type="text" id="lowTensionInput" placeholder="Ajouter un mot..."
+                            data-i18n-placeholder="btn.add_word"
                             style="width: 100%; padding: 0.5rem; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 4px; color: var(--text-primary); font-size: 0.85rem"
                             onkeypress="if (event.key === 'Enter') addTensionWord('low');" />
                         <button onclick="addTensionWord('low')"
                             style="width: 100%; margin-top: 0.5rem; padding: 0.5rem; background: #2d6bb3; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.85rem; font-weight: 500">+
-                            Ajouter</button>
+                            <span data-i18n="btn.add">Ajouter</span></button>
                         <button onclick="openBulkImport('low')"
-                            style="width: 100%; margin-top: 0.5rem; padding: 0.5rem; background: rgba(45, 107, 179, 0.15); color: #2d6bb3; border: 1px solid #2d6bb3; border-radius: 4px; cursor: pointer; font-size: 0.85rem; font-weight: 500">Import
+                            style="width: 100%; margin-top: 0.5rem; padding: 0.5rem; background: rgba(45, 107, 179, 0.15); color: #2d6bb3; border: 1px solid #2d6bb3; border-radius: 4px; cursor: pointer; font-size: 0.85rem; font-weight: 500"
+                            data-i18n="modal.tension.bulk_import">Import
                             en masse</button>
                     </div>
                     <div id="lowTensionList"
@@ -3322,10 +3346,12 @@
             <div class="modal-actions" style="display: flex; justify-content: space-between; align-items: center">
                 <div style="display: flex; gap: 0.75rem">
                     <button class="btn" onclick="exportTensionWords()"
-                        style="background: #2d6bb3; color: white; border: 1px solid #2d6bb3">Exporter les
+                        style="background: #2d6bb3; color: white; border: 1px solid #2d6bb3"
+                        data-i18n="modal.tension.export_dicts">Exporter les
                         dictionnaires</button>
                     <button class="btn" onclick="resetTensionWordsToDefault()"
-                        style="background: var(--accent-red); color: white">Réinitialiser aux valeurs par
+                        style="background: var(--accent-red); color: white"
+                        data-i18n="modal.tension.reset_default">Réinitialiser aux valeurs par
                         défaut</button>
                 </div>
                 <div style="display: flex; gap: 0.75rem">
@@ -3340,48 +3366,57 @@
     <!-- Bulk Import Modal -->
     <div class="modal" id="bulkImportModal">
         <div class="modal-content" style="max-width: 700px">
-            <div class="modal-title" id="bulkImportTitle">Import en masse</div>
+            <div class="modal-title" id="bulkImportTitle" data-i18n="modal.bulk_import.title">Import en masse</div>
             <div style="margin-bottom: 1.5rem">
-                <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 1rem">
+                <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 1rem"
+                    data-i18n="modal.bulk_import.desc">
                     Importez une liste de mots en masse. Vous pouvez :</p>
                 <ul style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.8; padding-left: 1.5rem">
-                    <li><strong>Coller du texte</strong> : Un mot par ligne ou séparés par des virgules</li>
-                    <li><strong>Importer un fichier</strong> : Fichier .txt avec un mot par ligne</li>
+                    <li><strong data-i18n="modal.bulk_import.li_paste">Coller du texte</strong><span
+                            data-i18n="modal.bulk_import.li_paste_desc"> : Un mot par ligne ou séparés par des
+                            virgules</span></li>
+                    <li><strong data-i18n="modal.bulk_import.li_file">Importer un fichier</strong><span
+                            data-i18n="modal.bulk_import.li_file_desc"> : Fichier .txt avec un mot par ligne</span></li>
                 </ul>
             </div>
             <div style="margin-bottom: 1.5rem">
-                <label class="form-label">Collez vos mots ici :</label>
+                <label class="form-label" data-i18n="modal.bulk_import.label_paste">Collez vos mots ici :</label>
                 <textarea id="bulkImportText"
                     placeholder="Ex: combat, bataille, mort&#10;tuer, danger, peur&#10;terreur, cri, hurler"
+                    data-i18n-placeholder="modal.bulk_import.placeholder"
                     style="width: 100%; min-height: 200px; padding: 0.75rem; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 4px; color: var(--text-primary); font-size: 0.85rem; font-family: monospace; resize: vertical"> </textarea>
-                <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem">Formats acceptés :
+                <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem"
+                    data-i18n="modal.bulk_import.formats">Formats acceptés :
                     un
                     mot
                     par ligne, ou plusieurs mots séparés par des virgules</div>
             </div>
             <div style="margin-bottom: 1.5rem">
-                <label class="form-label">Ou importez un fichier .txt :</label>
+                <label class="form-label" data-i18n="modal.bulk_import.label_file">Ou importez un fichier .txt :</label>
                 <input type="file" id="bulkImportFile" accept=".txt"
                     style="width: 100%; padding: 0.5rem; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 4px; color: var(--text-primary); font-size: 0.85rem" />
             </div>
             <div
                 style="padding: 1rem; background: rgba(74, 144, 226, 0.1); border-radius: 4px; border: 1px solid var(--accent-blue); margin-bottom: 1.5rem">
-                <div style="font-size: 0.85rem; font-weight: 600; color: var(--accent-blue); margin-bottom: 0.5rem">
+                <div style="font-size: 0.85rem; font-weight: 600; color: var(--accent-blue); margin-bottom: 0.5rem"
+                    data-i18n="modal.bulk_import.fusion_mode">
                     Mode
                     de fusion</div>
                 <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; margin-bottom: 0.5rem">
                     <input type="radio" name="importMode" value="add" checked />
-                    <span style="font-size: 0.85rem; color: var(--text-primary)">Ajouter aux mots existants
+                    <span style="font-size: 0.85rem; color: var(--text-primary)"
+                        data-i18n="modal.bulk_import.mode_add">Ajouter aux mots existants
                         (recommandé)</span>
                 </label>
                 <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer">
                     <input type="radio" name="importMode" value="replace" />
-                    <span style="font-size: 0.85rem; color: var(--text-primary)">Remplacer tous les mots
+                    <span style="font-size: 0.85rem; color: var(--text-primary)"
+                        data-i18n="modal.bulk_import.mode_replace">Remplacer tous les mots
                         existants</span>
                 </label>
             </div>
             <div class="modal-actions">
-                <button class="btn" onclick="closeModal('bulkImportModal')">Annuler</button>
+                <button class="btn" onclick="closeModal('bulkImportModal')" data-i18n="btn.cancel">Annuler</button>
                 <button class="btn btn-primary" onclick="processBulkImport()"><i data-lucide="download"></i>
                     Importer
                     les mots</button>
@@ -3395,7 +3430,7 @@
             </div>
             <div id="referencesModalContent"></div>
             <div class="modal-actions">
-                <button class="btn" onclick="closeModal('referencesModal')">Fermer</button>
+                <button class="btn" onclick="closeModal('referencesModal')" data-i18n="btn.close">Fermer</button>
             </div>
         </div>
     </div>
@@ -3888,305 +3923,373 @@
     <!-- Hidden input for project import -->
     <input type="file" id="importProjectFile" style="display: none" onchange="ProjectViewModel.import(this.files[0])"
         accept=".json">
+
+    <!-- ========================================
+         MOBILE BOTTOM NAVIGATION BAR
+         ======================================== -->
+    <div class="mobile-bottom-nav" id="mobileBottomNav">
+        <button class="mobile-bottom-nav-item" onclick="toggleMobileSidebar()" id="mobileBottomStructure">
+            <i data-lucide="list-tree"></i>
+            <span data-i18n="mobile.nav.structure">Structure</span>
+        </button>
+        <button class="mobile-bottom-nav-item" onclick="toggleMobileToolsSheet()" id="mobileBottomTools">
+            <i data-lucide="wrench"></i>
+            <span data-i18n="mobile.nav.tools">Outils</span>
+        </button>
+        <button class="mobile-bottom-nav-item" onclick="toggleMobileNav()" id="mobileBottomMenu">
+            <i data-lucide="compass"></i>
+            <span data-i18n="mobile.nav.navigation">Navigation</span>
+        </button>
+        <button class="mobile-bottom-nav-item" onclick="toggleFloatingEditorMenu()" id="mobileBottomFormat">
+            <i data-lucide="pen-line"></i>
+            <span data-i18n="mobile.nav.format">Format</span>
+        </button>
+    </div>
+
+    <!-- ========================================
+         MOBILE TOOLS BOTTOM SHEET
+         ======================================== -->
+    <div class="mobile-tools-sheet" id="mobileToolsSheet">
+        <div class="mobile-tools-sheet-backdrop" onclick="closeMobileToolsSheet()"></div>
+        <div class="mobile-tools-sheet-content">
+            <div class="mobile-tools-sheet-handle"></div>
+            <div class="mobile-tools-sheet-title" data-i18n="mobile.tools.title">Outils de sc&egrave;ne</div>
+            <div class="mobile-tools-grid">
+                <button class="mobile-tool-item" onclick="toggleVersionsSidebar(); closeMobileToolsSheet();">
+                    <i data-lucide="git-branch"></i>
+                    <span data-i18n="tools.versions">Versions</span>
+                </button>
+                <button class="mobile-tool-item" onclick="toggleAnnotationsPanel(); closeMobileToolsSheet();">
+                    <i data-lucide="message-square"></i>
+                    <span data-i18n="tools.annotations">Annotations</span>
+                </button>
+                <button class="mobile-tool-item" onclick="toggleTodosPanel(); closeMobileToolsSheet();">
+                    <i data-lucide="check-square"></i>
+                    <span data-i18n="tools.todos">TODOs</span>
+                </button>
+                <button class="mobile-tool-item" onclick="toggleArcScenePanel(); closeMobileToolsSheet();">
+                    <i data-lucide="git-commit-horizontal"></i>
+                    <span data-i18n="tools.arcs">Arcs</span>
+                </button>
+                <button class="mobile-tool-item" onclick="PlotGridUI.toggleSidebar(); closeMobileToolsSheet();">
+                    <i data-lucide="layout-grid"></i>
+                    <span data-i18n="tools.plot">Plot</span>
+                </button>
+                <button class="mobile-tool-item"
+                    onclick="InvestigationSidebarUI.toggleSidebar(); closeMobileToolsSheet();">
+                    <i data-lucide="search"></i>
+                    <span data-i18n="tools.investigation">Recherche</span>
+                </button>
+                <button class="mobile-tool-item" onclick="toggleLinksPanelVisibility(); closeMobileToolsSheet();">
+                    <i data-lucide="link-2"></i>
+                    <span data-i18n="tools.links">Liens</span>
+                </button>
+                <button class="mobile-tool-item" onclick="toggleWordRepetitionPanel(); closeMobileToolsSheet();">
+                    <i data-lucide="repeat"></i>
+                    <span data-i18n="tools.repetition">R&eacute;p&eacute;titions</span>
+                </button>
+            </div>
+        </div>
+    </div>
 </body>
     <!-- Generated JS Scripts -->
     <script src="./js/vendor/driver.js.iife.js"></script>
 <script src="./js/vendor/docx.js"></script>
 <script src="./js/vendor/idb.js"></script>
-<script src="./js/01.app.refactor.js"></script>
-<script src="./js/localization/locales/fr.js"></script>
-<script src="./js/localization/locales/en.js"></script>
-<script src="./js/localization/locales/de.js"></script>
-<script src="./js/localization/locales/es.js"></script>
-<script src="./js/localization/localization.model.js"></script>
-<script src="./js/localization/localization.view.js"></script>
-<script src="./js/localization/localization.manager.js"></script>
-<script src="./js/localization/landing-locales.js"></script>
-<script src="./js/tension/tension.model.js"></script>
-<script src="./js/tension/tension.repository.js"></script>
-<script src="./js/tension/tension.viewmodel.js"></script>
-<script src="./js/tension/tension.view.js"></script>
-<script src="./js/tension/tension.handlers.js"></script>
-<script src="./js/tension/tension.main.js"></script>
-<script src="./js/storage/storage.model.js"></script>
-<script src="./js/storage/storage.repository.js"></script>
-<script src="./js/storage/storage.viewmodel.js"></script>
-<script src="./js/storage/storage.view.js"></script>
-<script src="./js/storage/storage.main.js"></script>
-<script src="./js/project/project.model.js"></script>
-<script src="./js/project/project.repository.js"></script>
-<script src="./js/project/project.templates.js"></script>
-<script src="./js/project/project.viewmodel.js"></script>
-<script src="./js/project/project.view.js"></script>
-<script src="./js/project/project.handlers.js"></script>
-<script src="./js/project/project.main.js"></script>
-<script src="./js/floating-editor/floating-editor.model.js"></script>
-<script src="./js/floating-editor/floating-editor.repository.js"></script>
-<script src="./js/floating-editor/floating-editor.view.js"></script>
-<script src="./js/floating-editor/floating-editor.viewmodel.js"></script>
-<script src="./js/floating-editor/floating-editor.handlers.js"></script>
-<script src="./js/floating-editor/floating-editor.main.js"></script>
-<script src="./js/interface-customizer/interface-customizer.model.js"></script>
-<script src="./js/interface-customizer/interface-customizer.repository.js"></script>
-<script src="./js/interface-customizer/interface-customizer.viewmodel.js"></script>
-<script src="./js/interface-customizer/interface-customizer.view.js"></script>
-<script src="./js/04.init.js"></script>
-<script src="./js/undo-redo/undo-redo.model.js"></script>
-<script src="./js/undo-redo/undo-redo.repository.js"></script>
-<script src="./js/undo-redo/undo-redo.viewmodel.js"></script>
-<script src="./js/undo-redo/undo-redo.view.js"></script>
-<script src="./js/undo-redo/undo-redo.handlers.js"></script>
-<script src="./js/undo-redo/undo-redo.main.js"></script>
-<script src="./js/pagination.js"></script>
-<script src="./js/structure/structure.model.js"></script>
-<script src="./js/structure/structure.repository.js"></script>
-<script src="./js/structure/structure.viewmodel.js"></script>
-<script src="./js/00.app.view.js"></script>
-<script src="./js/tools-sidebar.viewmodel.js"></script>
-<script src="./js/structure/structure.view.js"></script>
-<script src="./js/structure/structure-organizer.view.js"></script>
-<script src="./js/structure/structure.helpers.js"></script>
-<script src="./js/stats/stats.model.js"></script>
-<script src="./js/stats/stats.repository.js"></script>
-<script src="./js/stats/stats.viewmodel.js"></script>
-<script src="./js/stats/stats.view.js"></script>
-<script src="./js/stats/stats.main.js"></script>
-<script src="./js/auto-detect/auto-detect.model.js"></script>
-<script src="./js/auto-detect/auto-detect.repository.js"></script>
-<script src="./js/auto-detect/auto-detect.viewmodel.js"></script>
-<script src="./js/auto-detect/auto-detect.view.js"></script>
-<script src="./js/auto-detect/auto-detect.handlers.js"></script>
-<script src="./js/auto-detect/auto-detect.main.js"></script>
-<script src="./js/colorpalette/color-palette.model.js"></script>
-<script src="./js/colorpalette/color-palette.repository.js"></script>
-<script src="./js/colorpalette/color-palette.viewmodel.js"></script>
-<script src="./js/colorpalette/color-palette.view.js"></script>
-<script src="./js/colorpalette/color-palette.handlers.js"></script>
-<script src="./js/colorpalette/color-palette.main.js"></script>
-<script src="./js/mobile-menu/mobile-menu.model.js"></script>
-<script src="./js/mobile-menu/mobile-menu.repository.js"></script>
-<script src="./js/mobile-menu/mobile-menu.viewmodel.js"></script>
-<script src="./js/mobile-menu/mobile-menu.view.js"></script>
-<script src="./js/mobile-menu/mobile-menu.main.js"></script>
-<script src="./js/dragndrop-acts/dragndrop-acts.model.js"></script>
-<script src="./js/dragndrop-acts/dragndrop-acts.repository.js"></script>
-<script src="./js/dragndrop-acts/dragndrop-acts.viewmodel.js"></script>
-<script src="./js/dragndrop-acts/dragndrop-acts.view.js"></script>
-<script src="./js/dragndrop-acts/dragndrop-acts.handlers.js"></script>
-<script src="./js/dragndrop-acts/dragndrop-acts.main.js"></script>
-<script src="./js/characters/characters.model.js"></script>
-<script src="./js/characters/characters.repository.js"></script>
-<script src="./js/characters/characters.viewmodel.js"></script>
-<script src="./js/characters/characters.view.js"></script>
-<script src="./js/splitview/splitview.model.js"></script>
-<script src="./js/splitview/splitview.repository.js"></script>
-<script src="./js/splitview/splitview.viewmodel.js"></script>
-<script src="./js/splitview/splitview.view.js"></script>
-<script src="./js/splitview/splitview.coordinator.js"></script>
-<script src="./js/splitview/splitview.handlers.js"></script>
-<script src="./js/splitview/splitview.main.js"></script>
-<script src="./js/tabs/tabs.repository.js"></script>
-<script src="./js/tabs/tabs.viewmodel.js"></script>
-<script src="./js/tabs/tabs.view.js"></script>
-<script src="./js/tabs/tabs.main.js"></script>
-<script src="./js/world/world.model.js"></script>
-<script src="./js/world/world.repository.js"></script>
-<script src="./js/world/world.viewmodel.js"></script>
-<script src="./js/world/world.view.js"></script>
-<script src="./js/18.timeline.js"></script>
-<script src="./js/notes/notes.model.js"></script>
-<script src="./js/notes/notes.repository.js"></script>
-<script src="./js/notes/notes.viewmodel.js"></script>
-<script src="./js/notes/notes.view.js"></script>
-<script src="./js/notes/notes.handlers.js"></script>
-<script src="./js/notes/notes.main.js"></script>
-<script src="./js/snapshots/snapshots.model.js"></script>
-<script src="./js/snapshots/snapshots.repository.js"></script>
-<script src="./js/snapshots/snapshots.viewmodel.js"></script>
-<script src="./js/snapshots/snapshots.view.js"></script>
-<script src="./js/snapshots/snapshots.main.js"></script>
-<script src="./js/sceneVersion/sceneVersion.model.js"></script>
-<script src="./js/sceneVersion/sceneVersion.repository.js"></script>
-<script src="./js/sceneVersion/sceneVersion.viewmodel.js"></script>
-<script src="./js/sceneVersion/sceneVersion.view.js"></script>
-<script src="./js/sceneVersion/sceneVersion.main.js"></script>
-<script src="./js/diff/diff.model.js"></script>
-<script src="./js/diff/diff.repository.js"></script>
-<script src="./js/diff/diff.viewmodel.js"></script>
-<script src="./js/diff/diff.view.js"></script>
-<script src="./js/diff/diff.handlers.js"></script>
-<script src="./js/diff/diff.main.js"></script>
-<script src="./js/codex/codex.model.js"></script>
-<script src="./js/codex/codex.repository.js"></script>
-<script src="./js/codex/codex.viewmodel.js"></script>
-<script src="./js/codex/codex.view.js"></script>
-<script src="./js/search/search.model.js"></script>
-<script src="./js/search/search.repository.js"></script>
-<script src="./js/search/search.viewmodel.js"></script>
-<script src="./js/search/search.view.js"></script>
-<script src="./js/search/search.handlers.js"></script>
-<script src="./js/search/search.main.js"></script>
-<script src="./js/focusMode/focusMode.model.js"></script>
-<script src="./js/focusMode/focusMode.repository.js"></script>
-<script src="./js/focusMode/focusMode.viewmodel.js"></script>
-<script src="./js/focusMode/focusMode.view.js"></script>
-<script src="./js/focusMode/focusMode.handlers.js"></script>
-<script src="./js/focusMode/focusMode.main.js"></script>
-<script src="./js/keyboard-shortcuts/keyboard-shortcuts.model.js"></script>
-<script src="./js/keyboard-shortcuts/keyboard-shortcuts.repository.js"></script>
-<script src="./js/keyboard-shortcuts/keyboard-shortcuts.viewmodel.js"></script>
-<script src="./js/keyboard-shortcuts/keyboard-shortcuts.view.js"></script>
-<script src="./js/keyboard-shortcuts/keyboard-shortcuts.handlers.js"></script>
-<script src="./js/keyboard-shortcuts/keyboard-shortcuts.main.js"></script>
-<script src="./js/revision/revision.model.js"></script>
-<script src="./js/revision/revision.repository.js"></script>
-<script src="./js/revision/revision.viewmodel.js"></script>
-<script src="./js/revision/revision.view.js"></script>
-<script src="./js/revision/revision.handlers.js"></script>
-<script src="./js/revision/revision.main.js"></script>
-<script src="./js/mention-help/mention-help.model.js"></script>
-<script src="./js/mention-help/mention-help.repository.js"></script>
-<script src="./js/mention-help/mention-help.viewmodel.js"></script>
-<script src="./js/mention-help/mention-help.view.js"></script>
-<script src="./js/mention-help/mention-help.handlers.js"></script>
-<script src="./js/mention-help/mention-help.main.js"></script>
-<script src="./js/todo/todo.model.js"></script>
-<script src="./js/todo/todo.repository.js"></script>
-<script src="./js/todo/todo.viewmodel.js"></script>
-<script src="./js/todo/todo.view.js"></script>
-<script src="./js/todo/todo.handlers.js"></script>
-<script src="./js/todo/todo.main.js"></script>
-<script src="./js/corkboard/corkboard.model.js"></script>
-<script src="./js/corkboard/corkboard.repository.js"></script>
-<script src="./js/corkboard/corkboard.viewmodel.js"></script>
-<script src="./js/corkboard/corkboard.view.js"></script>
-<script src="./js/corkboard/corkboard.handlers.js"></script>
-<script src="./js/corkboard/corkboard.main.js"></script>
-<script src="./js/mindmap/mindmap.model.js"></script>
-<script src="./js/mindmap/mindmap.repository.js"></script>
-<script src="./js/mindmap/mindmap.viewmodel.js"></script>
-<script src="./js/mindmap/mindmap.view.js"></script>
-<script src="./js/mindmap/mindmap.handlers.js"></script>
-<script src="./js/mindmap/mindmap.main.js"></script>
-<script src="./js/plot/plot.model.js"></script>
-<script src="./js/plot/plot.repository.js"></script>
-<script src="./js/plot/plot.viewmodel.js"></script>
-<script src="./js/plot/plot.view.js"></script>
-<script src="./js/plot/plot.init.js"></script>
-<script src="./js/relation-map/relation-map.model.js"></script>
-<script src="./js/relation-map/relation-map.repository.js"></script>
-<script src="./js/relation-map/relation-map.viewmodel.js"></script>
-<script src="./js/relation-map/relation-map.view.js"></script>
-<script src="./js/relation-map/relation-map.handlers.js"></script>
-<script src="./js/relation-map/relation-map.main.js"></script>
-<script src="./js/map/map.model.js"></script>
-<script src="./js/map/map.repository.js"></script>
-<script src="./js/map/map.viewmodel.js"></script>
-<script src="./js/map/map.view.js"></script>
-<script src="./js/map/map.handlers.js"></script>
-<script src="./js/map/map.main.js"></script>
-<script src="./js/timeline-metro/timeline-metro.model.js"></script>
-<script src="./js/timeline-metro/timeline-metro.repository.js"></script>
-<script src="./js/timeline-metro/timeline-metro.viewmodel.js"></script>
-<script src="./js/timeline-metro/timeline-metro.view.js"></script>
-<script src="./js/timeline-metro/timeline-metro.handlers.js"></script>
-<script src="./js/timeline-metro/timeline-metro.main.js"></script>
-<script src="./js/theme-manager/theme-manager.model.js"></script>
-<script src="./js/theme-manager/theme-manager.repository.js"></script>
-<script src="./js/theme-manager/theme-manager.viewmodel.js"></script>
-<script src="./js/theme-manager/theme-manager.view.js"></script>
-<script src="./js/theme-manager/theme-manager.main.js"></script>
-<script src="./js/import-export/import-export.model.js"></script>
-<script src="./js/import-export/docx-export.config.js"></script>
-<script src="./js/import-export/import-export.repository.js"></script>
-<script src="./js/import-export/google-drive.service.js"></script>
-<script src="./js/import-export/import-export.viewmodel.js"></script>
-<script src="./js/import-export/import-export.view.js"></script>
-<script src="./js/import-export/import-export.handlers.js"></script>
-<script src="./js/import-export/import-export.main.js"></script>
-<script src="./js/front-matter/front-matter.model.js"></script>
-<script src="./js/front-matter/front-matter.repository.js"></script>
-<script src="./js/front-matter/front-matter.viewmodel.js"></script>
-<script src="./js/front-matter/front-matter.view.js"></script>
-<script src="./js/front-matter/front-matter.main.js"></script>
-<script src="./js/sidebar-view/sidebar-view.model.js"></script>
-<script src="./js/sidebar-view/sidebar-view.repository.js"></script>
-<script src="./js/sidebar-view/sidebar-view.viewmodel.js"></script>
-<script src="./js/sidebar-view/sidebar-view.view.js"></script>
-<script src="./js/sidebar-view/sidebar-view.main.js"></script>
-<script src="./js/storageMonitoring/storageMonitoring.model.js"></script>
-<script src="./js/storageMonitoring/storageMonitoring.repository.js"></script>
-<script src="./js/storageMonitoring/storageMonitoring.viewmodel.js"></script>
-<script src="./js/storageMonitoring/storageMonitoring.view.js"></script>
-<script src="./js/storageMonitoring/storageMonitoring.main.js"></script>
-<script src="./js/mobile-swipe/mobile-swipe.model.js"></script>
-<script src="./js/mobile-swipe/mobile-swipe.repository.js"></script>
-<script src="./js/mobile-swipe/mobile-swipe.viewmodel.js"></script>
-<script src="./js/mobile-swipe/mobile-swipe.view.js"></script>
-<script src="./js/mobile-swipe/mobile-swipe.handlers.js"></script>
-<script src="./js/mobile-swipe/mobile-swipe.main.js"></script>
-<script src="./js/arc-board/arc-board.config.js"></script>
-<script src="./js/arc-board/arc-board.models.js"></script>
-<script src="./js/arc-board/arc-board.repository.js"></script>
-<script src="./js/arc-board/arc-board.viewmodel.js"></script>
-<script src="./js/arc-board/arc-board.services.js"></script>
-<script src="./js/arc-board/arc-board.views.js"></script>
-<script src="./js/arc-board/arc-board.handlers.js"></script>
-<script src="./js/arc-board/index.js"></script>
-<script src="./js/arc-board/arc-board.main.js"></script>
-<script src="./js/plotgrid/plot-grid.model.js"></script>
-<script src="./js/plotgrid/plot-grid.repository.js"></script>
-<script src="./js/plotgrid/plot-grid.viewmodel.js"></script>
-<script src="./js/plotgrid/plot-grid.import-export.js"></script>
-<script src="./js/plotgrid/plot-grid.view.js"></script>
-<script src="./js/sceneNavigation/scene-navigation.model.js"></script>
-<script src="./js/sceneNavigation/scene-navigation.repository.js"></script>
-<script src="./js/sceneNavigation/scene-navigation.viewmodel.js"></script>
-<script src="./js/sceneNavigation/scene-navigation.view.js"></script>
-<script src="./js/sceneNavigation/scene-navigation.handlers.js"></script>
-<script src="./js/sceneNavigation/scene-navigation.main.js"></script>
-<script src="./js/synonyms/synonyms.config.js"></script>
-<script src="./js/synonyms/synonyms.model.js"></script>
-<script src="./js/synonyms/synonyms.dictionary.js"></script>
-<script src="./js/synonyms/synonyms.service.js"></script>
-<script src="./js/synonyms/synonyms.repository.js"></script>
-<script src="./js/synonyms/synonyms.viewmodel.js"></script>
-<script src="./js/synonyms/synonyms.view.js"></script>
-<script src="./js/import-chapter/import-chapter.model.js"></script>
-<script src="./js/import-chapter/import-chapter.viewmodel.js"></script>
-<script src="./js/import-chapter/import-chapter.view.js"></script>
-<script src="./js/word-repetition/word-repetition.model.js"></script>
-<script src="./js/word-repetition/word-repetition.repository.js"></script>
-<script src="./js/word-repetition/word-repetition.viewmodel.js"></script>
-<script src="./js/word-repetition/word-repetition.view.js"></script>
-<script src="./js/word-repetition/word-repetition.handlers.js"></script>
-<script src="./js/word-repetition/word-repetition.main.js"></script>
-<script src="./js/product-tour/product-tour.model.js"></script>
-<script src="./js/product-tour/product-tour.data.js"></script>
-<script src="./js/product-tour/product-tour.repository.js"></script>
-<script src="./js/product-tour/product-tour.viewmodel.js"></script>
-<script src="./js/product-tour/product-tour.view.js"></script>
-<script src="./js/product-tour/product-tour.editor.view.js"></script>
-<script src="./js/product-tour/product-tour.editor.viewmodel.js"></script>
-<script src="./js/product-tour/product-tour.handlers.js"></script>
-<script src="./js/product-tour/product-tour.main.js"></script>
-<script src="./js/investigation-board/investigation-board.model.js"></script>
-<script src="./js/investigation-board/investigation-board.store.js"></script>
-<script src="./js/investigation-board/investigation-board.dashboard.js"></script>
-<script src="./js/investigation-board/investigation-board.registry.js"></script>
-<script src="./js/investigation-board/investigation-board.matrix.js"></script>
-<script src="./js/investigation-board/investigation-board.mmo.js"></script>
-<script src="./js/investigation-board/investigation-board.timeline.js"></script>
-<script src="./js/investigation-board/investigation-board.demo.js"></script>
-<script src="./js/investigation-board/investigation-board.sidebar.js"></script>
-<script src="./js/investigation-board/investigation-board.view.js"></script>
-<script src="./js/globalnotes/globalnotes.model.js"></script>
-<script src="./js/globalnotes/globalnotes.repository.js"></script>
-<script src="./js/globalnotes/globalnotes.viewmodel.js"></script>
-<script src="./js/globalnotes/globalnotes.view.js"></script>
-<script src="./js/globalnotes/globalnotes.item.view.js"></script>
-<script src="./js/globalnotes/globalnotes.handlers.js"></script>
-<script src="./js/globalnotes/globalnotes.main.js"></script>
+<script src="./js/core/01.app.refactor.js"></script>
+<script src="./js/core/localization/locales/fr.js"></script>
+<script src="./js/core/localization/locales/en.js"></script>
+<script src="./js/core/localization/locales/de.js"></script>
+<script src="./js/core/localization/locales/es.js"></script>
+<script src="./js/core/localization/localization.model.js"></script>
+<script src="./js/core/localization/localization.view.js"></script>
+<script src="./js/core/localization/localization.manager.js"></script>
+<script src="./js/core/localization/landing-locales.js"></script>
+<script src="./js/worldbuilding/planning/tension/tension.model.js"></script>
+<script src="./js/worldbuilding/planning/tension/tension.repository.js"></script>
+<script src="./js/worldbuilding/planning/tension/tension.viewmodel.js"></script>
+<script src="./js/worldbuilding/planning/tension/tension.view.js"></script>
+<script src="./js/worldbuilding/planning/tension/tension.handlers.js"></script>
+<script src="./js/worldbuilding/planning/tension/tension.main.js"></script>
+<script src="./js/core/storage/storage.model.js"></script>
+<script src="./js/core/storage/storage.repository.js"></script>
+<script src="./js/core/storage/storage.viewmodel.js"></script>
+<script src="./js/core/storage/storage.view.js"></script>
+<script src="./js/core/storage/storage.main.js"></script>
+<script src="./js/core/project/project.model.js"></script>
+<script src="./js/core/project/project.repository.js"></script>
+<script src="./js/core/project/project.templates.js"></script>
+<script src="./js/core/project/project.viewmodel.js"></script>
+<script src="./js/core/project/project.view.js"></script>
+<script src="./js/core/project/project.handlers.js"></script>
+<script src="./js/core/project/project.main.js"></script>
+<script src="./js/features/editor/floating-editor/floating-editor.model.js"></script>
+<script src="./js/features/editor/floating-editor/floating-editor.repository.js"></script>
+<script src="./js/features/editor/floating-editor/floating-editor.view.js"></script>
+<script src="./js/features/editor/floating-editor/floating-editor.viewmodel.js"></script>
+<script src="./js/features/editor/floating-editor/floating-editor.handlers.js"></script>
+<script src="./js/features/editor/floating-editor/floating-editor.main.js"></script>
+<script src="./js/core/interface-customizer/interface-customizer.model.js"></script>
+<script src="./js/core/interface-customizer/interface-customizer.repository.js"></script>
+<script src="./js/core/interface-customizer/interface-customizer.viewmodel.js"></script>
+<script src="./js/core/interface-customizer/interface-customizer.view.js"></script>
+<script src="./js/core/04.init.js"></script>
+<script src="./js/core/undo-redo/undo-redo.model.js"></script>
+<script src="./js/core/undo-redo/undo-redo.repository.js"></script>
+<script src="./js/core/undo-redo/undo-redo.viewmodel.js"></script>
+<script src="./js/core/undo-redo/undo-redo.view.js"></script>
+<script src="./js/core/undo-redo/undo-redo.handlers.js"></script>
+<script src="./js/core/undo-redo/undo-redo.main.js"></script>
+<script src="./js/core/pagination.js"></script>
+<script src="./js/worldbuilding/planning/structure/structure.model.js"></script>
+<script src="./js/worldbuilding/planning/structure/structure.repository.js"></script>
+<script src="./js/worldbuilding/planning/structure/structure.viewmodel.js"></script>
+<script src="./js/core/00.app.view.js"></script>
+<script src="./js/core/tools-sidebar.viewmodel.js"></script>
+<script src="./js/worldbuilding/planning/structure/structure.view.js"></script>
+<script src="./js/worldbuilding/planning/structure/structure-organizer.view.js"></script>
+<script src="./js/worldbuilding/planning/structure/structure.helpers.js"></script>
+<script src="./js/features/analysis/stats/stats.model.js"></script>
+<script src="./js/features/analysis/stats/stats.repository.js"></script>
+<script src="./js/features/analysis/stats/stats.viewmodel.js"></script>
+<script src="./js/features/analysis/stats/stats.view.js"></script>
+<script src="./js/features/analysis/stats/stats.main.js"></script>
+<script src="./js/features/tools/auto-detect/auto-detect.model.js"></script>
+<script src="./js/features/tools/auto-detect/auto-detect.repository.js"></script>
+<script src="./js/features/tools/auto-detect/auto-detect.viewmodel.js"></script>
+<script src="./js/features/tools/auto-detect/auto-detect.view.js"></script>
+<script src="./js/features/tools/auto-detect/auto-detect.handlers.js"></script>
+<script src="./js/features/tools/auto-detect/auto-detect.main.js"></script>
+<script src="./js/features/tools/colorpalette/color-palette.model.js"></script>
+<script src="./js/features/tools/colorpalette/color-palette.repository.js"></script>
+<script src="./js/features/tools/colorpalette/color-palette.viewmodel.js"></script>
+<script src="./js/features/tools/colorpalette/color-palette.view.js"></script>
+<script src="./js/features/tools/colorpalette/color-palette.handlers.js"></script>
+<script src="./js/features/tools/colorpalette/color-palette.main.js"></script>
+<script src="./js/core/ui/mobile-menu/mobile-menu.model.js"></script>
+<script src="./js/core/ui/mobile-menu/mobile-menu.repository.js"></script>
+<script src="./js/core/ui/mobile-menu/mobile-menu.viewmodel.js"></script>
+<script src="./js/core/ui/mobile-menu/mobile-menu.view.js"></script>
+<script src="./js/core/ui/mobile-menu/mobile-menu.main.js"></script>
+<script src="./js/core/ui/dragndrop-acts/dragndrop-acts.model.js"></script>
+<script src="./js/core/ui/dragndrop-acts/dragndrop-acts.repository.js"></script>
+<script src="./js/core/ui/dragndrop-acts/dragndrop-acts.viewmodel.js"></script>
+<script src="./js/core/ui/dragndrop-acts/dragndrop-acts.view.js"></script>
+<script src="./js/core/ui/dragndrop-acts/dragndrop-acts.handlers.js"></script>
+<script src="./js/core/ui/dragndrop-acts/dragndrop-acts.main.js"></script>
+<script src="./js/worldbuilding/characters/characters.model.js"></script>
+<script src="./js/worldbuilding/characters/characters.repository.js"></script>
+<script src="./js/worldbuilding/characters/characters.viewmodel.js"></script>
+<script src="./js/worldbuilding/characters/characters.view.js"></script>
+<script src="./js/core/ui/splitview/splitview.model.js"></script>
+<script src="./js/core/ui/splitview/splitview.repository.js"></script>
+<script src="./js/core/ui/splitview/splitview.viewmodel.js"></script>
+<script src="./js/core/ui/splitview/splitview.view.js"></script>
+<script src="./js/core/ui/splitview/splitview.coordinator.js"></script>
+<script src="./js/core/ui/splitview/splitview.handlers.js"></script>
+<script src="./js/core/ui/splitview/splitview.main.js"></script>
+<script src="./js/core/ui/tabs/tabs.repository.js"></script>
+<script src="./js/core/ui/tabs/tabs.viewmodel.js"></script>
+<script src="./js/core/ui/tabs/tabs.view.js"></script>
+<script src="./js/core/ui/tabs/tabs.main.js"></script>
+<script src="./js/worldbuilding/atlas/world/world.model.js"></script>
+<script src="./js/worldbuilding/atlas/world/world.repository.js"></script>
+<script src="./js/worldbuilding/atlas/world/world.viewmodel.js"></script>
+<script src="./js/worldbuilding/atlas/world/world.view.js"></script>
+<script src="./js/worldbuilding/planning/18.timeline.js"></script>
+<script src="./js/features/personal/notes/notes.model.js"></script>
+<script src="./js/features/personal/notes/notes.repository.js"></script>
+<script src="./js/features/personal/notes/notes.viewmodel.js"></script>
+<script src="./js/features/personal/notes/notes.view.js"></script>
+<script src="./js/features/personal/notes/notes.handlers.js"></script>
+<script src="./js/features/personal/notes/notes.main.js"></script>
+<script src="./js/features/revision/snapshots/snapshots.model.js"></script>
+<script src="./js/features/revision/snapshots/snapshots.repository.js"></script>
+<script src="./js/features/revision/snapshots/snapshots.viewmodel.js"></script>
+<script src="./js/features/revision/snapshots/snapshots.view.js"></script>
+<script src="./js/features/revision/snapshots/snapshots.main.js"></script>
+<script src="./js/features/revision/sceneVersion/sceneVersion.model.js"></script>
+<script src="./js/features/revision/sceneVersion/sceneVersion.repository.js"></script>
+<script src="./js/features/revision/sceneVersion/sceneVersion.viewmodel.js"></script>
+<script src="./js/features/revision/sceneVersion/sceneVersion.view.js"></script>
+<script src="./js/features/revision/sceneVersion/sceneVersion.main.js"></script>
+<script src="./js/features/revision/diff/diff.model.js"></script>
+<script src="./js/features/revision/diff/diff.repository.js"></script>
+<script src="./js/features/revision/diff/diff.viewmodel.js"></script>
+<script src="./js/features/revision/diff/diff.view.js"></script>
+<script src="./js/features/revision/diff/diff.handlers.js"></script>
+<script src="./js/features/revision/diff/diff.main.js"></script>
+<script src="./js/worldbuilding/atlas/codex/codex.model.js"></script>
+<script src="./js/worldbuilding/atlas/codex/codex.repository.js"></script>
+<script src="./js/worldbuilding/atlas/codex/codex.viewmodel.js"></script>
+<script src="./js/worldbuilding/atlas/codex/codex.view.js"></script>
+<script src="./js/features/tools/search/search.model.js"></script>
+<script src="./js/features/tools/search/search.repository.js"></script>
+<script src="./js/features/tools/search/search.viewmodel.js"></script>
+<script src="./js/features/tools/search/search.view.js"></script>
+<script src="./js/features/tools/search/search.handlers.js"></script>
+<script src="./js/features/tools/search/search.main.js"></script>
+<script src="./js/features/editor/focusMode/focusMode.model.js"></script>
+<script src="./js/features/editor/focusMode/focusMode.repository.js"></script>
+<script src="./js/features/editor/focusMode/focusMode.viewmodel.js"></script>
+<script src="./js/features/editor/focusMode/focusMode.view.js"></script>
+<script src="./js/features/editor/focusMode/focusMode.handlers.js"></script>
+<script src="./js/features/editor/focusMode/focusMode.main.js"></script>
+<script src="./js/core/keyboard-shortcuts/keyboard-shortcuts.model.js"></script>
+<script src="./js/core/keyboard-shortcuts/keyboard-shortcuts.repository.js"></script>
+<script src="./js/core/keyboard-shortcuts/keyboard-shortcuts.viewmodel.js"></script>
+<script src="./js/core/keyboard-shortcuts/keyboard-shortcuts.view.js"></script>
+<script src="./js/core/keyboard-shortcuts/keyboard-shortcuts.handlers.js"></script>
+<script src="./js/core/keyboard-shortcuts/keyboard-shortcuts.main.js"></script>
+<script src="./js/features/revision/revision.model.js"></script>
+<script src="./js/features/revision/revision.repository.js"></script>
+<script src="./js/features/revision/revision.viewmodel.js"></script>
+<script src="./js/features/revision/revision.view.js"></script>
+<script src="./js/features/revision/revision.handlers.js"></script>
+<script src="./js/features/revision/revision.main.js"></script>
+<script src="./js/features/tools/mention-help/mention-help.model.js"></script>
+<script src="./js/features/tools/mention-help/mention-help.repository.js"></script>
+<script src="./js/features/tools/mention-help/mention-help.viewmodel.js"></script>
+<script src="./js/features/tools/mention-help/mention-help.view.js"></script>
+<script src="./js/features/tools/mention-help/mention-help.handlers.js"></script>
+<script src="./js/features/tools/mention-help/mention-help.main.js"></script>
+<script src="./js/features/personal/todo/todo.model.js"></script>
+<script src="./js/features/personal/todo/todo.repository.js"></script>
+<script src="./js/features/personal/todo/todo.viewmodel.js"></script>
+<script src="./js/features/personal/todo/todo.view.js"></script>
+<script src="./js/features/personal/todo/todo.handlers.js"></script>
+<script src="./js/features/personal/todo/todo.main.js"></script>
+<script src="./js/worldbuilding/planning/corkboard/corkboard.model.js"></script>
+<script src="./js/worldbuilding/planning/corkboard/corkboard.repository.js"></script>
+<script src="./js/worldbuilding/planning/corkboard/corkboard.viewmodel.js"></script>
+<script src="./js/worldbuilding/planning/corkboard/corkboard.view.js"></script>
+<script src="./js/worldbuilding/planning/corkboard/corkboard.handlers.js"></script>
+<script src="./js/worldbuilding/planning/corkboard/corkboard.main.js"></script>
+<script src="./js/worldbuilding/planning/mindmap/mindmap.model.js"></script>
+<script src="./js/worldbuilding/planning/mindmap/mindmap.repository.js"></script>
+<script src="./js/worldbuilding/planning/mindmap/mindmap.viewmodel.js"></script>
+<script src="./js/worldbuilding/planning/mindmap/mindmap.view.js"></script>
+<script src="./js/worldbuilding/planning/mindmap/mindmap.handlers.js"></script>
+<script src="./js/worldbuilding/planning/mindmap/mindmap.main.js"></script>
+<script src="./js/worldbuilding/planning/plot/plot.model.js"></script>
+<script src="./js/worldbuilding/planning/plot/plot.repository.js"></script>
+<script src="./js/worldbuilding/planning/plot/plot.viewmodel.js"></script>
+<script src="./js/worldbuilding/planning/plot/plot.view.js"></script>
+<script src="./js/worldbuilding/planning/plot/plot.init.js"></script>
+<script src="./js/worldbuilding/planning/relation-map/relation-map.model.js"></script>
+<script src="./js/worldbuilding/planning/relation-map/relation-map.repository.js"></script>
+<script src="./js/worldbuilding/planning/relation-map/relation-map.viewmodel.js"></script>
+<script src="./js/worldbuilding/planning/relation-map/relation-map.view.js"></script>
+<script src="./js/worldbuilding/planning/relation-map/relation-map.handlers.js"></script>
+<script src="./js/worldbuilding/planning/relation-map/relation-map.main.js"></script>
+<script src="./js/worldbuilding/planning/map/map.model.js"></script>
+<script src="./js/worldbuilding/planning/map/map.repository.js"></script>
+<script src="./js/worldbuilding/planning/map/map.viewmodel.js"></script>
+<script src="./js/worldbuilding/planning/map/map.view.js"></script>
+<script src="./js/worldbuilding/planning/map/map.handlers.js"></script>
+<script src="./js/worldbuilding/planning/map/map.main.js"></script>
+<script src="./js/worldbuilding/planning/timeline-metro/timeline-metro.model.js"></script>
+<script src="./js/worldbuilding/planning/timeline-metro/timeline-metro.repository.js"></script>
+<script src="./js/worldbuilding/planning/timeline-metro/timeline-metro.viewmodel.js"></script>
+<script src="./js/worldbuilding/planning/timeline-metro/timeline-metro.view.js"></script>
+<script src="./js/worldbuilding/planning/timeline-metro/timeline-metro.handlers.js"></script>
+<script src="./js/worldbuilding/planning/timeline-metro/timeline-metro.main.js"></script>
+<script src="./js/core/theme-manager/theme-manager.model.js"></script>
+<script src="./js/core/theme-manager/theme-manager.repository.js"></script>
+<script src="./js/core/theme-manager/theme-manager.viewmodel.js"></script>
+<script src="./js/core/theme-manager/theme-manager.view.js"></script>
+<script src="./js/core/theme-manager/theme-manager.main.js"></script>
+<script src="./js/features/tools/import-export/import-export.model.js"></script>
+<script src="./js/features/tools/import-export/docx-export.config.js"></script>
+<script src="./js/features/tools/import-export/import-export.repository.js"></script>
+<script src="./js/features/tools/import-export/google-drive.service.js"></script>
+<script src="./js/features/tools/import-export/import-export.viewmodel.js"></script>
+<script src="./js/features/tools/import-export/import-export.view.js"></script>
+<script src="./js/features/tools/import-export/import-export.handlers.js"></script>
+<script src="./js/features/tools/import-export/import-export.main.js"></script>
+<script src="./js/features/front-matter/front-matter.model.js"></script>
+<script src="./js/features/front-matter/front-matter.repository.js"></script>
+<script src="./js/features/front-matter/front-matter.viewmodel.js"></script>
+<script src="./js/features/front-matter/front-matter.view.js"></script>
+<script src="./js/features/front-matter/front-matter.main.js"></script>
+<script src="./js/core/ui/sidebar-view/sidebar-view.model.js"></script>
+<script src="./js/core/ui/sidebar-view/sidebar-view.repository.js"></script>
+<script src="./js/core/ui/sidebar-view/sidebar-view.viewmodel.js"></script>
+<script src="./js/core/ui/sidebar-view/sidebar-view.view.js"></script>
+<script src="./js/core/ui/sidebar-view/sidebar-view.main.js"></script>
+<script src="./js/core/storageMonitoring/storageMonitoring.model.js"></script>
+<script src="./js/core/storageMonitoring/storageMonitoring.repository.js"></script>
+<script src="./js/core/storageMonitoring/storageMonitoring.viewmodel.js"></script>
+<script src="./js/core/storageMonitoring/storageMonitoring.view.js"></script>
+<script src="./js/core/storageMonitoring/storageMonitoring.main.js"></script>
+<script src="./js/core/ui/mobile-swipe/mobile-swipe.model.js"></script>
+<script src="./js/core/ui/mobile-swipe/mobile-swipe.repository.js"></script>
+<script src="./js/core/ui/mobile-swipe/mobile-swipe.viewmodel.js"></script>
+<script src="./js/core/ui/mobile-swipe/mobile-swipe.view.js"></script>
+<script src="./js/core/ui/mobile-swipe/mobile-swipe.handlers.js"></script>
+<script src="./js/core/ui/mobile-swipe/mobile-swipe.main.js"></script>
+<script src="./js/worldbuilding/planning/arc-board/arc-board.config.js"></script>
+<script src="./js/worldbuilding/planning/arc-board/arc-board.models.js"></script>
+<script src="./js/worldbuilding/planning/arc-board/arc-board.repository.js"></script>
+<script src="./js/worldbuilding/planning/arc-board/arc-board.viewmodel.js"></script>
+<script src="./js/worldbuilding/planning/arc-board/arc-board.services.js"></script>
+<script src="./js/worldbuilding/planning/arc-board/arc-board.views.js"></script>
+<script src="./js/worldbuilding/planning/arc-board/arc-board.handlers.js"></script>
+<script src="./js/worldbuilding/planning/arc-board/index.js"></script>
+<script src="./js/worldbuilding/planning/arc-board/arc-board.main.js"></script>
+<script src="./js/worldbuilding/planning/plotgrid/plot-grid.model.js"></script>
+<script src="./js/worldbuilding/planning/plotgrid/plot-grid.repository.js"></script>
+<script src="./js/worldbuilding/planning/plotgrid/plot-grid.viewmodel.js"></script>
+<script src="./js/worldbuilding/planning/plotgrid/plot-grid.import-export.js"></script>
+<script src="./js/worldbuilding/planning/plotgrid/plot-grid.view.js"></script>
+<script src="./js/features/revision/sceneNavigation/scene-navigation.model.js"></script>
+<script src="./js/features/revision/sceneNavigation/scene-navigation.repository.js"></script>
+<script src="./js/features/revision/sceneNavigation/scene-navigation.viewmodel.js"></script>
+<script src="./js/features/revision/sceneNavigation/scene-navigation.view.js"></script>
+<script src="./js/features/revision/sceneNavigation/scene-navigation.handlers.js"></script>
+<script src="./js/features/revision/sceneNavigation/scene-navigation.main.js"></script>
+<script src="./js/features/analysis/synonyms/synonyms.config.js"></script>
+<script src="./js/features/analysis/synonyms/synonyms.model.js"></script>
+<script src="./js/features/analysis/synonyms/synonyms.dictionary.js"></script>
+<script src="./js/features/analysis/synonyms/synonyms.service.js"></script>
+<script src="./js/features/analysis/synonyms/synonyms.repository.js"></script>
+<script src="./js/features/analysis/synonyms/synonyms.viewmodel.js"></script>
+<script src="./js/features/analysis/synonyms/synonyms.view.js"></script>
+<script src="./js/features/tools/import-chapter/import-chapter.model.js"></script>
+<script src="./js/features/tools/import-chapter/import-chapter.viewmodel.js"></script>
+<script src="./js/features/tools/import-chapter/import-chapter.view.js"></script>
+<script src="./js/features/analysis/word-repetition/word-repetition.model.js"></script>
+<script src="./js/features/analysis/word-repetition/word-repetition.repository.js"></script>
+<script src="./js/features/analysis/word-repetition/word-repetition.viewmodel.js"></script>
+<script src="./js/features/analysis/word-repetition/word-repetition.view.js"></script>
+<script src="./js/features/analysis/word-repetition/word-repetition.handlers.js"></script>
+<script src="./js/features/analysis/word-repetition/word-repetition.main.js"></script>
+<script src="./js/features/tools/product-tour/product-tour.model.js"></script>
+<script src="./js/features/tools/product-tour/product-tour.data.js"></script>
+<script src="./js/features/tools/product-tour/product-tour.repository.js"></script>
+<script src="./js/features/tools/product-tour/product-tour.viewmodel.js"></script>
+<script src="./js/features/tools/product-tour/product-tour.view.js"></script>
+<script src="./js/features/tools/product-tour/product-tour.editor.view.js"></script>
+<script src="./js/features/tools/product-tour/product-tour.editor.viewmodel.js"></script>
+<script src="./js/features/tools/product-tour/product-tour.handlers.js"></script>
+<script src="./js/features/tools/product-tour/product-tour.main.js"></script>
+<script src="./js/worldbuilding/planning/investigation-board/investigation-board.model.js"></script>
+<script src="./js/worldbuilding/planning/investigation-board/investigation-board.store.js"></script>
+<script src="./js/worldbuilding/planning/investigation-board/investigation-board.dashboard.js"></script>
+<script src="./js/worldbuilding/planning/investigation-board/investigation-board.registry.js"></script>
+<script src="./js/worldbuilding/planning/investigation-board/investigation-board.matrix.js"></script>
+<script src="./js/worldbuilding/planning/investigation-board/investigation-board.mmo.js"></script>
+<script src="./js/worldbuilding/planning/investigation-board/investigation-board.timeline.js"></script>
+<script src="./js/worldbuilding/planning/investigation-board/investigation-board.demo.js"></script>
+<script src="./js/worldbuilding/planning/investigation-board/investigation-board.sidebar.js"></script>
+<script src="./js/worldbuilding/planning/investigation-board/investigation-board.view.js"></script>
+<script src="./js/features/personal/globalnotes/globalnotes.model.js"></script>
+<script src="./js/features/personal/globalnotes/globalnotes.repository.js"></script>
+<script src="./js/features/personal/globalnotes/globalnotes.viewmodel.js"></script>
+<script src="./js/features/personal/globalnotes/globalnotes.view.js"></script>
+<script src="./js/features/personal/globalnotes/globalnotes.item.view.js"></script>
+<script src="./js/features/personal/globalnotes/globalnotes.handlers.js"></script>
+<script src="./js/features/personal/globalnotes/globalnotes.main.js"></script>
 
     </body>
 </html>

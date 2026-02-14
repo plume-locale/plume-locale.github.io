@@ -171,38 +171,31 @@
     /* Important for flex scrolling */
 }
 
-/* Mobile adjustments - Same rules as tablet for sidebar visibility */
+/* Mobile adjustments - Sidebar as overlay, tools-sidebar hidden */
 @media (max-width: 900px) {
     .sidebar-column {
         display: flex;
         flex-direction: column;
         flex-shrink: 0;
         margin-left: 0;
-        transition: margin-left 0.2s ease;
     }
 
-    /* Add left margin when tools-sidebar is visible */
+    /* No margin needed - tools-sidebar is hidden on mobile */
     body.has-tools-sidebar .sidebar-column {
-        margin-left: 50px;
+        margin-left: 0;
     }
 
     .sidebar {
         position: static !important;
         left: auto !important;
-        width: auto !important;
-        min-width: 250px !important;
+        width: 100% !important;
+        min-width: unset !important;
         max-width: none !important;
         height: auto !important;
         z-index: auto !important;
         transition: none !important;
         display: flex !important;
         flex-shrink: 0;
-    }
-
-    /* Hide mobile-only elements */
-    .mobile-menu-handle,
-    .sidebar-overlay {
-        display: none !important;
     }
 }
 

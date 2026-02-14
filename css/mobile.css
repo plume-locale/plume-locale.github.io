@@ -543,6 +543,177 @@
 }
 
 /* ========================================
+           MOBILE BOTTOM NAVIGATION BAR
+           ======================================== */
+
+.mobile-bottom-nav {
+    display: none;
+    /* Shown only at <900px via media query */
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 56px;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    background: var(--bg-secondary);
+    border-top: 1px solid var(--border-color);
+    z-index: 10000;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.08);
+}
+
+.mobile-bottom-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    flex: 1;
+    height: 100%;
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 0.6rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: color 0.2s ease;
+    padding: 4px 0;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    font-family: inherit;
+}
+
+.mobile-bottom-nav-item i {
+    width: 22px;
+    height: 22px;
+}
+
+.mobile-bottom-nav-item.active {
+    color: var(--accent-gold);
+}
+
+.mobile-bottom-nav-item:active {
+    color: var(--accent-gold);
+    transform: scale(0.92);
+}
+
+/* ========================================
+           MOBILE TOOLS BOTTOM SHEET
+           ======================================== */
+
+.mobile-tools-sheet {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10010;
+}
+
+.mobile-tools-sheet.active {
+    display: block;
+}
+
+.mobile-tools-sheet-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+    animation: mobileSheetFadeIn 0.2s ease;
+}
+
+.mobile-tools-sheet-content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--bg-primary);
+    border-radius: 16px 16px 0 0;
+    padding: 12px 16px calc(16px + env(safe-area-inset-bottom, 0px));
+    transform: translateY(100%);
+    animation: mobileSheetSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+@keyframes mobileSheetSlideUp {
+    to {
+        transform: translateY(0);
+    }
+}
+
+@keyframes mobileSheetFadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.mobile-tools-sheet-handle {
+    width: 36px;
+    height: 4px;
+    background: var(--border-color);
+    border-radius: 2px;
+    margin: 0 auto 12px;
+}
+
+.mobile-tools-sheet-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 16px;
+    text-align: center;
+}
+
+.mobile-tools-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+}
+
+.mobile-tool-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 12px 4px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    color: var(--text-primary);
+    font-size: 0.65rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    position: relative;
+    min-height: 64px;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    font-family: inherit;
+}
+
+.mobile-tool-item i {
+    width: 24px;
+    height: 24px;
+}
+
+.mobile-tool-item:active {
+    background: var(--accent-gold);
+    color: white;
+    border-color: var(--accent-gold);
+    transform: scale(0.95);
+}
+
+/* ========================================
            RESPONSIVE DESIGN - MOBILE & TABLET
            ======================================== */
 
@@ -970,17 +1141,71 @@ body.force-mobile-nav .split-mode-toggle span {
         display: none !important;
     }
 
-    /* Hide mobile navigation elements - sidebar always visible like tablet */
-    .mobile-nav-toggle-btn,
-    .mobile-nav-dropdown,
-    .mobile-menu-handle,
+    /* Mobile navigation - re-enabled for overlay mode */
+    .mobile-nav-toggle-btn {
+        display: none !important;
+        /* Replaced by bottom nav bar */
+    }
+
+    .mobile-nav-dropdown {
+        display: block;
+    }
+
+    .mobile-menu-handle {
+        display: none !important;
+        /* Replaced by bottom nav bar */
+    }
+
     .sidebar-overlay {
+        display: block;
+        /* Re-enabled for sidebar overlay mode */
+    }
+
+    /* Hide floating editor toggle - replaced by bottom nav "Format" button */
+    #floatingEditorToggle {
         display: none !important;
     }
 
-    /* Afficher le bouton ✏️ flottant en mobile */
-    #floatingEditorToggle {
+    /* Sidebar column - overlay mode (hidden by default, slides from left) */
+    .sidebar-column {
+        position: fixed !important;
+        top: 56px !important;
+        left: -100% !important;
+        width: 85vw !important;
+        max-width: 360px !important;
+        height: calc(100vh - 56px) !important;
+        z-index: 10002 !important;
+        transition: left 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        background: var(--bg-secondary) !important;
+        overflow-y: auto !important;
+        min-width: unset !important;
+        box-shadow: none !important;
+        padding-bottom: calc(56px + env(safe-area-inset-bottom, 0px));
+    }
+
+    .sidebar-column.mobile-visible {
+        left: 0 !important;
+        box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15) !important;
+    }
+
+    /* Hide tools-sidebar on mobile - replaced by bottom nav tools sheet */
+    .tools-sidebar {
+        display: none !important;
+    }
+
+    /* Show bottom navigation bar on mobile */
+    .mobile-bottom-nav {
         display: flex !important;
+    }
+
+    /* Adjust editor padding for bottom nav */
+    .editor-container {
+        padding-bottom: calc(56px + env(safe-area-inset-bottom, 0px)) !important;
+    }
+
+    /* Storage badge above bottom nav */
+    .storage-badge {
+        bottom: calc(56px + 15px + env(safe-area-inset-bottom, 0px)) !important;
     }
 
     /* Cacher stats sur mobile pour gagner de la place (optionnel, mais recommandé) */
@@ -992,8 +1217,8 @@ body.force-mobile-nav .split-mode-toggle span {
     .header-actions {
         gap: 0.35rem;
         margin-left: auto;
-        margin-right: 2.8rem !important;
-        /* Adjusted to avoid overlap with hamburger */
+        margin-right: 0.5rem !important;
+        /* No hamburger to avoid - using bottom nav */
     }
 
     .header-action-btn {
@@ -1072,13 +1297,12 @@ body.force-mobile-nav .split-mode-toggle span {
         top: 56px !important;
         right: 0 !important;
         bottom: 0 !important;
-        left: 50px !important;
-        /* Aside the tools bar */
-        width: auto !important;
-        z-index: 995 !important;
+        left: 0 !important;
+        width: 100% !important;
+        z-index: 10005 !important;
         background: var(--bg-primary) !important;
-        box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
-        border-left: 1px solid var(--border-color);
+        box-shadow: none;
+        border-left: none;
         display: flex;
         flex-direction: column;
     }
@@ -1091,17 +1315,18 @@ body.force-mobile-nav .split-mode-toggle span {
         display: none !important;
     }
 
-    /* Sidebar Structure - Optimisation mobile */
+    /* Sidebar Structure - Touch-friendly overlay mode */
     .status-filters {
-        padding: 0.3rem 0.5rem;
-        gap: 0.25rem;
+        padding: 0.4rem 0.75rem;
+        gap: 0.35rem;
         flex-wrap: wrap;
     }
 
     .status-filter-btn {
-        padding: 0.2rem 0.4rem;
-        font-size: 0.6rem;
-        gap: 0.15rem;
+        padding: 0.35rem 0.5rem;
+        font-size: 0.75rem;
+        gap: 0.25rem;
+        min-height: 36px;
     }
 
     .status-filter-btn span:not(.status-filter-dot):not(.status-filter-count) {
@@ -1110,13 +1335,13 @@ body.force-mobile-nav .split-mode-toggle span {
     }
 
     .status-filter-dot {
-        width: 6px;
-        height: 6px;
+        width: 8px;
+        height: 8px;
     }
 
     .status-filter-count {
-        font-size: 0.55rem;
-        padding: 0 0.2rem;
+        font-size: 0.7rem;
+        padding: 0 0.25rem;
     }
 
     .scene-tools {
@@ -1124,115 +1349,116 @@ body.force-mobile-nav .split-mode-toggle span {
     }
 
     .scene-tool-btn i {
-        width: 14px !important;
-        height: 14px !important;
+        width: 16px !important;
+        height: 16px !important;
     }
 
     .tree-collapse-toolbar {
-        padding: 0.2rem 0.5rem;
-        gap: 0.15rem;
+        padding: 0.35rem 0.75rem;
+        gap: 0.25rem;
     }
 
     .tree-collapse-btn {
-        padding: 0.15rem 0.35rem;
-        font-size: 0.6rem;
-        gap: 0.15rem;
+        padding: 0.3rem 0.5rem;
+        font-size: 0.75rem;
+        gap: 0.2rem;
+        min-height: 36px;
     }
 
-    /* Treeview ULTRA compact sur mobile */
+    /* Treeview - Touch-friendly in sidebar overlay (min 44px tap targets) */
     .act-group {
-        margin-bottom: 0.1rem;
+        margin-bottom: 0.25rem;
     }
 
     .act-header {
-        padding: 0.15rem 0.3rem;
-        font-size: 0.7rem;
-        gap: 0.15rem;
-        min-height: 24px;
+        padding: 0.5rem 0.75rem;
+        font-size: 0.9rem;
+        gap: 0.5rem;
+        min-height: 44px;
     }
 
     .act-icon {
-        width: 14px;
-        height: 14px;
+        width: 20px;
+        height: 20px;
         display: flex;
         align-items: center;
         justify-content: center;
     }
 
     .act-title {
-        font-size: 0.65rem;
+        font-size: 0.9rem;
     }
 
     .act-chapters {
-        padding-left: 0.15rem;
+        padding-left: 0.5rem;
     }
 
     .chapter-group {
-        margin-bottom: 0;
+        margin-bottom: 0.1rem;
     }
 
     .chapter-header {
-        padding: 0.1rem 0.3rem;
-        font-size: 0.65rem;
-        gap: 0.15rem;
-        min-height: 22px;
+        padding: 0.4rem 0.75rem;
+        font-size: 0.85rem;
+        gap: 0.5rem;
+        min-height: 40px;
     }
 
     .chapter-icon {
-        width: 12px;
-        height: 12px;
+        width: 18px;
+        height: 18px;
         display: flex;
         align-items: center;
         justify-content: center;
     }
 
     .chapter-title {
-        font-size: 0.65rem;
+        font-size: 0.85rem;
     }
 
     .scenes-list {
-        padding-left: 0.4rem;
+        padding-left: 0.75rem;
     }
 
     .scene-item {
-        padding: 0.08rem 0.3rem;
-        font-size: 0.65rem;
-        gap: 0.15rem;
-        min-height: 20px;
+        padding: 0.4rem 0.75rem;
+        font-size: 0.85rem;
+        gap: 0.4rem;
+        min-height: 44px;
     }
 
     .auto-number {
-        font-size: 0.5rem;
-        min-width: 20px;
-        margin-right: 0.1rem;
+        font-size: 0.7rem;
+        min-width: 24px;
+        margin-right: 0.25rem;
     }
 
     .word-count-badge {
-        font-size: 0.45rem;
-        padding: 0 0.15rem;
+        font-size: 0.65rem;
+        padding: 0.1rem 0.3rem;
     }
 
     .status-badge {
-        width: 6px;
-        height: 6px;
+        width: 8px;
+        height: 8px;
     }
 
     .drag-handle {
-        padding: 0 0.1rem;
+        padding: 0 0.25rem;
         display: flex;
         align-items: center;
         justify-content: center;
     }
 
     .drag-handle i {
-        width: 10px !important;
-        height: 10px !important;
+        width: 16px !important;
+        height: 16px !important;
     }
 
     .delete-btn {
-        width: 14px !important;
-        height: 14px !important;
-        font-size: 0.6rem !important;
+        width: 24px !important;
+        height: 24px !important;
+        font-size: 0.75rem !important;
         padding: 0 !important;
     }
 
@@ -1241,13 +1467,13 @@ body.force-mobile-nav .split-mode-toggle span {
     }
 
     .chapter-count {
-        font-size: 0.5rem;
+        font-size: 0.7rem;
     }
 
     /* Barre de progression mobile */
     .sidebar-progress-info {
-        padding: 0.25rem 0.5rem;
-        font-size: 0.6rem;
+        padding: 0.35rem 0.75rem;
+        font-size: 0.75rem;
     }
 
     /* Search bar mobile */
@@ -1288,10 +1514,11 @@ body.force-mobile-nav .split-mode-toggle span {
         gap: 0.25rem;
     }
 
-    /* Sidebar actions mobile compact */
+    /* Sidebar actions mobile - touch-friendly */
     .sidebar-actions .btn {
-        padding: 0.4rem 0.6rem;
-        font-size: 0.7rem;
+        padding: 0.5rem 0.75rem;
+        font-size: 0.8rem;
+        min-height: 44px;
     }
 
     /* Editor full width */
@@ -1485,6 +1712,12 @@ body.force-mobile-nav .split-mode-toggle span {
         flex-direction: row;
     }
 
+    /* Hide mobile-only elements on tablet */
+    .mobile-bottom-nav,
+    .mobile-tools-sheet {
+        display: none !important;
+    }
+
     .sidebar {
         position: static !important;
         left: auto !important;
@@ -1529,7 +1762,9 @@ body.force-mobile-nav .split-mode-toggle span {
     #floatingEditorToggle,
     #floatingEditorMenu,
     .mobile-menu-handle,
-    .sidebar-overlay {
+    .sidebar-overlay,
+    .mobile-bottom-nav,
+    .mobile-tools-sheet {
         display: none !important;
     }
 
@@ -1578,7 +1813,7 @@ body.force-mobile-nav .split-mode-toggle span {
 /* Styles additionnels pour mobile (900px) - storage badge */
 @media (max-width: 900px) {
     .storage-badge {
-        bottom: 15px;
+        bottom: calc(56px + 15px + env(safe-area-inset-bottom, 0px));
         right: 15px;
         padding: 10px 15px;
         font-size: 12px;
@@ -2012,6 +2247,12 @@ body.force-mobile-nav .split-mode-toggle span {
         height: calc(100vh - 52px);
     }
 
+    /* Sidebar column overlay ajustement petit mobile */
+    .sidebar-column {
+        top: 52px !important;
+        height: calc(100vh - 52px) !important;
+    }
+
     .app-container {
         grid-template-rows: 52px 1fr;
     }
@@ -2064,6 +2305,12 @@ body.force-mobile-nav .split-mode-toggle span {
         height: calc(100vh - 48px);
     }
 
+    /* Sidebar overlay ajustement paysage */
+    .sidebar-column {
+        top: 48px !important;
+        height: calc(100vh - 48px) !important;
+    }
+
     .app-container {
         grid-template-rows: 48px 1fr;
     }
@@ -2077,6 +2324,26 @@ body.force-mobile-nav .split-mode-toggle span {
         height: 48px;
         bottom: 12px;
         right: 12px;
+    }
+
+    /* Bottom nav plus compact en paysage */
+    .mobile-bottom-nav {
+        height: 44px;
+    }
+
+    .mobile-bottom-nav-item span {
+        display: none;
+        /* Icônes seules en paysage pour économiser l'espace vertical */
+    }
+
+    .mobile-bottom-nav-item i {
+        width: 20px;
+        height: 20px;
+    }
+
+    /* Ajuster padding editeur en paysage */
+    .editor-container {
+        padding-bottom: calc(44px + env(safe-area-inset-bottom, 0px)) !important;
     }
 }
 
