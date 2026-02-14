@@ -49,8 +49,8 @@ window.MobileSwipeViewModel = {
      * Gère un balayage de gauche à droite (ouverture potentielle).
      */
     handleLeftToRightSwipe: function () {
-        const sidebar = document.querySelector('.sidebar');
-        if (sidebar && !sidebar.classList.contains('mobile-open')) {
+        const sidebarColumn = document.getElementById('sidebarColumn');
+        if (sidebarColumn && !sidebarColumn.classList.contains('mobile-visible')) {
             this.toggleSidebar();
         }
     },
@@ -59,8 +59,8 @@ window.MobileSwipeViewModel = {
      * Gère un balayage de droite à gauche (fermeture potentielle).
      */
     handleRightToLeftSwipe: function () {
-        const sidebar = document.querySelector('.sidebar');
-        if (sidebar && sidebar.classList.contains('mobile-open')) {
+        const sidebarColumn = document.getElementById('sidebarColumn');
+        if (sidebarColumn && sidebarColumn.classList.contains('mobile-visible')) {
             this.toggleSidebar();
         }
     },

@@ -578,7 +578,7 @@ const ProjectViewModel = {
      * Lance l'analyse du texte.
      */
     runAnalysis() {
-        const scope = document.getElementById('analysisScope')?.value || 'current';
+        const scope = document.getElementById('analysisScope')?.value || 'all';
         const text = this.getTextForAnalysis(scope);
 
         if (!text || text.trim().length === 0) {

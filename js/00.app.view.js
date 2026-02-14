@@ -367,6 +367,7 @@ function syncSidebarWithView(view) {
         if (sceneTools) sceneTools.style.display = 'flex';
         if (toolsSidebar) {
             toolsSidebar.style.display = 'flex';
+            document.body.classList.add('has-tools-sidebar');
             if (typeof updateEditorToolsSidebar === 'function') updateEditorToolsSidebar();
         }
 
@@ -384,6 +385,7 @@ function syncSidebarWithView(view) {
         if (tensionMeter) tensionMeter.style.display = 'none';
         if (toolsSidebar) {
             toolsSidebar.style.display = 'flex';
+            document.body.classList.add('has-tools-sidebar');
             if (typeof updateGNToolsSidebar === 'function') updateGNToolsSidebar();
         }
     } else {
@@ -391,7 +393,10 @@ function syncSidebarWithView(view) {
         if (statusFilters) statusFilters.style.display = 'none';
         if (treeCollapseToolbar) treeCollapseToolbar.style.display = 'none';
         if (sceneTools) sceneTools.style.display = 'none';
-        if (toolsSidebar) toolsSidebar.style.display = 'none';
+        if (toolsSidebar) {
+            toolsSidebar.style.display = 'none';
+            document.body.classList.remove('has-tools-sidebar');
+        }
         if (tensionMeter) tensionMeter.style.display = 'none';
     }
 
@@ -2851,14 +2856,20 @@ function toggleSidebarCollapse() {
         col.classList.toggle('collapsed');
         const isCollapsed = col.classList.contains('collapsed');
 
-        // Force hide/show if CSS fails or for animation smoothness
+        // Force hide/show if CSS fails or for animation smoothness (Desktop only)
         const accordion = document.getElementById('sidebarAccordion');
         const sidebar = document.getElementById('sidebar');
 
-        if (isCollapsed) {
-            if (accordion) accordion.style.display = 'none';
-            if (sidebar) sidebar.style.display = 'none';
+        if (window.innerWidth > 900) {
+            if (isCollapsed) {
+                if (accordion) accordion.style.display = 'none';
+                if (sidebar) sidebar.style.display = 'none';
+            } else {
+                if (accordion) accordion.style.display = '';
+                if (sidebar) sidebar.style.display = '';
+            }
         } else {
+            // Sur mobile, on enlève le display: none forcé pour laisser le clipping CSS s'opérer
             if (accordion) accordion.style.display = '';
             if (sidebar) sidebar.style.display = '';
         }

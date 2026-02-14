@@ -906,10 +906,10 @@ body.force-mobile-nav .split-mode-toggle span {
 /* MOBILE (< 900px) */
 @media (max-width: 900px) {
 
-    /* Layout Mobile */
+    /* Layout Mobile - Same as tablet, sidebar always visible */
     .app-content {
-        flex-direction: column;
-        padding-left: 50px;
+        display: flex;
+        flex-direction: row;
     }
 
     /* Sidebar versions en overlay sur mobile */
@@ -970,23 +970,17 @@ body.force-mobile-nav .split-mode-toggle span {
         display: none !important;
     }
 
-    /* Afficher toggle navigation mobile */
-    .mobile-nav-toggle-btn {
-        display: flex;
+    /* Hide mobile navigation elements - sidebar always visible like tablet */
+    .mobile-nav-toggle-btn,
+    .mobile-nav-dropdown,
+    .mobile-menu-handle,
+    .sidebar-overlay {
+        display: none !important;
     }
 
     /* Afficher le bouton ✏️ flottant en mobile */
     #floatingEditorToggle {
         display: flex !important;
-    }
-
-    /* Afficher la poignée latérale sur mobile */
-    .mobile-menu-handle {
-        display: block;
-    }
-
-    .mobile-nav-dropdown {
-        display: block;
     }
 
     /* Cacher stats sur mobile pour gagner de la place (optionnel, mais recommandé) */
@@ -1034,8 +1028,10 @@ body.force-mobile-nav .split-mode-toggle span {
         flex-shrink: 0;
     }
 
-    /* Sidebar Mobile - en overlay */
-    /* Sidebar Mobile - en overlay */
+    /* Sidebar Mobile - DÉSACTIVÉ - Géré par .sidebar-column dans css/sidebar.css */
+    /* Le positionnement mobile est maintenant géré au niveau du conteneur .sidebar-column */
+    /* pour éviter les conflits de positionnement fixed entre parent et enfant */
+    /*
     .sidebar {
         position: fixed;
         top: 56px;
@@ -1053,8 +1049,8 @@ body.force-mobile-nav .split-mode-toggle span {
 
     .sidebar.mobile-open {
         left: 50px;
-        /* Leave space for tools sidebar */
     }
+    */
 
     /* Padding pour les listes de la sidebar sur mobile */
     .chapters-list,

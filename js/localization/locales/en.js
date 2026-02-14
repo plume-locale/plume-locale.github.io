@@ -142,6 +142,7 @@ const LOCALE_EN = {
     "sidebar.btn.add_scene": "+ Add scene",
     "sidebar.empty.no_chapters": "No chapters",
     "sidebar.no_scene": "No scene selected",
+    "sidebar.no_info": "This view does not use the sidebar",
     "sidebar.group.write": "Writing",
     "sidebar.group.analyze": "Analysis",
     "sidebar.group.construction": "Construction",

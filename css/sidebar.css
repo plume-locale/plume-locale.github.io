@@ -171,23 +171,38 @@
     /* Important for flex scrolling */
 }
 
-/* Mobile adjustments */
+/* Mobile adjustments - Same rules as tablet for sidebar visibility */
 @media (max-width: 900px) {
     .sidebar-column {
-        position: fixed;
-        left: 0;
-        top: 56px;
-        bottom: 0;
-        z-index: 1000;
-        transform: translateX(-100%);
-        transition: transform 0.3s ease;
-        width: 85%;
-        max-width: 320px;
-        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        flex-shrink: 0;
+        margin-left: 0;
+        transition: margin-left 0.2s ease;
     }
 
-    .sidebar-column.mobile-visible {
-        transform: translateX(0);
+    /* Add left margin when tools-sidebar is visible */
+    body.has-tools-sidebar .sidebar-column {
+        margin-left: 50px;
+    }
+
+    .sidebar {
+        position: static !important;
+        left: auto !important;
+        width: auto !important;
+        min-width: 250px !important;
+        max-width: none !important;
+        height: auto !important;
+        z-index: auto !important;
+        transition: none !important;
+        display: flex !important;
+        flex-shrink: 0;
+    }
+
+    /* Hide mobile-only elements */
+    .mobile-menu-handle,
+    .sidebar-overlay {
+        display: none !important;
     }
 }
 
@@ -311,7 +326,6 @@
 /* Mobile: show tools-sidebar on small screens */
 @media (max-width: 900px) {
     .tools-sidebar {
-        display: flex !important;
         position: fixed;
         left: 0;
         top: 56px;

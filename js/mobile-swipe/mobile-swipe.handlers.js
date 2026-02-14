@@ -11,7 +11,7 @@ window.MobileSwipeHandlers = {
     handleTouchStart: function (e) {
         if (e.changedTouches && e.changedTouches.length > 0) {
             const touch = e.changedTouches[0];
-            MobileSwipeViewModel.initiateTouch(touch.screenX, touch.screenY);
+            MobileSwipeViewModel.initiateTouch(touch.clientX, touch.clientY);
         }
     },
 
@@ -22,7 +22,7 @@ window.MobileSwipeHandlers = {
     handleTouchEnd: function (e) {
         if (e.changedTouches && e.changedTouches.length > 0) {
             const touch = e.changedTouches[0];
-            MobileSwipeViewModel.completeTouch(touch.screenX, touch.screenY);
+            MobileSwipeViewModel.completeTouch(touch.clientX, touch.clientY);
         }
     }
 };

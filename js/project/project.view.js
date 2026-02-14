@@ -430,7 +430,7 @@ const ProjectView = {
                         <option value="current">${Localization.t('project.view.analysis_scope_current')}</option>
                         <option value="chapter">${Localization.t('project.view.analysis_scope_chapter')}</option>
                         <option value="act">${Localization.t('project.view.analysis_scope_act')}</option>
-                        <option value="all">${Localization.t('project.view.analysis_scope_all')}</option>
+                        <option value="all" selected>${Localization.t('project.view.analysis_scope_all')}</option>
                     </select>
                 </div>
                 <div id="analysisResults"></div>

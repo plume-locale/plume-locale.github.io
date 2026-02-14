@@ -99,11 +99,35 @@ const ColorPaletteView = {
         if (!sidebar || !resizeHandle) return;
 
         let isResizing = false;
+        let hasMoved = false;
         let startX = 0;
         let startWidth = 0;
 
+        const handleDrag = (clientX) => {
+            if (!isResizing) return;
+
+            const diff = clientX - startX;
+            if (Math.abs(diff) > 5) hasMoved = true;
+
+            const newWidth = startWidth + diff;
+
+            // Déterminer la largeur maximale (800px sur desktop, plein écran sur mobile)
+            const maxWidth = window.innerWidth > 900 ? 800 : window.innerWidth;
+
+            if (newWidth >= 50 && newWidth <= maxWidth) {
+                sidebar.style.width = newWidth + 'px';
+                document.documentElement.style.setProperty('--sidebar-width', newWidth + 'px');
+
+                // Support legacy si le conteneur utilise encore un grid
+                if (appContainer && getComputedStyle(appContainer).display === 'grid') {
+                    appContainer.style.gridTemplateColumns = `${newWidth}px 1fr`;
+                }
+            }
+        };
+
         resizeHandle.addEventListener('mousedown', (e) => {
             isResizing = true;
+            hasMoved = false;
             startX = e.clientX;
             startWidth = sidebar.offsetWidth;
 
@@ -113,22 +137,27 @@ const ColorPaletteView = {
             e.preventDefault();
         });
 
+        // Ajout du support tactile (Mobile)
+        resizeHandle.addEventListener('touchstart', (e) => {
+            isResizing = true;
+            hasMoved = false;
+            startX = e.touches[0].clientX;
+            startWidth = sidebar.offsetWidth;
+
+            document.body.style.userSelect = 'none';
+        }, { passive: true });
+
         document.addEventListener('mousemove', (e) => {
-            if (!isResizing) return;
-
-            const diff = e.clientX - startX;
-            const newWidth = startWidth + diff;
-
-            if (newWidth >= 200 && newWidth <= 600) {
-                sidebar.style.width = newWidth + 'px';
-                // Legacy support for grid layout if still used
-                if (appContainer && getComputedStyle(appContainer).display === 'grid') {
-                    appContainer.style.gridTemplateColumns = `${newWidth}px 1fr`;
-                }
-            }
+            handleDrag(e.clientX);
         });
 
-        document.addEventListener('mouseup', () => {
+        document.addEventListener('touchmove', (e) => {
+            if (isResizing) {
+                handleDrag(e.touches[0].clientX);
+            }
+        }, { passive: true });
+
+        const stopResizing = () => {
             if (isResizing) {
                 isResizing = false;
                 document.body.style.cursor = '';
@@ -138,13 +167,18 @@ const ColorPaletteView = {
                     ColorPaletteViewModel.updateSidebarWidth(sidebar.offsetWidth);
                 }
             }
-        });
+        };
+
+        document.addEventListener('mouseup', stopResizing);
+        document.addEventListener('touchend', stopResizing);
 
         // Load saved width
         if (typeof ColorPaletteViewModel !== 'undefined') {
             const savedWidth = ColorPaletteViewModel.getSavedSidebarWidth();
-            if (savedWidth && savedWidth >= 200 && savedWidth <= 600) {
+            const maxWidth = window.innerWidth > 900 ? 800 : window.innerWidth;
+            if (savedWidth && savedWidth >= 50 && savedWidth <= maxWidth) {
                 sidebar.style.width = savedWidth + 'px';
+                document.documentElement.style.setProperty('--sidebar-width', savedWidth + 'px');
                 if (appContainer && getComputedStyle(appContainer).display === 'grid') {
                     appContainer.style.gridTemplateColumns = `${savedWidth}px 1fr`;
                 }

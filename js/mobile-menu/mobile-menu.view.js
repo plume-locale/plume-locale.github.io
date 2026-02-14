@@ -28,18 +28,15 @@ const MobileMenuView = {
      * Ouvre la sidebar (ajoute classes CSS).
      */
     openSidebar: function () {
-        const sidebar = document.querySelector('.sidebar');
+        const sidebarColumn = document.getElementById('sidebarColumn');
         const overlay = document.querySelector('.sidebar-overlay');
-        const handle = document.querySelector('.mobile-menu-handle');
 
-        if (sidebar) sidebar.classList.add('mobile-open');
+        if (sidebarColumn) sidebarColumn.classList.add('mobile-visible');
 
         if (overlay) {
             overlay.style.display = 'block';
             setTimeout(() => overlay.classList.add('active'), 10);
         }
-
-        if (handle) handle.classList.add('hidden');
 
         document.body.style.overflow = 'hidden';
     },
@@ -48,18 +45,15 @@ const MobileMenuView = {
      * Ferme la sidebar.
      */
     closeSidebar: function () {
-        const sidebar = document.querySelector('.sidebar');
+        const sidebarColumn = document.getElementById('sidebarColumn');
         const overlay = document.querySelector('.sidebar-overlay');
-        const handle = document.querySelector('.mobile-menu-handle');
 
-        if (sidebar) sidebar.classList.remove('mobile-open');
+        if (sidebarColumn) sidebarColumn.classList.remove('mobile-visible');
 
         if (overlay) {
             overlay.classList.remove('active');
             setTimeout(() => overlay.style.display = 'none', 300);
         }
-
-        if (handle) handle.classList.remove('hidden');
 
         document.body.style.overflow = '';
     },
@@ -100,12 +94,12 @@ const MobileMenuView = {
 
     /**
      * Masque ou affiche la sidebar (visibility) lors de l'ouverture du dropdown nav.
-     * @param {boolean} isVisible 
+     * @param {boolean} isVisible
      */
     updateSidebarVisibility: function (isVisible) {
-        const sidebar = document.querySelector('.sidebar');
-        if (sidebar) {
-            sidebar.style.visibility = isVisible ? '' : 'hidden';
+        const sidebarColumn = document.querySelector('.sidebar-column');
+        if (sidebarColumn) {
+            sidebarColumn.style.visibility = isVisible ? '' : 'hidden';
         }
     },
 
@@ -202,11 +196,11 @@ const MobileMenuView = {
      * Assure un état propre lors du repassage en mode desktop.
      */
     ensureDesktopState: function () {
-        const sidebar = document.querySelector('.sidebar');
+        const sidebarColumn = document.getElementById('sidebarColumn');
         const overlay = document.querySelector('.sidebar-overlay');
         const menuBtn = document.querySelector('.mobile-menu-toggle');
 
-        if (sidebar) sidebar.classList.remove('mobile-open');
+        if (sidebarColumn) sidebarColumn.classList.remove('mobile-visible');
         if (overlay) {
             overlay.classList.remove('active');
             overlay.style.display = 'none';
