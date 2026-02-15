@@ -98,15 +98,24 @@ function openTimelineDetail(id) {
     const event = project.timeline.find(e => e.id === id);
     if (!event) return;
 
-    // When tabs are active, delegate to tab system
-    if (typeof tabsState !== 'undefined' && tabsState.panes.left.tabs.length > 0 && typeof renderTabs === 'function') {
-        if (!document.getElementById('editorView-backup')) {
+    // 🔥 Protection contre l'écrasement du système d'onglets (Tabs)
+    const isTabsSystem = typeof tabsState !== 'undefined' && tabsState.enabled;
+    const isSplitRendering = document.getElementById('editorView-backup') !== null;
+    const editorView = document.getElementById('editorView');
+
+    if (isTabsSystem && !isSplitRendering) {
+        // Pour les détails de chronologie, on n'a pas forcément d'onglet dédié
+        // Mais on ne doit SURTOUT PAS écraser #editorView.
+        // On laisse le système d'onglet gérer si on est déjà dans un processus de rendu d'onglet.
+        if (typeof renderTabs === 'function') {
             renderTabs();
+            // Note: En mode onglets, le détail d'un événement devrait idéalement ouvrir un nouvel onglet
+            // ou s'afficher dans un volet latéral/modal. Pour l'instant on évite juste le crash.
             return;
         }
     }
 
-    const editorView = document.getElementById('editorView');
+    if (!editorView) return;
     editorView.innerHTML = `
                 <div class="detail-view">
                     <div class="detail-header">

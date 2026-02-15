@@ -67,6 +67,7 @@ const NAVIGATION_GROUPS = [
         title: 'sidebar.group.analyze',
         items: [
             { id: 'plot', icon: 'trending-up', label: 'nav.plot' },
+            { id: 'plotgrid', icon: 'grid-3x3', label: 'nav.plotgrid' },
             { id: 'analysis', icon: 'scan-search', label: 'nav.analysis' },
             { id: 'stats', icon: 'bar-chart-3', label: 'nav.stats' }
         ]
@@ -360,11 +361,11 @@ function syncSidebarWithView(view) {
     const toolsSidebar = document.getElementById('toolsSidebar');
     let tensionMeter = document.getElementById('liveTensionMeter');
 
-    if (view === 'editor') {
-        if (progressBar) progressBar.style.display = 'block';
-        if (statusFilters) statusFilters.style.display = 'flex';
-        if (treeCollapseToolbar) treeCollapseToolbar.style.display = 'flex';
-        if (sceneTools) sceneTools.style.display = 'flex';
+    if (view === 'editor' || view === 'plotgrid') {
+        if (progressBar) progressBar.style.display = (view === 'editor') ? 'block' : 'none';
+        if (statusFilters) statusFilters.style.display = (view === 'editor') ? 'flex' : 'none';
+        if (treeCollapseToolbar) treeCollapseToolbar.style.display = (view === 'editor') ? 'flex' : 'none';
+        if (sceneTools) sceneTools.style.display = (view === 'editor') ? 'flex' : 'none';
         if (toolsSidebar) {
             toolsSidebar.style.display = 'flex';
             document.body.classList.add('has-tools-sidebar');
@@ -426,6 +427,11 @@ function updateSidebarActions(view) {
                 <button class="btn btn-primary" onclick="openAddActModal()">${Localization.t('btn.add_act')}</button>
                 <button class="btn btn-primary" onclick="openAddChapterModal()">${Localization.t('btn.add_chapter')}</button>
                 <button class="btn btn-primary" onclick="openAddSceneModalQuick()">${Localization.t('btn.add_scene')}</button>
+            `;
+            break;
+        case 'plotgrid':
+            html = `
+                <button class="btn btn-primary" onclick="PlotGridUI.addColumn()">+ ${Localization.t('plotgrid.header.add_column') || 'Ligne'}</button>
             `;
             break;
         case 'characters':
@@ -551,7 +557,7 @@ function updateEditorToolsSidebar() {
         </button>
         <button class="tool-btn" onclick="PlotGridUI.toggleSidebar()" id="toolPlotBtn" 
             title="${Localization.t('tools.plot') || 'Plot Grid'}">
-            <i data-lucide="layout-grid"></i>
+            <i data-lucide="grid-3x3"></i>
             <span class="tool-badge" id="toolPlotBadge" style="display: none">0</span>
         </button>
         <button class="tool-btn" onclick="InvestigationSidebarUI.toggleSidebar()" id="toolInvestigationBtn"
@@ -707,12 +713,17 @@ function renderViewContent(view, containerId) {
         case 'corkboard': if (typeof openCorkBoardView === 'function') openCorkBoardView(); break;
         case 'mindmap': if (typeof renderMindmapView === 'function') renderMindmapView(); break;
         case 'plot': if (typeof renderPlotView === 'function') renderPlotView(); break;
+        case 'plotgrid': if (typeof renderPlotGridView === 'function') renderPlotGridView(); break;
         case 'relations': if (typeof renderRelationsView === 'function') renderRelationsView(); break;
         case 'map': if (typeof renderMapView === 'function') renderMapView(); break;
         case 'timelineviz': if (typeof renderTimelineVizView === 'function') renderTimelineVizView(); break;
         case 'arcs':
-            if (typeof renderArcsList === 'function') renderArcsList();
-            if (typeof renderArcsWelcome === 'function') renderArcsWelcome();
+            if (typeof ArcBoardViewModel !== 'undefined' && typeof ArcBoardViewModel.render === 'function') {
+                ArcBoardViewModel.render();
+            } else {
+                if (typeof renderArcsList === 'function') renderArcsList();
+                if (typeof renderArcsWelcome === 'function') renderArcsWelcome();
+            }
             break;
         case 'timeline': if (typeof renderTimelineList === 'function') renderTimelineList(); break;
         case 'storygrid': if (typeof renderStoryGrid === 'function') renderStoryGrid(); break;

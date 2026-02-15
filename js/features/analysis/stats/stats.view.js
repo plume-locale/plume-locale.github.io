@@ -35,17 +35,25 @@ const StatsView = {
      * Rendu de la vue complète des statistiques.
      */
     renderStatsPage() {
-        // When tabs are active, delegate rendering to the tab system
-        // (unless we're already inside a tab render cycle, detected by editorView-backup)
-        if (typeof tabsState !== 'undefined' && tabsState.panes.left.tabs.length > 0 && typeof renderTabs === 'function') {
-            if (!document.getElementById('editorView-backup')) {
+        const editorView = document.getElementById('editorView');
+        if (!editorView) return;
+
+        // 🔥 Protection contre l'écrasement du système d'onglets (Tabs)
+        const isTabsSystem = typeof tabsState !== 'undefined' && tabsState.enabled;
+        const isMainEditorView = editorView.id === 'editorView';
+        const isSplitRendering = document.getElementById('editorView-backup') !== null;
+
+        if (isTabsSystem && isMainEditorView && !isSplitRendering) {
+            if (typeof currentView !== 'undefined' && currentView !== 'stats') {
+                if (typeof switchView === 'function') {
+                    switchView('stats');
+                    return;
+                }
+            } else if (typeof renderTabs === 'function') {
                 renderTabs();
                 return;
             }
         }
-
-        const editorView = document.getElementById('editorView');
-        if (!editorView) return;
 
         const { totalWords } = StatsViewModel.getProjectStats();
         const { words: todayWords, goal: dailyGoal, progress: dailyProgress } = StatsViewModel.getTodayStats();

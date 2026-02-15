@@ -21,6 +21,23 @@ const ProjectView = {
         const container = document.getElementById('editorView');
         if (!container) return;
 
+        // 🔥 Protection contre l'écrasement du système d'onglets (Tabs)
+        const isTabsSystem = typeof tabsState !== 'undefined' && tabsState.enabled;
+        const isMainEditorView = container.id === 'editorView';
+        const isSplitRendering = document.getElementById('editorView-backup') !== null;
+
+        if (isTabsSystem && isMainEditorView && !isSplitRendering) {
+            if (typeof currentView !== 'undefined' && currentView !== 'projects') {
+                if (typeof switchView === 'function') {
+                    switchView('projects');
+                    return;
+                }
+            } else if (typeof renderTabs === 'function') {
+                renderTabs();
+                return;
+            }
+        }
+
         const viewMode = ProjectViewModel.viewMode;
 
         container.innerHTML = `
@@ -118,8 +135,8 @@ const ProjectView = {
                         <div class="progress-bar-fill" style="width: ${progress}%"></div>
                     </div>
                     <div class="progress-info">
-                        <span>${progress}%</span>
-                        <span style="opacity: 0.7; font-size: 0.75rem;">${totalWords.toLocaleString()} / ${goal.toLocaleString()} ${Localization.t('project.view.words_short')}</span>
+                        <span class="progress-percentage">${progress}%</span>
+                        <span class="progress-words">${totalWords.toLocaleString()} / ${goal.toLocaleString()} ${Localization.t('project.view.words_short')}</span>
                     </div>
                 </div>
 
@@ -418,6 +435,23 @@ const ProjectView = {
     renderAnalysis() {
         const editorView = document.getElementById('editorView');
         if (!editorView) return;
+
+        // 🔥 Protection contre l'écrasement du système d'onglets (Tabs)
+        const isTabsSystem = typeof tabsState !== 'undefined' && tabsState.enabled;
+        const isMainEditorView = editorView.id === 'editorView';
+        const isSplitRendering = document.getElementById('editorView-backup') !== null;
+
+        if (isTabsSystem && isMainEditorView && !isSplitRendering) {
+            if (typeof currentView !== 'undefined' && currentView !== 'analysis') {
+                if (typeof switchView === 'function') {
+                    switchView('analysis');
+                    return;
+                }
+            } else if (typeof renderTabs === 'function') {
+                renderTabs();
+                return;
+            }
+        }
 
         editorView.innerHTML = `
             <div style="height: 100%; overflow-y: auto; padding: 2rem 3rem;">

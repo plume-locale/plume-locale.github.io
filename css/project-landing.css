@@ -277,10 +277,22 @@
 
 .progress-info {
     display: flex;
-    justify-content: flex-end;
-    font-size: 0.7rem;
+    justify-content: space-between;
+    align-items: center;
     color: var(--text-muted);
     font-weight: 600;
+    margin-top: 8px;
+    gap: 12px;
+}
+
+.progress-percentage {
+    font-size: 0.85rem;
+    color: var(--accent-gold);
+}
+
+.progress-words {
+    font-size: 0.75rem;
+    opacity: 0.8;
 }
 
 /* Table View */

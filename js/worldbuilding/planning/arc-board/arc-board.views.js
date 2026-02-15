@@ -1641,27 +1641,16 @@ const ArcBoardView = {
     },
 
     _getElementPosition(element, side) {
-        let x, y, w, h;
+        const content = document.getElementById('arcBoardContent');
+        if (!content) return { x: 0, y: 0 };
 
-        // Pour les éléments avec position absolue (colonnes, notes flottantes)
-        if (element.style.left && element.style.top) {
-            x = parseInt(element.style.left) || 0;
-            y = parseInt(element.style.top) || 0;
-            w = element.offsetWidth;
-            h = element.offsetHeight;
-        } else {
-            // Pour les cartes (dans le flux du DOM), utiliser getBoundingClientRect
-            const content = document.getElementById('arcBoardContent');
-            if (!content) return { x: 0, y: 0 };
+        const contentRect = content.getBoundingClientRect();
+        const rect = element.getBoundingClientRect();
 
-            const contentRect = content.getBoundingClientRect();
-            const rect = element.getBoundingClientRect();
-
-            x = (rect.left - contentRect.left) / ArcBoardState.zoom;
-            y = (rect.top - contentRect.top) / ArcBoardState.zoom;
-            w = rect.width / ArcBoardState.zoom;
-            h = rect.height / ArcBoardState.zoom;
-        }
+        const x = (rect.left - contentRect.left) / ArcBoardState.zoom;
+        const y = (rect.top - contentRect.top) / ArcBoardState.zoom;
+        const w = rect.width / ArcBoardState.zoom;
+        const h = rect.height / ArcBoardState.zoom;
 
         switch (side) {
             case 'top': return { x: x + w / 2, y: y };
@@ -1755,7 +1744,7 @@ const ArcBoardView = {
         g.appendChild(line1);
         g.appendChild(line2);
 
-        g.onclick = (e) => {
+        g.addEventListener('click', (e) => {
             e.stopPropagation();
             if (isInterArc) {
                 InterArcConnectionRepository.delete(connectionId);
@@ -1764,7 +1753,7 @@ const ArcBoardView = {
                 ConnectionRepository.delete(arcId, connectionId);
                 ArcBoardViewModel.renderItems();
             }
-        };
+        });
 
         return g;
     },

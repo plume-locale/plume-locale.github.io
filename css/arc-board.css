@@ -388,6 +388,7 @@
     cursor: pointer;
     opacity: 0;
     transition: opacity 0.2s ease;
+    pointer-events: all;
 }
 
 .arc-connection-line:hover+.arc-connection-delete-handle,
@@ -3135,7 +3136,11 @@
 }
 
 .arc-column.arc-column-compare .arc-column-header {
-    cursor: pointer;
+    cursor: grab;
+}
+
+.arc-column.arc-column-compare .arc-column-header:active {
+    cursor: grabbing;
 }
 
 .arc-column.arc-column-compare:hover {

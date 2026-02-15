@@ -94,7 +94,26 @@ const InvestigationView = {
 
         if (!container) return;
 
-        const currentView = InvestigationStore.state.currentView;
+        // 🔥 Protection contre l'écrasement du système d'onglets (Tabs)
+        // Si on essaie de rendre dans #editorView alors que les onglets sont actifs
+        // on redirige vers le système de rendu des onglets.
+        const isTabsSystem = typeof tabsState !== 'undefined' && tabsState.enabled;
+        const isMainEditorView = container.id === 'editorView';
+        const isSplitRendering = document.getElementById('editorView-backup') !== null;
+
+        if (isTabsSystem && isMainEditorView && !isSplitRendering) {
+            if (typeof currentView !== 'undefined' && currentView !== 'investigation') {
+                if (typeof switchView === 'function') {
+                    switchView('investigation');
+                    return;
+                }
+            } else if (typeof renderTabs === 'function') {
+                renderTabs();
+                return;
+            }
+        }
+
+        const currentViewMode = InvestigationStore.state.currentView;
         const activeCase = InvestigationStore.getActiveCase();
         const cases = InvestigationStore.getCases();
         const hasCases = cases.length > 0;
@@ -122,40 +141,40 @@ const InvestigationView = {
 
                 <div class="investigation-toolbar">
                     <div class="investigation-nav">
-                        <button class="investigation-nav-btn ${currentView === 'dashboard' ? 'active' : ''}" 
+                        <button class="investigation-nav-btn ${currentViewMode === 'dashboard' ? 'active' : ''}" 
                                 onclick="InvestigationStore.setCurrentView('dashboard')">
                             <i data-lucide="layout-dashboard"></i> ${Localization.t('investigation.tab.dashboard')}
                         </button>
                         ${hasCases ? `
-                        <button class="investigation-nav-btn ${currentView === 'registry' ? 'active' : ''}" 
+                        <button class="investigation-nav-btn ${currentViewMode === 'registry' ? 'active' : ''}" 
                                 onclick="InvestigationStore.setCurrentView('registry')">
                             <i data-lucide="files"></i> ${Localization.t('investigation.tab.registry')}
                             <span class="help-trigger" onclick="event.stopPropagation(); InvestigationView.showHelp('registry')">
                                 <i data-lucide="help-circle"></i>
                             </span>
                         </button>
-                        <button class="investigation-nav-btn ${currentView === 'matrix' ? 'active' : ''}" 
+                        <button class="investigation-nav-btn ${currentViewMode === 'matrix' ? 'active' : ''}" 
                                 onclick="InvestigationStore.setCurrentView('matrix')">
                             <i data-lucide="grid-3x3"></i> ${Localization.t('investigation.tab.matrix')}
                             <span class="help-trigger" onclick="event.stopPropagation(); InvestigationView.showHelp('matrix')">
                                 <i data-lucide="help-circle"></i>
                             </span>
                         </button>
-                        <button class="investigation-nav-btn ${currentView === 'mmo' ? 'active' : ''}" 
+                        <button class="investigation-nav-btn ${currentViewMode === 'mmo' ? 'active' : ''}" 
                                 onclick="InvestigationStore.setCurrentView('mmo')">
                             <i data-lucide="network"></i> ${Localization.t('investigation.tab.mmo')}
                             <span class="help-trigger" onclick="event.stopPropagation(); InvestigationView.showHelp('mmo')">
                                 <i data-lucide="help-circle"></i>
                             </span>
                         </button>
-                        <button class="investigation-nav-btn ${currentView === 'timeline' ? 'active' : ''}" 
+                        <button class="investigation-nav-btn ${currentViewMode === 'timeline' ? 'active' : ''}" 
                                 onclick="InvestigationStore.setCurrentView('timeline')">
                             <i data-lucide="clock-3"></i> ${Localization.t('investigation.tab.timeline')}
                         </button>
                         ` : ''}
                     </div>
                     <div class="investigation-actions">
-                        ${this.renderToolbarActions(currentView)}
+                        ${this.renderToolbarActions(currentViewMode)}
                     </div>
                 </div>
 
@@ -166,7 +185,7 @@ const InvestigationView = {
         `;
 
 
-        this.renderActiveView(currentView);
+        this.renderActiveView(currentViewMode);
         this.updateHeader();
 
         // Initialiser les icônes
@@ -423,16 +442,16 @@ const InvestigationView = {
 // Use the local object as the global one
 window.InvestigationView = InvestigationView;
 
-window.renderInvestigationBoard = function () {
+window.renderInvestigationBoard = function (container = null) {
     console.log('🕵️ renderInvestigationBoard called');
-    const container = document.getElementById('editorView');
-    if (container) {
-        console.log('✅ Container #editorView found. Initializing Investigation View...');
+    const target = container || document.getElementById('editorView');
+    if (target) {
+        console.log('✅ Container found. Initializing Investigation View...');
         // Load saved data from project before rendering
         InvestigationStore.init();
-        InvestigationView.render(container);
+        InvestigationView.render(target);
     } else {
-        console.error('❌ Error: Container #editorView not found in DOM.');
+        console.error('❌ Error: Container not found in DOM.');
         alert(Localization.t('investigation.error.editor_not_found'));
     }
 };

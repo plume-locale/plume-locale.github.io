@@ -132,6 +132,25 @@ const ArcBoardViewModel = {
     render() {
         ArcBoardView.renderSidebar();
 
+        // Intégration avec le système d'onglets (Tabs) et Split View
+        // On évite d'écraser #editorView directement si le système d'onglets est actif 
+        // ET qu'on n'est pas déjà dans un processus de rendu de panneau (split/tab).
+        const isTabsSystem = typeof tabsState !== 'undefined' && tabsState.enabled;
+        const isSplitRendering = document.getElementById('editorView-backup') !== null;
+
+        if (isTabsSystem && !isSplitRendering) {
+            // Si on demande un rendu mais qu'on n'est pas dans le flux des onglets
+            if (typeof currentView !== 'undefined' && currentView !== 'arcs') {
+                if (typeof switchView === 'function') {
+                    switchView('arcs');
+                    return;
+                }
+            } else if (typeof renderTabs === 'function') {
+                renderTabs();
+                return;
+            }
+        }
+
         const arc = this.getCurrentArc();
         if (arc) {
             ArcBoardView.renderCanvas(arc);

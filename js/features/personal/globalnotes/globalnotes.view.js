@@ -12,6 +12,23 @@ const GlobalNotesView = {
         this.container = container || document.getElementById('editorView');
         if (!this.container) return;
 
+        // 🔥 Protection contre l'écrasement du système d'onglets (Tabs)
+        const isTabsSystem = typeof tabsState !== 'undefined' && tabsState.enabled;
+        const isMainEditorView = this.container.id === 'editorView';
+        const isSplitRendering = document.getElementById('editorView-backup') !== null;
+
+        if (isTabsSystem && isMainEditorView && !isSplitRendering) {
+            if (typeof currentView !== 'undefined' && currentView !== 'globalnotes') {
+                if (typeof switchView === 'function') {
+                    switchView('globalnotes');
+                    return;
+                }
+            } else if (typeof renderTabs === 'function') {
+                renderTabs();
+                return;
+            }
+        }
+
         let activeBoard = GlobalNotesViewModel.getActiveBoard();
         if (!activeBoard) {
             GlobalNotesViewModel.init();

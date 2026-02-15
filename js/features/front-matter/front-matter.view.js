@@ -96,11 +96,15 @@ class FrontMatterView {
     openItem(id) {
         this.currentId = id;
 
-        // Quand le système d'onglets est actif, déléguer le rendu aux onglets
-        // (sauf si on est déjà dans un cycle de rendu d'onglet, détecté par editorView-backup)
-        if (typeof tabsState !== 'undefined' && tabsState.panes.left.tabs.length > 0 && typeof renderTabs === 'function') {
-            if (!document.getElementById('editorView-backup')) {
-                this.renderSidebar();
+        // 🔥 Protection contre l'écrasement du système d'onglets (Tabs)
+        const isTabsSystem = typeof tabsState !== 'undefined' && tabsState.enabled;
+        const editorView = document.getElementById(this.editorContainerId);
+        const isMainEditorView = editorView && editorView.id === 'editorView';
+        const isSplitRendering = document.getElementById('editorView-backup') !== null;
+
+        if (isTabsSystem && isMainEditorView && !isSplitRendering) {
+            this.renderSidebar();
+            if (typeof renderTabs === 'function') {
                 renderTabs();
                 return;
             }

@@ -263,19 +263,60 @@ const DragDropService = {
                 const canBeCard = CreatableItemTypes[itemType]?.canBeCard;
 
                 if (canBeCard) {
-                    // Pour la toolbar, utiliser l'arcId cible ou l'arc courant
                     const card = CardRepository.create(arcId, targetColumnId, itemType);
                     ArcBoardViewModel.renderItems();
                 }
             } else if (this._state.type === DragTypes.CARD) {
                 // Déplacer une carte entre colonnes
-                if (this._state.sourceColumnId !== targetColumnId) {
-                    CardRepository.move(
-                        arcId,
-                        this._state.sourceColumnId,
-                        targetColumnId,
-                        this._state.itemId
-                    );
+                if (this._state.sourceColumnId !== targetColumnId || (this._state.arcId && targetArcId && this._state.arcId !== targetArcId)) {
+                    // Cas spécial : déplacement entre différents arcs (Mode Compare)
+                    if (this._state.arcId && targetArcId && this._state.arcId !== targetArcId) {
+                        const sourceArc = ArcRepository.getById(this._state.arcId);
+                        const targetArc = ArcRepository.getById(targetArcId);
+                        const sourceColumn = BoardItemRepository.getById(this._state.arcId, this._state.sourceColumnId);
+                        const targetColumn = BoardItemRepository.getById(targetArcId, targetColumnId);
+
+                        if (sourceColumn && targetColumn && sourceColumn.cards) {
+                            const cardIndex = sourceColumn.cards.findIndex(c => c.id === this._state.itemId);
+                            if (cardIndex !== -1) {
+                                const [card] = sourceColumn.cards.splice(cardIndex, 1);
+                                if (!targetColumn.cards) targetColumn.cards = [];
+                                targetColumn.cards.push(card);
+
+                                // Si c'est une carte de scène, on met à jour le lien dans les deux arcs
+                                if (card.type === 'scene' && card.sceneId) {
+                                    // Retirer de l'arc source (optionnel selon le comportement voulu, mais cohérent pour un 'move')
+                                    if (sourceArc.scenePresence) {
+                                        sourceArc.scenePresence = sourceArc.scenePresence.filter(p => p.sceneId != card.sceneId);
+                                    }
+
+                                    // Ajouter/Mettre à jour dans l'arc cible
+                                    if (targetArc && targetArc.scenePresence) {
+                                        let presence = targetArc.scenePresence.find(p => p.sceneId == card.sceneId);
+                                        if (!presence) {
+                                            presence = {
+                                                sceneId: card.sceneId,
+                                                intensity: card.intensity || 3,
+                                                status: card.status || 'setup',
+                                                notes: card.notes || ''
+                                            };
+                                            targetArc.scenePresence.push(presence);
+                                        }
+                                        presence.columnId = targetColumnId;
+                                    }
+                                }
+                                saveProject();
+                            }
+                        }
+                    } else {
+                        // Déplacement normal dans le même arc
+                        CardRepository.move(
+                            arcId,
+                            this._state.sourceColumnId,
+                            targetColumnId,
+                            this._state.itemId
+                        );
+                    }
                 }
             } else if (this._state.type === DragTypes.FLOATING) {
                 // Convertir un item flottant en carte
@@ -659,6 +700,22 @@ const PanService = {
             startY: event.clientY - ArcBoardState.panY
         };
         document.getElementById('arcBoardCanvas')?.classList.add('panning');
+
+        // Listeners globaux pour le pan
+        this._onMouseMoveBound = this._onMouseMove.bind(this);
+        this._onMouseUpBound = this._onMouseUp.bind(this);
+        document.addEventListener('mousemove', this._onMouseMoveBound);
+        document.addEventListener('mouseup', this._onMouseUpBound);
+        document.body.style.userSelect = 'none';
+        document.body.style.cursor = 'grabbing';
+    },
+
+    _onMouseMove(event) {
+        this.move(event);
+    },
+
+    _onMouseUp(event) {
+        this.end();
     },
 
     move(event) {
@@ -670,8 +727,15 @@ const PanService = {
     },
 
     end() {
+        if (!this._state.active) return;
+
         this._state.active = false;
         document.getElementById('arcBoardCanvas')?.classList.remove('panning');
+
+        document.removeEventListener('mousemove', this._onMouseMoveBound);
+        document.removeEventListener('mouseup', this._onMouseUpBound);
+        document.body.style.userSelect = '';
+        document.body.style.cursor = '';
     },
 
     isActive() {
@@ -705,6 +769,22 @@ const ResizeService = {
             startX: event.clientX,
             startWidth: parseInt(el.style.width) || ArcBoardConfig.column.defaultWidth
         };
+
+        // Listeners globaux
+        this._onMouseMoveBound = this._onMouseMove.bind(this);
+        this._onMouseUpBound = this._onMouseUp.bind(this);
+        document.addEventListener('mousemove', this._onMouseMoveBound);
+        document.addEventListener('mouseup', this._onMouseUpBound);
+        document.body.style.cursor = 'ew-resize';
+        document.body.style.userSelect = 'none';
+    },
+
+    _onMouseMove(event) {
+        this.move(event);
+    },
+
+    _onMouseUp(event) {
+        this.end();
     },
 
     move(event) {
@@ -726,7 +806,6 @@ const ResizeService = {
 
         const el = document.getElementById(`item-${this._state.columnId}`);
         if (el) {
-            // Utiliser l'arcId stocké ou l'arc courant
             const targetArcId = this._state.arcId || ArcBoardState.currentArcId;
             if (targetArcId) {
                 BoardItemRepository.update(targetArcId, this._state.columnId, {
@@ -734,6 +813,11 @@ const ResizeService = {
                 });
             }
         }
+
+        document.removeEventListener('mousemove', this._onMouseMoveBound);
+        document.removeEventListener('mouseup', this._onMouseUpBound);
+        document.body.style.cursor = '';
+        document.body.style.userSelect = '';
 
         this._state = { active: false, columnId: null, arcId: null, startX: 0, startWidth: 0 };
     },
@@ -783,14 +867,14 @@ const CompareResizeService = {
     /**
      * Handler de mouvement (bound)
      */
-    _onMouseMove: function(event) {
+    _onMouseMove: function (event) {
         CompareResizeService.move(event);
     },
 
     /**
      * Handler de fin (bound)
      */
-    _onMouseUp: function(event) {
+    _onMouseUp: function (event) {
         CompareResizeService.end(event);
     },
 
@@ -887,6 +971,7 @@ const ItemMoveService = {
     },
 
     start(event, itemId, arcId = null) {
+        event.stopPropagation();
         const el = document.getElementById(`item-${itemId}`);
         if (!el) return;
 
@@ -901,6 +986,21 @@ const ItemMoveService = {
         };
 
         el.classList.add('dragging');
+
+        // Listeners globaux pour le mouvement
+        this._onMouseMoveBound = this._onMouseMove.bind(this);
+        this._onMouseUpBound = this._onMouseUp.bind(this);
+        document.addEventListener('mousemove', this._onMouseMoveBound);
+        document.addEventListener('mouseup', this._onMouseUpBound);
+        document.body.style.userSelect = 'none';
+    },
+
+    _onMouseMove(event) {
+        this.move(event);
+    },
+
+    _onMouseUp(event) {
+        this.end();
     },
 
     move(event) {
@@ -943,7 +1043,6 @@ const ItemMoveService = {
         if (el) {
             el.classList.remove('dragging');
 
-            // Utiliser l'arcId stocké ou l'arc courant
             const targetArcId = this._state.arcId || ArcBoardState.currentArcId;
             if (targetArcId) {
                 BoardItemRepository.updatePosition(
@@ -954,6 +1053,10 @@ const ItemMoveService = {
                 );
             }
         }
+
+        document.removeEventListener('mousemove', this._onMouseMoveBound);
+        document.removeEventListener('mouseup', this._onMouseUpBound);
+        document.body.style.userSelect = '';
 
         this._state = { active: false, itemId: null, arcId: null, startX: 0, startY: 0, itemStartX: 0, itemStartY: 0 };
     },

@@ -83,16 +83,25 @@ const TodoView = {
      * @param {Array} todos - Liste des TODOs formatés
      */
     renderFullList: (todos) => {
-        // When tabs are active, delegate to tab system
-        if (typeof tabsState !== 'undefined' && tabsState.panes.left.tabs.length > 0 && typeof renderTabs === 'function') {
-            if (!document.getElementById('editorView-backup')) {
+        const editorView = document.getElementById('editorView');
+        if (!editorView) return;
+
+        // 🔥 Protection contre l'écrasement du système d'onglets (Tabs)
+        const isTabsSystem = typeof tabsState !== 'undefined' && tabsState.enabled;
+        const isMainEditorView = editorView.id === 'editorView';
+        const isSplitRendering = document.getElementById('editorView-backup') !== null;
+
+        if (isTabsSystem && isMainEditorView && !isSplitRendering) {
+            if (typeof currentView !== 'undefined' && currentView !== 'todos') {
+                if (typeof switchView === 'function') {
+                    switchView('todos');
+                    return;
+                }
+            } else if (typeof renderTabs === 'function') {
                 renderTabs();
                 return;
             }
         }
-
-        const editorView = document.getElementById('editorView');
-        if (!editorView) return;
 
         // Trier: non terminés d'abord
         const sortedTodos = [...todos].sort((a, b) => {

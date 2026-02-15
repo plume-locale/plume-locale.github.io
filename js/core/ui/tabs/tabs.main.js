@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
 function viewSupportsTabs(view) {
     const supportedViews = [
         'projects', 'editor', 'corkboard', 'characters', 'world', 'notes', 'codex',
-        'stats', 'analysis', 'plot', 'mindmap', 'relations', 'arcs', 'versions',
+        'stats', 'analysis', 'plot', 'plotgrid', 'mindmap', 'relations', 'arcs', 'versions',
         'map', 'timelineviz', 'investigation', 'globalnotes', 'front_matter'
     ];
     return supportedViews.includes(view);

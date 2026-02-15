@@ -14,6 +14,23 @@ class RelationMapView {
         const editorView = document.getElementById('editorView');
         if (!editorView) return;
 
+        // 🔥 Protection contre l'écrasement du système d'onglets (Tabs)
+        const isTabsSystem = typeof tabsState !== 'undefined' && tabsState.enabled;
+        const isMainEditorView = editorView.id === 'editorView';
+        const isSplitRendering = document.getElementById('editorView-backup') !== null;
+
+        if (isTabsSystem && isMainEditorView && !isSplitRendering) {
+            if (typeof currentView !== 'undefined' && currentView !== 'relations') {
+                if (typeof switchView === 'function') {
+                    switchView('relations');
+                    return;
+                }
+            } else if (typeof renderTabs === 'function') {
+                renderTabs();
+                return;
+            }
+        }
+
         const characters = this.viewModel.getCharacters();
         const relations = this.viewModel.getRelations();
         const relationTypes = this.viewModel.getRelationTypes();

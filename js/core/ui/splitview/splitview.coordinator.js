@@ -185,7 +185,7 @@ function renderViewInSplitPanel(view, container, state, panel) {
                 const entry = project.codex?.find(c => c.id == state.codexId);
                 if (entry) {
                     const codexCatIcon = typeof getCodexCategoryIcon === 'function' ? getCodexCategoryIcon(entry.category) : 'book';
-                    const codexCategories = typeof getCodexCategories === 'function' ? getCodexCategories() : ['Culture','Histoire','Technologie','Géographie','Politique','Magie/Pouvoir','Religion','Société','Autre'];
+                    const codexCategories = typeof getCodexCategories === 'function' ? getCodexCategories() : ['Culture', 'Histoire', 'Technologie', 'Géographie', 'Politique', 'Magie/Pouvoir', 'Religion', 'Société', 'Autre'];
                     const codexCatOptions = codexCategories.map(cat =>
                         `<option value="${cat}" ${entry.category === cat ? 'selected' : ''}>${Localization.t('codex.category.' + cat)}</option>`
                     ).join('');
@@ -245,6 +245,12 @@ function renderViewInSplitPanel(view, container, state, panel) {
             }
             break;
 
+        case 'plotgrid':
+            if (typeof renderPlotGridView === 'function') {
+                renderPlotGridView();
+            }
+            break;
+
         case 'relations':
             if (typeof renderRelationsView === 'function') {
                 renderRelationsView();
@@ -284,8 +290,8 @@ function renderViewInSplitPanel(view, container, state, panel) {
 
                             <div class="metro-legend" style="margin-top: 1rem;">
                                 ${project.characters.map(char => {
-                                    const color = typeof MetroTimelineRepository !== 'undefined' ? MetroTimelineRepository.getCharacterColor(char.id) : '#999';
-                                    return `
+                        const color = typeof MetroTimelineRepository !== 'undefined' ? MetroTimelineRepository.getCharacterColor(char.id) : '#999';
+                        return `
                                     <div class="metro-legend-item" onclick="typeof openMetroColorPicker === 'function' ? openMetroColorPicker(${char.id}) : null" style="cursor: pointer;" title="${Localization.t('split.metro_legend_hint')}">
                                         <div class="metro-legend-line" style="background: ${color};"></div>
                                         <span>${char.name}</span>
@@ -338,8 +344,12 @@ function renderViewInSplitPanel(view, container, state, panel) {
             break;
 
         case 'arcs':
-            if (typeof renderArcsList === 'function') renderArcsList();
-            if (typeof renderArcsWelcome === 'function') renderArcsWelcome();
+            if (typeof ArcBoardViewModel !== 'undefined' && typeof ArcBoardViewModel.render === 'function') {
+                ArcBoardViewModel.render();
+            } else {
+                if (typeof renderArcsList === 'function') renderArcsList();
+                if (typeof renderArcsWelcome === 'function') renderArcsWelcome();
+            }
             break;
 
         case 'investigation':

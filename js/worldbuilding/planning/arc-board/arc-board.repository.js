@@ -658,7 +658,8 @@ const InterArcConnectionService = {
             if (text) text.textContent = 'Cliquez sur l\'élément cible (dans un autre arc)';
 
             // Highlight la source
-            const sourceEl = document.querySelector(`[data-arc-id="${arcId}"] [data-item-id="${itemId}"]`);
+            const sourceEl = document.querySelector(`[data-arc-id="${arcId}"] [data-item-id="${itemId}"]`)
+                || document.querySelector(`[data-arc-id="${arcId}"] [data-card-id="${itemId}"]`);
             if (sourceEl) sourceEl.classList.add('connection-source');
 
             return true;

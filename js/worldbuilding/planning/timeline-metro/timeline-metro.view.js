@@ -80,10 +80,27 @@ class MetroTimelineView {
      * Rend la vue principale.
      */
     static renderTimelineVizView() {
-        this.renderTimelineVizList();
-
         const editorView = document.getElementById('editorView');
         if (!editorView) return;
+
+        // 🔥 Protection contre l'écrasement du système d'onglets (Tabs)
+        const isTabsSystem = typeof tabsState !== 'undefined' && tabsState.enabled;
+        const isMainEditorView = editorView.id === 'editorView';
+        const isSplitRendering = document.getElementById('editorView-backup') !== null;
+
+        if (isTabsSystem && isMainEditorView && !isSplitRendering) {
+            if (typeof currentView !== 'undefined' && currentView !== 'metro') {
+                if (typeof switchView === 'function') {
+                    switchView('metro');
+                    return;
+                }
+            } else if (typeof renderTabs === 'function') {
+                renderTabs();
+                return;
+            }
+        }
+
+        this.renderTimelineVizList();
 
         const characters = project.characters || [];
         if (characters.length === 0) {

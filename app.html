@@ -1296,6 +1296,10 @@
                     <span class="mobile-nav-item-icon"><i data-lucide="trending-up"></i></span>
                     <span data-i18n="nav.plot">Intrigue</span>
                 </button>
+                <button class="mobile-nav-item" onclick="switchViewMobile('plotgrid')" data-view="plotgrid">
+                    <span class="mobile-nav-item-icon"><i data-lucide="grid-3x3"></i></span>
+                    <span data-i18n="nav.plotgrid">Grille d'Intrigue</span>
+                </button>
                 <button class="mobile-nav-item" onclick="switchViewMobile('analysis')" data-view="analysis">
                     <span class="mobile-nav-item-icon"><i data-lucide="scan-search"></i></span>
                     <span data-i18n="nav.analysis">Analyse</span>
@@ -1635,9 +1639,10 @@
                             <span data-i18n="tool.arcs">Arcs</span>
                         </button>
                         <button class="scene-tool-btn" onclick="PlotGridUI.toggleSidebar()" id="sidebarPlotBtn"
-                            title="Afficher/masquer l'Intrigue" data-i18n-title="tool.plot_title">
-                            <i data-lucide="trending-up"></i>
-                            <span data-i18n="tool.plot">Intrigue</span>
+                            title="Afficher/masquer la Grille d'Intrigue"
+                            data-i18n-title="tour.projects.tab_plotgrid.title">
+                            <i data-lucide="grid-3x3"></i>
+                            <span data-i18n="nav.plotgrid">Grille d'Intrigue</span>
                         </button>
                         <button class="scene-tool-btn" onclick="InvestigationSidebarUI.toggleSidebar()"
                             id="sidebarInvestigationBtn" title="Afficher/masquer l'Enquête"
@@ -1766,9 +1771,9 @@
                     <i data-lucide="git-commit-horizontal"></i>
                     <span class="tool-badge" id="toolArcsBadge" style="display: none">0</span>
                 </button>
-                <button class="tool-btn" onclick="PlotGridUI.toggleSidebar()" id="toolPlotBtn" title="Plot Grid"
-                    data-i18n-title="tools.plot">
-                    <i data-lucide="layout-grid"></i>
+                <button class="tool-btn" onclick="PlotGridUI.toggleSidebar()" id="toolPlotBtn" title="Grille d'Intrigue"
+                    data-i18n-title="nav.plotgrid">
+                    <i data-lucide="grid-3x3"></i>
                     <span class="tool-badge" id="toolPlotBadge" style="display: none">0</span>
                 </button>
                 <button class="tool-btn" onclick="InvestigationSidebarUI.toggleSidebar()" id="toolInvestigationBtn"
@@ -1824,9 +1829,9 @@
             <div class="sidebar-plot hidden" id="sidebarPlot">
                 <div class="sidebar-plot-header">
                     <div class="sidebar-plot-title">
-                        <h3 data-i18n="tool.plot"><i data-lucide="layout-grid"
-                                style="width: 16px; height: 16px; vertical-align: middle; margin-right: 6px"></i>Plot
-                            Grid</h3>
+                        <h3 data-i18n="nav.plotgrid"><i data-lucide="grid-3x3"
+                                style="width: 16px; height: 16px; vertical-align: middle; margin-right: 6px"></i>Grille
+                            d'Intrigue</h3>
                         <button class="sidebar-plot-toggle" onclick="PlotGridUI.toggleSidebar()" title="Masquer"
                             data-i18n-title="btn.hide">
                             <i data-lucide="x" style="width: 14px; height: 14px"></i>

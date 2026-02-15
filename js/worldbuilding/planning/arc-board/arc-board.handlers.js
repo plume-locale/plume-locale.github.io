@@ -30,31 +30,9 @@ const ArcBoardEventHandlers = {
     },
 
     onCanvasMouseMove(event) {
-        if (PanService.isActive()) {
-            PanService.move(event);
-        }
-
-        if (ItemMoveService.isActive()) {
-            ItemMoveService.move(event);
-        }
-
-        if (ResizeService.isActive()) {
-            ResizeService.move(event);
-        }
     },
 
     onCanvasMouseUp(event) {
-        if (PanService.isActive()) {
-            PanService.end();
-        }
-
-        if (ItemMoveService.isActive()) {
-            ItemMoveService.end();
-        }
-
-        if (ResizeService.isActive()) {
-            ResizeService.end();
-        }
     },
 
     onCanvasWheel(event) {

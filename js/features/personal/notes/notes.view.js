@@ -84,6 +84,23 @@ class NotesView {
         const editorView = document.getElementById('editorView');
         if (!editorView) return;
 
+        // 🔥 Protection contre l'écrasement du système d'onglets (Tabs)
+        const isTabsSystem = typeof tabsState !== 'undefined' && tabsState.enabled;
+        const isMainEditorView = editorView.id === 'editorView';
+        const isSplitRendering = document.getElementById('editorView-backup') !== null;
+
+        if (isTabsSystem && isMainEditorView && !isSplitRendering) {
+            if (typeof currentView !== 'undefined' && currentView !== 'notes') {
+                if (typeof switchView === 'function') {
+                    switchView('notes', note.id);
+                    return;
+                }
+            } else if (typeof renderTabs === 'function') {
+                renderTabs();
+                return;
+            }
+        }
+
         const catIcon = NotesModel.CATEGORIES[note.category] || 'file-text';
         const tagsHtml = (note.tags || []).length > 0
             ? (note.tags || []).map(t => `<span style="display:inline-block; padding:0.2rem 0.6rem; background:var(--bg-tertiary); border:1px solid var(--border-color); border-radius:12px; font-size:0.8rem; color:var(--text-secondary);">${t.trim()}</span>`).join(' ')
