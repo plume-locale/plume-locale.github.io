@@ -33,7 +33,7 @@ class MindmapModel {
     }
 
     get mindmaps() {
-        return project.mindmaps;
+        return project.mindmaps || [];
     }
 
     set mindmaps(value) {

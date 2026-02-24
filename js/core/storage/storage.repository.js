@@ -175,7 +175,16 @@ class StorageRepository {
                 return null;
             }
 
-            const projectData = await this.db.get(StorageModel.STORES.PROJECTS, projectId);
+            let projectData = await this.db.get(StorageModel.STORES.PROJECTS, projectId);
+
+            // Fallback pour les IDs numériques stockés en tant que Number mais cherchés en tant que String
+            if (!projectData && projectId !== null && projectId !== undefined) {
+                const numId = Number(projectId);
+                if (!isNaN(numId) && String(numId) === String(projectId)) {
+                    projectData = await this.db.get(StorageModel.STORES.PROJECTS, numId);
+                }
+            }
+
             if (projectData) {
                 console.log('📖 Projet chargé depuis IndexedDB:', projectData.title);
                 return projectData;
@@ -220,6 +229,13 @@ class StorageRepository {
                 return false;
             }
             await this.db.delete(StorageModel.STORES.PROJECTS, projectId);
+
+            // Tenter aussi la suppression avec Number si c'est possible (cas où l'ID était un Number dans IndexedDB)
+            const numId = Number(projectId);
+            if (!isNaN(numId) && String(numId) === String(projectId)) {
+                await this.db.delete(StorageModel.STORES.PROJECTS, numId);
+            }
+
             console.log('🗑️ Projet supprimé:', projectId);
             return true;
         } catch (error) {

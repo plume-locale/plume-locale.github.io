@@ -22,6 +22,14 @@ function loadSplitViewState() {
             if (data.state && data.state.persistOnReload) {
                 splitViewState = { ...splitViewState, ...data.state };
                 splitActivePanel = data.activePanel || 'left';
+
+                // Si le système d'onglets est présent, on n'active JAMAIS l'ancien mode split
+                if (typeof tabsState !== 'undefined') {
+                    splitViewActive = false;
+                    localStorage.removeItem('plume_splitViewState'); // Nettoyage définitif
+                    return;
+                }
+
                 if (data.active) {
                     splitViewActive = true;
                     setTimeout(() => {

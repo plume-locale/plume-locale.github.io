@@ -1164,59 +1164,10 @@
 }
 
 /* --- MODALS & FORMS (RESTORATION) --- */
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.4);
-    z-index: 2000;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-
-.modal-content,
-.modal-container {
-    background: var(--bg-primary);
-    width: 600px;
-    max-width: 95vw;
-    border-radius: 16px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-    overflow: hidden;
-    max-height: 90vh;
-    display: flex;
-    flex-direction: column;
-}
+/* Base modal classes are now managed globally in /css/modals.css */
 
 .modal-container.large-modal {
     width: 800px;
-}
-
-
-.modal-header {
-    padding: 20px 24px;
-    background: var(--bg-secondary);
-    border-bottom: 1px solid var(--border-color);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.modal-body {
-    padding: 24px;
-    overflow-y: auto;
-}
-
-.modal-footer {
-    padding: 20px 24px;
-    background: var(--bg-secondary);
-    border-top: 1px solid var(--border-color);
-    display: flex;
-    justify-content: flex-end;
-    gap: 12px;
 }
 
 .form-group {

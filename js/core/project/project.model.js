@@ -22,6 +22,7 @@ const ProjectModel = {
             timeline: [],
             notes: [],
             codex: [],
+            mindmaps: [],
             stats: { dailyGoal: 500, totalGoal: 80000, writingSessions: [] },
             versions: [],
             relationships: [],
@@ -56,6 +57,7 @@ const ProjectModel = {
         project.versions = project.versions || [];
         project.relationships = project.relationships || [];
         project.acts = project.acts || [];
+        project.mindmaps = project.mindmaps || [];
         project.investigationBoard = project.investigationBoard || {
             cases: [],
             activeCaseId: null,

@@ -118,6 +118,11 @@ function addChapterViewModel(title, targetActId) {
 
     try {
         const chapter = createChapter(trimmedTitle);
+
+        // Option 1: Implicit Scene creation
+        const scene = createScene(trimmedTitle); // First scene takes chapter title
+        chapter.scenes.push(scene);
+
         const repoActions = [];
         if (autoCreatedAct) repoActions.push({ action: 'ADD', collection: 'acts', data: autoCreatedAct });
         repoActions.push({ action: 'ADD', collection: 'chapters', actId: actId, data: chapter });
@@ -130,12 +135,61 @@ function addChapterViewModel(title, targetActId) {
                 repository: repoActions,
                 shouldExpandAct: actId,
                 shouldExpandChapter: chapter.id,
-                shouldSave: true
+                shouldSave: true,
+                shouldOpenScene: { actId, chapterId: chapter.id, sceneId: scene.id }
             }
         };
     } catch (error) {
         return { success: false, error: 'CREATION_FAILED', message: error.message };
     }
+}
+
+/**
+ * Coordination pour ajouter plusieurs chapitres en masse.
+ */
+function batchAddChaptersViewModel(baseTitle, count, targetActId) {
+    if (!baseTitle || count <= 0) return { success: false, message: 'Paramètres invalides' };
+
+    let actId = targetActId;
+    let autoCreatedAct = null;
+
+    // Fallback si pas d'acte cible
+    if (!actId) {
+        const acts = ActRepository.getAll();
+        if (acts.length === 0) {
+            autoCreatedAct = createAct('Roman');
+            actId = autoCreatedAct.id;
+        } else {
+            actId = acts[0].id;
+        }
+    }
+
+    const repoActions = [];
+    if (autoCreatedAct) repoActions.push({ action: 'ADD', collection: 'acts', data: autoCreatedAct });
+
+    const createdChapters = [];
+    for (let i = 1; i <= count; i++) {
+        const title = `${baseTitle} ${i}`;
+        const chapter = createChapter(title);
+        const scene = createScene(title);
+        chapter.scenes.push(scene);
+
+        repoActions.push({ action: 'ADD', collection: 'chapters', actId: actId, data: chapter });
+        createdChapters.push(chapter);
+    }
+
+    return {
+        success: true,
+        data: { actId, chapters: createdChapters },
+        message: `${count} chapitres créés`,
+        sideEffects: {
+            repository: repoActions,
+            shouldExpandAct: actId,
+            shouldSave: true,
+            // We don't necessarily want to open the last scene of 45 chapters automatically
+            shouldOpenScene: count === 1 ? { actId, chapterId: createdChapters[0].id, sceneId: createdChapters[0].scenes[0].id } : null
+        }
+    };
 }
 
 /**

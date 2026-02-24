@@ -71,6 +71,10 @@ const ThemeManagerViewModel = {
         const savedTheme = ThemeManagerRepository.getCurrentTheme();
         if (savedTheme) {
             ThemeManagerViewModel.applyTheme(savedTheme);
+        } else {
+            // Premier chargement: appliquer le thème par défaut (Plume)
+            // Cela permet de s'assurer que toutes les variables (y compris -rgb) sont bien initialisées
+            ThemeManagerViewModel.applyTheme(ThemeManagerModel.defaultVariables);
         }
     },
 

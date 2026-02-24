@@ -41,42 +41,49 @@ const TensionModel = {
         const foundWords = { high: [], medium: [], low: [] };
         let lexicalScore = 0;
 
-        // 1. ANALYSE LEXICALE
-        if (tensionWords.high) {
-            tensionWords.high.forEach(word => {
-                if (!word) return;
-                const regex = new RegExp(`\\b${word}\\b`, 'gi');
-                const matches = cleanText.match(regex);
-                if (matches) {
-                    lexicalScore += matches.length * 8;
-                    foundWords.high.push(word);
-                }
-            });
-        }
+        // 1. ANALYSE LEXICALE (Avec racines flexibles pour conjugaisons et dérivés)
+        const processList = (list, weight, cat) => {
+            if (!list) return;
+            list.forEach(word => {
+                if (!word || word.trim() === '') return;
 
-        if (tensionWords.medium) {
-            tensionWords.medium.forEach(word => {
-                if (!word) return;
-                const regex = new RegExp(`\\b${word}\\b`, 'gi');
-                const matches = cleanText.match(regex);
-                if (matches) {
-                    lexicalScore += matches.length * 4;
-                    foundWords.medium.push(word);
-                }
-            });
-        }
+                let pattern;
+                const cleanWord = word.trim().toLowerCase();
 
-        if (tensionWords.low) {
-            tensionWords.low.forEach(word => {
-                if (!word) return;
-                const regex = new RegExp(`\\b${word}\\b`, 'gi');
+                // Si l'utilisateur force un joker (ex: hurl*)
+                if (cleanWord.endsWith('*')) {
+                    pattern = `\\b${cleanWord.slice(0, -1)}`;
+                }
+                // Extraction de racine pour les infinitifs fréquents (er, ir, re)
+                else if (cleanWord.length >= 5 && (cleanWord.endsWith('er') || cleanWord.endsWith('ir') || cleanWord.endsWith('re'))) {
+                    const root = cleanWord.slice(0, -2);
+                    if (root.length >= 3) {
+                        pattern = `\\b${root}`; // Match tout ce qui commence par la racine
+                    } else {
+                        pattern = `\\b${cleanWord}\\b`; // Exigence stricte si racine trop courte
+                    }
+                }
+                // Pour les mots de 4+ lettres, on autorise le début de mot (ex: "sang" match "sanglant")
+                else if (cleanWord.length >= 4) {
+                    pattern = `\\b${cleanWord}`;
+                }
+                // Pour les mots très courts (3 lettres ou moins), correspondance exacte uniquement
+                else {
+                    pattern = `\\b${cleanWord}\\b`;
+                }
+
+                const regex = new RegExp(pattern, 'gi');
                 const matches = cleanText.match(regex);
                 if (matches) {
-                    lexicalScore -= matches.length * 5;
-                    foundWords.low.push(word);
+                    lexicalScore += matches.length * weight;
+                    foundWords[cat].push(word);
                 }
             });
-        }
+        };
+
+        processList(tensionWords.high, 8, 'high');
+        processList(tensionWords.medium, 4, 'medium');
+        processList(tensionWords.low, -5, 'low');
 
         // 2. ANALYSE PONCTUATION
         const exclamations = (cleanText.match(/!/g) || []).length;

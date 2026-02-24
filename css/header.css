@@ -91,10 +91,10 @@
     border: none;
     color: var(--text-secondary);
     cursor: pointer;
-    font-family: 'Crimson Pro', serif;
+    font-family: var(--font-ui);
     font-size: 0.7rem;
-    border-radius: 8px;
-    transition: all 0.2s ease;
+    border-radius: var(--radius-sm);
+    transition: background var(--transition-base), color var(--transition-base);
     white-space: nowrap;
     flex-shrink: 0;
     min-width: 36px;
@@ -397,17 +397,18 @@
     height: 36px;
     background: transparent;
     border: 1px solid var(--border-color);
-    color: var(--text-primary);
+    color: var(--text-secondary);
     cursor: pointer;
     font-size: 1.1rem;
-    border-radius: 4px;
-    transition: all 0.2s ease;
+    border-radius: var(--radius-sm);
+    transition: background var(--transition-base), color var(--transition-base), border-color var(--transition-base);
 }
 
+/* Hover et Active UNIFIÉS sur primary-color pour cohérence */
 .header-action-btn:hover:not(:disabled) {
-    background: var(--accent-gold);
-    color: white;
-    border-color: var(--accent-gold);
+    background: rgba(var(--primary-color-rgb), 0.10);
+    color: var(--primary-color);
+    border-color: rgba(var(--primary-color-rgb), 0.30);
 }
 
 .header-action-btn.active {
@@ -433,15 +434,15 @@
     right: 0;
     margin-top: 0.75rem;
     min-width: 160px;
-    background: rgba(var(--bg-primary-rgb), 0.95);
+    background: rgba(var(--bg-primary-rgb), 0.97);
     backdrop-filter: blur(12px);
     border: 1px solid var(--border-color);
-    border-radius: 12px;
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
     opacity: 0;
     visibility: hidden;
-    transform: translateY(10px);
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateY(8px);
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
     z-index: 9001;
     padding: 0.5rem;
     pointer-events: auto;
@@ -453,10 +454,11 @@
     transform: translateY(0);
 }
 
+/* Quand le menu langue est ouvert : même style que .active */
 .lang-dropdown.open .header-action-btn {
-    background: var(--accent-gold);
+    background: var(--primary-color);
     color: white;
-    border-color: var(--accent-gold);
+    border-color: var(--primary-color);
 }
 
 /* Ensure no parent clips the menu */
@@ -572,15 +574,15 @@
 
 .edit-bar-content {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    flex-direction: column;
+    align-items: stretch;
     gap: 0.75rem;
 }
 
 .edit-bar-left {
     display: flex;
     flex-direction: column;
-    gap: 0.1rem;
+    gap: 0.25rem;
     min-width: 0;
 }
 
@@ -590,9 +592,9 @@
     gap: 0.35rem;
     font-weight: 700;
     color: var(--accent-gold);
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     text-transform: uppercase;
-    letter-spacing: 0.3px;
+    letter-spacing: 0.5px;
 }
 
 .edit-bar-hint {
@@ -604,13 +606,15 @@
 
 .edit-bar-actions {
     display: flex;
-    gap: 0.35rem;
+    flex-direction: column;
+    gap: 0.5rem;
     flex-shrink: 0;
 }
 
 .edit-bar-actions .btn-sm {
-    font-size: 0.7rem;
-    padding: 0.25rem 0.5rem;
+    font-size: 0.8rem;
+    padding: 0.4rem 0.5rem;
+    width: 100%;
 }
 
 @keyframes editBarSlideIn {
@@ -623,7 +627,7 @@
 
     to {
         opacity: 1;
-        max-height: 80px;
+        max-height: 350px;
         padding-top: 0.5rem;
         padding-bottom: 0.5rem;
     }
@@ -632,15 +636,6 @@
 .interface-edit-mode .app-header {
     outline: 2px solid var(--accent-gold);
     outline-offset: -2px;
-}
-
-.interface-edit-mode .sidebar-customize-btn {
-    display: none;
-}
-
-.interface-edit-mode .sidebar-shortcuts {
-    border-bottom: 2px dashed var(--accent-gold);
-    background: rgba(var(--accent-gold-rgb, 212, 175, 55), 0.05);
 }
 
 .interface-edit-mode .mobile-nav-dropdown {
@@ -669,15 +664,15 @@
     right: 0;
     margin-top: 0.75rem;
     min-width: 200px;
-    background: rgba(var(--bg-primary-rgb), 0.95);
+    background: rgba(var(--bg-primary-rgb), 0.97);
     backdrop-filter: blur(12px);
     border: 1px solid var(--border-color);
-    border-radius: 12px;
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
     opacity: 0;
     visibility: hidden;
-    transform: translateY(10px);
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateY(8px);
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
     z-index: 9001;
     padding: 0.5rem;
     pointer-events: auto;
@@ -689,10 +684,11 @@
     transform: translateY(0);
 }
 
+/* Quand le menu extra est ouvert : même style que .active */
 .extra-menu-dropdown.open .header-action-btn {
-    background: var(--accent-gold);
+    background: var(--primary-color);
     color: white;
-    border-color: var(--accent-gold);
+    border-color: var(--primary-color);
 }
 
 /* Decorative arrow for extra menu */

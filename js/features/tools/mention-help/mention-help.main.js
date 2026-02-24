@@ -19,8 +19,21 @@ const MentionHelp = {
         if (MentionHelpViewModel.state.active) {
             MentionHelpViewModel.updateSuggestions();
         }
+    },
+
+    /**
+     * Affiche un guide rapide de découverte des mentions.
+     */
+    showGuide() {
+        const btn = document.getElementById('toolMentionsBtn');
+        if (btn && typeof MentionHelpView !== 'undefined') {
+            MentionHelpView.renderGuide(btn);
+        } else if (typeof showNotification === 'function') {
+            const title = Localization.t('mention.guide.title');
+            const content = Localization.t('mention.guide.content');
+            showNotification(`<b>${title}</b><br>${content}`, 'info', 10000);
+        }
     }
 };
 
-// Pas d'auto-init ici si les Handlers s'en occupent déjà,
-// mais on l'ajoute au JS_ORDER pour être prêt.
+// Plus d'auto-init ici, c'est géré par 04.init.js pour respecter l'ordre de chargement.

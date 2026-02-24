@@ -77,8 +77,6 @@ const TensionHandlers = {
         if (typeof showNotification === 'function') {
             showNotification(Localization.t('tension.notification.saved'), 'success');
         }
-        // Déclencher une mise à jour immédiate si possible
-        // Note: updateLiveTensionMeter est appelé par l'éditeur principal (via des événements globaux ou timers)
     },
 
     /**
@@ -159,3 +157,6 @@ const TensionHandlers = {
         }
     }
 };
+
+// Exposition globale
+window.TensionHandlers = TensionHandlers;

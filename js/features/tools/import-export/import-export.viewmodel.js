@@ -9,8 +9,100 @@ const ImportExportViewModel = {
     // --- Backup & Restore (JSON) ---
 
     showBackupMenu: function () {
-        ImportExportView.openBackupModal();
+        ImportExportView.openHubModal();
     },
+
+    executeProjectExport: function () {
+        if (!window.project) return;
+
+        const selection = {
+            manuscript: document.getElementById('hub-check-manuscript')?.checked,
+            characters: document.getElementById('hub-check-characters')?.checked,
+            world: document.getElementById('hub-check-world')?.checked,
+            codex: document.getElementById('hub-check-codex')?.checked,
+            notes: document.getElementById('hub-check-notes')?.checked,
+            timeline: document.getElementById('hub-check-timeline')?.checked,
+            relations: document.getElementById('hub-check-relations')?.checked,
+            investigation: document.getElementById('hub-check-investigation')?.checked,
+            plotgrid: document.getElementById('hub-check-plotgrid')?.checked
+        };
+
+        const exportData = {};
+        if (selection.manuscript) exportData.acts = window.project.acts;
+        if (selection.characters) exportData.characters = window.project.characters;
+        if (selection.world) exportData.world = window.project.world;
+        if (selection.codex) exportData.codex = window.project.codex;
+        if (selection.notes) exportData.notes = window.project.notes;
+        if (selection.timeline) exportData.timeline = window.project.timeline;
+        if (selection.relations) exportData.relationships = window.project.relationships;
+        if (selection.investigation) exportData.investigationBoard = window.project.investigationBoard;
+        if (selection.plotgrid) exportData.plotGrid = window.project.plotGrid;
+
+        // Meta data
+        exportData.id = window.project.id;
+        exportData.title = window.project.title;
+        exportData.description = window.project.description;
+        exportData.genre = window.project.genre;
+        exportData.stats = window.project.stats;
+        exportData.settings = window.project.settings;
+
+        const dataStr = JSON.stringify(exportData, null, 2);
+        const filename = `${(window.project.title || 'Export').replace(/\s+/g, '_')}_Selective_${new Date().toISOString().split('T')[0]}.json`;
+
+        ImportExportRepository.downloadFile(dataStr, filename, 'application/json');
+        ImportExportView.showNotification(Localization.t('export.json.success_msg', filename));
+    },
+
+    handleHubFileImport: async function (input) {
+        const file = input.files[0];
+        if (!file) return;
+
+        try {
+            const content = await ImportExportRepository.readFileAsText(file);
+            const importedData = JSON.parse(content);
+
+            // Open selective import modal (reuse export checklist UI for simplicity in this step)
+            // For now, simple confirmation-based import similar to existing one but filtered
+            if (!confirm(Localization.t('import.json.confirm_backup'))) return;
+
+            // Logic to merge selective data...
+            // For this version, let's allow importing only what's in the file
+            window.project = Object.assign(window.project || {}, importedData);
+
+            if (typeof saveProject === 'function') saveProject();
+            if (typeof renderActsList === 'function') renderActsList();
+
+            ImportExportView.showNotification(Localization.t('import.json.success'));
+            ImportExportView.closeHubModal();
+        } catch (e) {
+            console.error(e);
+            alert("Erreur d'import : " + e.message);
+        }
+    },
+
+    openTextImportDialog: function () {
+        // Reuse old importChapterModal logic or redirect
+        if (typeof openImportChapterModal === 'function') {
+            openImportChapterModal();
+        }
+    },
+
+    openNovelExportSettings: function () {
+        // Show the export sub-view in the Manuscript tab
+        const initial = document.getElementById('manuscript-hub-initial');
+        const exportView = document.getElementById('manuscript-hub-export');
+        if (initial) initial.style.display = 'none';
+        if (exportView) exportView.style.display = 'block';
+
+        this.initNovelExport();
+    },
+
+    initNovelExport: function () {
+        ImportExportModel.initSelectionState(true);
+        ImportExportView.renderExportTree(window.project, ImportExportModel.selectionState);
+        ImportExportView.updateExportFormatInfo();
+    },
+
 
     exportToJSON: function () {
         if (!window.project) return;
@@ -191,11 +283,11 @@ const ImportExportViewModel = {
     },
 
     openExportNovelModal: function () {
-        ImportExportModel.initSelectionState(true);
-        ImportExportView.renderExportTree(window.project, ImportExportModel.selectionState);
-        ImportExportView.updateExportFormatInfo();
-        ImportExportView.openExportNovelModal();
+        ImportExportView.openHubModal();
+        ImportExportView.switchHubTab('manuscript');
+        this.openNovelExportSettings();
     },
+
 
     toggleAct: function (actId) {
         const newState = !ImportExportModel.selectionState[`act-${actId}`];
@@ -270,7 +362,7 @@ const ImportExportViewModel = {
         const options = ImportExportView.getOptions();
         const format = options.format; // docx, markdown, txt, html, epub
 
-        const content = ImportExportModel.getSelectedContent();
+        const content = ImportExportModel.getSelectedContent(options);
         const title = window.project.title || Localization.t('export.novel.default_title');
 
         try {

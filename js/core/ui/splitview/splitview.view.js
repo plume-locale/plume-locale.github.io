@@ -6,7 +6,10 @@
 function updateSplitToggleButton() {
     const btn = document.getElementById('splitModeToggle');
     if (btn) {
-        if (splitViewActive) {
+        // En mode onglets, on vérifie tabsState.isSplit
+        const isActive = (typeof tabsState !== 'undefined' && (tabsState.isSplit || tabsState.panes.right.tabs.length > 0)) || splitViewActive;
+
+        if (isActive) {
             btn.classList.add('active');
             btn.innerHTML = `<i data-lucide="columns-2" style="width:14px;height:14px;"></i> <span>${Localization.t('split.toggle_active')}</span>`;
         } else {
@@ -363,13 +366,19 @@ function renderEditorInContainer(act, chapter, scene, container, panel) {
         if (typeof initializeColorPickers === 'function') initializeColorPickers(panel);
 
         // Initial Tension Check
-        if (typeof updateLiveTensionMeter === 'function' && scene.content) {
+        if (typeof updateLiveTensionMeter === 'function') {
             // Strip HTML for tension calculation to be safe, or let the handler do it
+            const content = scene.content || '';
             const tempDiv = document.createElement('div');
-            tempDiv.innerHTML = scene.content;
+            tempDiv.innerHTML = content;
             updateLiveTensionMeter(tempDiv.innerText || tempDiv.textContent || '', { sceneId: scene.id, chapterId: chapter.id, actId: act.id });
         }
     }, 50);
+
+    // Initialize scene navigation toolbar
+    setTimeout(() => {
+        if (typeof initSceneNavigation === 'function') initSceneNavigation();
+    }, 200);
 }
 
 /** [MVVM : View] - Alterne la visibilité de la barre d'outils de l'éditeur en mode split */

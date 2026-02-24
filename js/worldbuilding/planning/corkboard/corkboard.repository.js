@@ -177,7 +177,7 @@ const CorkBoardRepository = {
         if (!project || !project.acts) return null;
         if (!title || title.trim() === '') return null;
 
-        const newAct = {
+        const newAct = (typeof createAct === 'function') ? createAct(title.trim()) : {
             id: Date.now(),
             title: title.trim(),
             chapters: []
@@ -199,11 +199,24 @@ const CorkBoardRepository = {
         if (!act) return null;
         if (!title || title.trim() === '') return null;
 
-        const newChapter = {
+        const newChapter = (typeof createChapter === 'function') ? createChapter(title.trim()) : {
             id: Date.now(),
             title: title.trim(),
             scenes: []
         };
+
+        // Create implicit scene for the new chapter
+        const firstScene = (typeof createScene === 'function') ? createScene(title.trim()) : {
+            id: Date.now() + 1,
+            title: title.trim(),
+            content: '',
+            synopsis: '',
+            status: 'draft',
+            characters: [],
+            locations: [],
+            notes: ''
+        };
+        newChapter.scenes.push(firstScene);
 
         act.chapters.push(newChapter);
         return newChapter;
@@ -225,7 +238,7 @@ const CorkBoardRepository = {
         if (!chapter) return null;
         if (!title || title.trim() === '') return null;
 
-        const newScene = {
+        const newScene = (typeof createScene === 'function') ? createScene(title.trim()) : {
             id: Date.now(),
             title: title.trim(),
             content: '',

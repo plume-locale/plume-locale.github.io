@@ -90,5 +90,47 @@ const KeyboardShortcutsHandlers = {
             // Re-render icons if needed
             if (typeof lucide !== 'undefined') lucide.createIcons();
         }
+    },
+
+    // ── Tools Sidebar shortcuts (Alt+letter) ─────────────────────────────────
+
+    toolVersions: (e) => {
+        if (e) e.preventDefault();
+        if (typeof toggleVersionsSidebar === 'function') toggleVersionsSidebar();
+    },
+
+    toolAnnotations: (e) => {
+        if (e) e.preventDefault();
+        if (typeof toggleAnnotationsPanel === 'function') toggleAnnotationsPanel();
+    },
+
+    toolTodos: (e) => {
+        if (e) e.preventDefault();
+        if (typeof toggleTodosPanel === 'function') toggleTodosPanel();
+    },
+
+    toolArcs: (e) => {
+        if (e) e.preventDefault();
+        if (typeof toggleArcScenePanel === 'function') toggleArcScenePanel();
+    },
+
+    toolPlot: (e) => {
+        if (e) e.preventDefault();
+        if (typeof PlotGridUI !== 'undefined') PlotGridUI.toggleSidebar();
+    },
+
+    toolInvestigation: (e) => {
+        if (e) e.preventDefault();
+        if (typeof InvestigationSidebarUI !== 'undefined') InvestigationSidebarUI.toggleSidebar();
+    },
+
+    toolLinks: (e) => {
+        if (e) e.preventDefault();
+        if (typeof toggleLinksPanelVisibility === 'function') toggleLinksPanelVisibility();
+    },
+
+    toolRepetition: (e) => {
+        if (e) e.preventDefault();
+        if (typeof toggleWordRepetitionPanel === 'function') toggleWordRepetitionPanel();
     }
 };

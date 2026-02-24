@@ -8,24 +8,103 @@ const ImportExportView = {
 
     // --- Backup Modal ---
     openBackupModal: function () {
-        const el = document.getElementById('backupModal');
-        if (el) el.classList.add('active');
+        this.openHubModal();
     },
 
     closeBackupModal: function () {
-        const el = document.getElementById('backupModal');
+        this.closeHubModal();
+    },
+
+
+    // --- Unified Hub Modal ---
+
+    openHubModal: function () {
+        const el = document.getElementById('unifiedImportExportHubModal');
+        if (el) {
+            el.classList.add('active');
+            this.switchHubTab('project'); // Default tab
+            this.renderProjectExportChecklist();
+        }
+    },
+
+    closeHubModal: function () {
+        const el = document.getElementById('unifiedImportExportHubModal');
         if (el) el.classList.remove('active');
     },
 
+    switchHubTab: function (tabId) {
+        // Update buttons
+        document.querySelectorAll('.hub-tab-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        const activeBtn = document.querySelector(`.hub-tab-btn[onclick*="'${tabId}'"]`);
+        if (activeBtn) activeBtn.classList.add('active');
+
+        // Update views
+        document.querySelectorAll('.hub-content-view').forEach(view => {
+            view.classList.remove('active');
+        });
+        const activeView = document.getElementById(`hub-view-${tabId}`);
+        if (activeView) activeView.classList.add('active');
+
+        // Refresh specific view logic
+        if (tabId === 'project') this.renderProjectExportChecklist();
+        if (tabId === 'manuscript') {
+            const initial = document.getElementById('manuscript-hub-initial');
+            const exportView = document.getElementById('manuscript-hub-export');
+            if (initial) initial.style.display = 'grid';
+            if (exportView) exportView.style.display = 'none';
+        }
+        if (tabId === 'cloud') {
+            if (typeof GoogleDriveService !== 'undefined' && GoogleDriveService.user) {
+                this.updateGDriveUI(GoogleDriveService.user, true);
+            }
+        }
+
+        if (window.lucide) window.lucide.createIcons();
+    },
+
+
+    renderProjectExportChecklist: function () {
+        const container = document.getElementById('projectExportChecklist');
+        if (!container) return;
+
+        const models = [
+            { id: 'manuscript', label: Localization.t('modal.export.manuscript_section'), icon: 'book-open' },
+            { id: 'characters', label: Localization.t('modal.export.include_characters'), icon: 'users' },
+            { id: 'world', label: Localization.t('modal.export.include_world'), icon: 'globe' },
+            { id: 'codex', label: Localization.t('modal.export.include_codex'), icon: 'library' },
+            { id: 'notes', label: Localization.t('modal.export.include_notes'), icon: 'sticky-note' },
+            { id: 'timeline', label: Localization.t('modal.export.include_timeline'), icon: 'calendar-days' },
+            { id: 'relations', label: Localization.t('modal.export.include_relations'), icon: 'network' },
+            { id: 'investigation', label: Localization.t('modal.export.include_investigation'), icon: 'search' },
+            { id: 'plotgrid', label: Localization.t('modal.export.include_plotgrid'), icon: 'grid-3x3' }
+        ];
+
+        let html = '';
+        models.forEach(model => {
+            html += `
+                <label class="hub-checkbox-item">
+                    <input type="checkbox" id="hub-check-${model.id}" checked>
+                    <i data-lucide="${model.icon}" style="width: 16px; height: 16px; color: var(--accent-gold);"></i>
+                    <span>${model.label}</span>
+                </label>
+            `;
+        });
+        container.innerHTML = html;
+        if (window.lucide) window.lucide.createIcons();
+    },
+
     triggerFileInput: function () {
-        const el = document.getElementById('importFileInput');
+        const el = document.getElementById('hubImportFileInput');
         if (el) el.click();
     },
 
     resetFileInput: function () {
-        const el = document.getElementById('importFileInput');
+        const el = document.getElementById('hubImportFileInput');
         if (el) el.value = '';
     },
+
 
     // --- Export Novel Modal ---
 
@@ -40,7 +119,7 @@ const ImportExportView = {
     },
 
     renderExportTree: function (project, selectionState) {
-        const container = document.getElementById('exportTreeContainer');
+        const container = document.getElementById('hubExportTreeContainer') || document.getElementById('exportTreeContainer');
         if (!container) return;
 
         if (!project.acts || project.acts.length === 0) {
@@ -52,31 +131,31 @@ const ImportExportView = {
         project.acts.forEach((act, actIndex) => {
             const actChecked = selectionState[`act-${act.id}`] ? 'checked' : '';
             html += `
-                <div style="margin-bottom: 1rem;">
-                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-weight: 600; font-size: 1rem; margin-bottom: 0.5rem;">
-                        <input type="checkbox" ${actChecked} onchange="ImportExportViewModel.toggleAct(${act.id})" id="export-act-${act.id}" style="cursor: pointer;">
-                        <span>${Localization.t('export.tree.act', actIndex + 1)}</span>
+                <div class="hub-tree-item">
+                    <label class="hub-checkbox-item">
+                        <input type="checkbox" ${actChecked} onchange="ImportExportViewModel.toggleAct(${act.id})" id="export-act-${act.id}">
+                        <span class="hub-tree-label">${Localization.t('export.tree.act', actIndex + 1)}</span>
                     </label>
-                    <div style="margin-left: 1.5rem;">
+                    <div class="hub-tree-children">
             `;
 
             act.chapters.forEach((chapter, chapIndex) => {
                 const chapterChecked = selectionState[`chapter-${chapter.id}`] ? 'checked' : '';
                 html += `
-                    <div style="margin-bottom: 0.75rem;">
-                        <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-weight: 500; font-size: 0.95rem; margin-bottom: 0.25rem;">
-                            <input type="checkbox" ${chapterChecked} onchange="ImportExportViewModel.toggleChapter(${act.id}, ${chapter.id})" id="export-chapter-${chapter.id}" style="cursor: pointer;">
-                            <span>${Localization.t('export.tree.chapter', chapIndex + 1)}</span>
+                    <div class="hub-tree-item">
+                        <label class="hub-checkbox-item">
+                            <input type="checkbox" ${chapterChecked} onchange="ImportExportViewModel.toggleChapter(${act.id}, ${chapter.id})" id="export-chapter-${chapter.id}">
+                            <span class="hub-tree-label">${Localization.t('export.tree.chapter', chapIndex + 1)}</span>
                         </label>
-                        <div style="margin-left: 1.5rem;">
+                        <div class="hub-tree-children">
                 `;
 
                 chapter.scenes.forEach((scene, sceneIndex) => {
                     const sceneChecked = selectionState[`scene-${scene.id}`] ? 'checked' : '';
                     html += `
-                        <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 0.25rem;">
-                            <input type="checkbox" ${sceneChecked} onchange="ImportExportViewModel.toggleScene(${act.id}, ${chapter.id}, ${scene.id})" id="export-scene-${scene.id}" style="cursor: pointer;">
-                            <span>${Localization.t('export.tree.scene', sceneIndex + 1)}</span>
+                        <label class="hub-checkbox-item">
+                            <input type="checkbox" ${sceneChecked} onchange="ImportExportViewModel.toggleScene(${act.id}, ${chapter.id}, ${scene.id})" id="export-scene-${scene.id}">
+                            <span class="hub-tree-label scene">${Localization.t('export.tree.scene', sceneIndex + 1)}</span>
                         </label>
                     `;
                 });
@@ -85,13 +164,15 @@ const ImportExportView = {
             html += `</div></div>`;
         });
         container.innerHTML = html;
+        if (window.lucide) window.lucide.createIcons();
     },
 
+
     updateExportFormatInfo: function () {
-        const formatSelect = document.getElementById('exportFormatSelect');
+        const formatSelect = document.getElementById('hubExportFormatSelect') || document.getElementById('exportFormatSelect');
         const infoBox = document.getElementById('formatInfoBox');
-        const docxPanel = document.getElementById('docxSettingsPanel');
-        if (!formatSelect || !infoBox) return;
+        const docxAdvanced = document.getElementById('hub-docx-advanced');
+        if (!formatSelect) return;
 
         const format = formatSelect.value;
         const messages = {
@@ -101,36 +182,48 @@ const ImportExportView = {
             html: Localization.t('export.info.html'),
             epub: Localization.t('export.info.epub')
         };
-        infoBox.innerHTML = messages[format] || messages.docx;
 
-        // Show/hide DOCX advanced settings panel
-        if (docxPanel) {
-            docxPanel.style.display = (format === 'docx') ? 'block' : 'none';
+        if (infoBox) infoBox.innerHTML = messages[format] || messages.docx;
+
+        // Toggle advanced settings for DOCX
+        if (docxAdvanced) {
+            docxAdvanced.style.display = (format === 'docx') ? 'block' : 'none';
         }
     },
 
+
     getOptions: function () {
-        const format = document.getElementById('exportFormatSelect')?.value || 'txt';
+        const hubFormat = document.getElementById('hubExportFormatSelect')?.value;
+        const oldFormat = document.getElementById('exportFormatSelect')?.value;
+        const format = hubFormat || oldFormat || 'txt';
+
         const options = {
             format: format,
-            exportSummaries: document.getElementById('exportSummariesCheck')?.checked,
-            exportProse: document.getElementById('exportProseCheck')?.checked,
-            includeActTitles: document.getElementById('includeActTitlesCheck')?.checked,
-            includeSceneSubtitles: document.getElementById('includeSceneSubtitlesCheck')?.checked,
-            sceneDivider: document.getElementById('sceneDividerSelect')?.value || 'asterisks',
+            exportSummaries: (document.getElementById('hubExportSummariesCheck') || document.getElementById('exportSummariesCheck'))?.checked,
+            exportProse: (document.getElementById('hubExportProseCheck') || document.getElementById('exportProseCheck'))?.checked,
+            includeActTitles: (document.getElementById('hubExportActTitlesCheck') || document.getElementById('includeActTitlesCheck'))?.checked,
+            includeSceneSubtitles: (document.getElementById('hubExportSceneSubtitlesCheck') || document.getElementById('includeSceneSubtitlesCheck'))?.checked,
+            sceneDivider: (document.getElementById('hubExportSceneDividerSelect') || document.getElementById('sceneDividerSelect'))?.value || 'asterisks',
             includeCharacters: document.getElementById('includeCharactersCheck')?.checked,
             includeWorld: document.getElementById('includeWorldCheck')?.checked,
             includeTimeline: document.getElementById('includeTimelineCheck')?.checked,
-            includeRelations: document.getElementById('includeRelationsCheck')?.checked,
             includeCodex: document.getElementById('includeCodexCheck')?.checked,
-            includeNotes: document.getElementById('includeNotesCheck')?.checked
+            includeNotes: document.getElementById('includeNotesCheck')?.checked,
+            includeRelations: document.getElementById('includeRelationsCheck')?.checked,
+            includeInvestigation: document.getElementById('includeInvestigationCheck')?.checked,
+            includePlotGrid: document.getElementById('includePlotGridCheck')?.checked
         };
 
-        // Collect DOCX-specific options when DOCX is selected
+        // Extensive DOCX config
         if (format === 'docx') {
-            const marginsPreset = document.getElementById('docxMargins')?.value || 'wide';
-            const marginPresets = (typeof DocxExportConfig !== 'undefined') ? DocxExportConfig.marginPresets : null;
-            const margins = (marginPresets && marginPresets[marginsPreset]) || { top: 1700, bottom: 1700, left: 1700, right: 1700 };
+            const marginsPreset = document.getElementById('docxMargins')?.value || 'normal';
+            const marginPresets = (typeof DocxExportConfig !== 'undefined') ? DocxExportConfig.marginPresets : {
+                narrow: { top: 720, bottom: 720, left: 720, right: 720 },
+                normal: { top: 1440, bottom: 1440, left: 1440, right: 1440 },
+                wide: { top: 1700, bottom: 1700, left: 1700, right: 1700 },
+                editorial: { top: 1700, bottom: 1700, left: 2268, right: 1700 }
+            };
+            const margins = marginPresets[marginsPreset] || marginPresets.normal;
 
             const headerContent = document.getElementById('docxHeaderContent')?.value || 'title';
             const footerValue = document.getElementById('docxFooter')?.value || 'pagenum';
@@ -147,7 +240,7 @@ const ImportExportView = {
                 font: {
                     body: document.getElementById('docxFont')?.value || 'Times New Roman',
                     heading: document.getElementById('docxFont')?.value || 'Times New Roman',
-                    bodySize: parseInt(document.getElementById('docxBodySize')?.value) || 24
+                    bodySize: (parseInt(document.getElementById('docxBodySize')?.value) || 12) * 2 // Standard pt to half-points
                 },
                 spacing: {
                     lineSpacing: parseInt(document.getElementById('docxLineSpacing')?.value) || 360,
@@ -179,6 +272,7 @@ const ImportExportView = {
         return options;
     },
 
+
     setAllOptions: function (checked) {
         const ids = [
             'includeCharactersCheck', 'includeWorldCheck', 'includeTimelineCheck',
@@ -199,16 +293,16 @@ const ImportExportView = {
     },
 
     updateGDriveUI: function (user, isSignedIn) {
-        const loggedOutDiv = document.getElementById('gdrive-logged-out');
-        const loggedInDiv = document.getElementById('gdrive-logged-in');
+        const loggedOutDiv = document.getElementById('hub-gdrive-logged-out');
+        const loggedInDiv = document.getElementById('hub-gdrive-logged-in');
 
         if (isSignedIn && user) {
             if (loggedOutDiv) loggedOutDiv.style.display = 'none';
             if (loggedInDiv) loggedInDiv.style.display = 'block';
 
-            const avatarEl = document.getElementById('gdrive-user-avatar');
-            const nameEl = document.getElementById('gdrive-user-name');
-            const emailEl = document.getElementById('gdrive-user-email');
+            const avatarEl = document.getElementById('hub-gdrive-user-avatar');
+            const nameEl = document.getElementById('hub-gdrive-user-name');
+            const emailEl = document.getElementById('hub-gdrive-user-email');
 
             if (nameEl) nameEl.textContent = user.name;
             if (emailEl) emailEl.textContent = user.email;
@@ -221,11 +315,13 @@ const ImportExportView = {
         }
     },
 
+
     updateGDriveStatus: function (status, type = 'normal') {
-        const statusText = document.getElementById('gdrive-status-text');
-        const statusIcon = document.querySelector('#gdrive-sync-status i');
+        const statusText = document.getElementById('hub-gdrive-status-text');
+        const statusIcon = document.querySelector('#hub-gdrive-sync-status i');
 
         if (statusText) statusText.textContent = status;
+
 
         if (statusIcon) {
             // Reset classes

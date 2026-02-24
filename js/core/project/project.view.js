@@ -76,7 +76,11 @@ const ProjectView = {
                 
                 ${(projects && projects.length > 0)
                 ? (viewMode === 'grid'
-                    ? `<div class="projects-grid" id="projectsGrid">${projects.map(proj => this.renderCard(proj)).join('')}</div>`
+                    ? (JSON.stringify(projects), `<div class="projects-grid" id="projectsGrid">${(() => {
+                        const nameCounts = {};
+                        projects.forEach(p => nameCounts[p.title] = (nameCounts[p.title] || 0) + 1);
+                        return projects.map(proj => this.renderCard(proj, nameCounts[proj.title] > 1)).join('');
+                    })()}</div>`)
                     : this.renderTableView(projects))
                 : `
                     <div class="projects-empty-state">
@@ -97,8 +101,8 @@ const ProjectView = {
      * Rendu d'une carte projet individuelle.
      * @param {Object} proj 
      */
-    renderCard(proj) {
-        const isActive = proj.id === currentProjectId;
+    renderCard(proj, isDuplicateName = false) {
+        const isActive = proj.id == currentProjectId;
         const stats = this.getProjectStats(proj);
 
         const createdDate = this.formatDate(proj.createdAt);
@@ -110,10 +114,10 @@ const ProjectView = {
         const progress = Math.min(100, Math.round((totalWords / goal) * 100));
 
         return `
-            <div class="project-card-new ${isActive ? 'active' : ''}" onclick="ProjectViewModel.switchTo(${proj.id})">
+            <div class="project-card-new ${isActive ? 'active' : ''}" onclick="ProjectViewModel.switchTo('${proj.id}')">
                 ${isActive ? `<span class="status-badge active">${Localization.t('project.view.active')}</span>` : ''}
                 
-                <h3 class="title">${proj.title}</h3>
+                <h3 class="title">${proj.title} ${isDuplicateName ? `<span style="font-weight: normal; font-size: 0.75rem; opacity: 0.7;">(${updatedDate})</span>` : ''}</h3>
                 ${(proj.updatedAt && (new Date() - new Date(proj.updatedAt)) < 24 * 60 * 60 * 1000) ? `<span class="recent-badge" style="background: rgba(46, 204, 113, 0.1); color: #2ecc71; border: 1px solid #2ecc71; font-size: 0.65rem; padding: 2px 6px; border-radius: 10px; margin-left: 8px; vertical-align: middle;">${Localization.t('project.view.recently_updated')}</span>` : ''}
                 ${proj.genre ? `<div class="genre">${proj.genre}</div>` : ''}
                 <p class="description">${proj.description || ''}</p>
@@ -217,16 +221,16 @@ const ProjectView = {
                 </div>
 
                 <div class="project-card-actions-row">
-                    <button class="btn btn-small" onclick="event.stopPropagation(); ProjectViewModel.switchTo(${proj.id})">
+                    <button class="btn btn-small" onclick="event.stopPropagation(); ProjectViewModel.switchTo('${proj.id}')">
                         <i data-lucide="external-link"></i> ${Localization.t('project.view.btn_open')}
                     </button>
-                    <button class="btn btn-small btn-outline" onclick="event.stopPropagation(); ProjectViewModel.export(${proj.id})" title="${Localization.t('project.view.btn_export')}">
+                    <button class="btn btn-small btn-outline" onclick="event.stopPropagation(); ProjectViewModel.export('${proj.id}')" title="${Localization.t('project.view.btn_export')}">
                         <i data-lucide="upload"></i>
                     </button>
-                    <button class="btn btn-small btn-outline" onclick="event.stopPropagation(); ProjectViewModel.backup(${proj.id})" title="${Localization.t('header.backup')}">
+                    <button class="btn btn-small btn-outline" onclick="event.stopPropagation(); ProjectViewModel.backup('${proj.id}')" title="${Localization.t('header.backup')}">
                         <i data-lucide="file-up"></i>
                     </button>
-                    <button class="btn btn-small btn-danger-outline" onclick="event.stopPropagation(); ProjectViewModel.delete(${proj.id})" title="${Localization.t('project.view.btn_delete')}">
+                    <button class="btn btn-small btn-danger-outline" onclick="event.stopPropagation(); ProjectViewModel.delete('${proj.id}')" title="${Localization.t('project.view.btn_delete')}">
                         <i data-lucide="trash-2"></i>
                     </button>
                 </div>
@@ -252,60 +256,65 @@ const ProjectView = {
                         </tr>
                     </thead>
                     <tbody>
-                        ${projects.map(proj => {
-            const isActive = proj.id === currentProjectId;
-            const stats = this.getProjectStats(proj);
-            const updatedDate = this.formatDate(proj.updatedAt);
-            return `
-                                <tr class="${isActive ? 'active' : ''}" onclick="ProjectViewModel.switchTo(${proj.id})">
-                                    <td>
-                                        <div class="table-title">
-                                            <i data-lucide="folder"></i>
-                                            <div style="display: flex; flex-direction: column;">
-                                                <span>${proj.title}</span>
-                                                <span style="font-size: 0.7rem; opacity: 0.6;">${proj.genre || '-'}</span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="table-stats-row" style="display: flex; gap: 12px; font-size: 0.8rem;">
-                                            <span title="${Localization.t('project.view.act_count')}"><i data-lucide="layers" style="width:12px;height:12px;vertical-align:middle;margin-right:2px;"></i> ${proj.acts?.length || 0}</span>
-                                            <span title="${Localization.t('project.view.chapter_count')}"><i data-lucide="bookmark" style="width:12px;height:12px;vertical-align:middle;margin-right:2px;"></i> ${stats.chapterCount}</span>
-                                            <span title="${Localization.t('project.view.scene_count')}"><i data-lucide="file-text" style="width:12px;height:12px;vertical-align:middle;margin-right:2px;"></i> ${stats.sceneCount}</span>
-                                        </div>
-                                    </td>
-                                    <td style="text-align: center;">
-                                        <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
-                                            <span style="font-weight: 600;">${stats.wordCount.toLocaleString()}</span>
-                                            <div style="width: 80px; height: 4px; background: var(--bg-tertiary); border-radius: 2px; overflow: hidden; border: 1px solid var(--border-color);">
-                                                <div style="width: ${Math.min(100, Math.round((stats.wordCount / (proj.stats?.totalGoal || 80000)) * 100))}% ; height: 100%; background: var(--accent-gold);"></div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td style="text-align: center; font-size: 0.85rem;">${updatedDate}</td>
-                                    <td style="text-align: center;">
-                                        ${isActive ? `<span class="active-dot"></span>` : ''}
-                                    </td>
-                                    <td style="text-align: right;">
-                                        <div class="table-actions">
-                                            <button class="icon-btn" onclick="event.stopPropagation(); ProjectViewModel.export(${proj.id})" title="${Localization.t('project.view.btn_export')}">
-                                                <i data-lucide="upload"></i>
-                                            </button>
-                                            <button class="icon-btn" onclick="event.stopPropagation(); ProjectViewModel.backup(${proj.id})" title="${Localization.t('header.backup')}">
-                                                <i data-lucide="file-up"></i>
-                                            </button>
-                                            <button class="icon-btn danger" onclick="event.stopPropagation(); ProjectViewModel.delete(${proj.id})" title="${Localization.t('project.view.btn_delete')}">
-                                                <i data-lucide="trash-2"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            `;
-        }).join('')}
+                        ${(() => {
+                const nameCounts = {};
+                projects.forEach(p => nameCounts[p.title] = (nameCounts[p.title] || 0) + 1);
+                return projects.map(proj => {
+                    const isActive = proj.id == currentProjectId;
+                    const stats = this.getProjectStats(proj);
+                    const updatedDate = this.formatDate(proj.updatedAt);
+                    const isDuplicateName = nameCounts[proj.title] > 1;
+                    return `
+                                            <tr class="${isActive ? 'active' : ''}" onclick="ProjectViewModel.switchTo('${proj.id}')">
+                                                <td>
+                                                    <div class="table-title">
+                                                        <i data-lucide="folder"></i>
+                                                        <div style="display: flex; flex-direction: column;">
+                                                            <span>${proj.title} ${isDuplicateName ? `<span style="font-weight: normal; font-size: 0.75rem; opacity: 0.7;">(${updatedDate})</span>` : ''}</span>
+                                                            <span style="font-size: 0.7rem; opacity: 0.6;">${proj.genre || '-'}</span>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="table-stats-row" style="display: flex; gap: 12px; font-size: 0.8rem;">
+                                                        <span title="${Localization.t('project.view.act_count')}"><i data-lucide="layers" style="width:12px;height:12px;vertical-align:middle;margin-right:2px;"></i> ${proj.acts?.length || 0}</span>
+                                                        <span title="${Localization.t('project.view.chapter_count')}"><i data-lucide="bookmark" style="width:12px;height:12px;vertical-align:middle;margin-right:2px;"></i> ${stats.chapterCount}</span>
+                                                        <span title="${Localization.t('project.view.scene_count')}"><i data-lucide="file-text" style="width:12px;height:12px;vertical-align:middle;margin-right:2px;"></i> ${stats.sceneCount}</span>
+                                                    </div>
+                                                </td>
+                                                <td style="text-align: center;">
+                                                    <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
+                                                        <span style="font-weight: 600;">${stats.wordCount.toLocaleString()}</span>
+                                                        <div style="width: 80px; height: 4px; background: var(--bg-tertiary); border-radius: 2px; overflow: hidden; border: 1px solid var(--border-color);">
+                                                            <div style="width: ${Math.min(100, Math.round((stats.wordCount / (proj.stats?.totalGoal || 80000)) * 100))}% ; height: 100%; background: var(--accent-gold);"></div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td style="text-align: center; font-size: 0.85rem;">${updatedDate}</td>
+                                                <td style="text-align: center;">
+                                                    ${isActive ? `<span class="active-dot"></span>` : ''}
+                                                </td>
+                                                <td style="text-align: right;">
+                                                    <div class="table-actions">
+                                                        <button class="icon-btn" onclick="event.stopPropagation(); ProjectViewModel.export('${proj.id}')" title="${Localization.t('project.view.btn_export')}">
+                                                            <i data-lucide="upload"></i>
+                                                        </button>
+                                                        <button class="icon-btn" onclick="event.stopPropagation(); ProjectViewModel.backup('${proj.id}')" title="${Localization.t('header.backup')}">
+                                                            <i data-lucide="file-up"></i>
+                                                        </button>
+                                                        <button class="icon-btn danger" onclick="event.stopPropagation(); ProjectViewModel.delete('${proj.id}')" title="${Localization.t('project.view.btn_delete')}">
+                                                            <i data-lucide="trash-2"></i>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        `;
+                }).join('');
+            })()}
                     </tbody>
                 </table>
             </div>
-        `;
+    `;
     },
 
     getProjectStats(proj) {
@@ -390,12 +399,17 @@ const ProjectView = {
             return;
         }
 
+        const nameCounts = {};
+        projects.forEach(p => nameCounts[p.title] = (nameCounts[p.title] || 0) + 1);
+
         container.innerHTML = projects.map(proj => {
-            const isActive = proj.id === currentProjectId;
+            const isActive = proj.id == currentProjectId;
+            const updatedDate = this.formatDate(proj.updatedAt);
+            const isDuplicateName = nameCounts[proj.title] > 1;
             return `
-                <div class="sidebar-item ${isActive ? 'active' : ''}" onclick="ProjectViewModel.switchTo(${proj.id})">
+                <div class="sidebar-item ${isActive ? 'active' : ''}" onclick="ProjectViewModel.switchTo('${proj.id}')" title="${proj.title} ${isDuplicateName ? `(${updatedDate})` : ''}">
                     <i data-lucide="folder" class="sidebar-item-icon"></i>
-                    <span class="sidebar-item-text">${proj.title}</span>
+                    <span class="sidebar-item-text">${proj.title} ${isDuplicateName ? `<span style="font-weight: normal; font-size: 0.7rem; opacity: 0.6;">(${updatedDate})</span>` : ''}</span>
                     ${isActive ? '<span class="active-dot"></span>' : ''}
                 </div>
             `;
@@ -565,17 +579,16 @@ const ProjectView = {
                 <div style="background: var(--bg-primary); padding: 1rem; border-radius: 4px; border: 1px solid var(--border-color);">
                     <div style="font-weight: 700; font-size: 1rem; margin-bottom: 0.75rem; color: var(--accent-red);"><i data-lucide="alert-triangle" style="width:16px;height:16px;vertical-align:middle;margin-right:6px;"></i>${Localization.t('project.view.analysis_repetitions')}</div>
                     ${analysis.repetitions.length > 0 ? `
-                        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 0.5rem;">
-                            ${analysis.repetitions.map(([word, count]) => `
-                                <div style="padding: 0.4rem 0.6rem; background: rgba(196, 69, 54, 0.1); border: 1px solid var(--accent-red); border-radius: 2px; font-size: 0.75rem;">
-                                    <strong>${word}</strong>: ${count}×
-                                </div>
-                            `).join('')}
-                        </div>
-                    ` : `<div style="color: var(--text-muted); font-size: 0.85rem;">${Localization.t('project.view.analysis_no_repetitions')}</div>`}
+                                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 0.5rem;">
+                                        ${analysis.repetitions.map(([word, count]) => `
+                                            <div style="padding: 0.4rem 0.6rem; background: rgba(196, 69, 54, 0.1); border: 1px solid var(--accent-red); border-radius: 2px; font-size: 0.75rem;">
+                                                <strong>${word}</strong>: ${count}×
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                ` : `<div style="color: var(--text-muted); font-size: 0.85rem;">${Localization.t('project.view.analysis_no_repetitions')}</div>`}
                 </div>
-            </div>
-        `;
+            </div>`;
 
         if (typeof lucide !== 'undefined') lucide.createIcons();
     },
@@ -608,9 +621,10 @@ const ProjectView = {
             </div>`;
 
         // Initial Tension Check
-        if (typeof updateLiveTensionMeter === 'function' && scene.content) {
+        if (typeof updateLiveTensionMeter === 'function') {
+            const content = scene.content || '';
             const tempDiv = document.createElement('div');
-            tempDiv.innerHTML = scene.content;
+            tempDiv.innerHTML = content;
             updateLiveTensionMeter(tempDiv.innerText || tempDiv.textContent || '', { sceneId: scene.id, chapterId: chapter.id, actId: act.id });
         }
     }

@@ -27,11 +27,21 @@ const MobileMenuView = {
     /**
      * Ouvre la sidebar (ajoute classes CSS).
      */
-    openSidebar: function () {
+    openSidebar: function (tab) {
         const sidebarColumn = document.getElementById('sidebarColumn');
+        const activityBar = document.getElementById('sidebarAccordion');
         const overlay = document.querySelector('.sidebar-overlay');
 
-        if (sidebarColumn) sidebarColumn.classList.add('mobile-visible');
+        if (tab === 'navigation') {
+            if (activityBar) {
+                activityBar.classList.add('mobile-visible');
+                activityBar.classList.remove('thin');
+            }
+            if (sidebarColumn) sidebarColumn.classList.remove('mobile-visible');
+        } else {
+            if (sidebarColumn) sidebarColumn.classList.add('mobile-visible');
+            if (activityBar) activityBar.classList.remove('mobile-visible');
+        }
 
         if (overlay) {
             overlay.style.display = 'block';
@@ -46,9 +56,11 @@ const MobileMenuView = {
      */
     closeSidebar: function () {
         const sidebarColumn = document.getElementById('sidebarColumn');
+        const activityBar = document.getElementById('sidebarAccordion');
         const overlay = document.querySelector('.sidebar-overlay');
 
         if (sidebarColumn) sidebarColumn.classList.remove('mobile-visible');
+        if (activityBar) activityBar.classList.remove('mobile-visible');
 
         if (overlay) {
             overlay.classList.remove('active');
@@ -56,65 +68,6 @@ const MobileMenuView = {
         }
 
         document.body.style.overflow = '';
-    },
-
-    /**
-     * Met à jour l'affichage du menu de navigation (dropdown).
-     * @param {boolean} isActive 
-     */
-    updateNavState: function (isActive) {
-        const dropdown = document.getElementById('mobileNavDropdown');
-        const toggleBtn = document.getElementById('mobileNavToggleBtn');
-
-        // Icône Lucid 'Menu'
-        const menuIcon = `
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-menu">
-                <line x1="4" x2="20" y1="12" y2="12"/>
-                <line x1="4" x2="20" y1="6" y2="6"/>
-                <line x1="4" x2="20" y1="18" y2="18"/>
-            </svg>
-        `;
-
-        // Icône Lucid 'X'
-        const closeIcon = `
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x">
-                <path d="M18 6 6 18"/>
-                <path d="m6 6 12 12"/>
-            </svg>
-        `;
-
-        if (isActive) {
-            if (dropdown) dropdown.classList.add('active');
-            if (toggleBtn) toggleBtn.innerHTML = closeIcon;
-        } else {
-            if (dropdown) dropdown.classList.remove('active');
-            if (toggleBtn) toggleBtn.innerHTML = menuIcon;
-        }
-    },
-
-    /**
-     * Masque ou affiche la sidebar (visibility) lors de l'ouverture du dropdown nav.
-     * @param {boolean} isVisible
-     */
-    updateSidebarVisibility: function (isVisible) {
-        const sidebarColumn = document.querySelector('.sidebar-column');
-        if (sidebarColumn) {
-            sidebarColumn.style.visibility = isVisible ? '' : 'hidden';
-        }
-    },
-
-    /**
-     * Marque l'élément actif dans le menu mobile.
-     * @param {string} view 
-     */
-    setActiveNavItem: function (view) {
-        document.querySelectorAll('.mobile-nav-item').forEach(item => {
-            item.classList.remove('active');
-        });
-        const activeItem = document.querySelector(`[data-view="${view}"]`);
-        if (activeItem) {
-            activeItem.classList.add('active');
-        }
     },
 
     /**
@@ -237,11 +190,13 @@ const MobileMenuView = {
      */
     ensureDesktopState: function () {
         const sidebarColumn = document.getElementById('sidebarColumn');
+        const activityBar = document.getElementById('sidebarAccordion');
         const overlay = document.querySelector('.sidebar-overlay');
         const menuBtn = document.querySelector('.mobile-menu-toggle');
         const toolsSheet = document.getElementById('mobileToolsSheet');
 
         if (sidebarColumn) sidebarColumn.classList.remove('mobile-visible');
+        if (activityBar) activityBar.classList.remove('mobile-visible');
         if (overlay) {
             overlay.classList.remove('active');
             overlay.style.display = 'none';

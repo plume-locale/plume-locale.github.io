@@ -156,12 +156,25 @@ function renderSplitTabs(container) {
 /** [MVVM : View] - Génère le HTML pour un item d'onglet */
 function renderTabItemHTML(tab, activeTabId) {
     const isActive = tab.id === activeTabId;
+
+    // Check if tour exists for this view
+    const hasTour = typeof ProductTourData !== 'undefined' &&
+        ProductTourData.tours &&
+        ProductTourData.tours[tab.view] &&
+        ProductTourData.tours[tab.view].length > 0;
+
+    const tourBtnHTML = hasTour ? `
+            <div class="tab-tour" onclick="activateTab('${tab.id}', '${tab.paneId}'); setTimeout(() => { if(typeof startProductTourVM === 'function') startProductTourVM(); }, 150); event.stopPropagation();" title="${typeof Localization !== 'undefined' ? Localization.t('tour.start_tooltip') || 'Visite guidée' : 'Visite guidée'}">
+                <i data-lucide="help-circle"></i>
+            </div>` : '';
+
     return `
         <div class="tab-item ${isActive ? 'active' : ''}" 
              draggable="true" ondragstart="dragTab(event, '${tab.id}', '${tab.paneId}')"
              onclick="activateTab('${tab.id}', '${tab.paneId}'); event.stopPropagation();">
             <div class="tab-icon"><i data-lucide="${tab.icon}"></i></div>
             <div class="tab-label">${tab.title}</div>
+            ${tourBtnHTML}
             <div class="tab-close" onclick="closeTab('${tab.id}', '${tab.paneId}'); event.stopPropagation();">
                 <i data-lucide="x"></i>
             </div>
@@ -191,6 +204,8 @@ function switchActivePane(paneId) {
     const pane = tabsState.panes[paneId];
     const activeTab = pane.tabs.find(t => t.id === pane.activeTabId);
     if (activeTab) syncGlobalStateWithTab(activeTab);
+
+    if (typeof closeSidebarAccordion === 'function') closeSidebarAccordion();
 }
 
 /** [MVVM : View] - Active un onglet spécifique */
@@ -201,6 +216,8 @@ function activateTab(tabId, paneId) {
 
     const activeTab = tabsState.panes[paneId].tabs.find(t => t.id === tabId);
     if (activeTab) syncGlobalStateWithTab(activeTab);
+
+    if (typeof closeSidebarAccordion === 'function') closeSidebarAccordion();
 }
 
 /** [MVVM : View] - Gestion du Drag & Drop des onglets */

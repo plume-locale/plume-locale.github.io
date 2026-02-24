@@ -118,7 +118,11 @@ const TensionView = {
         div.className = 'tension-meter-container';
         div.setAttribute('title', Localization.t('tension.meter.title'));
 
+
         div.innerHTML = `
+            <div class="tension-meter-bar-bg" id="tensionMeterBar">
+                <div class="tension-meter-bar-fill" id="tensionMeterBarFill"></div>
+            </div>
             <svg class="tension-meter-svg" viewBox="0 0 50 50">
                 <circle class="tension-meter-bg" cx="25" cy="25" r="22"></circle>
                 <circle class="tension-meter-fill" id="tensionMeterFill" cx="25" cy="25" r="22" stroke-dasharray="138.2" stroke-dashoffset="138.2"></circle>
@@ -128,6 +132,23 @@ const TensionView = {
         `;
 
         document.body.appendChild(div);
+
+        // Toggle tooltip on click/touch (Mobile & Desktop compatible)
+        div.addEventListener('click', (e) => {
+            const tooltip = document.getElementById('tensionTooltip');
+            if (tooltip) {
+                const isActive = tooltip.classList.contains('active');
+                // Fermer les autres éventuels tooltips si nécessaire (optionnel)
+                tooltip.classList.toggle('active');
+                e.stopPropagation();
+            }
+        });
+
+        // Fermer le tooltip si on clique ailleurs
+        document.addEventListener('click', () => {
+            const tooltip = document.getElementById('tensionTooltip');
+            if (tooltip) tooltip.classList.remove('active');
+        });
 
         if (typeof focusModeActive !== 'undefined' && focusModeActive) {
             div.classList.add('focus-hide');
@@ -151,6 +172,18 @@ const TensionView = {
             if (score > 65) circle.style.stroke = 'var(--accent-red)';
             else if (score > 40) circle.style.stroke = 'var(--accent-gold)';
             else circle.style.stroke = 'var(--accent-blue)';
+        }
+
+        // Mise à jour de la barre mobile
+        const barFill = document.getElementById('tensionMeterBarFill');
+        if (barFill) {
+            barFill.style.width = `${score}%`;
+
+            let color = 'var(--accent-blue)';
+            if (score > 65) color = 'var(--accent-red)';
+            else if (score > 40) color = 'var(--accent-gold)';
+
+            barFill.style.backgroundColor = color;
         }
 
         const valueDisplay = document.getElementById('tensionValueDisplay');

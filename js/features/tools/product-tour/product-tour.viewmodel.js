@@ -6,6 +6,12 @@
 console.log('🎓 Product Tour ViewModel loaded');
 
 // ============================================
+// GLOBAL STATE
+// ============================================
+
+let activeTourId = null;
+
+// ============================================
 // INITIALIZATION
 // ============================================
 
@@ -22,9 +28,8 @@ async function initProductTourVM() {
 
         // Créer le bouton de tour dans le header
         ProductTourButtonView.create(() => {
-            // Au lieu de démarrer directement, on affiche le modal de bienvenue
-            // pour permettre de choisir, d'ignorer ou de masquer définitivement.
-            showWelcomeModalVM();
+            // Au lieu de démarrer directement, on affiche le tour global de l'interface
+            startProductTourVM('app_overview');
         });
 
         // Vérifier si on doit afficher le modal de bienvenue
@@ -73,7 +78,8 @@ function showWelcomeModalVM() {
         ProductTourWelcomeView.show(
             // onStart
             () => {
-                startProductTourVM();
+                // Au premier démarrage, on lance d'abord l'overview de l'app
+                startProductTourVM('app_overview');
             },
             // onSkip
             async () => {
@@ -127,10 +133,11 @@ function hideWelcomeModalVM() {
 
 /**
  * Démarre la visite guidée.
+ * @param {string} forcedView - Vue forcée (optionnel).
  * @returns {Promise<Object>} Résultat de l'opération.
  */
-async function startProductTourVM() {
-    console.log('Starting product tour...');
+async function startProductTourVM(forcedView = null) {
+    console.log('Starting product tour...', forcedView || 'current view');
 
     try {
         // Réinitialiser le step sauvegardé pour recommencer du début
@@ -142,7 +149,8 @@ async function startProductTourVM() {
         }
 
         // Récupérer les steps
-        const view = typeof currentView !== 'undefined' ? currentView : 'editor';
+        activeTourId = forcedView || (typeof currentView !== 'undefined' ? currentView : 'editor');
+        const view = activeTourId;
         let steps = await ProductTourStepsRepository.getAllSteps(view);
 
         // Filtrer les steps valides d'abord pour éviter d'enrichir des steps malformés
@@ -302,10 +310,19 @@ async function resetProductTourVM() {
  * @returns {Promise<void>}
  */
 async function onTourCompleteVM() {
-    console.log('Tour completed');
+    console.log('Tour completed:', activeTourId);
 
     try {
-        // Marquer comme complété
+        // Si c'était l'overview, on enchaîne avec le tour de la vue actuelle (Projets)
+        if (activeTourId === 'app_overview') {
+            console.log('🎓 App overview finished, starting current view tour');
+            // Au premier démarrage, currentView est 'projects'
+            const followUpView = (typeof currentView !== 'undefined' ? currentView : 'projects');
+            startProductTourVM(followUpView);
+            return;
+        }
+
+        // Marquer comme complété pour l'ensemble du système
         await ProductTourStateRepository.markCompleted();
 
         // Afficher un message de succès
@@ -313,6 +330,7 @@ async function onTourCompleteVM() {
 
         // Nettoyer
         ProductTourDriverView.cleanup();
+        activeTourId = null;
     } catch (error) {
         console.error('Error completing tour:', error);
     }
@@ -327,6 +345,7 @@ function onTourDestroyedVM() {
     try {
         // Nettoyer les ressources
         ProductTourDriverView.cleanup();
+        activeTourId = null;
     } catch (error) {
         console.error('Error in tour destroyed callback:', error);
     }

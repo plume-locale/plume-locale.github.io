@@ -12,7 +12,11 @@ let isMobile = window.innerWidth <= 900;
 
 // Update isMobile on resize
 window.addEventListener('resize', () => {
+    const wasMobile = isMobile;
     isMobile = window.innerWidth <= 900;
+    if (wasMobile !== isMobile) {
+        renderSidebarAccordion();
+    }
 });
 
 // --- DISPATCHER DE REPOSITORY ---
@@ -68,22 +72,27 @@ const NAVIGATION_GROUPS = [
         items: [
             { id: 'plot', icon: 'trending-up', label: 'nav.plot' },
             { id: 'plotgrid', icon: 'grid-3x3', label: 'nav.plotgrid' },
+            { id: 'arcs', icon: 'git-commit-horizontal', label: 'nav.arcs' },
+            { id: 'investigation', icon: 'search', label: 'nav.investigation' },
             { id: 'analysis', icon: 'scan-search', label: 'nav.analysis' },
             { id: 'stats', icon: 'bar-chart-3', label: 'nav.stats' }
         ]
     },
     {
-        title: 'sidebar.group.construction',
+        title: 'sidebar.group.world',
         items: [
             { id: 'world', icon: 'globe', label: 'nav.world' },
             { id: 'codex', icon: 'book-open', label: 'nav.codex' },
             { id: 'notes', icon: 'sticky-note', label: 'nav.notes' },
-            { id: 'arcs', icon: 'git-commit-horizontal', label: 'nav.arcs' },
-            { id: 'investigation', icon: 'search', label: 'nav.investigation' },
             { id: 'mindmap', icon: 'git-branch', label: 'nav.mindmap' },
             { id: 'relations', icon: 'link', label: 'nav.relations' },
             { id: 'map', icon: 'map', label: 'nav.map' },
-            { id: 'timelineviz', icon: 'clock', label: 'nav.timeline' },
+            { id: 'timelineviz', icon: 'clock', label: 'nav.timeline' }
+        ]
+    },
+    {
+        title: 'sidebar.group.history',
+        items: [
             { id: 'versions', icon: 'history', label: 'nav.snapshots' }
         ]
     }
@@ -102,17 +111,13 @@ function renderSidebarAccordion() {
             </div>
             <div class="accordion-group-items">
                 ${group.items.map(item => `
-                    <div class="accordion-nav-item" onclick="switchView('${item.id}')" id="nav-item-${item.id}" style="position: relative; padding-right: 48px;">
+                    <div class="accordion-nav-item"
+                         onclick="switchView('${item.id}')"
+                         oncontextmenu="_showNavContextMenu(event, '${item.id}')"
+                         id="nav-item-${item.id}"
+                         data-tooltip="${Localization.t(item.label)}">
                         <i data-lucide="${item.icon}"></i>
-                        <span data-i18n="${item.label}">${Localization.t(item.label)}</span>
-                        <div class="accordion-item-actions">
-                            <button class="treeview-action-btn" onclick="event.stopPropagation(); switchView('${item.id}', { forceNew: true })" title="${Localization.t('tabs.open_new')}">
-                                <i data-lucide="plus-square"></i>
-                            </button>
-                            <button class="treeview-action-btn" onclick="event.stopPropagation(); switchView('${item.id}', { replaceCurrent: true })" title="${Localization.t('tabs.replace')}">
-                                <i data-lucide="maximize-2"></i>
-                            </button>
-                        </div>
+                        <span class="nav-item-label" data-i18n="${item.label}">${Localization.t(item.label)}</span>
                     </div>
                 `).join('')}
             </div>
@@ -120,16 +125,111 @@ function renderSidebarAccordion() {
     `).join('');
 
     if (typeof lucide !== 'undefined') lucide.createIcons();
+
+    // Appliquer les réglages d'interface (modules masqués) APRÈS le rendu de l'accordéon
+    if (typeof InterfaceCustomizerViewModel !== 'undefined') {
+        InterfaceCustomizerViewModel.applySettings();
+    }
+}
+
+/**
+ * R2 — Menu contextuel (clic droit) sur les éléments de l'accordéon de navigation.
+ * Remplace les 2 boutons inline (open new tab / replace current).
+ */
+function _showNavContextMenu(e, viewId) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    // Supprimer tout menu existant
+    let existing = document.getElementById('navContextMenu');
+    if (existing) existing.remove();
+
+    const menu = document.createElement('div');
+    menu.id = 'navContextMenu';
+    menu.className = 'nav-context-menu';
+    menu.innerHTML = `
+        <button class="nav-ctx-item" onclick="_navCtxAction('${viewId}', 'new')">
+            <i data-lucide="plus-square"></i>
+            <span data-i18n="tabs.open_new">${Localization.t('tabs.open_new')}</span>
+        </button>
+        <button class="nav-ctx-item" onclick="_navCtxAction('${viewId}', 'replace')">
+            <i data-lucide="maximize-2"></i>
+            <span data-i18n="tabs.replace">${Localization.t('tabs.replace')}</span>
+        </button>
+    `;
+
+    // Positionner le menu au curseur
+    menu.style.left = e.clientX + 'px';
+    menu.style.top = e.clientY + 'px';
+    document.body.appendChild(menu);
+
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+
+    // Fermer au prochain clic (n'importe où)
+    const closeMenu = () => { menu.remove(); document.removeEventListener('click', closeMenu); };
+    setTimeout(() => document.addEventListener('click', closeMenu), 0);
+}
+
+function _navCtxAction(viewId, action) {
+    const menu = document.getElementById('navContextMenu');
+    if (menu) menu.remove();
+    if (action === 'new') switchView(viewId, { forceNew: true });
+    else if (action === 'replace') switchView(viewId, { replaceCurrent: true });
 }
 
 function toggleSidebarAccordion() {
     const accordion = document.getElementById('sidebarAccordion');
-    if (accordion) accordion.classList.toggle('open');
+    if (accordion) {
+        if (window.innerWidth <= 900) {
+            return; // L'en-tête ne permet pas de plier la barre en mode mobile
+        }
+        if (document.body.classList.contains('interface-edit-mode') && !accordion.classList.contains('thin')) {
+            // Empêche de fermer/réduire la barre pendant le mode édition
+            return;
+        }
+        const isThin = accordion.classList.contains('thin');
+        setSidebarAccordion(isThin);
+    }
+}
+
+function setSidebarAccordion(expanded) {
+    const accordion = document.getElementById('sidebarAccordion');
+    if (!accordion) return;
+
+    if (expanded) {
+        accordion.classList.remove('thin');
+    } else {
+        accordion.classList.add('thin');
+    }
+}
+
+function closeSidebarAccordion() {
+    const accordion = document.getElementById('sidebarAccordion');
+    if (accordion && !accordion.classList.contains('thin')) {
+        accordion.classList.add('thin');
+    }
 }
 
 // Initial Render
 document.addEventListener('DOMContentLoaded', () => {
     setTimeout(renderSidebarAccordion, 100);
+
+    // Default to thin mode
+    const accordion = document.getElementById('sidebarAccordion');
+    if (accordion && !accordion.classList.contains('thin')) {
+        accordion.classList.add('thin');
+    }
+
+    // R2 — Fallback: délégation contextmenu sur le container navigation
+    // (couvre les cas où l'attribut oncontextmenu serait ignoré)
+    document.addEventListener('contextmenu', (e) => {
+        const item = e.target.closest('.accordion-nav-item[id^="nav-item-"]');
+        if (!item) return;
+        const viewId = item.id.replace('nav-item-', '');
+        _showNavContextMenu(e, viewId);
+        e.preventDefault();
+        return false;
+    });
 });
 
 /*
@@ -195,7 +295,7 @@ function closeAllToolsSidebarPanels() {
  */
 function switchView(view, options = {}) {
     // Si le système d'onglets est actif et que la vue le supporte
-    if (typeof openTab === 'function' && viewSupportsTabs(view)) {
+    if (typeof openTab === 'function' && viewSupportsTabs(view) && !options.skipTabs) {
         openTab(view, {}, options);
         return;
     }
@@ -251,7 +351,9 @@ function switchView(view, options = {}) {
     }
 
     // Initial render of view content
-    renderViewContent(view, 'editorView');
+    if (!options.skipRenderView) {
+        renderViewContent(view, 'editorView');
+    }
 
     // Live Tension Meter Visibility
     const tensionMeter = document.getElementById('liveTensionMeter');
@@ -274,19 +376,12 @@ function switchView(view, options = {}) {
 function syncSidebarWithView(view) {
     const listContainers = [
         'chaptersList', 'charactersList', 'worldList', 'notesList',
-        'codexList', 'arcsList', 'statsList', 'versionsList',
-        'analysisList', 'corkboardList', 'mindmapList', 'plotList',
-        'relationsList', 'mapList', 'timelineVizList', 'investigationList',
-        'globalnotesList', 'todosList', 'thrillerList', 'frontMatterList'
+        'codexList', 'arcsList',
+        'mindmapList', 'mapList', 'timelineVizList', 'investigationList',
+        'globalnotesList', 'todosList', 'frontMatterList'
     ];
 
-    // Cacher toutes les listes
-    listContainers.forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.style.display = 'none';
-    });
-
-    // Afficher la liste correspondante
+    // Identifier la liste correspondante
     let targetListId = null;
     switch (view) {
         case 'editor': targetListId = 'chaptersList'; break;
@@ -295,64 +390,67 @@ function syncSidebarWithView(view) {
         case 'notes': targetListId = 'notesList'; break;
         case 'codex': targetListId = 'codexList'; break;
         case 'arcs': targetListId = 'arcsList'; break;
-        case 'stats': targetListId = 'statsList'; break;
-        case 'versions': targetListId = 'versionsList'; break;
-        case 'analysis': targetListId = 'analysisList'; break;
-        case 'corkboard': targetListId = 'corkboardList'; break;
         case 'mindmap': targetListId = 'mindmapList'; break;
-        case 'plot': targetListId = 'plotList'; break;
-        case 'relations': targetListId = 'relationsList'; break;
         case 'map': targetListId = 'mapList'; break;
         case 'timelineviz': targetListId = 'timelineVizList'; break;
         case 'investigation': targetListId = 'investigationList'; break;
         case 'globalnotes': targetListId = 'globalnotesList'; break;
         case 'todos': targetListId = 'todosList'; break;
-        case 'thriller': targetListId = 'thrillerList'; break;
         case 'front_matter': targetListId = 'frontMatterList'; break;
     }
 
-    if (targetListId) {
-        const targetEl = document.getElementById(targetListId);
-        if (targetEl) targetEl.style.display = 'block';
+    const targetEl = targetListId ? document.getElementById(targetListId) : null;
+    const listWasVisible = targetEl && targetEl.style.display === 'block';
 
-        // Refresh the list content based on view
-        switch (view) {
-            case 'editor':
-                if (typeof renderActsList === 'function') renderActsList();
-                break;
-            case 'characters':
-                if (typeof renderCharactersList === 'function') renderCharactersList();
-                break;
-            case 'world':
-                if (typeof renderWorldList === 'function') renderWorldList();
-                break;
-            case 'notes':
-                if (typeof renderNotesList === 'function') renderNotesList();
-                break;
-            case 'codex':
-                if (typeof renderCodexList === 'function') renderCodexList();
-                break;
-            case 'front_matter':
-                if (window.FrontMatterView && typeof window.FrontMatterView.renderSidebar === 'function') window.FrontMatterView.renderSidebar();
-                break;
-            case 'globalnotes':
-                if (typeof renderGlobalNotesTree === 'function') {
-                    const gnList = document.getElementById('globalnotesList');
-                    if (gnList) gnList.innerHTML = renderGlobalNotesTree();
-                }
-                break;
-            case 'mindmap':
-                if (typeof renderMindmapList === 'function') renderMindmapList();
-                break;
-            case 'timelineviz':
-                if (typeof renderTimelineVizList === 'function') renderTimelineVizList();
-                break;
-            case 'arcs':
-                if (typeof renderArcsList === 'function') renderArcsList();
-                break;
+    // Cacher toutes les listes
+    listContainers.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.style.display = 'none';
+    });
+
+    if (targetListId && targetEl) {
+        targetEl.style.display = 'block';
+
+        // On ne rafraîchit le contenu que si la liste n'était pas déjà affichée
+        // Cela évite de casser le double-clic dans l'arborescence (re-render sauvage sur le premier clic)
+        if (!listWasVisible) {
+            switch (view) {
+                case 'editor':
+                    if (typeof renderActsList === 'function') renderActsList();
+                    break;
+                case 'characters':
+                    if (typeof renderCharactersList === 'function') renderCharactersList();
+                    break;
+                case 'world':
+                    if (typeof renderWorldList === 'function') renderWorldList();
+                    break;
+                case 'notes':
+                    if (typeof renderNotesList === 'function') renderNotesList();
+                    break;
+                case 'codex':
+                    if (typeof renderCodexList === 'function') renderCodexList();
+                    break;
+                case 'front_matter':
+                    if (window.FrontMatterView && typeof window.FrontMatterView.renderSidebar === 'function') window.FrontMatterView.renderSidebar();
+                    break;
+                case 'globalnotes':
+                    if (typeof renderGlobalNotesTree === 'function') {
+                        const gnList = document.getElementById('globalnotesList');
+                        if (gnList) gnList.innerHTML = renderGlobalNotesTree();
+                    }
+                    break;
+                case 'mindmap':
+                    if (typeof renderMindmapList === 'function') renderMindmapList();
+                    break;
+                case 'timelineviz':
+                    if (typeof renderTimelineVizList === 'function') renderTimelineVizList();
+                    break;
+                case 'arcs':
+                    if (typeof renderArcsList === 'function') renderArcsList();
+                    break;
+            }
         }
     }
-
     // Gérer les filtres et barres de progression spécifiques
     const progressBar = document.getElementById('projectProgressBar');
     const statusFilters = document.getElementById('statusFilters');
@@ -361,53 +459,61 @@ function syncSidebarWithView(view) {
     const toolsSidebar = document.getElementById('toolsSidebar');
     let tensionMeter = document.getElementById('liveTensionMeter');
 
-    if (view === 'editor' || view === 'plotgrid') {
-        if (progressBar) progressBar.style.display = (view === 'editor') ? 'block' : 'none';
-        if (statusFilters) statusFilters.style.display = (view === 'editor') ? 'flex' : 'none';
+    if (view === 'editor') {
         if (treeCollapseToolbar) treeCollapseToolbar.style.display = (view === 'editor') ? 'flex' : 'none';
-        if (sceneTools) sceneTools.style.display = (view === 'editor') ? 'flex' : 'none';
         if (toolsSidebar) {
             toolsSidebar.style.display = 'flex';
             document.body.classList.add('has-tools-sidebar');
             if (typeof updateEditorToolsSidebar === 'function') updateEditorToolsSidebar();
         }
 
-        // Ensure tension meter is visible and properly displayed
-        if (!tensionMeter && typeof window.injectTensionMeter === 'function') {
-            window.injectTensionMeter();
-            tensionMeter = document.getElementById('liveTensionMeter');
+        // Tension meter: contrôlé par CSS via la classe sur le body
+        if (view === 'editor') {
+            document.body.classList.add('view-editor');
+            // Injecter si pas encore présent
+            if (!tensionMeter && typeof TensionView !== 'undefined' && typeof TensionView.injectTensionMeter === 'function') {
+                TensionView.injectTensionMeter();
+            }
+        } else {
+            document.body.classList.remove('view-editor');
         }
-        if (tensionMeter) tensionMeter.style.display = 'flex';
     } else if (view === 'globalnotes') {
-        if (progressBar) progressBar.style.display = 'none';
-        if (statusFilters) statusFilters.style.display = 'none';
         if (treeCollapseToolbar) treeCollapseToolbar.style.display = 'none';
-        if (sceneTools) sceneTools.style.display = 'none';
-        if (tensionMeter) tensionMeter.style.display = 'none';
+        document.body.classList.remove('view-editor');
         if (toolsSidebar) {
             toolsSidebar.style.display = 'flex';
             document.body.classList.add('has-tools-sidebar');
             if (typeof updateGNToolsSidebar === 'function') updateGNToolsSidebar();
         }
     } else {
-        if (progressBar) progressBar.style.display = 'none';
-        if (statusFilters) statusFilters.style.display = 'none';
         if (treeCollapseToolbar) treeCollapseToolbar.style.display = 'none';
-        if (sceneTools) sceneTools.style.display = 'none';
+        document.body.classList.remove('view-editor');
         if (toolsSidebar) {
             toolsSidebar.style.display = 'none';
             document.body.classList.remove('has-tools-sidebar');
         }
-        if (tensionMeter) tensionMeter.style.display = 'none';
     }
 
     // Message "pas de sidebar" si rien ne correspond
     const noSidebarMsg = document.getElementById('noSidebarMessage');
-    if (!targetListId && noSidebarMsg) {
-        noSidebarMsg.style.display = 'block';
-        noSidebarMsg.innerHTML = `<div style="padding: 2rem; text-align: center; color: var(--text-muted); font-size: 0.85rem;">${Localization.t('sidebar.no_info') || 'Pas d\'informations pour cette vue'}</div>`;
-    } else if (noSidebarMsg) {
-        noSidebarMsg.style.display = 'none';
+    const sidebarColumn = document.getElementById('sidebarColumn');
+
+    if (!targetListId) {
+        if (noSidebarMsg) {
+            noSidebarMsg.style.display = 'block';
+            noSidebarMsg.innerHTML = `<div style="padding: 2rem; text-align: center; color: var(--text-muted); font-size: 0.85rem;">${Localization.t('sidebar.no_info') || 'Pas d\'informations pour cette vue'}</div>`;
+        }
+        // Masquage automatique de la sidebar pour les vues qui ne l'utilisent pas
+        if (sidebarColumn) sidebarColumn.style.setProperty('display', 'none', 'important');
+    } else {
+        if (noSidebarMsg) noSidebarMsg.style.display = 'none';
+        // Réaffichage de la sidebar pour les vues qui l'utilisent
+        if (sidebarColumn) sidebarColumn.style.removeProperty('display');
+    }
+
+    // Appliquer les réglages de personnalisation après le changement de vue
+    if (typeof InterfaceCustomizerViewModel !== 'undefined') {
+        InterfaceCustomizerViewModel.applySettings();
     }
 }
 
@@ -424,9 +530,9 @@ function updateSidebarActions(view) {
     switch (v) {
         case 'editor':
             html = `
-                <button class="btn btn-primary" onclick="openAddActModal()">${Localization.t('btn.add_act')}</button>
-                <button class="btn btn-primary" onclick="openAddChapterModal()">${Localization.t('btn.add_chapter')}</button>
                 <button class="btn btn-primary" onclick="openAddSceneModalQuick()">${Localization.t('btn.add_scene')}</button>
+                <button class="btn btn-secondary" onclick="openAddChapterModal()">${Localization.t('btn.add_chapter')}</button>
+                <button class="btn btn-ghost" onclick="openAddActModal()">${Localization.t('btn.add_act')}</button>
             `;
             break;
         case 'plotgrid':
@@ -525,6 +631,11 @@ function updateGNToolsSidebar() {
         </div>
     `;
     if (typeof lucide !== 'undefined') lucide.createIcons({ root: toolsSidebar });
+
+    // Appliquer les réglages de personnalisation après le rendu
+    if (typeof InterfaceCustomizerViewModel !== 'undefined') {
+        InterfaceCustomizerViewModel.applySettings();
+    }
 }
 
 /**
@@ -583,6 +694,11 @@ function updateEditorToolsSidebar() {
     if (typeof ToolsSidebarViewModel !== 'undefined') {
         ToolsSidebarViewModel.updateAllBadges();
     }
+
+    // Appliquer les réglages de personnalisation après le rendu
+    if (typeof InterfaceCustomizerViewModel !== 'undefined') {
+        InterfaceCustomizerViewModel.applySettings();
+    }
 }
 
 /**
@@ -631,6 +747,7 @@ function renderViewContent(view, containerId) {
     const container = document.getElementById(containerId);
     if (!container) return;
 
+
     switch (view) {
         case 'projects':
             if (typeof ProjectView !== 'undefined' && typeof ProjectView.renderLandingPage === 'function') {
@@ -653,9 +770,10 @@ function renderViewContent(view, containerId) {
                                     if (typeof refreshLinksPanel === 'function') refreshLinksPanel();
 
                                     // Update Tension Meter
-                                    if (typeof updateLiveTensionMeter === 'function' && scene.content) {
+                                    if (typeof updateLiveTensionMeter === 'function') {
+                                        const content = scene.content || '';
                                         const tempDiv = document.createElement('div');
-                                        tempDiv.innerHTML = scene.content;
+                                        tempDiv.innerHTML = content;
                                         updateLiveTensionMeter(tempDiv.innerText || tempDiv.textContent || '', { sceneId: scene.id, chapterId: chapter.id, actId: act.id });
                                     }
 
@@ -687,6 +805,11 @@ function renderViewContent(view, containerId) {
                         <div class="empty-state-title">${Localization.t('empty.select_scene')}</div>
                         <div class="empty-state-text">${Localization.t('empty.select_sidebar')}</div>
                     </div> `;
+            }
+
+            // Reset Tension Meter in empty state
+            if (typeof updateLiveTensionMeter === 'function') {
+                updateLiveTensionMeter('', null);
             }
             break;
 
@@ -1172,6 +1295,10 @@ function expandAllTree() {
         renderNotesList();
     }
 
+    // Refresh other view lists if they exist
+    if (typeof renderCharactersList === 'function') renderCharactersList();
+    if (typeof renderWorldList === 'function') renderWorldList();
+
     if (typeof ActRepository?.saveTreeState === 'function') ActRepository.saveTreeState();
     if (typeof lucide !== 'undefined') lucide.createIcons();
 }
@@ -1183,13 +1310,18 @@ function collapseAllTree() {
     expandedActs.clear();
     expandedChapters.clear();
 
-    document.querySelectorAll('.treeview-children').forEach(el => el.classList.add('collapsed'));
-    document.querySelectorAll('.treeview-chevron').forEach(el => el.setAttribute('data-lucide', 'chevron-right'));
+    // Only collapse children that are inside a treeview group
+    document.querySelectorAll('.treeview-group .treeview-children').forEach(el => el.classList.add('collapsed'));
+    document.querySelectorAll('.treeview-group .treeview-chevron').forEach(el => el.setAttribute('data-lucide', 'chevron-right'));
 
     if (typeof renderNotesList === 'function') {
         expandedNoteCategories.clear();
         renderNotesList();
     }
+
+    // Refresh other view lists if they exist
+    if (typeof renderCharactersList === 'function') renderCharactersList();
+    if (typeof renderWorldList === 'function') renderWorldList();
 
     if (typeof ActRepository?.saveTreeState === 'function') ActRepository.saveTreeState();
     if (typeof lucide !== 'undefined') lucide.createIcons();
@@ -1219,7 +1351,9 @@ function closeModal(modalId) {
 }
 
 function openModal(modalId) {
-    document.getElementById(modalId)?.classList.add('active');
+    const modal = document.getElementById(modalId);
+    if (!modal) return;
+    modal.classList.add('active');
 }
 
 
@@ -1490,18 +1624,35 @@ function getEditorToolbarHTML(panel = null, hideExtraTools = false) {
         </div>
         
         <!-- Synonyms -->
-        <div class="toolbar-group">
+        <div class="toolbar-group" id="toolSynonymsBtn">
             <button class="toolbar-btn" onmousedown="event.preventDefault()" onclick="if(typeof SynonymsView !== 'undefined') SynonymsView.toggle()" title="${Localization.t('toolbar.synonyms')}">
                 <i data-lucide="book-a" style="width:14px;height:14px;"></i>
             </button>
         </div>
         
+        <!-- Mentions -->
+        <div class="toolbar-group" id="toolMentionsBtn">
+            <button class="toolbar-btn" onmousedown="event.preventDefault()" onclick="MentionHelp.showGuide()" title="${Localization.t('mention.toolbar.title')}">
+                <i data-lucide="at-sign" style="width:14px;height:14px;"></i>
+            </button>
+        </div>
+
         <!-- Other -->
         <div class="toolbar-group">
             <button class="toolbar-btn" onmousedown="event.preventDefault()" onclick="${fnName}(${fnPrefix}'insertHorizontalRule')" title="${Localization.t('toolbar.horizontal_rule')}"><i data-lucide="minus" style="width:14px;height:14px;"></i></button>
             <button class="toolbar-btn" onmousedown="event.preventDefault()" onclick="${fnName}(${fnPrefix}'removeFormat')" title="${Localization.t('toolbar.remove_format')}"><i data-lucide="eraser" style="width:14px;height:14px;"></i></button>
+            <button class="toolbar-btn" id="toolStructureBlockBtn" onmousedown="event.preventDefault()" onclick="StructureBlockUI.wrapSelection()" title="${Localization.t('toolbar.structure_block')}">
+                <i data-lucide="layers" style="width:14px;height:14px;"></i>
+            </button>
         </div>
-        
+
+        <!-- Narrative Overview Toggle -->
+        <div class="toolbar-group" id="toolNarrativeOverviewBtn">
+            <button class="toolbar-btn" onmousedown="event.preventDefault()" onclick="NarrativeOverviewMain.toggleVisibility()" title="Aperçu narratif chronologique">
+                <i data-lucide="book-open" style="width:14px;height:14px;"></i>
+            </button>
+        </div>
+
         ${!hideExtraTools ? `
         <!-- Revision mode button -->
         <div class="toolbar-group">
@@ -1576,6 +1727,12 @@ function renderEditor(act, chapter, scene) {
             <div class="editor-toolbar" id="editorToolbar" style="border-top: 1px solid var(--border-color);">
                 ${getEditorToolbarHTML()}
             </div>
+            
+            <script>
+                if (typeof InterfaceCustomizerViewModel !== 'undefined') {
+                    InterfaceCustomizerViewModel.applySettings();
+                }
+            </script>
         </div>
 
         <div class="chapter-progress-indicator" id="chapterProgressIndicator">
@@ -1595,6 +1752,9 @@ function renderEditor(act, chapter, scene) {
         </div>`;
 
     if (typeof lucide !== 'undefined') lucide.createIcons();
+    if (typeof StructureBlockUI !== 'undefined' && StructureBlockUI.upgradeLegacyBlocks) {
+        StructureBlockUI.upgradeLegacyBlocks();
+    }
     if (typeof initializeColorPickers === 'function') initializeColorPickers();
 
     // Auto-resize summary textarea on load
@@ -2754,254 +2914,46 @@ function renderCodexWelcome() {
     if (typeof lucide !== 'undefined') lucide.createIcons();
 }
 
+// --- GLOBAL FLOATING TOOLTIP ---
+document.addEventListener('mouseover', (e) => {
+    // Target any item with a data-tooltip inside a thin activity bar.
+    const target = e.target.closest('.activity-bar.thin [data-tooltip], .activity-bar.thin .accordion-nav-item');
+    if (!target) return;
 
-// --- SIDEBAR SHORTCUTS & COLLAPSE ---
-
-/**
- * Renders the draggable sidebar shortcuts.
- */
-function renderSidebarShortcuts(shortcuts = null, isEditing = false) {
-    const container = document.getElementById('sidebarShortcuts');
-    if (!container) return;
-
-    // 1. Determine which shortcuts to show (Handling temp state while editing)
-    let list = shortcuts;
-    const vm = InterfaceCustomizerViewModel;
-
-    if (!list) {
-        if (vm && vm.state && vm.state.isEditing) {
-            list = vm.state.tempSettings.shortcuts;
-        } else if (typeof InterfaceCustomizerRepository !== 'undefined') {
-            const settings = InterfaceCustomizerRepository.loadSettings();
-            list = settings ? settings.shortcuts : null;
-        }
+    // Si l'élément est caché par le panel (ex: nav-item-label masqué) ou autre, l'event mouseover sur l'icon fonctionne.
+    let tooltip = document.getElementById('globalFloatingTooltip');
+    if (!tooltip) {
+        tooltip = document.createElement('div');
+        tooltip.id = 'globalFloatingTooltip';
+        tooltip.className = 'global-floating-tooltip';
+        document.body.appendChild(tooltip);
     }
 
-    // Default fallback if still nothing
-    if (!list || !Array.isArray(list)) {
-        list = ['projects', 'editor', 'corkboard', 'notes', 'characters', 'world'];
-    }
+    const text = target.getAttribute('data-tooltip') || target.querySelector('.nav-item-label')?.textContent;
+    if (!text) return;
 
-    // 2. Generate HTML items
-    const html = list.map(id => {
-        const cleanId = String(id).trim();
-        const item = NAVIGATION_ITEMS.find(i => String(i.id).trim() == cleanId);
-        if (!item) return '';
+    tooltip.textContent = text;
 
-        const isActive = (typeof currentView !== 'undefined' && currentView === cleanId);
-        const label = Localization.t(item.label);
+    // Position
+    const rect = target.getBoundingClientRect();
+    tooltip.style.left = (rect.right + 10) + 'px';
+    tooltip.style.top = (rect.top + rect.height / 2) + 'px';
 
-        return `
-            <div class="sidebar-shortcut-item ${isActive ? 'active' : ''}"
-                 onclick="switchView('${cleanId}')"
-                 title="${label}"
-                 data-id="${cleanId}">
-                <i data-lucide="${item.icon}"></i>
-                ${isEditing ? `<div class="shortcut-remove-btn" onclick="removeSidebarShortcut('${cleanId}', event)">×</div>` : ''}
-            </div>
-        `;
-    }).join('');
+    // Afficher
+    tooltip.classList.add('visible');
 
-    // 3. Add Customize + Collapse/Expand buttons
-    const col = document.getElementById('sidebarColumn');
-    const isCollapsed = col ? col.classList.contains('collapsed') : false;
-    const customizeBtn = `
-        <button class="sidebar-customize-btn" onclick="InterfaceCustomizerViewModel.startEditing()" title="${Localization.t('customizer.sidebar.btn_title')}" id="sidebarCustomizeBtn">
-            <i data-lucide="settings-2"></i>
-        </button>
-    `;
-    const toggleBtn = `
-        <button class="sidebar-collapse-btn" onclick="toggleSidebarCollapse()" title="${isCollapsed ? 'Déplier' : 'Replier'}">
-            <i data-lucide="${isCollapsed ? 'panel-left-open' : 'panel-left-close'}"></i>
-        </button>
-    `;
-
-    // 4. Inject and Process Icons
-    container.innerHTML = html + customizeBtn + toggleBtn;
-
-    if (typeof lucide !== 'undefined') {
-        lucide.createIcons({ root: container });
-    }
-
-    // 5. Re-attach Drag & Drop if needed
-    if (isEditing) {
-        setupShortcutsDragAndDrop(container, list);
-    } else {
-        disableShortcutsDragAndDrop();
-    }
-}
-
-/**
- * Disables Drag & Drop on accordion items.
- */
-function disableShortcutsDragAndDrop() {
-    document.querySelectorAll('.accordion-nav-item').forEach(item => {
-        item.removeAttribute('draggable');
-        item.style.cursor = '';
-        item.ondragstart = null;
-        item.ondragend = null;
-    });
-}
-
-/**
- * Removes a shortcut from the list (Edit Mode).
- */
-function removeSidebarShortcut(id, event) {
-    if (event) event.stopPropagation();
-
-    if (typeof InterfaceCustomizerViewModel !== 'undefined' && InterfaceCustomizerViewModel.state.isEditing) {
-        const currentShortcuts = InterfaceCustomizerViewModel.state.tempSettings.shortcuts || ['projects', 'editor', 'corkboard', 'notes', 'characters', 'world'];
-        const newShortcuts = currentShortcuts.filter(s => s !== id);
-
-        InterfaceCustomizerViewModel.state.tempSettings.shortcuts = newShortcuts;
-        renderSidebarShortcuts(newShortcuts, true);
-    }
-}
-
-/**
- * Toggles the sidebar collapse state.
- */
-function toggleSidebarCollapse() {
-    const col = document.getElementById('sidebarColumn');
-    if (col) {
-        col.classList.toggle('collapsed');
-        const isCollapsed = col.classList.contains('collapsed');
-
-        // Force hide/show if CSS fails or for animation smoothness (Desktop only)
-        const accordion = document.getElementById('sidebarAccordion');
-        const sidebar = document.getElementById('sidebar');
-
-        if (window.innerWidth > 900) {
-            if (isCollapsed) {
-                if (accordion) accordion.style.display = 'none';
-                if (sidebar) sidebar.style.display = 'none';
-            } else {
-                if (accordion) accordion.style.display = '';
-                if (sidebar) sidebar.style.display = '';
-            }
-        } else {
-            // Sur mobile, on enlève le display: none forcé pour laisser le clipping CSS s'opérer
-            if (accordion) accordion.style.display = '';
-            if (sidebar) sidebar.style.display = '';
-        }
-
-        // Re-render shortcuts to update the toggle icon
-        const isEditing = document.body.classList.contains('interface-edit-mode');
-        // Get current shortcuts
-        let shortcuts = null;
-        if (typeof InterfaceCustomizerViewModel !== 'undefined' && isEditing) {
-            shortcuts = InterfaceCustomizerViewModel.state.tempSettings.shortcuts;
-        } else if (typeof InterfaceCustomizerRepository !== 'undefined') {
-            shortcuts = InterfaceCustomizerRepository.loadSettings().shortcuts;
-        }
-
-        renderSidebarShortcuts(shortcuts, isEditing);
-
-        // Handle resizing event globally
-        window.dispatchEvent(new Event('resize'));
-    }
-}
-
-/**
- * Sets up Drag & Drop for shortcuts.
- */
-function setupShortcutsDragAndDrop(container, currentShortcuts) {
-    if (!container) return;
-
-    // Direct property assignment to override any previous handlers
-    container.ondragover = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        e.dataTransfer.dropEffect = 'copy';
-        container.classList.add('drag-over');
+    const hideTooltip = () => {
+        tooltip.classList.remove('visible');
+        target.removeEventListener('mouseleave', hideTooltip);
+        const wrapper = document.querySelector('.activity-bar-content-wrapper');
+        if (wrapper) wrapper.removeEventListener('scroll', hideTooltip);
     };
 
-    container.ondragleave = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        if (e.relatedTarget && container.contains(e.relatedTarget)) return;
-        container.classList.remove('drag-over');
-    };
+    target.addEventListener('mouseleave', hideTooltip);
 
-    container.ondrop = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        container.classList.remove('drag-over');
-        container.classList.remove('can-drop');
-
-        const rawId = e.dataTransfer.getData('text/plain') || e.dataTransfer.getData('Text');
-        const id = rawId ? rawId.trim() : null;
-
-        console.log('[SHORTCUT DROP] Raw ID:', rawId, 'Cleaned ID:', id);
-
-        if (id) {
-            const vm = InterfaceCustomizerViewModel;
-            console.log('[SHORTCUT DROP] ViewModel:', vm);
-            console.log('[SHORTCUT DROP] Is Editing:', vm?.state?.isEditing);
-
-            if (vm && vm.state && vm.state.isEditing) {
-                // Initialize tempSettings if empty
-                if (!vm.state.tempSettings.shortcuts) {
-                    vm.state.tempSettings.shortcuts = [...(currentShortcuts || [])];
-                    console.log('[SHORTCUT DROP] Initialized shortcuts:', vm.state.tempSettings.shortcuts);
-                }
-
-                const list = vm.state.tempSettings.shortcuts;
-                const alreadyExists = list.some(s => String(s).trim() == String(id));
-
-                console.log('[SHORTCUT DROP] Current list:', list);
-                console.log('[SHORTCUT DROP] Already exists:', alreadyExists);
-
-                if (!alreadyExists) {
-                    // Final safety: check if ID exists in navigation items
-                    const isValid = NAVIGATION_ITEMS.some(i => String(i.id).trim() == String(id));
-                    console.log('[SHORTCUT DROP] Is valid nav item:', isValid);
-
-                    if (isValid) {
-                        const newList = [...list, id];
-                        vm.state.tempSettings.shortcuts = newList;
-                        console.log('[SHORTCUT DROP] New list:', newList);
-                        // Trigger immediate UI refresh
-                        renderSidebarShortcuts(newList, true);
-                        console.log('[SHORTCUT DROP] Rendered shortcuts');
-                    }
-                } else {
-                    console.log('[SHORTCUT DROP] Item already in shortcuts, skipping');
-                }
-            }
-        }
-    };
-
-    // Attaching drag events to accordion items
-    const items = document.querySelectorAll('.accordion-nav-item');
-    items.forEach(item => {
-        item.setAttribute('draggable', 'true');
-        item.style.cursor = 'grab';
-
-        // Extract ID from nav-item-{id}
-        const navId = item.id.replace('nav-item-', '').trim();
-
-        item.ondragstart = (e) => {
-            const cleanId = String(navId).trim();
-            // Store ID in multiple formats for browser compatibility
-            e.dataTransfer.effectAllowed = 'copy';
-            e.dataTransfer.setData('text/plain', cleanId);
-            e.dataTransfer.setData('Text', cleanId);
-            item.classList.add('dragging');
-            container.classList.add('can-drop');
-        };
-
-        item.ondragend = (e) => {
-            item.classList.remove('dragging');
-            container.classList.remove('can-drop');
-            container.classList.remove('drag-over');
-        };
-    });
-}
-
-// Initial Render of Shortcuts
-document.addEventListener('DOMContentLoaded', () => {
-    setTimeout(() => {
-        renderSidebarShortcuts();
-    }, 200); // Wait for navigation items to be loaded/rendered
+    // Fermer l'infobulle si l'utilisateur scrolle la barre
+    const scrollWrapper = document.querySelector('.activity-bar-content-wrapper');
+    if (scrollWrapper) {
+        scrollWrapper.addEventListener('scroll', hideTooltip, { once: true });
+    }
 });

@@ -44,11 +44,11 @@ class FrontMatterRepository {
         const newItem = FrontMatterModel.create({
             type: type,
             title: title || FrontMatterModel.getDefaultTitle(type),
-            order: items.length // Ajoute à la fin par défaut
+            order: items.length
         });
 
         window.project.frontMatter.push(newItem);
-        this._save();
+        this._recalibrateOrders(); // Assure la propreté des ordres
         return newItem;
     }
 
@@ -81,7 +81,7 @@ class FrontMatterRepository {
 
         const success = window.project.frontMatter.length < initialLength;
         if (success) {
-            this._save();
+            this._recalibrateOrders();
         }
         return success;
     }
@@ -126,6 +126,14 @@ class FrontMatterRepository {
         items[currentIndex].order = items[newIndex].order;
         items[newIndex].order = tempOrder;
 
+        this._recalibrateOrders();
+    }
+
+    _recalibrateOrders() {
+        const items = this.getAll();
+        items.forEach((item, index) => {
+            item.order = index;
+        });
         this._save();
     }
 

@@ -241,26 +241,30 @@ class FrontMatterView {
         const items = this.viewModel.getSidebarList();
 
         const modalHtml = `
-            <div id="organizeFrontMatterModal" class="modal active" style="display: flex; align-items: center; justify-content: center; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000;">
-                <div class="modal-content" style="background: var(--bg-primary); padding: 2rem; border-radius: 8px; width: 500px; max-width: 90%;">
+            <div id="organizeFrontMatterModal" class="modal active" style="display: flex; align-items: center; justify-content: center; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); z-index: 10000;">
+                <div class="modal-content" style="background: var(--bg-primary); padding: 2rem; border-radius: 12px; width: 500px; max-width: 90%; box-shadow: var(--shadow-xl); border: 1px solid var(--border-color);">
                     <h3 style="margin-bottom: 1.5rem;"><i data-lucide="layers" style="vertical-align: middle; margin-right: 10px;"></i> ${Localization.t('tool.tree.organize')}</h3>
                     <div style="max-height: 400px; overflow-y: auto; display: flex; flex-direction: column; gap: 0.5rem;">
-                        ${items.map((item, index) => `
-                            <div style="display: flex; align-items: center; gap: 10px; background: var(--bg-secondary); padding: 10px; border-radius: 4px; border: 1px solid var(--border-color);">
-                                <div style="flex: 1; font-weight: 600;">${item.title || Localization.t(FrontMatterModel.getTypeLabelKey(item.type))}</div>
-                                <div style="display: flex; gap: 5px;">
-                                    <button class="btn btn-icon btn-small" onclick="FrontMatterView.moveItem('${item.id}', -1)" ${index === 0 ? 'disabled' : ''}>
-                                        <i data-lucide="chevron-up" style="width: 14px; height: 14px;"></i>
+                        ${items.length === 0 ? `
+                            <div style="text-align: center; padding: 20px; color: var(--text-muted);">
+                                ${Localization.t('front_matter.empty_list')}
+                            </div>
+                        ` : items.map((item, index) => `
+                            <div style="display: flex; align-items: center; gap: 10px; background: var(--bg-secondary); padding: 12px; border-radius: 8px; border: 1px solid var(--border-color);">
+                                <div style="flex: 1; font-weight: 600; color: var(--text-primary);">${item.title || Localization.t(FrontMatterModel.getTypeLabelKey(item.type))}</div>
+                                <div style="display: flex; gap: 8px;">
+                                    <button class="btn btn-secondary btn-small" onclick="FrontMatterView.moveItem('${item.id}', -1)" ${index === 0 ? 'disabled' : ''} title="${Localization.t('tool.tree.up') || 'Haut'}" style="width: 36px; height: 36px; padding: 0; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border-color); background: var(--bg-primary);">
+                                        <i data-lucide="chevron-up" style="width: 18px; height: 18px;"></i>
                                     </button>
-                                    <button class="btn btn-icon btn-small" onclick="FrontMatterView.moveItem('${item.id}', 1)" ${index === items.length - 1 ? 'disabled' : ''}>
-                                        <i data-lucide="chevron-down" style="width: 14px; height: 14px;"></i>
+                                    <button class="btn btn-secondary btn-small" onclick="FrontMatterView.moveItem('${item.id}', 1)" ${index === items.length - 1 ? 'disabled' : ''} title="${Localization.t('tool.tree.down') || 'Bas'}" style="width: 36px; height: 36px; padding: 0; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border-color); background: var(--bg-primary);">
+                                        <i data-lucide="chevron-down" style="width: 18px; height: 18px;"></i>
                                     </button>
                                 </div>
                             </div>
                         `).join('')}
                     </div>
-                    <div style="margin-top: 1.5rem; text-align: right;">
-                        <button class="btn btn-primary" onclick="document.getElementById('organizeFrontMatterModal').remove()">
+                    <div style="margin-top: 2rem; text-align: right; border-top: 1px solid var(--border-color); padding-top: 1.5rem;">
+                        <button class="btn btn-primary" onclick="document.getElementById('organizeFrontMatterModal').remove()" style="min-width: 120px;">
                             ${Localization.t('btn.close')}
                         </button>
                     </div>

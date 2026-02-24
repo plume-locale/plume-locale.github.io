@@ -185,6 +185,10 @@ const ProductTourConfigModel = {
             disableActiveInteraction: false,
             onDestroyStarted: () => {
                 console.log('🎓 Tour destroy started');
+                // Il faut explicitement détruire l'instance car l'événement est intercepté
+                if (typeof ProductTourDriverRepository !== 'undefined') {
+                    ProductTourDriverRepository.cleanup();
+                }
                 // Sera géré par le ViewModel
                 if (typeof onTourCompleteVM === 'function') {
                     onTourCompleteVM();

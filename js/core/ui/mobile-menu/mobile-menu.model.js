@@ -9,7 +9,6 @@ const MobileMenuModel = {
      */
     DEFAULT_STATE: {
         isSidebarOpen: false,
-        isNavDropdownActive: false,
         isEditorToolbarExpanded: false,
         isLinksPanelExpanded: false,
         isMobileMode: false, // Déterminé par la taille de la fenêtre/header

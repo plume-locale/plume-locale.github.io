@@ -107,6 +107,49 @@ const MentionHelpView = {
     },
 
     /**
+     * Affiche un mini-guide statique des raccourcis.
+     */
+    renderGuide(activeElement) {
+        let list = document.getElementById(this.containerId);
+        if (!list) {
+            list = document.createElement('div');
+            list.id = this.containerId;
+            list.className = 'mention-help-popup';
+            document.body.appendChild(list);
+            this.injectStyles();
+        }
+
+        const rect = activeElement.getBoundingClientRect();
+        list.style.left = `${rect.left}px`;
+        list.style.top = `${rect.bottom + 10}px`;
+        list.style.display = 'block';
+
+        list.innerHTML = `
+            <div style="padding: 10px; font-size: 0.9rem;">
+                <div style="font-weight: bold; margin-bottom: 8px; color: var(--accent-color);">${Localization.t('mention.guide.title')}</div>
+                <div style="display: flex; flex-direction: column; gap: 6px;">
+                    <div style="display: flex; gap: 10px;"><b>@@</b> <span>${Localization.t('mention.type.character')}</span></div>
+                    <div style="display: flex; gap: 10px;"><b>##</b> <span>${Localization.t('mention.type.world')}</span></div>
+                    <div style="display: flex; gap: 10px;"><b>!!</b> <span>${Localization.t('mention.type.globalnote')}</span></div>
+                    <div style="display: flex; gap: 10px;"><b>??</b> <span>${Localization.t('mention.type.codex')}</span></div>
+                </div>
+                <div style="margin-top: 10px; font-size: 0.75rem; opacity: 0.7; border-top: 1px solid var(--border-color); padding-top: 6px;">
+                    Tapez ces symboles dans l'éditeur pour lier vos fiches.
+                </div>
+            </div>
+        `;
+
+        // Fermer au clic ailleurs
+        const closeHandler = (e) => {
+            if (!list.contains(e.target)) {
+                this.hide();
+                document.removeEventListener('mousedown', closeHandler);
+            }
+        };
+        setTimeout(() => document.addEventListener('mousedown', closeHandler), 10);
+    },
+
+    /**
      * Injecte les styles CSS nécessaires.
      */
     injectStyles() {

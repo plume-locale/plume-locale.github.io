@@ -364,10 +364,30 @@ const ArcBoardView = {
 
                 <div style="flex:1"></div>
 
+                <div class="arc-toolbar-dropdown">
+                    <button class="arc-toolbar-btn" data-tooltip="${Localization.t('header.backup')}">
+                        <i data-lucide="download"></i>
+                    </button>
+                    <div class="arc-toolbar-dropdown-content">
+                        <button onclick="ArcBoardImportExport.exportToExcel(ArcBoardState.currentArcId)">
+                            <i data-lucide="file-spreadsheet"></i> ${Localization.t('arc.toolbar.export_excel')}
+                        </button>
+                        <button onclick="ArcBoardImportExport.exportToMarkdown(ArcBoardState.currentArcId)">
+                            <i data-lucide="file-text"></i> ${Localization.t('arc.toolbar.export_md')}
+                        </button>
+                        <div class="dropdown-divider"></div>
+                        <button onclick="document.getElementById('arcImportExcelInput').click()">
+                            <i data-lucide="upload"></i> ${Localization.t('arc.toolbar.import_excel')}
+                        </button>
+                    </div>
+                </div>
+
                 <button class="arc-toolbar-btn" data-tooltip="${Localization.t('arc.toolbar.delete')}" onclick="ArcBoardViewModel.deleteSelected()">
                     <i data-lucide="trash-2"></i>
                 </button>
             </div>
+            <input type="file" id="arcImportExcelInput" style="display:none" accept=".xlsx, .xls"
+                   onchange="ArcBoardImportExport.importFromExcel(this.files[0])">
         `;
     },
 

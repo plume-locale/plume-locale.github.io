@@ -6,7 +6,10 @@
 function toggleSplitView() {
     // Gestion Onglets (Préféré)
     if (typeof toggleTabsSplit === 'function') {
+        // Désactiver l'ancien flag pour éviter les conflits visuels (reliquats)
+        splitViewActive = false;
         toggleTabsSplit();
+        updateSplitToggleButton();
         return;
     }
 

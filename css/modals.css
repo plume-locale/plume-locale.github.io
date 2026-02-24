@@ -958,6 +958,47 @@
     white-space: nowrap;
 }
 
+/* R5 — Hiérarchie CTA : Scène (primary) > Chapitre (secondary) > Acte (ghost) */
+.sidebar-actions .btn-primary {
+    flex: 1.4;
+}
+
+.sidebar-actions .btn-secondary {
+    flex: 1.1;
+    padding: 0.5rem 0.25rem;
+    font-size: 0.75rem;
+    white-space: nowrap;
+}
+
+/* btn-ghost global (utilisé aussi pour le CTA Acte) */
+.btn-ghost {
+    background: transparent;
+    color: var(--text-muted);
+    border: 1.5px solid var(--border-color);
+    border-radius: 8px;
+    padding: 0.6rem 1.2rem;
+    font-family: 'Crimson Pro', serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    opacity: 0.7;
+}
+
+.btn-ghost:hover {
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    border-color: var(--text-muted);
+    opacity: 1;
+}
+
+.sidebar-actions .btn-ghost {
+    flex: 0.9;
+    padding: 0.5rem 0.25rem;
+    font-size: 0.75rem;
+    white-space: nowrap;
+}
+
 /* Scene Tools Bar */
 .scene-tools {
     display: flex;
@@ -1000,12 +1041,475 @@
     height: 16px;
 }
 
-.scene-tool-badge {
-    background: var(--accent-red);
-    color: white;
-    font-size: 0.65rem;
-    padding: 0.1rem 0.4rem;
-    border-radius: 10px;
+
+/* ============================================
+   STANDARD MODAL STYLES (UNIFIED)
+   ============================================ */
+
+:root {
+    --modal-sm: 400px;
+    --modal-md: 600px;
+    --modal-lg: 1000px;
+}
+
+/* Base Modal Container (Overlay) */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    z-index: 10000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.modal.active, 
+.modal[style*="block"], 
+.modal[style*="flex"] {
+    opacity: 1;
+    display: flex !important;
+}
+
+/* Modal Content Container */
+.modal-content {
+    background: var(--bg-primary);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border-color);
+    width: 90%;
+    max-width: var(--modal-md);
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    transform: translateY(20px);
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.modal.active .modal-content,
+.modal[style*="block"] .modal-content,
+.modal[style*="flex"] .modal-content {
+    transform: translateY(0);
+}
+
+/* Modal Sizes */
+.modal-content.modal-sm {
+    max-width: var(--modal-sm);
+}
+
+.modal-content.modal-lg {
+    max-width: var(--modal-lg);
+}
+
+/* Modal Header */
+.modal-header {
+    padding: 1.25rem 1.5rem;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+}
+
+.modal-title,
+.modal-header h2 {
+    font-size: 1.25rem;
     font-weight: 600;
-    margin-left: 0.25rem;
+    color: var(--text-primary);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: var(--font-ui);
+}
+
+.modal-title i,
+.modal-header h2 i {
+    width: 20px;
+    height: 20px;
+    color: var(--accent-gold);
+}
+
+/* Modal Body */
+.modal-body {
+    padding: 1.5rem;
+    overflow-y: auto;
+    flex: 1;
+    min-height: 0;
+}
+
+/* Modal Footer */
+.modal-footer,
+.modal-actions {
+    padding: 1.25rem 1.5rem;
+    border-top: 1px solid var(--border-color);
+    background: var(--bg-secondary);
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    flex-shrink: 0;
+}
+
+/* Close Button */
+.modal-close {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 1.5rem;
+    padding: 0.25rem;
+    border-radius: var(--radius-sm);
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+}
+
+.modal-close:hover {
+    background: rgba(0, 0, 0, 0.05);
+    color: var(--text-primary);
+}
+
+/* Forms inside Modals */
+.modal .form-group {
+    margin-bottom: 1.25rem;
+}
+
+.modal .form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    font-family: var(--font-ui);
+    font-size: 0.9rem;
+}
+
+.modal .form-input,
+.modal .form-select,
+.modal textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: var(--font-ui);
+    transition: border-color 0.2s, box-shadow 0.2s;
+    font-size: 0.95rem;
+}
+
+.modal .form-input:focus,
+.modal .form-select:focus,
+.modal textarea:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(var(--primary-color-rgb), 0.15);
+    outline: none;
+}
+
+/* Legacy Support & Specific Modals Adjustments */
+.diff-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.diff-modal-content {
+    background: var(--bg-primary);
+    border-radius: 12px;
+    width: 100%;
+    max-width: 1200px;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.diff-modal-header {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+}
+
+.diff-modal-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.diff-modal-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 0.25rem;
+    line-height: 1;
+    transition: color 0.2s;
+}
+
+.diff-modal-close:hover {
+    color: var(--text-primary);
+}
+
+.diff-toolbar {
+    padding: 0.75rem 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    background: var(--bg-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    flex-shrink: 0;
+}
+
+.diff-stats {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.85rem;
+}
+
+.diff-stat {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.diff-stat.added {
+    color: #2e7d32;
+}
+
+.diff-stat.removed {
+    color: #c62828;
+}
+
+.diff-stat.changed {
+    color: #f57c00;
+}
+
+.diff-view-toggle {
+    display: flex;
+    gap: 0.25rem;
+}
+
+.diff-view-btn {
+    padding: 0.4rem 0.8rem;
+    border: 1px solid var(--border-color);
+    background: var(--bg-primary);
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.diff-view-btn:first-child {
+    border-radius: 4px 0 0 4px;
+}
+
+.diff-view-btn:last-child {
+    border-radius: 0 4px 4px 0;
+}
+
+.diff-view-btn.active {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.diff-nav-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.diff-nav-btn {
+    padding: 0.4rem 0.8rem;
+    border: 1px solid var(--border-color);
+    background: var(--bg-primary);
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.diff-nav-btn:hover {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+}
+
+.diff-content {
+    flex: 1;
+    overflow: auto;
+    padding: 1rem;
+}
+
+/* Vue unifiée */
+.diff-unified {
+    font-family: 'Crimson Pro', serif;
+    font-size: 1rem;
+    line-height: 1.8;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+.diff-line {
+    padding: 0.1rem 0.5rem;
+    margin: 0 -0.5rem;
+    border-radius: 3px;
+}
+
+.diff-line.added {
+    background: rgba(46, 125, 50, 0.15);
+}
+
+.diff-line.removed {
+    background: rgba(198, 40, 40, 0.15);
+    text-decoration: line-through;
+    opacity: 0.7;
+}
+
+.diff-word {
+    padding: 0.1rem 0.2rem;
+    border-radius: 2px;
+}
+
+.diff-word.added {
+    background: rgba(46, 125, 50, 0.3);
+    color: #1b5e20;
+}
+
+.diff-word.removed {
+    background: rgba(198, 40, 40, 0.3);
+    color: #b71c1c;
+    text-decoration: line-through;
+}
+
+/* Vue côte à côte */
+.diff-side-by-side {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    height: 100%;
+}
+
+.diff-side {
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.diff-side-header {
+    padding: 0.75rem 1rem;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-color);
+    font-weight: 600;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.diff-side-header.old {
+    color: #c62828;
+}
+
+.diff-side-header.new {
+    color: #2e7d32;
+}
+
+.diff-side-content {
+    flex: 1;
+    overflow: auto;
+    padding: 1rem;
+    font-family: 'Crimson Pro', serif;
+    font-size: 1rem;
+    line-height: 1.8;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+.diff-paragraph {
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    border-radius: 4px;
+    transition: background 0.2s;
+}
+
+.diff-paragraph.modified {
+    background: rgba(255, 152, 0, 0.1);
+    border-left: 3px solid #ff9800;
+}
+
+.diff-paragraph.added {
+    background: rgba(46, 125, 50, 0.1);
+    border-left: 3px solid #4caf50;
+}
+
+.diff-paragraph.removed {
+    background: rgba(198, 40, 40, 0.1);
+    border-left: 3px solid #f44336;
+    text-decoration: line-through;
+    opacity: 0.6;
+}
+
+.diff-highlight {
+    cursor: pointer;
+}
+
+.diff-highlight:hover {
+    filter: brightness(0.95);
+}
+
+.diff-empty-state {
+    text-align: center;
+    padding: 3rem;
+    color: var(--text-muted);
+}
+
+.diff-empty-state-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.diff-version-selector {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+}
+
+.diff-version-select {
+    padding: 0.4rem 0.8rem;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-size: 0.85rem;
+    cursor: pointer;
 }

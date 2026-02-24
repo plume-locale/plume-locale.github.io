@@ -1,0 +1,193 @@
+/**
+ * Styles - Import Scrivener Modal
+ */
+
+/* ─── Modal ──────────────────────────────────────────────────────────────── */
+#importScrivenerModal .modal-content {
+    max-width: 620px;
+    max-height: 88vh;
+    overflow-y: auto;
+}
+
+/* ─── Corps ──────────────────────────────────────────────────────────────── */
+.scriv-import-body {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+/* ─── Intro ──────────────────────────────────────────────────────────────── */
+.scriv-intro {
+    text-align: center;
+    padding: 1rem 0 0.5rem;
+}
+
+.scriv-intro-icon {
+    margin-bottom: 0.75rem;
+}
+
+/* ─── Instructions étape par étape ──────────────────────────────────────── */
+.scriv-instructions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    padding: 1rem 1.25rem;
+}
+
+.scriv-step {
+    display: flex;
+    gap: 0.875rem;
+    align-items: flex-start;
+}
+
+.scriv-step p {
+    margin: 0.2rem 0 0;
+    color: var(--text-muted);
+    font-size: 0.83rem;
+    line-height: 1.5;
+}
+
+.scriv-step strong {
+    font-size: 0.9rem;
+}
+
+.scriv-step-num {
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--accent-gold, #c8a84b);
+    color: #000;
+    font-weight: 700;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ─── Dropzone ───────────────────────────────────────────────────────────── */
+.scriv-dropzone {
+    border: 2px dashed var(--border-color);
+    border-radius: 12px;
+    padding: 2rem 1.5rem;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+}
+
+.scriv-dropzone:hover,
+.scriv-dropzone.dragover {
+    border-color: var(--accent-gold, #c8a84b);
+    background: rgba(200, 168, 75, 0.05);
+}
+
+.scriv-dropzone.dragover {
+    background: rgba(200, 168, 75, 0.12);
+    transform: scale(1.01);
+}
+
+/* ─── Résumé ─────────────────────────────────────────────────────────────── */
+.scriv-summary {
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    padding: 1rem 1.25rem;
+}
+
+.scriv-summary-row {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.scriv-summary-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    flex: 1;
+    min-width: 100px;
+}
+
+.scriv-summary-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.scriv-summary-value {
+    font-size: 0.95rem;
+}
+
+/* ─── Arborescence ───────────────────────────────────────────────────────── */
+.scriv-tree {
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    max-height: 260px;
+    overflow-y: auto;
+    background: var(--bg-primary);
+}
+
+.scriv-tree-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.375rem 0;
+    border-bottom: 1px solid var(--border-color);
+    transition: background 0.15s;
+}
+
+.scriv-tree-item:last-child {
+    border-bottom: none;
+}
+
+.scriv-tree-item:hover {
+    background: var(--bg-secondary);
+}
+
+.scriv-tree-badge {
+    margin-left: auto;
+    margin-right: 12px;
+    font-size: 0.7rem;
+    background: var(--bg-tertiary);
+    color: var(--text-muted);
+    padding: 0.1rem 0.4rem;
+    border-radius: 3px;
+}
+
+/* ─── Avertissement ──────────────────────────────────────────────────────── */
+.scriv-warning {
+    background: rgba(255, 193, 7, 0.1);
+    border: 1px solid rgba(255, 193, 7, 0.3);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+/* ─── Tip ────────────────────────────────────────────────────────────────── */
+.scriv-tip {
+    background: rgba(200, 168, 75, 0.08);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+}
+
+.scriv-tip code {
+    background: var(--bg-tertiary);
+    padding: 0.1em 0.3em;
+    border-radius: 3px;
+    font-size: 0.85em;
+}
+
+kbd {
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: 3px;
+    padding: 0.1em 0.4em;
+    font-size: 0.8em;
+    font-family: monospace;
+}

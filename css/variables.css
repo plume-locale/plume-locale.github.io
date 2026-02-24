@@ -1,11 +1,14 @@
         :root {
-            /* Thème épuré blanc */
+            /* ============================================
+               COULEURS — Thème épuré blanc
+               ============================================ */
             --bg-primary: #ffffff;
             --bg-primary-rgb: 255, 255, 255;
             --bg-secondary: #f8f9fa;
             --bg-secondary-rgb: 248, 249, 250;
             --bg-tertiary: #f0f1f3;
             --bg-tertiary-rgb: 240, 241, 243;
+            --bg-hover: rgba(0, 0, 0, 0.04);
             --bg-accent: #2a2622;
             --bg-accent-rgb: 42, 38, 34;
 
@@ -23,8 +26,8 @@
             /* Touches de couleur */
             --accent-red: #ff6b6b;
             --accent-red-rgb: 255, 107, 107;
-            --accent-gold: #ffd93d;
-            --accent-gold-rgb: 255, 217, 61;
+            --accent-gold: #f5c842;
+            --accent-gold-rgb: 245, 200, 66;
             --accent-blue: #4a9eff;
             --accent-blue-rgb: 74, 158, 255;
             --accent-green: #51cf66;
@@ -33,9 +36,56 @@
             --accent-purple-rgb: 167, 139, 250;
             --error-color: #dc2626;
 
+            /* ============================================
+               TYPOGRAPHIE — Système bifocal UI / Contenu
+               ============================================ */
+            /* Police d'interface : sans-serif moderne, lisibilité UI */
+            --font-ui: 'Inter', 'Outfit', system-ui, -apple-system, sans-serif;
+            /* Police de contenu éditorial : serif expressif */
+            --font-content: 'Crimson Pro', 'Georgia', serif;
+            /* Police de titres décoratifs */
+            --font-display: 'Noto Serif JP', 'Georgia', serif;
+            /* Police monospace : stats, code, compteurs */
+            --font-mono: 'Source Code Pro', 'Fira Code', monospace;
+
+            /* ============================================
+               BORDER RADIUS — Système unifié
+               ============================================ */
+            --radius-xs: 3px;
+            /* badges, tags inline */
+            --radius-sm: 6px;
+            /* boutons, inputs petits */
+            --radius-md: 10px;
+            /* cartes, modals, dropdowns */
+            --radius-lg: 16px;
+            /* panels, drawers */
+            --radius-xl: 24px;
+            /* chips, pills */
+            --radius-full: 9999px;
+            /* badges ronds, avatars */
+
+            /* ============================================
+               SHADOWS — Système unifié
+               ============================================ */
             --shadow-color: 0, 0, 0;
             --shadow: rgba(var(--shadow-color), 0.08);
+            --shadow-xs: 0 1px 2px rgba(var(--shadow-color), 0.06);
+            --shadow-sm: 0 2px 6px rgba(var(--shadow-color), 0.08);
+            --shadow-md: 0 4px 16px rgba(var(--shadow-color), 0.10);
+            --shadow-lg: 0 10px 30px rgba(var(--shadow-color), 0.14);
+            --shadow-xl: 0 20px 60px rgba(var(--shadow-color), 0.20);
 
+            /* ============================================
+               TRANSITIONS — Durées standard
+               ============================================ */
+            --transition-fast: 100ms ease;
+            --transition-base: 200ms ease;
+            --transition-slow: 350ms ease;
+            --transition-bounce: 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
+
+            /* ============================================
+               AUTRES
+               ============================================ */
             /* Revision colors */
             --highlight-yellow: rgba(255, 235, 59, 0.4);
             --highlight-green: rgba(76, 175, 80, 0.3);
@@ -57,7 +107,7 @@
             /* Customization Variables */
             --progress-bar-width: 8px;
             --status-draft-color: #ff6b6b;
-            --status-progress-color: #ffd93d;
+            --status-progress-color: #f5c842;
             --status-complete-color: #51cf66;
             --status-review-color: #4a9eff;
         }

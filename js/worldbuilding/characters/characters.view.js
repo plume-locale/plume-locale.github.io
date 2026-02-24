@@ -73,7 +73,7 @@ function renderCharactersList() {
         return;
     }
 
-    let html = '<div class="treeview-children" style="margin-left: 0; border-left: none; padding-left: 0;">';
+    let html = '<div class="characters-list-wrapper" style="margin-left: 0; border-left: none; padding-left: 0;">';
 
     // Helper pour générer une section (Race ou Groupe)
     const renderSection = (title, groupedData) => {

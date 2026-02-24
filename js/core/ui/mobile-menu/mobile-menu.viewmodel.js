@@ -6,24 +6,41 @@
 const MobileMenuViewModel = {
     /**
      * Bascule l'état de la sidebar.
+     * @param {string} [targetTab] - 'structure' | 'navigation'
      * @returns {boolean} Nouvel état (ouvert/fermé).
      */
-    toggleSidebar: function () {
-        const currentState = MobileMenuRepository.getState().isSidebarOpen;
-        const newState = !currentState;
+    toggleSidebar: function (targetTab) {
+        const state = MobileMenuRepository.getState();
+        const currentState = state.isSidebarOpen;
+        const currentTab = state.activeBottomNavItem;
+
+        let newState;
+        let newTab = targetTab || 'structure';
+
+        // Si on clique sur le même onglet alors que c'est déjà ouvert -> on ferme
+        if (currentState && currentTab === newTab) {
+            newState = false;
+            newTab = null;
+        } else {
+            newState = true;
+        }
+
         MobileMenuRepository.updateState({
             isSidebarOpen: newState,
-            activeBottomNavItem: newState ? 'structure' : null
+            activeBottomNavItem: newTab
         });
 
         if (newState) {
-            MobileMenuView.openSidebar();
+            MobileMenuView.openSidebar(newTab);
+            // Appliquer l'état de l'accordéon selon l'onglet
+            if (typeof setSidebarAccordion === 'function') {
+                setSidebarAccordion(newTab === 'navigation');
+            }
         } else {
             MobileMenuView.closeSidebar();
         }
-        MobileMenuView.updateBottomNavActiveState(
-            MobileMenuRepository.getState().activeBottomNavItem
-        );
+
+        MobileMenuView.updateBottomNavActiveState(newTab);
         return newState;
     },
 
@@ -64,50 +81,6 @@ const MobileMenuViewModel = {
             MobileMenuRepository.updateState({ isToolsSheetOpen: false, activeBottomNavItem: null });
             MobileMenuView.updateToolsSheet(false);
             MobileMenuView.updateBottomNavActiveState(null);
-        }
-    },
-
-    /**
-     * Bascule l'état du menu de navigation mobile.
-     */
-    toggleNav: function () {
-        const currentState = MobileMenuRepository.getState().isNavDropdownActive;
-        const newState = !currentState;
-        MobileMenuRepository.updateState({ isNavDropdownActive: newState });
-
-        MobileMenuView.updateNavState(newState);
-
-        // Si on ouvre le nav, on pourrait vouloir masquer la sidebar si nécessaire
-        // (Logique originale: if nav open, sidebar visibility hidden)
-        MobileMenuView.updateSidebarVisibility(!newState);
-    },
-
-    /**
-     * Ferme le menu de navigation mobile.
-     */
-    closeNav: function () {
-        const state = MobileMenuRepository.getState();
-        if (state.isNavDropdownActive) {
-            MobileMenuRepository.updateState({ isNavDropdownActive: false });
-            MobileMenuView.updateNavState(false);
-            MobileMenuView.updateSidebarVisibility(true);
-        }
-    },
-
-    /**
-     * Change la vue active et ferme les menus mobiles.
-     * @param {string} view - Identifiant de la vue.
-     */
-    switchViewMobile: function (view) {
-        // Mettre à jour l'item actif dans le menu (UI)
-        MobileMenuView.setActiveNavItem(view);
-
-        // Fermer le nav dropdown
-        this.closeNav();
-
-        // Changer la vue principale
-        if (typeof switchView === 'function') {
-            switchView(view);
         }
     },
 

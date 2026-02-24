@@ -13,7 +13,7 @@ class LocalizationView {
      * @param {function} translateFn - The translation function from the manager
      */
     updateInterface(currentLocale, translateFn) {
-        const elements = document.querySelectorAll('[data-i18n], [data-i18n-title], [data-i18n-placeholder]');
+        const elements = document.querySelectorAll('[data-i18n], [data-i18n-title], [data-i18n-placeholder], [data-i18n-tooltip]');
         elements.forEach(el => {
             // Update content if data-i18n is present
             if (el.hasAttribute('data-i18n')) {
@@ -54,6 +54,12 @@ class LocalizationView {
             if (el.hasAttribute('data-i18n-placeholder')) {
                 const placeholderKey = el.getAttribute('data-i18n-placeholder');
                 el.placeholder = translateFn(placeholderKey);
+            }
+
+            // Update data-tooltip attribute for rich CSS tooltips (used by tool-btn)
+            if (el.hasAttribute('data-i18n-tooltip')) {
+                const tooltipKey = el.getAttribute('data-i18n-tooltip');
+                el.dataset.tooltip = translateFn(tooltipKey);
             }
         });
 

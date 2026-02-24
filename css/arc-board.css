@@ -3350,3 +3350,82 @@
 .arc-compare-content .arc-column {
     z-index: 1000;
 }
+
+/* Export Dropdown */
+.arc-toolbar-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.arc-toolbar-dropdown-content {
+    display: none;
+    position: absolute;
+    left: calc(100% + 8px);
+    bottom: 0;
+    /* Align with the bottom of the button so it grows upwards */
+    background: var(--bg-primary);
+    min-width: 220px;
+    box-shadow: 0 8px 32px var(--shadow), 0 0 0 1px var(--border-color);
+    border-radius: 8px;
+    z-index: 1001;
+    padding: 6px;
+    overflow: visible;
+    animation: fadeIn 0.2s ease;
+}
+
+/* Transparent bridge to prevent menu from closing when moving mouse across the gap */
+.arc-toolbar-dropdown-content::before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: -12px;
+    width: 12px;
+    height: 100%;
+    background: transparent;
+}
+
+.arc-toolbar-dropdown:hover .arc-toolbar-dropdown-content {
+    display: block;
+}
+
+.arc-toolbar-dropdown-content button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 10px 14px;
+    border: none;
+    background: transparent;
+    color: var(--text-primary);
+    font-family: "Inter", sans-serif;
+    font-size: 13px;
+    text-align: left;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+    /* Prevent text wrapping */
+}
+
+.arc-toolbar-dropdown-content button:hover {
+    background: var(--bg-secondary);
+    color: var(--primary-color);
+}
+
+.arc-toolbar-dropdown-content button i {
+    width: 16px;
+    height: 16px;
+    color: var(--text-muted);
+    transition: color 0.15s ease;
+    flex-shrink: 0;
+}
+
+.arc-toolbar-dropdown-content button:hover i {
+    color: var(--primary-color);
+}
+
+.dropdown-divider {
+    height: 1px;
+    background: var(--border-color);
+    margin: 6px 4px;
+}

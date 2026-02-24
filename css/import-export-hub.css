@@ -1,0 +1,415 @@
+/* ==========================================
+   UNIFIED IMPORT/EXPORT HUB (Redesign: Top Tabs)
+   ========================================== */
+
+.hub-modal-content {
+    max-width: 1400px !important;
+    width: 90vw;
+    height: 85vh !important;
+    min-width: 800px;
+    min-height: 500px;
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    border-radius: 20px !important;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4) !important;
+    background: var(--bg-primary);
+    resize: both;
+    /* Making it resizable */
+}
+
+/* Header & Tabs */
+.hub-header {
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-color);
+    padding: 0;
+    flex-shrink: 0;
+}
+
+.hub-header-main {
+    padding: 1.5rem 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.hub-title-section {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.hub-logo-icon {
+    width: 28px;
+    height: 28px;
+    color: var(--accent-gold);
+}
+
+.hub-title-section h2 {
+    font-family: 'Crimson Pro', serif;
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.hub-close-x {
+    color: var(--text-muted);
+    transition: all 0.2s;
+}
+
+.hub-close-x:hover {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+/* Tabs Navigation */
+.hub-tabs-nav {
+    display: flex;
+    gap: 1.5rem;
+    padding: 0 2.5rem;
+}
+
+.hub-tab-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 0.5rem;
+    border: none;
+    background: transparent;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 1.05rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    border-bottom: 3px solid transparent;
+}
+
+.hub-tab-btn:hover {
+    color: var(--text-primary);
+}
+
+.hub-tab-btn.active {
+    color: var(--accent-gold);
+    border-bottom-color: var(--accent-gold);
+}
+
+.hub-tab-btn i {
+    width: 20px;
+    height: 20px;
+}
+
+/* Main Container */
+.hub-main-container {
+    flex: 1;
+    overflow: hidden;
+    /* Changed to allow internal scrolls */
+    display: flex;
+    flex-direction: column;
+    background: var(--bg-primary);
+}
+
+.hub-content-view {
+    flex: 1;
+    padding: 2.5rem;
+    display: none;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+.hub-content-view.active {
+    display: flex;
+}
+
+.hub-view-intro {
+    margin-bottom: 2.5rem;
+    max-width: 800px;
+}
+
+.hub-view-intro h3 {
+    font-size: 1.85rem;
+    font-family: 'Crimson Pro', serif;
+    margin: 0 0 0.75rem 0;
+    color: var(--text-primary);
+}
+
+.hub-view-intro p {
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: 1.6;
+    font-size: 1.1rem;
+}
+
+/* Layouts */
+.hub-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 2.5rem;
+}
+
+.hub-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    transition: all 0.3s ease;
+}
+
+.hub-card:hover {
+    border-color: var(--accent-gold-transparent);
+}
+
+.hub-card.highlight {
+    border: 1px solid var(--accent-gold);
+    background: rgba(212, 175, 55, 0.05);
+}
+
+.hub-card h4 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--accent-gold);
+}
+
+.hub-muted {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+}
+
+/* Action Rows & Buttons */
+.hub-action-btn {
+    margin-top: 1rem;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 1rem !important;
+    font-weight: 700 !important;
+    font-size: 1rem !important;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Checklist */
+.hub-checkbox-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1rem;
+    margin: 0.5rem 0;
+}
+
+.hub-checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.85rem 1rem;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: all 0.2s;
+}
+
+.hub-checkbox-item:hover {
+    border-color: var(--accent-gold);
+    background: var(--bg-secondary);
+}
+
+.hub-checkbox-item input {
+    width: 20px;
+    height: 20px;
+    accent-color: var(--accent-gold);
+}
+
+/* Drop Zone */
+.hub-drop-zone {
+    border: 3px dashed var(--border-color);
+    border-radius: 16px;
+    padding: 4rem 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    cursor: pointer;
+    background: var(--bg-primary);
+    transition: all 0.3s;
+}
+
+.hub-drop-zone:hover {
+    border-color: var(--accent-gold);
+    background: rgba(212, 175, 55, 0.08);
+}
+
+.hub-drop-zone i {
+    width: 48px;
+    height: 48px;
+    color: var(--accent-gold);
+}
+
+.hub-drop-zone span {
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+/* Cloud Status */
+.hub-cloud-status {
+    background: var(--bg-secondary);
+    border-radius: 20px;
+    border: 1px solid var(--border-color);
+    padding: 4rem 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    max-width: 600px;
+    margin: 2rem auto;
+}
+
+.hub-status-icon i {
+    width: 64px;
+    height: 64px;
+    color: var(--text-muted);
+    margin-bottom: 2rem;
+}
+
+.hub-cloud-connected {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.hub-user-profile {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    background: var(--bg-secondary);
+    padding: 1.5rem 2rem;
+    border-radius: 16px;
+    border: 1px solid var(--border-color);
+}
+
+.hub-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: var(--accent-gold);
+    border: 2px solid var(--accent-gold);
+}
+
+.hub-user-info {
+    flex: 1;
+}
+
+/* Export Layout */
+.hub-export-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+}
+
+.hub-tree-container {
+    flex: 1;
+    min-height: 400px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.5rem;
+    overflow-y: auto;
+}
+
+/* Advanced Settings Panel */
+.hub-advanced-settings {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px dashed var(--border-color);
+}
+
+.hub-settings-section-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--accent-gold);
+    font-weight: 700;
+    margin-bottom: 1rem;
+    font-size: 1rem;
+}
+
+.hub-settings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.hub-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.hub-field label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.hub-field input,
+.hub-field select {
+    padding: 0.75rem;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    color: var(--text-primary);
+}
+
+.hub-checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.hub-settings-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.hub-select {
+    padding: 1rem;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    color: var(--text-primary);
+    font-size: 1rem;
+}
+
+/* Tree UI */
+.hub-tree-item {
+    margin-bottom: 0.75rem;
+}
+
+.hub-tree-children {
+    margin-left: 1.5rem;
+    border-left: 2px solid var(--border-color);
+    padding-left: 1rem;
+    margin-top: 0.5rem;
+}
+
+.hub-tree-label {
+    font-weight: 700;
+}
+
+.hub-tree-label.scene {
+    font-weight: 500;
+    color: var(--text-secondary);
+}

@@ -1147,8 +1147,83 @@ body.force-mobile-nav .split-mode-toggle span {
         /* Replaced by bottom nav bar */
     }
 
-    .mobile-nav-dropdown {
-        display: block;
+    /* Accordéon en mode mobile : style grille pour remplacer le menu mobile */
+    .sidebar-accordion-content.mobile-grid {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+        padding: 10px;
+    }
+
+    .sidebar-accordion-content.mobile-grid .accordion-group {
+        grid-column: span 3;
+        margin-top: 12px;
+    }
+
+    .sidebar-accordion-content.mobile-grid .accordion-group:first-child {
+        margin-top: 0;
+    }
+
+    .sidebar-accordion-content.mobile-grid .accordion-group-title {
+        font-size: 0.65rem;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        color: var(--text-muted);
+        margin-bottom: 8px;
+        padding-left: 4px;
+        font-weight: 700;
+        border-bottom: 1px solid var(--border-color);
+        padding-bottom: 4px;
+    }
+
+    .sidebar-accordion-content.mobile-grid .accordion-group-items {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 6px;
+    }
+
+    .sidebar-accordion-content.mobile-grid .accordion-nav-item {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 10px 4px;
+        background: var(--bg-primary);
+        border: 1px solid var(--border-color);
+        border-radius: 10px;
+        gap: 4px;
+        height: auto;
+        min-height: 64px;
+        position: relative;
+    }
+
+    .sidebar-accordion-content.mobile-grid .accordion-nav-item i {
+        width: 20px;
+        height: 20px;
+        margin: 0;
+        color: var(--primary-color);
+    }
+
+    .sidebar-accordion-content.mobile-grid .accordion-nav-item span {
+        font-size: 0.7rem;
+        padding: 0;
+        line-height: 1.1;
+        font-weight: 500;
+    }
+
+    .sidebar-accordion-content.mobile-grid .accordion-nav-item.active {
+        background: rgba(var(--primary-color-rgb), 0.1);
+        border-color: var(--primary-color);
+    }
+
+    /* Masquer les actions secondaires sur mobile grid */
+    .sidebar-accordion-content.mobile-grid .accordion-item-actions {
+        display: none !important;
+    }
+
+    .sidebar-accordion-content.mobile-grid .accordion-nav-item {
+        padding-right: 4px !important;
+        /* Reset padding-right du style inline */
     }
 
     .mobile-menu-handle {
@@ -1167,7 +1242,8 @@ body.force-mobile-nav .split-mode-toggle span {
     }
 
     /* Sidebar column - overlay mode (hidden by default, slides from left) */
-    .sidebar-column {
+    .sidebar-column,
+    .activity-bar {
         position: fixed !important;
         top: 56px !important;
         left: -100% !important;
@@ -1181,9 +1257,11 @@ body.force-mobile-nav .split-mode-toggle span {
         min-width: unset !important;
         box-shadow: none !important;
         padding-bottom: calc(56px + env(safe-area-inset-bottom, 0px));
+        display: flex !important;
     }
 
-    .sidebar-column.mobile-visible {
+    .sidebar-column.mobile-visible,
+    .activity-bar.mobile-visible {
         left: 0 !important;
         box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15) !important;
     }
@@ -2058,38 +2136,36 @@ body.force-mobile-nav .split-mode-toggle span {
         box-shadow: none !important;
     }
 
-    /* Modals */
+    /* Modals (Unified) */
     .modal-content {
-        width: 95%;
-        max-width: 95%;
-        margin: 1rem auto;
-        max-height: 90vh;
-        overflow-y: auto;
-    }
-
-    .modal-title {
-        font-size: 1.3rem;
-    }
-
-    /* Boutons dans les modals - empiler verticalement sur mobile */
-    .modal-button-group {
-        flex-direction: column;
-    }
-
-    .modal-button-group .btn {
         width: 100%;
-        min-width: unset;
+        max-width: 100%;
         margin: 0;
+        height: 100%;
+        max-height: 100%;
+        border-radius: 0;
+        border: none;
     }
 
-    .modal-button-group .btn+.btn {
-        margin-top: 0.75rem;
+    .modal-header {
+        padding: 1rem;
     }
 
-    .modal-content>div>.btn {
-        display: block;
+    .modal-body {
+        padding: 1rem;
+    }
+
+    .modal-footer,
+    .modal-actions {
+        padding: 1rem;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .modal-footer .btn,
+    .modal-actions .btn {
         width: 100%;
-        margin: 0.5rem 0;
+        margin: 0;
     }
 
     /* Forms */
@@ -2437,5 +2513,86 @@ body.force-mobile-nav .split-mode-toggle span {
     .nav-btn:active,
     .toolbar-btn:active {
         opacity: 0.7;
+    }
+}
+
+/* LIVE TENSION METER - MOBILE BAR CONCEPT */
+@media (max-width: 900px) {
+    .tension-meter-container {
+        position: fixed !important;
+        bottom: calc(56px + env(safe-area-inset-bottom, 0px)) !important;
+        left: 0 !important;
+        right: 0 !important;
+        width: 100% !important;
+        height: 10px !important;
+        border-radius: 0 !important;
+        border: none !important;
+        background: rgba(0, 0, 0, 0.1) !important;
+        box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1) !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        z-index: 10001 !important;
+        /* Just above bottom nav */
+        cursor: default !important;
+        overflow: hidden !important;
+        transform: none !important;
+    }
+
+    .tension-meter-bar-bg {
+        display: block !important;
+        width: 100% !important;
+        height: 100% !important;
+        background: transparent !important;
+    }
+
+    .tension-meter-bar-fill {
+        height: 100% !important;
+        width: 0%;
+        background: var(--accent-blue);
+        transition: width 0.5s ease, background-color 0.5s ease !important;
+    }
+
+    /* Hide desktop circular elements on mobile by default */
+    .tension-meter-svg,
+    .tension-value-display {
+        display: none !important;
+    }
+
+    .tension-tooltip {
+        display: block !important;
+        position: fixed !important;
+        bottom: calc(70px + env(safe-area-inset-bottom, 0px)) !important;
+        left: 50% !important;
+        right: auto !important;
+        transform: translateX(-50%) translateY(10px) !important;
+        width: 85% !important;
+        max-width: 320px !important;
+        padding: 1.2rem !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+        pointer-events: auto !important;
+        transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+        z-index: 10002 !important;
+        background: var(--bg-primary) !important;
+        border: 1px solid var(--border-color) !important;
+        border-radius: 12px !important;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3) !important;
+    }
+
+    .tension-tooltip.active {
+        opacity: 1 !important;
+        visibility: visible !important;
+        transform: translateX(-50%) translateY(0) !important;
+    }
+
+    .tension-meter-container:hover {
+        transform: none !important;
+    }
+}
+
+/* DESKTOP HIDING OF BAR */
+@media (min-width: 901px) {
+    .tension-meter-bar-bg {
+        display: none !important;
     }
 }

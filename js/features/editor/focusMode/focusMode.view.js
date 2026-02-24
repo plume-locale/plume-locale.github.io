@@ -6,14 +6,14 @@ const FocusModeView = {
     renderFocusMode(isActive) {
         const appContainer = document.querySelector('.app-container');
         const sidebar = document.querySelector('.sidebar');
-        const sidebarAccordion = document.querySelector('.sidebar-accordion');
+        const activityBar = document.querySelector('.activity-bar');
         const sidebarColumn = document.querySelector('.sidebar-column');
         const toolsSidebar = document.getElementById('toolsSidebar');
 
         if (isActive) {
             if (appContainer) appContainer.classList.add('focus-mode');
             if (sidebar) sidebar.style.display = 'none';
-            if (sidebarAccordion) sidebarAccordion.style.display = 'none';
+            if (activityBar) activityBar.style.display = 'none';
             if (sidebarColumn) sidebarColumn.style.display = 'none';
             if (toolsSidebar) {
                 toolsSidebar.style.display = 'flex';
@@ -32,7 +32,7 @@ const FocusModeView = {
             if (appContainer) appContainer.classList.remove('focus-mode');
 
             if (sidebar) sidebar.style.cssText = '';
-            if (sidebarAccordion) sidebarAccordion.style.cssText = '';
+            if (activityBar) activityBar.style.cssText = '';
 
             if (sidebarColumn) {
                 sidebarColumn.style.cssText = '';

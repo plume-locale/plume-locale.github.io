@@ -17,6 +17,9 @@ async function init() {
     // Initialiser les préférences d'interface
     if (typeof InterfaceCustomizerViewModel !== 'undefined') {
         InterfaceCustomizerViewModel.init();
+        if (typeof InterfaceCustomizerView !== 'undefined' && InterfaceCustomizerView.init) {
+            InterfaceCustomizerView.init();
+        }
     }
 
     // Initialiser IndexedDB en premier
@@ -83,7 +86,12 @@ async function init() {
         await initProductTourVM();
     }
 
-    // Initialize Mention Help
+    // Initialize Structure Blocks (Layers)
+    if (typeof StructureBlockUI !== 'undefined' && StructureBlockUI.init) {
+        StructureBlockUI.init();
+    }
+
+    // Initialize Mention Help (Auto-completion)
     if (typeof MentionHelp !== 'undefined' && MentionHelp.init) {
         MentionHelp.init();
     }

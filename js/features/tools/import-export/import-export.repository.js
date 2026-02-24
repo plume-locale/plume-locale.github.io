@@ -70,6 +70,69 @@ const ImportExportRepository = {
             });
         });
 
+        // --- Additional Models ---
+        if (content.characters && content.characters.length > 0) {
+            markdown += `\n\n# ${Localization.t('export.models.characters')}\n\n`;
+            content.characters.forEach(char => {
+                markdown += `## ${char.name}${char.role ? ` (${char.role})` : ''}\n\n`;
+                if (char.firstName || char.lastName) markdown += `**${Localization.t('characters.fields.name')}**: ${char.firstName} ${char.lastName}\n\n`;
+                if (char.physicalDescription) markdown += `**${Localization.t('characters.fields.appearance')}**:\n${this.stripHTML(char.physicalDescription)}\n\n`;
+                if (char.past) markdown += `**${Localization.t('characters.fields.past')}**:\n${this.stripHTML(char.past)}\n\n`;
+                if (char.notes) markdown += `**${Localization.t('characters.fields.notes')}**:\n${this.stripHTML(char.notes)}\n\n`;
+            });
+        }
+
+        if (content.world && content.world.length > 0) {
+            markdown += `\n\n# ${Localization.t('export.models.world')}\n\n`;
+            content.world.forEach(item => {
+                markdown += `## ${item.name} (${item.type})\n\n`;
+                if (item.description) markdown += `${this.stripHTML(item.description)}\n\n`;
+                if (item.details) markdown += `### ${Localization.t('world.fields.details')}\n\n${this.stripHTML(item.details)}\n\n`;
+                if (item.history) markdown += `### ${Localization.t('world.fields.history')}\n\n${this.stripHTML(item.history)}\n\n`;
+            });
+        }
+
+        if (content.codex && content.codex.length > 0) {
+            markdown += `\n\n# ${Localization.t('export.models.codex')}\n\n`;
+            content.codex.forEach(entry => {
+                markdown += `## ${entry.title} (${entry.category})\n\n`;
+                if (entry.summary) markdown += `> ${entry.summary}\n\n`;
+                if (entry.content) markdown += `${this.stripHTML(entry.content)}\n\n`;
+            });
+        }
+
+        if (content.timeline && content.timeline.length > 0) {
+            markdown += `\n\n# ${Localization.t('export.models.timeline')}\n\n`;
+            content.timeline.forEach(event => {
+                markdown += `## ${event.date ? `${event.date} - ` : ''}${event.title}\n\n`;
+                if (event.content) markdown += `${this.stripHTML(event.content)}\n\n`;
+            });
+        }
+
+        if (content.notes && content.notes.length > 0) {
+            markdown += `\n\n# ${Localization.t('export.models.notes')}\n\n`;
+            content.notes.forEach(note => {
+                markdown += `## ${note.title}\n\n`;
+                if (note.content) markdown += `${this.stripHTML(note.content)}\n\n`;
+            });
+        }
+
+        if (content.relations && content.relations.length > 0) {
+            markdown += `\n\n# ${Localization.t('export.models.relations')}\n\n`;
+            content.relations.forEach(rel => {
+                markdown += `- **${rel.sourceName || rel.sourceId}** -> **${rel.targetName || rel.targetId}** : ${rel.type || ''}\n`;
+            });
+            markdown += '\n';
+        }
+
+        if (content.plotgrid && content.plotgrid.cards && content.plotgrid.cards.length > 0) {
+            markdown += `\n\n# ${Localization.t('export.models.plotgrid')}\n\n`;
+            content.plotgrid.cards.forEach(card => {
+                markdown += `## ${card.title}\n\n`;
+                if (card.content) markdown += `${this.stripHTML(card.content)}\n\n`;
+            });
+        }
+
         return markdown;
     },
 
@@ -109,6 +172,30 @@ const ImportExportRepository = {
                 text += '\n\n';
             });
         });
+
+        // --- Additional Models ---
+        if (content.characters && content.characters.length > 0) {
+            const charTitle = Localization.t('export.models.characters');
+            text += `\n\n${charTitle}\n${'='.repeat(charTitle.length)}\n\n`;
+            content.characters.forEach(char => {
+                text += `${char.name}${char.role ? ` (${char.role})` : ''}\n`;
+                text += `${'-'.repeat(char.name.length + (char.role ? char.role.length + 3 : 0))}\n\n`;
+                if (char.physicalDescription) text += `${Localization.t('characters.fields.appearance')}:\n${this.stripHTML(char.physicalDescription)}\n\n`;
+                if (char.past) text += `${Localization.t('characters.fields.past')}:\n${this.stripHTML(char.past)}\n\n`;
+                if (char.notes) text += `${Localization.t('characters.fields.notes')}:\n${this.stripHTML(char.notes)}\n\n`;
+            });
+        }
+
+        if (content.world && content.world.length > 0) {
+            const worldTitle = Localization.t('export.models.world');
+            text += `\n\n${worldTitle}\n${'='.repeat(worldTitle.length)}\n\n`;
+            content.world.forEach(item => {
+                text += `${item.name} (${item.type})\n`;
+                text += `${'-'.repeat(item.name.length + item.type.length + 3)}\n\n`;
+                if (item.description) text += `${this.stripHTML(item.description)}\n\n`;
+                if (item.details) text += `${Localization.t('world.fields.details')}:\n${this.stripHTML(item.details)}\n\n`;
+            });
+        }
 
         return text;
     },
@@ -171,6 +258,17 @@ const ImportExportRepository = {
                 });
             });
         });
+
+        // --- Additional Models ---
+        if (content.characters && content.characters.length > 0) {
+            html += `    <h1>${Localization.t('export.models.characters')}</h1>\n`;
+            content.characters.forEach(char => {
+                html += `    <h2>${char.name}</h2>\n`;
+                if (char.role) html += `    <p><strong>${Localization.t('characters.fields.role')}</strong>: ${char.role}</p>\n`;
+                if (char.physicalDescription) html += `    <p><strong>${Localization.t('characters.fields.appearance')}</strong>:<br>${this.stripHTML(char.physicalDescription)}</p>\n`;
+                if (char.past) html += `    <p><strong>${Localization.t('characters.fields.past')}</strong>:<br>${this.stripHTML(char.past)}</p>\n`;
+            });
+        }
 
         html += `    </body>\n</html>`;
         return html;
@@ -301,6 +399,8 @@ const ImportExportRepository = {
             ? DocxExportConfig.merge(options.docxConfig || {})
             : this._getDocxFallbackConfig();
 
+        console.log("DOCX Export Config:", cfg);
+
         // --- Resolve page size ---
         const pageSizes = (typeof DocxExportConfig !== 'undefined') ? DocxExportConfig.pageSizes : {};
         const pageSize = pageSizes[cfg.page.format] || pageSizes['a4'] || { width: 11906, height: 16838 };
@@ -366,7 +466,7 @@ const ImportExportRepository = {
             if (cfg.footer.showPageNumber) {
                 footerChildren.push(
                     new Paragraph({
-                        alignment: getAlignment(cfg.footer.alignment),
+                        alignment: getAlignment(cfg.footer.alignment || 'center'),
                         children: [
                             new TextRun({
                                 children: [PageNumber.CURRENT],
@@ -860,7 +960,12 @@ const ImportExportRepository = {
                         }
                     }
 
+                    const fmHeader = buildHeader();
+                    const fmFooter = buildFooter();
+
                     sections.push({
+                        headers: fmHeader ? { default: fmHeader } : undefined,
+                        footers: fmFooter ? { default: fmFooter } : undefined,
                         properties: {
                             ...baseSectionProperties,
                             type: idx === 0 && cfg.frontMatter.includeTitlePage ? SectionType.NEXT_PAGE : SectionType.NEXT_PAGE
@@ -979,19 +1084,94 @@ const ImportExportRepository = {
             });
         }
 
+        // --- 5. ADDITIONAL MODELS (Characters, World, Codex) ---
+        if (content.characters && content.characters.length > 0) {
+            mainChildren.push(new Paragraph({ children: [new PageBreak()] }));
+            mainChildren.push(buildTitleParagraph(Localization.t('export.models.characters'), 'act'));
+
+            content.characters.forEach(char => {
+                mainChildren.push(buildTitleParagraph(char.name, 'chapter'));
+                if (char.role) {
+                    mainChildren.push(new Paragraph({
+                        ...bodyParagraphProps,
+                        spacing: { before: 120, after: 120, line: cfg.spacing.lineSpacing },
+                        children: [
+                            new TextRun({ text: `${Localization.t('characters.fields.role')}: `, bold: true, font: cfg.font.body, size: cfg.font.bodySize }),
+                            new TextRun({ text: char.role, font: cfg.font.body, size: cfg.font.bodySize })
+                        ]
+                    }));
+                }
+                if (char.physicalDescription) {
+                    mainChildren.push(new Paragraph({
+                        ...bodyParagraphProps,
+                        spacing: { before: 240, after: 120, line: cfg.spacing.lineSpacing },
+                        children: [new TextRun({ text: Localization.t('characters.fields.appearance'), bold: true, font: cfg.font.body, size: cfg.font.bodySize })]
+                    }));
+                    mainChildren.push(...htmlToParagraphs(char.physicalDescription));
+                }
+                if (char.past) {
+                    mainChildren.push(new Paragraph({
+                        ...bodyParagraphProps,
+                        spacing: { before: 240, after: 120, line: cfg.spacing.lineSpacing },
+                        children: [new TextRun({ text: Localization.t('characters.fields.past'), bold: true, font: cfg.font.body, size: cfg.font.bodySize })]
+                    }));
+                    mainChildren.push(...htmlToParagraphs(char.past));
+                }
+            });
+        }
+
+        if (content.world && content.world.length > 0) {
+            mainChildren.push(new Paragraph({ children: [new PageBreak()] }));
+            mainChildren.push(buildTitleParagraph(Localization.t('export.models.world'), 'act'));
+
+            content.world.forEach(item => {
+                mainChildren.push(buildTitleParagraph(`${item.name} (${item.type})`, 'chapter'));
+                if (item.description) {
+                    mainChildren.push(...htmlToParagraphs(item.description));
+                }
+                if (item.details) {
+                    mainChildren.push(new Paragraph({
+                        ...bodyParagraphProps,
+                        spacing: { before: 240, after: 120 },
+                        children: [new TextRun({ text: Localization.t('world.fields.details'), bold: true, font: cfg.font.body, size: cfg.font.bodySize })]
+                    }));
+                    mainChildren.push(...htmlToParagraphs(item.details));
+                }
+            });
+        }
+
+        if (content.codex && content.codex.length > 0) {
+            mainChildren.push(new Paragraph({ children: [new PageBreak()] }));
+            mainChildren.push(buildTitleParagraph(Localization.t('export.models.codex'), 'act'));
+
+            content.codex.forEach(entry => {
+                mainChildren.push(buildTitleParagraph(`${entry.title} (${entry.category})`, 'chapter'));
+                if (entry.summary) {
+                    mainChildren.push(new Paragraph({
+                        ...bodyParagraphProps,
+                        spacing: { before: 120, after: 120 },
+                        children: [new TextRun({ text: entry.summary, italics: true, color: '666666', font: cfg.font.body, size: cfg.font.bodySize })]
+                    }));
+                }
+                if (entry.content) {
+                    mainChildren.push(...htmlToParagraphs(entry.content));
+                }
+            });
+        }
+
         // Main section with header/footer
         const mainSectionProps = {
             ...baseSectionProperties,
             type: sections.length > 0 ? SectionType.NEXT_PAGE : undefined
         };
 
-        // Add headers and footers to main section
-        const header = buildHeader();
-        const footer = buildFooter();
-        if (header) mainSectionProps.headers = { default: header };
-        if (footer) mainSectionProps.footers = { default: footer };
+        // Create header and footer instances
+        const mainHeader = buildHeader();
+        const mainFooter = buildFooter();
 
         sections.push({
+            headers: mainHeader ? { default: mainHeader } : undefined,
+            footers: mainFooter ? { default: mainFooter } : undefined,
             properties: mainSectionProps,
             children: mainChildren
         });

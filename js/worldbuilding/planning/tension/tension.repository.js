@@ -23,11 +23,4 @@ const TensionRepository = {
         return TensionModel.DEFAULT_TENSION_WORDS;
     },
 
-    /**
-     * Sauvegarde les mots de tension dans le localStorage.
-     * @param {Object} words - L'objet contenant les listes de mots à sauvegarder.
-     */
-    saveTensionWords: function (words) {
-        localStorage.setItem(this.STORAGE_KEY, JSON.stringify(words));
-    }
 };

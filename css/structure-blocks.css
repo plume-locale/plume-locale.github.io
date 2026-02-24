@@ -1,0 +1,160 @@
+.structure-block {
+    margin: 1.5rem 0;
+    border: 1.5px solid var(--accent-color);
+    border-radius: 12px;
+    background-color: rgba(var(--accent-color-rgb), 0.03);
+    overflow: hidden;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    position: relative;
+    border-left-width: 4px;
+}
+
+.structure-block.collapsed .structure-block-content {
+    display: none;
+}
+
+.structure-block-header {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.5rem 0.8rem;
+    background-color: rgba(var(--accent-color-rgb), 0.08);
+    border-bottom: 1px solid rgba(var(--accent-color-rgb), 0.1);
+    user-select: none;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--accent-color);
+    letter-spacing: 0.03em;
+}
+
+.structure-block-label {
+    flex: 1;
+    text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.structure-block-actions {
+    display: flex;
+    gap: 0.3rem;
+    align-items: center;
+}
+
+.structure-block-btn {
+    background: rgba(var(--accent-color-rgb), 0.05);
+    border: 1px solid rgba(var(--accent-color-rgb), 0.2);
+    color: var(--accent-color);
+    width: 26px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    padding: 0;
+}
+
+.structure-block-btn:hover {
+    background: rgba(var(--accent-color-rgb), 0.15);
+    transform: translateY(-1px);
+}
+
+.structure-block-btn.delete:hover {
+    background: #e74c3c;
+    border-color: #e74c3c;
+    color: white;
+}
+
+.structure-block-toggle {
+    background: rgba(var(--accent-color-rgb), 0.05);
+    border: 1px solid rgba(var(--accent-color-rgb), 0.2);
+    color: var(--accent-color);
+    padding: 0.2rem 0.5rem;
+    height: 26px;
+    border-radius: 6px;
+    font-size: 0.65rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.structure-block-toggle:hover {
+    background: rgba(var(--accent-color-rgb), 0.15);
+}
+
+.structure-block-content {
+    padding: 1.25rem;
+    min-height: 2rem;
+    line-height: 1.6;
+    color: var(--text-primary);
+}
+
+.structure-block-content:empty::before {
+    content: attr(data-placeholder);
+    color: var(--text-muted);
+    opacity: 0.5;
+}
+
+/* Modal Elements */
+.preset-btn {
+    font-size: 0.65rem;
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-primary);
+    cursor: pointer;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    transition: all 0.2s ease;
+    font-family: 'Source Code Pro', monospace;
+}
+
+.preset-btn:hover {
+    border-color: var(--accent-gold);
+    background: rgba(255, 217, 61, 0.05);
+    color: var(--text-primary);
+    transform: translateY(-1px);
+}
+
+.color-swatch {
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 6px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.color-swatch:hover {
+    transform: scale(1.15);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    z-index: 2;
+}
+
+.color-swatch.active {
+    border-color: white;
+    outline: 2px solid var(--accent-gold);
+}
+
+/* Base Block Styles */
+.structure-block-content:focus {
+    outline: none;
+}
+
+/* --- Structure Map Mode (Blueprint 3.0) --- */
+
+.editor-workspace {
+    transition: background-color 0.4s ease;
+}
+
+/* Toggle button active state */
+.toolbar-btn.btn-structure-map.active {
+    background: var(--accent-color) !important;
+    color: white !important;
+}

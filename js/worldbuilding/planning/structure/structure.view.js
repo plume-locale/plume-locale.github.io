@@ -36,16 +36,43 @@ function deleteAct(actId) {
 
 function addChapter() {
     const titleInput = document.getElementById('chapterTitleInput');
-    const result = addChapterViewModel((titleInput.value || '').trim(), typeof activeActId !== 'undefined' ? activeActId : null);
+    const isBatch = document.getElementById('batchChapterCheck')?.checked;
+    const batchCountInput = document.getElementById('batchChapterCount');
+    const actId = typeof activeActId !== 'undefined' ? activeActId : null;
 
-    if (result.success) {
-        processStructureSideEffects(result.sideEffects);
-        titleInput.value = '';
-        closeModal('addChapterModal');
-        renderActsList();
-        if (result.message) showNotification(result.message, 'success');
+    if (isBatch) {
+        const count = parseInt(batchCountInput.value) || 0;
+        if (count <= 0) {
+            showNotification('Veuillez entrer un nombre valide', 'error');
+            return;
+        }
+
+        const baseTitle = (titleInput.value || 'Chapitre').trim();
+        const result = batchAddChaptersViewModel(baseTitle, count, actId);
+
+        if (result.success) {
+            processStructureSideEffects(result.sideEffects);
+            titleInput.value = '';
+            document.getElementById('batchChapterCheck').checked = false;
+            document.getElementById('batchChapterCountGroup').style.display = 'none';
+            closeModal('addChapterModal');
+            renderActsList();
+            showNotification(result.message, 'success');
+        } else {
+            showNotification(result.message || 'Échec de la création', 'error');
+        }
     } else {
-        showNotification(result.message || 'Erreur lors de l\'ajout', 'error');
+        const result = addChapterViewModel((titleInput.value || '').trim(), actId);
+
+        if (result.success) {
+            processStructureSideEffects(result.sideEffects);
+            titleInput.value = '';
+            closeModal('addChapterModal');
+            renderActsList();
+            if (result.message) showNotification(result.message, 'success');
+        } else {
+            showNotification(result.message || 'Erreur lors de l\'ajout', 'error');
+        }
     }
 }
 
@@ -268,31 +295,36 @@ function renderActsList() {
             const chStats = getChapterStats(chapter);
             const isChExpanded = typeof expandedChapters !== 'undefined' && expandedChapters.has(chapter.id);
             const sCh = formatWordCount(chStats.totalWords);
+            const isSingleScene = chapter.scenes.length === 1;
+            const singleScene = isSingleScene ? chapter.scenes[0] : null;
+            const singleSceneStatus = singleScene ? (singleScene.status || 'draft') : '';
 
             html += `
-                <div class="chapter-group" id="chapter-${chapter.id}" data-chapter-id="${chapter.id}" data-act-id="${act.id}">
+                <div class="chapter-group ${isSingleScene ? 'single-scene' : ''}" id="chapter-${chapter.id}" data-chapter-id="${chapter.id}" data-act-id="${act.id}">
                     <div class="chapter-header ${typeof currentChapterId !== 'undefined' && currentChapterId === chapter.id ? 'active' : ''}" data-chapter-id="${chapter.id}" data-act-id="${act.id}" style="position: relative; display: flex; align-items: center;">
-                        <span class="chapter-icon ${isChExpanded ? 'expanded' : ''}" onclick="toggleChapter(${act.id}, ${chapter.id}); event.stopPropagation();" style="cursor: pointer;"><i data-lucide="${isChExpanded ? 'chevron-down' : 'chevron-right'}" style="width:14px;height:14px;vertical-align:middle;"></i></span>
-                        <span class="chapter-title" ondblclick="event.stopPropagation(); startEditingChapter(${act.id}, ${chapter.id}, this)" onclick="${chapter.scenes.length > 0 ? `openChapter(${act.id}, ${chapter.id})` : ''}">${chapter.title}</span>
+                        <span class="chapter-icon ${isChExpanded ? 'expanded' : ''}" onclick="toggleChapter(${act.id}, ${chapter.id}); event.stopPropagation();" style="cursor: pointer; ${isSingleScene ? 'visibility: hidden;' : ''}"><i data-lucide="${isChExpanded ? 'chevron-down' : 'chevron-right'}" style="width:14px;height:14px;vertical-align:middle;"></i></span>
+                        ${isSingleScene ? `<span class="status-badge status-${singleSceneStatus}" onclick="event.stopPropagation(); toggleSceneStatus(${act.id}, ${chapter.id}, ${singleScene.id}, event)" style="cursor: pointer; margin-right: 0.6rem;" title="Cliquez pour changer le statut de la scène"></span>` : ''}
+                        <span class="chapter-title" ondblclick="event.stopPropagation(); startEditingChapter(${act.id}, ${chapter.id}, this)" onclick="${isSingleScene ? `openScene(${act.id}, ${chapter.id}, ${singleScene.id})` : (chapter.scenes.length > 0 ? `openChapter(${act.id}, ${chapter.id})` : '')}">${chapter.title}</span>
                         <span class="word-count-badge" style="margin-left: auto; margin-right: 55px;" title="${chStats.totalWords.toLocaleString()} mots">${sCh}</span>
                         <span class="drag-handle" draggable="true" onclick="event.stopPropagation()"><i data-lucide="grip-vertical" style="width:12px;height:12px;vertical-align:middle;"></i></span>
                         <div class="treeview-item-actions">
-                            <button class="treeview-action-btn" onclick="event.stopPropagation(); openChapter(${act.id}, ${chapter.id}, { forceNew: true })" title="${Localization.t('tabs.open_new')}"><i data-lucide="plus-square" style="width:12px;height:12px;"></i></button>
-                            <button class="treeview-action-btn" onclick="event.stopPropagation(); openChapter(${act.id}, ${chapter.id}, { replaceCurrent: true })" title="${Localization.t('tabs.replace')}"><i data-lucide="maximize-2" style="width:12px;height:12px;"></i></button>
+                            <button class="treeview-action-btn" onclick="event.stopPropagation(); ${isSingleScene ? `openScene(${act.id}, ${chapter.id}, ${singleScene.id}, { forceNew: true })` : `openChapter(${act.id}, ${chapter.id}, { forceNew: true })`}" title="${Localization.t('tabs.open_new')}"><i data-lucide="plus-square" style="width:12px;height:12px;"></i></button>
+                            <button class="treeview-action-btn" onclick="event.stopPropagation(); ${isSingleScene ? `openScene(${act.id}, ${chapter.id}, ${singleScene.id}, { replaceCurrent: true })` : `openChapter(${act.id}, ${chapter.id}, { replaceCurrent: true })`}" title="${Localization.t('tabs.replace')}"><i data-lucide="maximize-2" style="width:12px;height:12px;"></i></button>
                             <button class="treeview-action-btn delete" onclick="event.stopPropagation(); deleteChapter(${act.id}, ${chapter.id})"><i data-lucide="x" style="width:12px;height:12px;"></i></button>
                         </div>
                     </div>
-                    <div class="scenes-list ${isChExpanded ? 'visible' : ''}">`;
+                    <div class="scenes-list ${isChExpanded && !isSingleScene ? 'visible' : ''}">`;
 
-            chapter.scenes.forEach((scene) => {
-                const sStatus = scene.status || 'draft';
-                const sWords = (scene.content && typeof StatsModel !== 'undefined') ? StatsModel.getWordCount(scene.content) : (scene.wordCount || 0);
-                const synopsis = scene.synopsis ? (scene.synopsis.substring(0, 100) + (scene.synopsis.length > 100 ? '...' : '')) : '';
-                const tooltip = scene.synopsis ? scene.synopsis.replace(/"/g, '&quot;').replace(/'/g, '&#39;') : '';
-                const isActive = typeof currentSceneId !== 'undefined' && currentSceneId == scene.id;
-                const sLabel = formatWordCount(sWords);
+            if (!isSingleScene) {
+                chapter.scenes.forEach((scene) => {
+                    const sStatus = scene.status || 'draft';
+                    const sWords = (scene.content && typeof StatsModel !== 'undefined') ? StatsModel.getWordCount(scene.content) : (scene.wordCount || 0);
+                    const synopsis = scene.synopsis ? (scene.synopsis.substring(0, 100) + (scene.synopsis.length > 100 ? '...' : '')) : '';
+                    const tooltip = scene.synopsis ? scene.synopsis.replace(/"/g, '&quot;').replace(/'/g, '&#39;') : '';
+                    const isActive = typeof currentSceneId !== 'undefined' && currentSceneId == scene.id;
+                    const sLabel = formatWordCount(sWords);
 
-                html += `
+                    html += `
                     <div class="scene-item ${isActive ? 'active' : ''}" data-scene-id="${scene.id}" data-chapter-id="${chapter.id}" data-act-id="${act.id}" onclick="openScene(${act.id}, ${chapter.id}, ${scene.id})" ${tooltip ? `title="${tooltip}"` : ''} style="position: relative; display: flex; align-items: center;">
                         <div style="display: flex; align-items: center; gap: 0.6rem; flex: 1; min-width: 0;">
                             <span class="status-badge status-${sStatus}" onclick="event.stopPropagation(); toggleSceneStatus(${act.id}, ${chapter.id}, ${scene.id}, event)" style="cursor: pointer;" title="Cliquez pour changer le statut"></span>
@@ -309,7 +341,8 @@ function renderActsList() {
                             <button class="treeview-action-btn delete" onclick="event.stopPropagation(); deleteScene(${act.id}, ${chapter.id}, ${scene.id})"><i data-lucide="x" style="width:12px;height:12px;"></i></button>
                         </div>
                     </div>`;
-            });
+                });
+            }
 
             // Add Scene button
             html += `<div class="scene-item action-btn" onclick="openAddSceneModal(${act.id}, ${chapter.id})" style="opacity: 0.4; font-size: 0.85rem; padding-left: 2.2rem;">${Localization.t('sidebar.btn.add_scene')}</div>

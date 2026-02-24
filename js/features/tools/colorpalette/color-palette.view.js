@@ -114,7 +114,7 @@ const ColorPaletteView = {
             // Déterminer la largeur maximale (800px sur desktop, plein écran sur mobile)
             const maxWidth = window.innerWidth > 900 ? 800 : window.innerWidth;
 
-            if (newWidth >= 50 && newWidth <= maxWidth) {
+            if (newWidth >= 270 && newWidth <= maxWidth) {
                 sidebar.style.width = newWidth + 'px';
                 document.documentElement.style.setProperty('--sidebar-width', newWidth + 'px');
 
@@ -176,7 +176,7 @@ const ColorPaletteView = {
         if (typeof ColorPaletteViewModel !== 'undefined') {
             const savedWidth = ColorPaletteViewModel.getSavedSidebarWidth();
             const maxWidth = window.innerWidth > 900 ? 800 : window.innerWidth;
-            if (savedWidth && savedWidth >= 50 && savedWidth <= maxWidth) {
+            if (savedWidth && savedWidth >= 270 && savedWidth <= maxWidth) {
                 sidebar.style.width = savedWidth + 'px';
                 document.documentElement.style.setProperty('--sidebar-width', savedWidth + 'px');
                 if (appContainer && getComputedStyle(appContainer).display === 'grid') {

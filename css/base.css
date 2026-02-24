@@ -8,11 +8,39 @@ html {
     scroll-behavior: smooth;
 }
 
+/* Transition fluide lors du changement de thème clair/sombre */
+*,
+*::before,
+*::after {
+    transition-property: background-color, border-color, color, fill, stroke, box-shadow;
+    transition-duration: 200ms;
+    transition-timing-function: ease;
+}
+
+/* Exclure les éléments animés pour éviter la désynchronisation */
+*[style*="transition"],
+.tab-item,
+.focus-mode-panel,
+.sidebar-accordion,
+.lang-dropdown-menu,
+.extra-menu-dropdown-content,
+.modal,
+.modal-content,
+.pomodoro-popup,
+[data-lucide],
+.writing-progress-fill,
+.progress-scene-segment {
+    transition-property: none;
+}
+
 body {
-    font-family: 'Crimson Pro', serif;
+    /* UI utilise Inter sans-serif pour lisibilité optimale des éléments d'interface */
+    font-family: var(--font-ui, 'Inter', system-ui, sans-serif);
     background: var(--bg-primary);
     color: var(--text-primary);
     overflow: hidden;
+    font-size: 14px;
+    line-height: 1.5;
 }
 
 .app-container {
@@ -54,4 +82,47 @@ body {
 
 textarea {
     resize: vertical;
+}
+
+/* ============================================
+   GLOBAL SELECTION & SCROLLBARS
+   ============================================ */
+
+/* Sélection de texte aux couleurs du thème */
+::selection {
+    background: rgba(var(--primary-color-rgb), 0.25);
+    color: inherit;
+    text-shadow: none;
+}
+
+/* Scrollbars Standard (Firefox) */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-color) transparent;
+}
+
+/* Scrollbars Webkist (Chrome, Edge, Safari) */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border: 3px solid transparent;
+    background-clip: content-box;
+    border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: var(--text-muted);
+    border: 2px solid transparent;
+}
+
+::-webkit-scrollbar-corner {
+    background: transparent;
 }

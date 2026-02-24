@@ -20,14 +20,34 @@ const InterfaceCustomizerRepository = {
         return InterfaceCustomizerModel.getDefaultSettings();
     },
 
-    /**
-     * Sauvegarde les réglages dans localStorage
-     */
     saveSettings: (settings) => {
         try {
             localStorage.setItem(InterfaceCustomizerRepository._STORAGE_KEY, JSON.stringify(settings));
         } catch (e) {
             console.error('Error saving interface settings:', e);
+        }
+    },
+
+    /**
+     * Charge les presets personnalisés (Admin)
+     */
+    loadCustomPresets: () => {
+        try {
+            const stored = localStorage.getItem('plume_custom_presets');
+            return stored ? JSON.parse(stored) : [];
+        } catch (e) {
+            return [];
+        }
+    },
+
+    /**
+     * Sauvegarde les presets personnalisés (Admin)
+     */
+    saveCustomPresets: (presets) => {
+        try {
+            localStorage.setItem('plume_custom_presets', JSON.stringify(presets));
+        } catch (e) {
+            console.error('Error saving custom presets:', e);
         }
     }
 };

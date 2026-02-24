@@ -129,6 +129,19 @@ function resetArcZoom() {
     ArcBoardViewModel.resetView();
 }
 
+// Import / Export
+function exportArcToExcel(arcId = null) {
+    ArcBoardImportExport.exportToExcel(arcId || ArcBoardState.currentArcId);
+}
+
+function exportArcToMarkdown(arcId = null) {
+    ArcBoardImportExport.exportToMarkdown(arcId || ArcBoardState.currentArcId);
+}
+
+function importArcFromExcel(file) {
+    ArcBoardImportExport.importFromExcel(file);
+}
+
 // Items
 function addArcItem(type) {
     ArcBoardViewModel.addItem(type);

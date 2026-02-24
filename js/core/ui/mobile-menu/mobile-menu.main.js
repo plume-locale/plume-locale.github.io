@@ -34,7 +34,7 @@ window.MobileMenuMain = {
 // ========================================
 
 window.toggleMobileSidebar = function () {
-    MobileMenuViewModel.toggleSidebar();
+    MobileMenuViewModel.toggleSidebar('structure');
 };
 
 window.closeMobileSidebar = function () {
@@ -42,15 +42,12 @@ window.closeMobileSidebar = function () {
 };
 
 window.toggleMobileNav = function () {
-    MobileMenuViewModel.toggleNav();
+    MobileMenuViewModel.toggleSidebar('navigation');
 };
 
 window.closeMobileNav = function () {
-    MobileMenuViewModel.closeNav();
-};
-
-window.switchViewMobile = function (view) {
-    MobileMenuViewModel.switchViewMobile(view);
+    // Redirigé vers la sidebar
+    window.closeMobileSidebar();
 };
 
 window.toggleEditorToolbar = function () {

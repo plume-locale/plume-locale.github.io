@@ -136,61 +136,37 @@ const ProductTourButtonView = {
             return document.getElementById('tourTriggerBtn');
         }
 
-        // Trouver le conteneur du menu supplémentaire
-        const extraMenuContent = document.querySelector('#extraMenuDropdown .extra-menu-dropdown-content');
-        if (!extraMenuContent) {
-            // Fallback: chercher header-actions si le menu n'est pas trouvé
-            const headerActions = document.querySelector('.header-actions');
-            if (!headerActions) {
-                console.warn('Header actions container not found');
-                return null;
-            }
-
-            // Créer le bouton style header (fallback)
-            const button = document.createElement('button');
-            button.id = 'tourTriggerBtn';
-            button.className = 'header-action-btn tour-trigger-btn';
-            button.title = Localization.t('tour.btn.trigger.title');
-            button.setAttribute('aria-label', Localization.t('tour.btn.trigger.title'));
-            button.innerHTML = '<i data-lucide="help-circle"></i>';
-
-            button.addEventListener('click', (e) => {
-                e.preventDefault();
-                if (onClick) onClick();
-            });
-
-            headerActions.appendChild(button);
-            if (typeof lucide !== 'undefined') lucide.createIcons();
-            return button;
+        // Trouver le conteneur des actions du header
+        const headerActions = document.querySelector('.header-actions');
+        if (!headerActions) {
+            console.warn('Header actions container not found');
+            return null;
         }
 
-        // Créer le bouton style menu item
+        // Créer le bouton style header
         const button = document.createElement('button');
         button.id = 'tourTriggerBtn';
-        button.className = 'extra-menu-item tour-trigger-btn';
-        button.title = Localization.t('tour.btn.trigger.title');
-        button.setAttribute('aria-label', Localization.t('tour.btn.trigger.title'));
-        const label = Localization.t('tour.btn.trigger.title') || 'Visite guidée';
-        button.innerHTML = `<i data-lucide="help-circle"></i><span>${label}</span>`;
+        button.className = 'header-action-btn tour-trigger-btn';
+        button.title = Localization.t('tour.btn.trigger.title') || 'Visite guidée';
+        button.setAttribute('aria-label', Localization.t('tour.btn.trigger.title') || 'Visite guidée');
+        button.style.fontWeight = 'bold';
+        button.innerHTML = '<span>?</span>';
 
         // Attacher l'événement
         button.addEventListener('click', (e) => {
             e.preventDefault();
-            // Fermer le menu
-            const dropdown = button.closest('.extra-menu-dropdown');
-            if (dropdown) dropdown.classList.remove('open');
-
             if (onClick) {
                 onClick();
             }
         });
 
-        // Ajouter au menu
-        extraMenuContent.appendChild(button);
-
-        // Initialiser l'icône Lucide
-        if (typeof lucide !== 'undefined') {
-            lucide.createIcons();
+        // L'insérer avant ou après le bouton Ko-fi?
+        // On cherche le lien Ko-fi pour se placer à côté
+        const kofiBtn = headerActions.querySelector('a[href*="ko-fi.com"]');
+        if (kofiBtn) {
+            headerActions.insertBefore(button, kofiBtn);
+        } else {
+            headerActions.appendChild(button);
         }
 
         return button;
@@ -363,6 +339,22 @@ const ProductTourDriverView = {
             el.removeAttribute('aria-expanded');
             el.removeAttribute('aria-controls');
         });
+
+        // S'assurer que le scroll est réinitialisé si décalé (avec un léger délai pour laisser Driver.js finir)
+        setTimeout(() => {
+            window.scrollTo(0, 0);
+
+            // Réinitialiser le scroll des conteneurs internes (important pour le système d'onglets et corkboard)
+            const scrollableContainers = document.querySelectorAll('.cork-board-container, .tab-content-area, .editor-container, .sidebar, .split-panel');
+            scrollableContainers.forEach(el => {
+                el.scrollTop = 0;
+            });
+            // Optionnel: rafraîchir la vue actuelle pour forcer un re-calcul du layout si nécessaire
+            if (typeof refreshAllViews === 'function') {
+                refreshAllViews();
+            }
+            console.log('🔄 All tour scroll positions reset and views refreshed');
+        }, 50);
 
         console.log('✅ Tour cleanup complete');
     }

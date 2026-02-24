@@ -105,6 +105,14 @@ function closeTab(tabId, paneId) {
             // Si c'était le premier (index 0), on prend le nouveau premier (celui qui était à droite)
             const newIndex = Math.max(0, index - 1);
             pane.activeTabId = pane.tabs[newIndex].id;
+
+            // Synchronise les variables globales avec le nouvel onglet (équivalent du switchView)
+            syncGlobalStateWithTab(pane.tabs[newIndex]);
+
+            // Lancer le switchview pour cet onglet nouvellement sélectionné comme demandé
+            if (typeof switchView === 'function') {
+                switchView(pane.tabs[newIndex].view, { skipTabs: true, skipRenderView: true });
+            }
         } else {
             pane.activeTabId = null;
         }

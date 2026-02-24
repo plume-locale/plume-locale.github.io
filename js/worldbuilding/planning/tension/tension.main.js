@@ -35,8 +35,10 @@ window.saveTensionWordsToStorage = (words) => TensionRepository.saveTensionWords
 window.openTensionWordsEditor = () => TensionHandlers.onOpenEditor();
 window.loadTensionWordsInEditor = () => TensionView.loadWords();
 window.updateLiveTensionMeter = (text, context) => {
-    const meter = document.getElementById('liveTensionMeter');
-    if (!meter) TensionView.injectTensionMeter();
+    let meter = document.getElementById('liveTensionMeter');
+    if (!meter) {
+        TensionView.injectTensionMeter();
+    }
 
     // Déléguer le calcul et l'affichage
     const result = TensionViewModel.calculateTension(text, context);

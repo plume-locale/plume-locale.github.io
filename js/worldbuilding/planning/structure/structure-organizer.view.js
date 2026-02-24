@@ -683,9 +683,11 @@ function createAutoChapterForScene(targetAct) {
 
     // Générer un titre automatique pour le chapitre
     const chapterNumber = (targetAct.chapters?.length || 0) + 1;
-    const newChapter = {
+    const title = `Chapitre ${chapterNumber}`;
+
+    const newChapter = (typeof createChapter === 'function') ? createChapter(title) : {
         id: Date.now(),
-        title: `Chapitre ${chapterNumber}`,
+        title: title,
         scenes: []
     };
 

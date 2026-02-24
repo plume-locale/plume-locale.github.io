@@ -101,6 +101,8 @@ const PlotGridImportExport = {
         // Map standard columns
         const sceneIdx = headers.indexOf(Localization.t('plotgrid.export.scene')) !== -1 ? headers.indexOf(Localization.t('plotgrid.export.scene')) : headers.indexOf("Scène");
         const synIdx = headers.indexOf(Localization.t('plotgrid.export.synopsis')) !== -1 ? headers.indexOf(Localization.t('plotgrid.export.synopsis')) : headers.indexOf("Résumé");
+        const actIdx = headers.indexOf(Localization.t('plotgrid.export.act')) !== -1 ? headers.indexOf(Localization.t('plotgrid.export.act')) : headers.indexOf("Acte");
+        const chapIdx = headers.indexOf(Localization.t('plotgrid.export.chapter')) !== -1 ? headers.indexOf(Localization.t('plotgrid.export.chapter')) : headers.indexOf("Chapitre");
 
         if (sceneIdx === -1) {
             alert(Localization.t('plotgrid.import.error_no_scene_col'));
@@ -166,13 +168,22 @@ const PlotGridImportExport = {
                 if (cellText === "") return;
 
                 const lines = cellText.split('\n');
-                const newTitle = lines[0].trim();
-                const newContent = lines.slice(1).join('\n').trim();
+                let newTitle, newContent;
+
+                if (lines.length > 1) {
+                    // Si on a plusieurs lignes : la première est le titre, le reste est le contenu
+                    newTitle = lines[0].trim();
+                    newContent = lines.slice(1).join('\n').trim();
+                } else {
+                    // Si on n'a qu'une seule ligne : on la met en contenu, et on met un titre par défaut
+                    newTitle = ""; // Sera remplacé par 'Sans titre' via le ViewModel ou le fallback ci-dessous
+                    newContent = cellText;
+                }
 
                 if (existingCard) {
-                    if (existingCard.content !== newContent || existingCard.title !== newTitle) {
+                    if (existingCard.content !== newContent || (newTitle && existingCard.title !== newTitle)) {
                         PlotGridViewModel.updateCard(existingCard.id, {
-                            title: newTitle || Localization.t('plotgrid.import.default_card_title'),
+                            title: newTitle || existingCard.title || Localization.t('plotgrid.import.default_card_title'),
                             content: newContent
                         });
                         updatedCount++;

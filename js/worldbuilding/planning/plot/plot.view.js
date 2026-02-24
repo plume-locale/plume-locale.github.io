@@ -83,10 +83,10 @@ class PlotView {
     _renderGraph(plotPoints) {
         // Configuration SVG
         const svgWidth = 1000;
-        const svgHeight = 700;
+        const svgHeight = 750;
         const paddingX = 60;
         const paddingYTop = 40;
-        const paddingYBottom = 180;
+        const paddingYBottom = 220;
 
         const plotWidth = svgWidth - paddingX * 2;
         const plotHeight = svgHeight - paddingYTop - paddingYBottom;
@@ -348,25 +348,47 @@ class PlotView {
 
     _renderFooter() {
         return `
-            <div style="margin-top: 1rem; padding: 1rem; background: var(--bg-secondary); border-radius: 4px;">
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div style="margin-top: 13rem; padding: 1.5rem; background: var(--bg-secondary); border-radius: 12px; border: 1px solid var(--border-color); box-shadow: inset 0 0 20px rgba(0,0,0,0.02);">
+                <div style="display: flex; flex-direction: column; gap: 1.5rem;">
                     <div>
-                        <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; margin: 0;">
-                            <i data-lucide="lightbulb" style="width:14px;height:14px;vertical-align:middle;margin-right:4px;color:var(--accent-gold);"></i> <strong>${Localization.t('plot.usage')}</strong><br>
-                            • <strong>Clic</strong> ${Localization.t('plot.clickAction').substring(5)}<br>
-                            • <strong>Affichage</strong> ${Localization.t('plot.hoverAction').substring(10)}<br>
-                            • <strong>Intégration</strong> ${Localization.t('plot.integrationAction').substring(12)}<br>
-                            • <strong>Analyser</strong> ${Localization.t('plot.analyzeAction').substring(9)}<br>
-                            • <strong>Suggestions</strong> ${Localization.t('plot.suggestionsAction').substring(12)}
-                        </p>
+                        <h4 style="font-size: 1.1rem; color: var(--accent-gold); margin: 0 0 1rem 0; display: flex; align-items: center; gap: 10px; font-weight: 600;">
+                            <i data-lucide="lightbulb" style="width:20px;height:20px;"></i>
+                            ${Localization.t('plot.usage')}
+                        </h4>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 0.75rem 2rem; font-size: 0.95rem; color: var(--text-secondary); line-height: 1.5;">
+                            <div style="display: flex; align-items: start; gap: 8px;">
+                                <span style="color: var(--accent-gold); font-weight: bold;">•</span>
+                                <div><strong>Clic</strong> ${Localization.t('plot.clickAction').substring(5)}</div>
+                            </div>
+                            <div style="display: flex; align-items: start; gap: 8px;">
+                                <span style="color: var(--accent-gold); font-weight: bold;">•</span>
+                                <div><strong>Affichage</strong> ${Localization.t('plot.hoverAction').substring(10)}</div>
+                            </div>
+                            <div style="display: flex; align-items: start; gap: 8px;">
+                                <span style="color: var(--accent-gold); font-weight: bold;">•</span>
+                                <div><strong>Intégration</strong> ${Localization.t('plot.integrationAction').substring(12)}</div>
+                            </div>
+                            <div style="display: flex; align-items: start; gap: 8px;">
+                                <span style="color: var(--accent-gold); font-weight: bold;">•</span>
+                                <div><strong>Analyser</strong> ${Localization.t('plot.analyzeAction').substring(9)}</div>
+                            </div>
+                            <div style="display: flex; align-items: start; gap: 8px;">
+                                <span style="color: var(--accent-gold); font-weight: bold;">•</span>
+                                <div><strong>Suggestions</strong> ${Localization.t('plot.suggestionsAction').substring(12)}</div>
+                            </div>
+                        </div>
                     </div>
-                    <div style="padding: 0.75rem; background: var(--bg-primary); border-radius: 4px; border: 1px solid var(--border-color);">
-                        <div style="font-size: 0.85rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--text-primary);">${Localization.t('plot.tensionCalculation')}</div>
-                        <div style="font-size: 0.75rem; line-height: 1.6; color: var(--text-secondary);">
-                            • ${Localization.t('plot.lexicalAnalysis')}<br>
-                            • ${Localization.t('plot.sceneLength')}<br>
-                            • ${Localization.t('plot.expressivePunctuation')}<br>
-                            • ${Localization.t('plot.narrativePosition')}
+                    
+                    <div style="padding: 1.25rem; background: var(--bg-primary); border-radius: 10px; border: 1px solid var(--border-color); border-left: 4px solid var(--accent-gold); box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
+                        <h4 style="font-size: 0.9rem; font-weight: 700; margin: 0 0 0.75rem 0; color: var(--text-primary); display: flex; align-items: center; gap: 8px; text-transform: uppercase; letter-spacing: 0.5px;">
+                            <i data-lucide="info" style="width:16px;height:16px;"></i>
+                            ${Localization.t('plot.tensionCalculation')}
+                        </h4>
+                        <div style="display: flex; flex-wrap: wrap; gap: 1rem 2.5rem; font-size: 0.85rem; color: var(--text-secondary);">
+                            <span style="display: flex; align-items: center; gap: 6px;"><i data-lucide="check" style="width:12px;height:12px;color:var(--accent-gold);"></i> ${Localization.t('plot.lexicalAnalysis')}</span>
+                            <span style="display: flex; align-items: center; gap: 6px;"><i data-lucide="check" style="width:12px;height:12px;color:var(--accent-gold);"></i> ${Localization.t('plot.sceneLength')}</span>
+                            <span style="display: flex; align-items: center; gap: 6px;"><i data-lucide="check" style="width:12px;height:12px;color:var(--accent-gold);"></i> ${Localization.t('plot.expressivePunctuation')}</span>
+                            <span style="display: flex; align-items: center; gap: 6px;"><i data-lucide="check" style="width:12px;height:12px;color:var(--accent-gold);"></i> ${Localization.t('plot.narrativePosition')}</span>
                         </div>
                     </div>
                 </div>

@@ -12,7 +12,7 @@ class MindmapView {
         const container = document.getElementById('mindmapList');
         if (!container) return;
 
-        const mindmaps = this.model.mindmaps;
+        const mindmaps = this.model.mindmaps || [];
         const currentId = this.model.currentMindmapId;
 
         container.innerHTML = `

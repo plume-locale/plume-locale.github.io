@@ -2,6 +2,7 @@ const LANDING_TRANSLATIONS = {
     "fr": {
         "nav.features": "Fonctionnalités",
         "nav.privacy": "Confidentialité",
+        "nav.supportKofi": "Soutenir sur Ko-fi",
         "nav.open_app": "Ouvrir l'App",
         "hero.title": "Donnez vie à vos histoires avec <span>Plume</span>.",
         "hero.subtitle": "L'atelier d'écriture nouvelle génération. Puissant, privé et conçu pour la créativité sans limites.",
@@ -68,6 +69,7 @@ const LANDING_TRANSLATIONS = {
     "en": {
         "nav.features": "Features",
         "nav.privacy": "Privacy",
+        "nav.supportKofi": "Support on Ko-fi",
         "nav.open_app": "Open App",
         "hero.title": "Bring your stories to life with <span>Plume</span>.",
         "hero.subtitle": "The next-generation writing studio. Powerful, private, and designed for limitless creativity.",
@@ -134,6 +136,7 @@ const LANDING_TRANSLATIONS = {
     "es": {
         "nav.features": "Funcionalidades",
         "nav.privacy": "Privacidad",
+        "nav.supportKofi": "Apoyar en Ko-fi",
         "nav.open_app": "Abrir App",
         "hero.title": "Da vida a tus historias con <span>Plume</span>.",
         "hero.subtitle": "El taller de escritura de nueva generación. Potente, privado y diseñado para la creatividad sin límites.",
@@ -200,6 +203,7 @@ const LANDING_TRANSLATIONS = {
     "de": {
         "nav.features": "Funktionen",
         "nav.privacy": "Datenschutz",
+        "nav.supportKofi": "Auf Ko-fi unterstützen",
         "nav.open_app": "App Öffnen",
         "hero.title": "Erwecken Sie Ihre Geschichten mit <span>Plume</span> zum Leben.",
         "hero.subtitle": "Das Schreibstudio der nächsten Generation. Kraftvoll, privat und für grenzenlose Kreativität konzipiert.",
