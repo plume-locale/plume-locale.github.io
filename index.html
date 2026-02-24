@@ -4,335 +4,2232 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Plume - L'atelier d'écriture local-first</title>
     <meta name="description"
-        content="Plume est un studio d'écriture moderne, puissant et privé. Plus de 20 outils pour concevoir, écrire et analyser vos romans sans compromis.">
+        content="Plume - L'atelier d'écriture qui respecte votre vie privée. Gratuit, sans compte, vos données restent chez vous.">
+    <title>Plume - L'atelier d'écriture qui respecte votre vie privée</title>
 
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700;800&display=swap"
-        rel="stylesheet">
-
-    <!-- Icons -->
+    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
-    <link rel="stylesheet" href="css/01.variables.css">
-    <link rel="stylesheet" href="css/landing-page.css">
-    <script src="js/localization/landing-locales.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Couleurs Plume officielles - Light Mode */
+            --bg-primary: #faf9f6;
+            --bg-secondary: #f5f3ed;
+            --bg-tertiary: #f0f1f3;
+            --bg-card: #ffffff;
+            --bg-accent: #2a2622;
+            --text-primary: #2a2622;
+            --text-secondary: #5a5550;
+            --text-muted: #8a8580;
+            --border-color: #d4cfc5;
+            --primary-color: #ff8c42;
+            --primary-hover: #ff7629;
+            --accent-red: #c44536;
+            --accent-gold: #d4af37;
+            --accent-blue: #4a9eff;
+            --accent-green: #51cf66;
+            --accent-purple: #a78bfa;
+            --shadow-color: 0, 0, 0;
+            --header-bg: rgba(250, 249, 246, 0.95);
+            --toggle-bg: #e8e5de;
+            --toggle-icon-color: #5a5550;
+            --faq-border: #e8e5de;
+            --stats-bg: linear-gradient(135deg, rgba(255, 140, 66, 0.08), rgba(212, 175, 55, 0.06));
+        }
+
+        /* ===== DARK MODE ===== */
+        [data-theme="dark"] {
+            --bg-primary: #1a1917;
+            --bg-secondary: #211f1c;
+            --bg-tertiary: #2a2825;
+            --bg-card: #252320;
+            --bg-accent: #faf9f6;
+            --text-primary: #f0ede8;
+            --text-secondary: #b0a89e;
+            --text-muted: #8a8278;
+            --border-color: #3d3a35;
+            --primary-color: #ff9d5c;
+            --primary-hover: #ff8c42;
+            --accent-red: #e05a4a;
+            --accent-gold: #e0bb4a;
+            --accent-blue: #6ab0ff;
+            --accent-green: #6bdf7e;
+            --accent-purple: #c4acff;
+            --shadow-color: 0, 0, 0;
+            --header-bg: rgba(26, 25, 23, 0.96);
+            --toggle-bg: #3d3a35;
+            --toggle-icon-color: #e0bb4a;
+            --faq-border: #3d3a35;
+            --stats-bg: linear-gradient(135deg, rgba(255, 157, 92, 0.1), rgba(224, 187, 74, 0.08));
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root:not([data-theme="light"]) {
+                --bg-primary: #1a1917;
+                --bg-secondary: #211f1c;
+                --bg-tertiary: #2a2825;
+                --bg-card: #252320;
+                --bg-accent: #faf9f6;
+                --text-primary: #f0ede8;
+                --text-secondary: #b0a89e;
+                --text-muted: #8a8278;
+                --border-color: #3d3a35;
+                --primary-color: #ff9d5c;
+                --primary-hover: #ff8c42;
+                --accent-red: #e05a4a;
+                --accent-gold: #e0bb4a;
+                --accent-blue: #6ab0ff;
+                --accent-green: #6bdf7e;
+                --accent-purple: #c4acff;
+                --shadow-color: 0, 0, 0;
+                --header-bg: rgba(26, 25, 23, 0.96);
+                --toggle-bg: #3d3a35;
+                --toggle-icon-color: #e0bb4a;
+                --faq-border: #3d3a35;
+                --stats-bg: linear-gradient(135deg, rgba(255, 157, 92, 0.1), rgba(224, 187, 74, 0.08));
+            }
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1rem 2rem;
+            background: var(--header-bg);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            z-index: 1000;
+            transition: background 0.3s, border-color 0.3s;
+        }
+
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-icon {
+            width: 28px;
+            height: 28px;
+            color: var(--primary-color);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links>a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-links>a:hover {
+            color: var(--primary-color);
+        }
+
+        /* Language Selector */
+        .lang-selector {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .lang-selector>i {
+            width: 18px;
+            height: 18px;
+            color: var(--text-secondary);
+        }
+
+        /* Dark mode toggle */
+        .dark-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 38px;
+            height: 38px;
+            border-radius: 8px;
+            background: var(--toggle-bg);
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.3s;
+            color: var(--toggle-icon-color);
+            flex-shrink: 0;
+        }
+
+        .dark-toggle:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            transform: scale(1.08);
+        }
+
+        .dark-toggle i {
+            width: 18px;
+            height: 18px;
+            transition: transform 0.4s;
+        }
+
+        .dark-toggle:hover i {
+            transform: rotate(20deg);
+        }
+
+        .lang-current {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 0.75rem;
+            border-radius: 6px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .lang-current:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .lang-current .chevron {
+            width: 14px;
+            height: 14px;
+            transition: transform 0.3s;
+        }
+
+        .lang-dropdown {
+            position: absolute;
+            top: calc(100% + 0.5rem);
+            right: 0;
+            background: var(--bg-card);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(var(--shadow-color), 0.15);
+            min-width: 140px;
+            display: none;
+            overflow: hidden;
+            z-index: 1001;
+        }
+
+        .lang-dropdown.active {
+            display: block;
+        }
+
+        .lang-option {
+            padding: 0.75rem 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .lang-option:hover {
+            background: var(--bg-secondary);
+            color: var(--primary-color);
+        }
+
+        .lang-option.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .lang-option .flag {
+            font-size: 1.2rem;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            display: inline-block;
+            box-shadow: 0 2px 8px rgba(255, 140, 66, 0.2);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(255, 140, 66, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-primary);
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            border: 2px solid var(--primary-color);
+            transition: all 0.3s;
+            display: inline-block;
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Hero Section */
+        .hero {
+            margin-top: 80px;
+            padding: 6rem 2rem 4rem;
+            text-align: center;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .trust-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(81, 207, 102, 0.1);
+            border: 1px solid var(--accent-green);
+            color: var(--accent-green);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .trust-badge i {
+            width: 16px;
+            height: 16px;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+            line-height: 1.2;
+        }
+
+        .hero h1 .highlight {
+            color: var(--primary-color);
+        }
+
+        .hero .subtitle {
+            font-size: 1.4rem;
+            color: var(--text-secondary);
+            margin-bottom: 2.5rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .social-proof {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .social-proof span {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .social-proof i {
+            width: 18px;
+            height: 18px;
+            color: var(--primary-color);
+        }
+
+        /* App Preview */
+        .app-preview {
+            max-width: 1400px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+        }
+
+        .preview-container {
+            background: linear-gradient(135deg, rgba(255, 140, 66, 0.05), rgba(212, 175, 55, 0.05));
+            border: 2px solid var(--border-color);
+            border-radius: 16px;
+            padding: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .preview-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255, 140, 66, 0.1), transparent);
+            pointer-events: none;
+        }
+
+        .screenshot-placeholder {
+            background: white;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+            min-height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            box-shadow: 0 10px 40px rgba(var(--shadow-color), 0.1);
+        }
+
+        .screenshot-placeholder h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .screenshot-placeholder h3 i {
+            width: 32px;
+            height: 32px;
+        }
+
+        /* Carousel */
+        .carousel-container {
+            position: relative;
+            width: 100%;
+            min-height: 500px;
+            background: var(--bg-card);
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .carousel-slide {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            width: 100%;
+            height: 100%;
+            animation: fadeEffect 0.5s;
+        }
+
+        .carousel-slide.active {
+            display: flex;
+        }
+
+        .carousel-image {
+            width: 100%;
+            flex-grow: 1;
+            min-height: 350px;
+            background: var(--bg-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .carousel-image img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .carousel-caption {
+            padding: 2rem;
+            width: 100%;
+            background: var(--bg-card);
+            border-top: 1px solid var(--border-color);
+            z-index: 2;
+        }
+
+        .carousel-caption h3 {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .carousel-caption p {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Navigation */
+        .carousel-prev,
+        .carousel-next {
+            cursor: pointer;
+            position: absolute;
+            top: 40%;
+            width: auto;
+            padding: 16px;
+            margin-top: -22px;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+            border-radius: 0 3px 3px 0;
+            user-select: none;
+            background-color: rgba(0, 0, 0, 0.3);
+            border: none;
+            z-index: 10;
+            transition: background-color 0.3s;
+        }
+
+        .carousel-next {
+            right: 0;
+            border-radius: 3px 0 0 3px;
+        }
+
+        .carousel-prev:hover,
+        .carousel-next:hover {
+            background-color: var(--primary-color);
+        }
+
+        .carousel-dots {
+            text-align: center;
+            margin-top: 1.5rem;
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .dot {
+            cursor: pointer;
+            height: 12px;
+            width: 12px;
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 50%;
+            display: inline-block;
+            transition: background-color 0.3s ease;
+        }
+
+        [data-theme="dark"] .dot {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .dot.active,
+        .dot:hover {
+            background-color: var(--primary-color);
+        }
+
+        @keyframes fadeEffect {
+            from {
+                opacity: 0.4;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Value Props */
+        .value-props {
+            max-width: 1200px;
+            margin: 6rem auto;
+            padding: 0 2rem;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .section-header p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+        }
+
+        .value-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        /* Stats Section */
+        .stats-section {
+            max-width: 900px;
+            margin: 0 auto 2rem;
+            padding: 0 2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            background: var(--stats-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            line-height: 1;
+            margin-bottom: 0.4rem;
+            letter-spacing: -0.02em;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .stat-divider {
+            width: 1px;
+            background: var(--border-color);
+            display: none;
+        }
+
+        @media (min-width: 600px) {
+            .stats-grid {
+                grid-template-columns: 1fr 1px 1fr 1px 1fr;
+                align-items: center;
+            }
+
+            .stat-divider {
+                display: block;
+            }
+        }
+
+        .value-card {
+            background: var(--bg-card);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(var(--shadow-color), 0.05);
+        }
+
+        .value-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(var(--shadow-color), 0.15);
+            border-color: var(--primary-color);
+        }
+
+        .value-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-gold));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .value-icon i {
+            width: 32px;
+            height: 32px;
+            color: white;
+        }
+
+        .value-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .value-card p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+        /* Usage Modes */
+        .usage-modes {
+            max-width: 1200px;
+            margin: 6rem auto;
+            padding: 0 2rem;
+            position: relative;
+        }
+
+        .modes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .mode-card {
+            background: var(--bg-card);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2.5rem;
+            position: relative;
+            transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(var(--shadow-color), 0.05);
+        }
+
+        /* Mode En ligne = visuellement dominant */
+        .mode-card.featured {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 1px var(--primary-color), 0 8px 32px rgba(255, 140, 66, 0.15);
+            position: relative;
+        }
+
+        .mode-card.featured::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(160deg, rgba(255, 140, 66, 0.05) 0%, transparent 60%);
+            border-radius: 10px;
+            pointer-events: none;
+        }
+
+        .mode-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(var(--shadow-color), 0.15);
+            border-color: var(--primary-color);
+        }
+
+        .mode-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-gold));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .mode-icon.offline {
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
+        }
+
+        .mode-icon i {
+            width: 36px;
+            height: 36px;
+            color: white;
+        }
+
+        .mode-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .mode-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--bg-secondary);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .mode-badge.recommended {
+            background: rgba(255, 140, 66, 0.1);
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+        }
+
+        .mode-badge i {
+            width: 14px;
+            height: 14px;
+        }
+
+        .mode-url {
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: var(--primary-color);
+            background: var(--bg-secondary);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+
+        .mode-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .mode-features li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .mode-features li i {
+            width: 20px;
+            height: 20px;
+            color: var(--accent-green);
+            flex-shrink: 0;
+            margin-top: 0.1rem;
+        }
+
+        .mode-cta {
+            width: 100%;
+            text-align: center;
+        }
+
+        .usage-note {
+            margin-top: 3rem;
+            padding: 1.5rem;
+            background: rgba(74, 158, 255, 0.05);
+            border-left: 4px solid var(--accent-blue);
+            border-radius: 8px;
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+
+        .usage-note i {
+            width: 24px;
+            height: 24px;
+            color: var(--accent-blue);
+            flex-shrink: 0;
+            margin-top: 0.2rem;
+        }
+
+        .usage-note p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin: 0;
+        }
+
+        /* Features Section */
+        .features {
+            max-width: 1200px;
+            margin: 6rem auto;
+            padding: 0 2rem;
+        }
+
+        .feature-tabs {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            background: var(--bg-card);
+            border: 2px solid var(--border-color);
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .tab-btn i {
+            width: 20px;
+            height: 20px;
+        }
+
+        .tab-btn:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .tab-btn.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .feature-content {
+            display: none;
+        }
+
+        .feature-content.active {
+            display: block;
+        }
+
+        .feature-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .feature-item {
+            background: var(--bg-card);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            border-left: 4px solid var(--primary-color);
+            transition: all 0.3s;
+        }
+
+        .feature-item:hover {
+            box-shadow: 0 4px 16px rgba(var(--shadow-color), 0.1);
+            transform: translateY(-2px);
+        }
+
+        .feature-item h4 {
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .feature-item h4 i {
+            width: 20px;
+            height: 20px;
+            color: var(--primary-color);
+        }
+
+        .feature-item p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Testimonials */
+        .testimonials {
+            max-width: 1200px;
+            margin: 6rem auto;
+            padding: 0 2rem;
+        }
+
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .testimonial-card {
+            background: var(--bg-card);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            position: relative;
+            box-shadow: 0 4px 12px rgba(var(--shadow-color), 0.08);
+            transition: all 0.3s;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(var(--shadow-color), 0.12);
+            border-color: var(--primary-color);
+        }
+
+        .testimonial-stars {
+            display: flex;
+            gap: 3px;
+            margin-bottom: 1rem;
+        }
+
+        .testimonial-stars i {
+            width: 16px;
+            height: 16px;
+            color: var(--accent-gold);
+            fill: var(--accent-gold);
+        }
+
+        .testimonial-meta {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 0.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .testimonial-meta i {
+            width: 12px;
+            height: 12px;
+            color: var(--accent-green);
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            max-width: 800px;
+            margin: 6rem auto;
+            padding: 0 2rem;
+        }
+
+        .faq-list {
+            margin-top: 3rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .faq-item {
+            background: var(--bg-card);
+            border: 2px solid var(--faq-border);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: border-color 0.3s;
+        }
+
+        .faq-item.open {
+            border-color: var(--primary-color);
+        }
+
+        .faq-question {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.25rem 1.5rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            text-align: left;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            gap: 1rem;
+            transition: color 0.2s;
+        }
+
+        .faq-question:hover {
+            color: var(--primary-color);
+        }
+
+        .faq-chevron {
+            width: 20px;
+            height: 20px;
+            color: var(--primary-color);
+            flex-shrink: 0;
+            transition: transform 0.3s;
+        }
+
+        .faq-item.open .faq-chevron {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.35s ease, padding 0.3s;
+            padding: 0 1.5rem;
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+        .faq-answer.open {
+            max-height: 300px;
+            padding: 0 1.5rem 1.25rem;
+        }
+
+        .quote-icon {
+            position: absolute;
+            top: 1.5rem;
+            left: 1.5rem;
+            width: 40px;
+            height: 40px;
+            color: var(--primary-color);
+            opacity: 0.2;
+        }
+
+        .testimonial-content {
+            font-style: italic;
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+            color: var(--text-primary);
+            position: relative;
+            z-index: 1;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-gold));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: white;
+        }
+
+        .author-info h5 {
+            margin-bottom: 0.25rem;
+            color: var(--text-primary);
+        }
+
+        .author-info p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        /* CTA Final */
+        .final-cta {
+            max-width: 800px;
+            margin: 6rem auto;
+            padding: 4rem 2rem;
+            text-align: center;
+            background: linear-gradient(135deg, rgba(255, 140, 66, 0.1), rgba(212, 175, 55, 0.1));
+            border-radius: 16px;
+            border: 2px solid var(--border-color);
+        }
+
+        .cta-guarantee {
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .cta-guarantee i {
+            width: 16px;
+            height: 16px;
+            color: var(--accent-green);
+        }
+
+        .final-cta h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .final-cta p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        /* Footer */
+        footer {
+            border-top: 2px solid var(--border-color);
+            padding: 3rem 2rem;
+            text-align: center;
+            color: var(--text-secondary);
+            background: var(--bg-secondary);
+            transition: background 0.3s, border-color 0.3s;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .footer-links a i {
+            width: 18px;
+            height: 18px;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-color);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero .subtitle {
+                font-size: 1.1rem;
+            }
+
+            .nav-links>a:not(.btn-primary) {
+                display: none;
+            }
+
+            .feature-list {
+                grid-template-columns: 1fr;
+            }
+
+            .value-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .modes-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .testimonial-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+        }
+
+        /* Decorative elements */
+        .decorative-dots {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background-image: radial-gradient(circle, var(--primary-color) 2px, transparent 2px);
+            background-size: 20px 20px;
+            opacity: 0.1;
+        }
+
+        .dots-1 {
+            top: 10%;
+            left: 5%;
+        }
+
+        .dots-2 {
+            bottom: 10%;
+            right: 5%;
+        }
+    </style>
 </head>
 
-<body class="plume-lp">
-    <nav class="lp-navbar">
-        <div class="lp-nav-container">
-            <div class="lp-logo">
-                <i data-lucide="feather"></i>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="nav-content">
+            <div class="logo">
+                <i data-lucide="feather" class="logo-icon"></i>
                 <span>Plume</span>
             </div>
-            <div class="lp-nav-links">
-                <div class="lp-lang-selector">
-                    <button class="lp-btn-lang lp-active" onclick="setLanguage('fr')">FR</button>
-                    <button class="lp-btn-lang" onclick="setLanguage('en')">EN</button>
-                    <button class="lp-btn-lang" onclick="setLanguage('es')">ES</button>
-                    <button class="lp-btn-lang" onclick="setLanguage('de')">DE</button>
-                </div>
-                <button class="lp-theme-toggle" onclick="toggleTheme()" id="theme-toggle" title="Changer de thème">
-                    <i data-lucide="moon" id="theme-icon"></i>
-                </button>
-                <a href="#tools" data-t="nav.features">Fonctionnalités</a>
-                <a href="#local-first" data-t="nav.privacy">Confidentialité</a>
-                <a href="https://ko-fi.com/plume_locale" target="_blank" class="lp-btn-kofi" data-t="nav.supportKofi"
-                    title="Support on Ko-fi">
-                    <i data-lucide="coffee"></i>
+            <nav class="nav-links">
+                <a href="#features" data-i18n="nav.features">Fonctionnalités</a>
+                <a href="#faq" data-i18n="nav.faq">FAQ</a>
+                <a href="doc/fr/" id="doc-link">
+                    <span data-i18n="nav.documentation">Documentation</span>
                 </a>
-                <a href="app.html" class="lp-btn-primary" data-t="nav.open_app">Ouvrir l'App</a>
-            </div>
-        </div>
-    </nav>
 
-    <header class="lp-hero">
-        <div class="lp-container">
-            <div class="lp-hero-content">
-                <h1 data-t="hero.title">Donnez vie à vos histoires avec <span>Plume</span>.</h1>
-                <p data-t="hero.subtitle">L'atelier d'écriture nouvelle génération. Puissant, privé et conçu pour la
-                    créativité sans limites.
-                </p>
-                <div class="lp-hero-actions">
-                    <a href="app.html" class="lp-btn-hero-primary" data-t="hero.cta_primary">Commencer à écrire —
-                        Gratuitement</a>
-                    <a href="#tools" class="lp-btn-hero-secondary" data-t="hero.cta_secondary">Explorer les outils</a>
-                </div>
-            </div>
-            <div class="lp-hero-visual">
-                <div class="lp-screenshot-preview">
-                    <div class="lp-window-controls">
-                        <span></span><span></span><span></span>
+                <!-- Dark Mode Toggle -->
+                <button class="dark-toggle" id="dark-toggle" title="Changer de thème" aria-label="Changer de thème">
+                    <i data-lucide="moon" id="dark-toggle-icon"></i>
+                </button>
+
+                <!-- Language Selector -->
+                <div class="lang-selector">
+                    <i data-lucide="languages"></i>
+                    <div class="lang-current" id="lang-current">
+                        <span id="current-lang-text">FR</span>
+                        <i data-lucide="chevron-down" class="chevron"></i>
                     </div>
-                    <div class="lp-screenshot-content">
-                        <!-- Simulation de l'interface -->
-                        <div class="lp-ui-mockup">
-                            <div class="lp-ui-sidebar"></div>
-                            <div class="lp-ui-editor">
-                                <div class="lp-ui-text-line" style="width: 80%"></div>
-                                <div class="lp-ui-text-line" style="width: 90%"></div>
-                                <div class="lp-ui-text-line" style="width: 70%"></div>
-                                <div class="lp-ui-text-line" style="width: 85%"></div>
-                            </div>
-                            <div class="lp-ui-floating-card">
-                                <div class="lp-card-header"><i data-lucide="zap"></i> <span
-                                        data-t="ui.tension_card">Analyse de Tension</span></div>
-                                <div class="lp-chart-line"></div>
-                            </div>
+                    <div class="lang-dropdown" id="lang-dropdown">
+                        <div class="lang-option" data-lang="fr">
+                            <span class="flag">🇫🇷</span>
+                            <span>Français</span>
+                        </div>
+                        <div class="lang-option" data-lang="en">
+                            <span class="flag">🇬🇧</span>
+                            <span>English</span>
+                        </div>
+                        <div class="lang-option" data-lang="de">
+                            <span class="flag">🇩🇪</span>
+                            <span>Deutsch</span>
+                        </div>
+                        <div class="lang-option" data-lang="es">
+                            <span class="flag">🇪🇸</span>
+                            <span>Español</span>
                         </div>
                     </div>
                 </div>
-            </div>
+
+                <a href="app.html" class="btn-primary" data-i18n="nav.openApp">Ouvrir l'App</a>
+            </nav>
         </div>
     </header>
 
-    <section id="tools" class="lp-tools-overview">
-        <div class="lp-container">
-            <div class="lp-section-header">
-                <h2 data-t="section.tools.title">Un arsenal complet pour l'auteur.</h2>
-                <p data-t="section.tools.subtitle">Plume regroupe plus de 20 outils spécialisés, accessibles
-                    instantanément depuis votre barre de
-                    navigation.</p>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="decorative-dots dots-1"></div>
+
+        <div class="trust-badge">
+            <i data-lucide="check-circle"></i>
+            <span data-i18n="hero.trustBadge.free">100% Gratuit</span>
+            <i data-lucide="check-circle"></i>
+            <span data-i18n="hero.trustBadge.noAccount">Sans compte</span>
+            <i data-lucide="check-circle"></i>
+            <span data-i18n="hero.trustBadge.dataStays">Vos données restent chez vous</span>
+        </div>
+
+        <h1>
+            <span data-i18n="hero.title">Écrivez sans compromis.</span><br>
+            <span data-i18n="hero.titleEnd">Vos histoires</span> <span class="highlight"
+                data-i18n="hero.titleHighlight">vous appartiennent</span>.
+        </h1>
+
+        <p class="subtitle" data-i18n="hero.subtitle">
+            L'atelier d'écriture qui respecte votre vie privée. Puissant comme Scrivener,
+            simple comme Google Docs, et totalement gratuit.
+        </p>
+
+        <div class="hero-cta">
+            <a href="app.html" class="btn-primary" data-i18n="hero.ctaPrimary">Commencer à écrire — Aucune
+                installation</a>
+            <a href="#preview" class="btn-secondary" data-i18n="hero.ctaSecondary">Voir l'interface ↓</a>
+        </div>
+
+        <div class="social-proof">
+            <span>
+                <i data-lucide="lock"></i>
+                <span data-i18n="hero.socialProof.localData">Données 100% locales</span>
+            </span>
+            <span>
+                <i data-lucide="zap"></i>
+                <span data-i18n="hero.socialProof.offline">Fonctionne hors-ligne</span>
+            </span>
+            <span>
+                <i data-lucide="code-2"></i>
+                <span data-i18n="hero.socialProof.openSource">Open Source</span>
+            </span>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-number">100%</div>
+                <div class="stat-label" data-i18n="hero.stats.free">Gratuit pour toujours</div>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+                <div class="stat-number">0</div>
+                <div class="stat-label" data-i18n="hero.stats.servers">Serveur qui stocke vos données</div>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+                <div class="stat-number">20+</div>
+                <div class="stat-label" data-i18n="hero.stats.tools">Outils pour auteurs</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- App Preview -->
+    <section class="app-preview" id="preview">
+        <div class="preview-container">
+            <div class="carousel-container">
+                <!-- Slide 1 -->
+                <div class="carousel-slide active">
+                    <div class="carousel-image">
+                        <!-- Placeholder -->
+                        <!-- Remplacer le contenu ci-dessous par votre image -->
+                        <img src="img/editeur.png" alt="Éditeur Plume" style="max-height: 600px; width: auto;">
+                    </div>
+                    <div class="carousel-caption">
+                        <h3 data-i18n="carousel.slide1.title">L'Éditeur Distraction-Free</h3>
+                        <p data-i18n="carousel.slide1.desc">Une interface épurée pour vous concentrer uniquement sur
+                            votre texte.</p>
+                    </div>
+                </div>
+
+                <!-- Slide 2 -->
+                <div class="carousel-slide">
+                    <div class="carousel-image">
+                        <!-- Remplacer le contenu ci-dessous par votre image -->
+                        <img src="img/corkboard.png" alt="Tableau de Liège" style="max-height: 600px; width: auto;">
+                    </div>
+                    <div class="carousel-caption">
+                        <h3 data-i18n="carousel.slide2.title">Le Tableau de Liège</h3>
+                        <p data-i18n="carousel.slide2.desc">Organisez vos scènes et chapitres visuellement par
+                            glisser-déposer.</p>
+                    </div>
+                </div>
+
+                <!-- Slide 3 -->
+                <div class="carousel-slide">
+                    <div class="carousel-image">
+                        <!-- Remplacer le contenu ci-dessous par votre image -->
+                        <img src="img/analyse.png" alt="Analyse du texte" style="max-height: 600px; width: auto;">
+                    </div>
+                    <div class="carousel-caption">
+                        <h3 data-i18n="carousel.slide3.title">Outils d'Analyse</h3>
+                        <p data-i18n="carousel.slide3.desc">Statistiques sur l'avancement de votre récit</p>
+                    </div>
+
+                </div>
+                <!-- Slide 4 -->
+                <div class="carousel-slide">
+                    <div class="carousel-image">
+                        <!-- Remplacer le contenu ci-dessous par votre image -->
+                        <img src="img/tension.png" alt="Analyse de Tension" style="max-height: 600px; width: auto;">
+                    </div>
+                    <div class="carousel-caption">
+                        <h3 data-i18n="carousel.slide4.title">Outils d'Analyse</h3>
+                        <p data-i18n="carousel.slide4.desc">Visualisez la tension dramatique et la structure de votre
+                            récit.</p>
+                    </div>
+                </div>
+
+                <button class="carousel-prev" onclick="moveSlide(-1)">❮</button>
+                <button class="carousel-next" onclick="moveSlide(1)">❯</button>
             </div>
 
-            <div class="lp-tools-category">
-                <div class="lp-category-info">
-                    <div class="lp-cat-icon"><i data-lucide="pen-tool"></i></div>
-                    <h3 data-t="cat.arch.title">Architecture & Structure</h3>
-                    <p data-t="cat.arch.desc">Concevez le squelette de votre œuvre avec une précision chirurgicale.</p>
+            <div class="carousel-dots">
+                <span class="dot active" onclick="currentSlide(1)"></span>
+                <span class="dot" onclick="currentSlide(2)"></span>
+                <span class="dot" onclick="currentSlide(3)"></span>
+                <span class="dot" onclick="currentSlide(4)"></span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Value Props -->
+    <section class="value-props">
+        <div class="section-header">
+            <h2 data-i18n="values.title">Pourquoi Plume est différent</h2>
+            <p data-i18n="values.subtitle">Les trois piliers qui font de Plume l'outil idéal pour votre écriture</p>
+        </div>
+
+        <div class="value-grid">
+            <div class="value-card">
+                <div class="value-icon">
+                    <i data-lucide="shield-check"></i>
                 </div>
-                <div class="lp-tools-grid">
-                    <div class="lp-tool-item">
-                        <i data-lucide="pen-line"></i>
-                        <h4 data-t="tool.structure.title">Structure</h4>
-                        <p data-t="tool.structure.desc">Éditeur principal organisé en actes, chapitres et scènes.</p>
-                    </div>
-                    <div class="lp-tool-item">
-                        <i data-lucide="layout-grid"></i>
-                        <h4 data-t="tool.corkboard.title">Tableau de Liège</h4>
-                        <p data-t="tool.corkboard.desc">Visualisez et réorganisez vos scènes sous forme de cartes.</p>
-                    </div>
-                    <div class="lp-tool-item">
-                        <i data-lucide="trending-up"></i>
-                        <h4 data-t="tool.plotgrid.title">PlotGrid</h4>
-                        <p data-t="tool.plotgrid.desc">Gérez les points clés de votre narration visuellement.</p>
-                    </div>
-                    <div class="lp-tool-item">
-                        <i data-lucide="git-commit-horizontal"></i>
-                        <h4 data-t="tool.arcs.title">Arcs Narratifs</h4>
-                        <p data-t="tool.arcs.desc">Suivez l'évolution de vos thèmes et de vos sous-intrigues.</p>
-                    </div>
-                    <div class="lp-tool-item">
-                        <i data-lucide="search"></i>
-                        <h4 data-t="tool.investigation.title">Enquête</h4>
-                        <p data-t="tool.investigation.desc">Tableau d'investigation pour les thrillers et romans
-                            policiers.</p>
-                    </div>
-                </div>
+                <h3 data-i18n="values.privacy.title">Vos données vous appartiennent</h3>
+                <p data-i18n="values.privacy.description">
+                    Pas de cloud obligatoire, pas de serveur, pas de compte. Tout est stocké dans
+                    votre navigateur. Vous pouvez sauvegarder sur Google Drive si vous le souhaitez,
+                    mais ce n'est jamais imposé.
+                </p>
             </div>
 
-            <div class="lp-tools-category">
-                <div class="lp-category-info">
-                    <div class="lp-cat-icon"><i data-lucide="users"></i></div>
-                    <h3 data-t="cat.casting.title">Casting & Univers</h3>
-                    <p data-t="cat.casting.desc">Donnez de la profondeur à vos personnages et de la cohérence à votre
-                        monde.</p>
+            <div class="value-card">
+                <div class="value-icon">
+                    <i data-lucide="zap"></i>
                 </div>
-                <div class="lp-tools-grid">
-                    <div class="lp-tool-item">
+                <h3 data-i18n="values.instant.title">Instantané et hors-ligne</h3>
+                <p data-i18n="values.instant.description">
+                    Aucune installation, aucun téléchargement. Ouvrez votre navigateur et écrivez.
+                    Fonctionne parfaitement sans connexion internet. (Si vous téléchargez la version offline !)
+                </p>
+            </div>
+
+            <div class="value-card">
+                <div class="value-icon">
+                    <i data-lucide="target"></i>
+                </div>
+                <h3 data-i18n="values.focused.title">Tout ce qu'il faut, rien de superflu</h3>
+                <p data-i18n="values.focused.description">
+                    Des outils pensés pour l'écriture narrative : structure, personnages, chronologie,
+                    tension dramatique. Pas de gadgets inutiles, juste ce qui sert vraiment votre
+                    créativité.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Usage Modes -->
+    <section class="usage-modes">
+        <div class="section-header">
+            <h2 data-i18n="usage.title">Deux façons d'utiliser Plume</h2>
+            <p data-i18n="usage.subtitle">Choisissez le mode qui vous convient le mieux</p>
+        </div>
+
+        <div class="modes-grid">
+            <div class="mode-card featured">
+                <div class="mode-icon">
+                    <i data-lucide="cloud"></i>
+                </div>
+                <h3 data-i18n="usage.online.title">En ligne (Recommandé)</h3>
+                <div class="mode-badge recommended">
+                    <i data-lucide="star"></i>
+                    <span data-i18n="usage.online.badge">Recommandé</span>
+                </div>
+                <p class="mode-url">plume-locale.github.io</p>
+                <ul class="mode-features">
+                    <li>
+                        <i data-lucide="check"></i>
+                        <span data-i18n="usage.online.feature1">Aucune installation nécessaire</span>
+                    </li>
+                    <li>
+                        <i data-lucide="check"></i>
+                        <span data-i18n="usage.online.feature2">Synchronisation automatique avec Google Drive</span>
+                    </li>
+                    <li>
+                        <i data-lucide="check"></i>
+                        <span data-i18n="usage.online.feature3">Mises à jour automatiques</span>
+                    </li>
+                    <li>
+                        <i data-lucide="check"></i>
+                        <span data-i18n="usage.online.feature4">Accessible depuis n'importe quel appareil</span>
+                    </li>
+                </ul>
+                <a href="app.html" class="btn-primary mode-cta" data-i18n="usage.online.cta">Utiliser en ligne</a>
+            </div>
+
+            <div class="mode-card">
+                <div class="mode-icon offline">
+                    <i data-lucide="hard-drive"></i>
+                </div>
+                <h3 data-i18n="usage.offline.title">Téléchargement local</h3>
+                <div class="mode-badge">
+                    <i data-lucide="shield"></i>
+                    <span data-i18n="usage.offline.badge">100% Hors-ligne</span>
+                </div>
+                <p class="mode-url">GitHub Releases</p>
+                <ul class="mode-features">
+                    <li>
+                        <i data-lucide="check"></i>
+                        <span data-i18n="usage.offline.feature1">Fonctionne sans connexion internet</span>
+                    </li>
+                    <li>
+                        <i data-lucide="check"></i>
+                        <span data-i18n="usage.offline.feature2">Contrôle total de vos données</span>
+                    </li>
+                    <li>
+                        <i data-lucide="check"></i>
+                        <span data-i18n="usage.offline.feature3">Sauvegarde manuelle à faire vers l'emplacement de votre
+                            choix</span>
+                    </li>
+                    <li>
+                        <i data-lucide="check"></i>
+                        <span data-i18n="usage.offline.feature4">Aucune dépendance externe</span>
+                    </li>
+                </ul>
+                <a href="https://github.com/plume-locale/plume-locale.github.io/releases/download/v1.0.2/plume-locale-v1.0.2.html"
+                    class="btn-secondary mode-cta" target="_blank" rel="noopener"
+                    data-i18n="usage.offline.cta">Télécharger la version 1.0.2 sur votre ordinateur</a>
+            </div>
+        </div>
+
+        <div class="usage-note">
+            <i data-lucide="info"></i>
+            <p data-i18n="usage.note">Dans les deux cas, vos données sont stockées localement dans votre navigateur. Le
+                mode en ligne offre simplement la synchronisation automatique avec Google Drive pour accéder à vos
+                projets depuis plusieurs appareils.</p>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="decorative-dots dots-2"></div>
+
+        <div class="section-header">
+            <h2 data-i18n="features.title">Les outils qui font la différence</h2>
+            <p data-i18n="features.subtitle">Commencez simple, explorez quand vous êtes prêt</p>
+        </div>
+
+        <div class="feature-tabs">
+            <button class="tab-btn active" data-tab="essentials">
+                <i data-lucide="rocket"></i>
+                <span data-i18n="features.tabs.essentials">Essentiels</span>
+            </button>
+            <button class="tab-btn" data-tab="creation">
+                <i data-lucide="palette"></i>
+                <span data-i18n="features.tabs.creation">Création</span>
+            </button>
+            <button class="tab-btn" data-tab="analysis">
+                <i data-lucide="bar-chart-3"></i>
+                <span data-i18n="features.tabs.analysis">Analyse</span>
+            </button>
+        </div>
+
+        <!-- Essentials Tab -->
+        <div class="feature-content active" id="essentials">
+            <div class="feature-list">
+                <div class="feature-item">
+                    <h4>
+                        <i data-lucide="edit-3"></i>
+                        <span data-i18n="features.essentials.editor.name">Éditeur par Scènes</span>
+                    </h4>
+                    <p data-i18n="features.essentials.editor.desc">Organisez votre récit en actes, chapitres et scènes.
+                        Réorganisez d'un glisser-déposer.</p>
+                </div>
+                <div class="feature-item">
+                    <h4>
+                        <i data-lucide="kanban-square"></i>
+                        <span data-i18n="features.essentials.corkboard.name">Tableau de Liège</span>
+                    </h4>
+                    <p data-i18n="features.essentials.corkboard.desc">Visualisez votre structure sous forme de cartes.
+                        Idéal pour planifier et restructurer.</p>
+                </div>
+                <div class="feature-item">
+                    <h4>
                         <i data-lucide="users"></i>
-                        <h4 data-t="tool.characters.title">Personnages</h4>
-                        <p data-t="tool.characters.desc">Fiches détaillées, psychologie et arcs de croissance.</p>
-                    </div>
-                    <div class="lp-tool-item">
+                        <span data-i18n="features.essentials.characters.name">Personnages</span>
+                    </h4>
+                    <p data-i18n="features.essentials.characters.desc">Fiches complètes avec psychologie, relations et
+                        arcs de transformation.</p>
+                </div>
+                <div class="feature-item">
+                    <h4>
                         <i data-lucide="globe"></i>
-                        <h4 data-t="tool.world.title">Univers</h4>
-                        <p data-t="tool.world.desc">Worldbuilding complet : lieux, objets, cultures, religions.</p>
-                    </div>
-                    <div class="lp-tool-item">
-                        <i data-lucide="book-open"></i>
-                        <h4 data-t="tool.codex.title">Codex</h4>
-                        <p data-t="tool.codex.desc">Votre encyclopédie personnelle pour garder une cohérence absolue.
-                        </p>
-                    </div>
-                    <div class="lp-tool-item">
+                        <span data-i18n="features.essentials.universe.name">Univers</span>
+                    </h4>
+                    <p data-i18n="features.essentials.universe.desc">Worldbuilding complet : lieux, cultures, objets,
+                        religions. Gardez la cohérence.</p>
+                </div>
+                <div class="feature-item">
+                    <h4>
                         <i data-lucide="sticky-note"></i>
-                        <h4 data-t="tool.notes.title">Notes</h4>
-                        <p data-t="tool.notes.desc">Espace de brouillon et d'idées rapides pour chaque projet.</p>
-                    </div>
-                    <div class="lp-tool-item">
-                        <i data-lucide="map"></i>
-                        <h4 data-t="tool.map.title">Carte du Monde</h4>
-                        <p data-t="tool.map.desc">Cartographiez vos lieux pour ne plus jamais vous perdre.</p>
-                    </div>
+                        <span data-i18n="features.essentials.notes.name">Notes Rapides</span>
+                    </h4>
+                    <p data-i18n="features.essentials.notes.desc">Capturez vos idées avant qu'elles ne s'évaporent. Un
+                        bloc-notes toujours accessible.</p>
+                </div>
+                <div class="feature-item">
+                    <h4>
+                        <i data-lucide="bar-chart-2"></i>
+                        <span data-i18n="features.essentials.stats.name">Statistiques</span>
+                    </h4>
+                    <p data-i18n="features.essentials.stats.desc">Suivez votre progression, vos objectifs de mots et
+                        votre temps d'écriture.</p>
                 </div>
             </div>
+        </div>
 
-            <div class="lp-tools-category">
-                <div class="lp-category-info">
-                    <div class="lp-cat-icon"><i data-lucide="bar-chart-3"></i></div>
-                    <h3 data-t="cat.viz.title">Visualisation & Analyse</h3>
-                    <p data-t="cat.viz.desc">Prenez de la hauteur et comprenez la mécanique de votre texte.</p>
-                </div>
-                <div class="lp-tools-grid">
-                    <div class="lp-tool-item">
+        <!-- Creation Tab -->
+        <div class="feature-content" id="creation">
+            <div class="feature-list">
+                <div class="feature-item">
+                    <h4>
                         <i data-lucide="git-branch"></i>
-                        <h4 data-t="tool.mindmap.title">Mindmap</h4>
-                        <p data-t="tool.mindmap.desc">Exploration visuelle des idées et des concepts complexes.</p>
-                    </div>
-                    <div class="lp-tool-item">
-                        <i data-lucide="link"></i>
-                        <h4 data-t="tool.relations.title">Relations</h4>
-                        <p data-t="tool.relations.desc">Graphe dynamique des liens sociaux entre vos personnages.</p>
-                    </div>
-                    <div class="lp-tool-item">
-                        <i data-lucide="clock"></i>
-                        <h4 data-t="tool.timeline.title">Timeline</h4>
-                        <p data-t="tool.timeline.desc">Chronologie multi-arcs pour éviter les anachronismes.</p>
-                    </div>
-                    <div class="lp-tool-item">
-                        <i data-lucide="bar-chart-3"></i>
-                        <h4 data-t="tool.stats.title">Statistiques</h4>
-                        <p data-t="tool.stats.desc">Suivi de progression, objectifs de mots et temps d'écriture.</p>
-                    </div>
-                    <div class="lp-tool-item">
-                        <i data-lucide="zap"></i>
-                        <h4 data-t="tool.tension.title">Tension</h4>
-                        <p data-t="tool.tension.desc">Analyse automatique de la tension narrative de vos scènes.</p>
-                    </div>
-                    <div class="lp-tool-item">
-                        <i data-lucide="scan-search"></i>
-                        <h4 data-t="tool.analysis.title">Analyse</h4>
-                        <p data-t="tool.analysis.desc">Répétitions et lisibilité de votre prose.</p>
-                    </div>
+                        <span data-i18n="features.creation.arcs.name">Arcs Narratifs</span>
+                    </h4>
+                    <p data-i18n="features.creation.arcs.desc">Suivez l'évolution de vos thèmes et sous-intrigues sur
+                        toute l'œuvre.</p>
+                </div>
+                <div class="feature-item">
+                    <h4>
+                        <i data-lucide="network"></i>
+                        <span data-i18n="features.creation.relations.name">Graphe de Relations</span>
+                    </h4>
+                    <p data-i18n="features.creation.relations.desc">Visualisez les liens sociaux entre personnages en
+                        temps réel.</p>
+                </div>
+                <div class="feature-item">
+                    <h4>
+                        <i data-lucide="calendar"></i>
+                        <span data-i18n="features.creation.timeline.name">Timeline</span>
+                    </h4>
+                    <p data-i18n="features.creation.timeline.desc">Chronologie multi-arcs pour éviter les anachronismes
+                        et incohérences temporelles.</p>
+                </div>
+                <div class="feature-item">
+                    <h4>
+                        <i data-lucide="grid-3x3"></i>
+                        <span data-i18n="features.creation.plotgrid.name">PlotGrid</span>
+                    </h4>
+                    <p data-i18n="features.creation.plotgrid.desc">Gérez visuellement les points clés de votre narration
+                        scène par scène.</p>
+                </div>
+                <div class="feature-item">
+                    <h4>
+                        <i data-lucide="map"></i>
+                        <span data-i18n="features.creation.map.name">Carte du Monde</span>
+                    </h4>
+                    <p data-i18n="features.creation.map.desc">Cartographiez vos lieux pour ne jamais perdre le fil
+                        géographique.</p>
+                </div>
+                <div class="feature-item">
+                    <h4>
+                        <i data-lucide="search"></i>
+                        <span data-i18n="features.creation.investigation.name">Enquête</span>
+                    </h4>
+                    <p data-i18n="features.creation.investigation.desc">Tableau d'investigation spécial pour thrillers
+                        et romans policiers.</p>
                 </div>
             </div>
+        </div>
 
-            <div class="lp-tools-category">
-                <div class="lp-category-info">
-                    <div class="lp-cat-icon"><i data-lucide="zap"></i></div>
-                    <h3 data-t="cat.prod.title">Confort & Productivité</h3>
-                    <p data-t="cat.prod.desc">Des outils pensés pour le quotidien de l'écrivain moderne.</p>
+        <!-- Analysis Tab -->
+        <div class="feature-content" id="analysis">
+            <div class="feature-list">
+                <div class="feature-item">
+                    <h4>
+                        <i data-lucide="activity"></i>
+                        <span data-i18n="features.analysis.tension.name">Analyse de Tension</span>
+                    </h4>
+                    <p data-i18n="features.analysis.tension.desc">Visualisez automatiquement la courbe de tension de vos
+                        scènes.</p>
                 </div>
-                <div class="lp-tools-grid">
-                    <div class="lp-tool-item">
-                        <i data-lucide="columns-2"></i>
-                        <h4 data-t="tool.split.title">Split View</h4>
-                        <p data-t="tool.split.desc">Travaillez sur deux scènes ou outils simultanément.</p>
-                    </div>
-                    <div class="lp-tool-item">
+                <div class="feature-item">
+                    <h4>
+                        <i data-lucide="scan-text"></i>
+                        <span data-i18n="features.analysis.text.name">Analyse de Texte</span>
+                    </h4>
+                    <p data-i18n="features.analysis.text.desc">Détectez les répétitions et améliorez la lisibilité de
+                        votre prose.</p>
+                </div>
+                <div class="feature-item">
+                    <h4>
+                        <i data-lucide="git-graph"></i>
+                        <span data-i18n="features.analysis.mindmap.name">Mindmap</span>
+                    </h4>
+                    <p data-i18n="features.analysis.mindmap.desc">Explorez visuellement les idées et les concepts
+                        complexes.</p>
+                </div>
+                <div class="feature-item">
+                    <h4>
+                        <i data-lucide="book-open"></i>
+                        <span data-i18n="features.analysis.codex.name">Codex</span>
+                    </h4>
+                    <p data-i18n="features.analysis.codex.desc">Votre encyclopédie personnelle pour garder une cohérence
+                        absolue.</p>
+                </div>
+                <div class="feature-item">
+                    <h4>
                         <i data-lucide="timer"></i>
-                        <h4 data-t="tool.pomodoro.title">Pomodoro</h4>
-                        <p data-t="tool.pomodoro.desc">Timer intégré pour des sessions d'écriture hyper-productives.</p>
+                        <span data-i18n="features.analysis.pomodoro.name">Pomodoro</span>
+                    </h4>
+                    <p data-i18n="features.analysis.pomodoro.desc">Timer intégré pour des sessions d'écriture
+                        hyper-productives.</p>
+                </div>
+                <div class="feature-item">
+                    <h4>
+                        <i data-lucide="camera"></i>
+                        <span data-i18n="features.analysis.snapshots.name">Snapshots</span>
+                    </h4>
+                    <p data-i18n="features.analysis.snapshots.desc">Sauvegardez des versions de vos scènes pour comparer
+                        les révisions.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials" id="testimonials">
+        <div class="section-header">
+            <h2 data-i18n="testimonials.title">Ce que disent les auteurs</h2>
+            <p data-i18n="testimonials.subtitle">Rejoignez une communauté d'écrivains qui ont repris le contrôle de
+                leurs textes</p>
+        </div>
+
+        <div class="testimonial-grid">
+            <div class="testimonial-card">
+                <i data-lucide="quote" class="quote-icon"></i>
+                <div class="testimonial-stars">
+                    <i data-lucide="star"></i><i data-lucide="star"></i><i data-lucide="star"></i><i
+                        data-lucide="star"></i><i data-lucide="star"></i>
+                </div>
+                <div class="testimonial-content" data-i18n="testimonials.marie.quote">
+                    "Enfin un outil qui ne m'oblige pas à créer un compte et à confier mes manuscrits
+                    à un serveur quelque part. La tranquillité d'esprit de savoir que mes textes
+                    sont uniquement chez moi n'a pas de prix."
+                </div>
+                <div class="testimonial-author">
+                    <div class="author-avatar">ML</div>
+                    <div class="author-info">
+                        <h5 data-i18n="testimonials.marie.name">Marie L.</h5>
+                        <p data-i18n="testimonials.marie.role">Autrice de fantasy · <em>La Saga des Brumes</em></p>
+
                     </div>
-                    <div class="lp-tool-item">
-                        <i data-lucide="history"></i>
-                        <h4 data-t="tool.snapshots.title">Snapshots</h4>
-                        <p data-t="tool.snapshots.desc">Sauvegardez des versions de vos scènes pour les révisions.</p>
+                </div>
+            </div>
+
+            <div class="testimonial-card">
+                <i data-lucide="quote" class="quote-icon"></i>
+                <div class="testimonial-stars">
+                    <i data-lucide="star"></i><i data-lucide="star"></i><i data-lucide="star"></i><i
+                        data-lucide="star"></i><i data-lucide="star"></i>
+                </div>
+                <div class="testimonial-content" data-i18n="testimonials.thomas.quote">
+                    "J'ai migré depuis Scrivener et je ne regrette rien. L'interface est plus moderne,
+                    les outils de visualisation (timeline, graphe) sont géniaux, et c'est totalement
+                    gratuit. Le rêve."
+                </div>
+                <div class="testimonial-author">
+                    <div class="author-avatar">TR</div>
+                    <div class="author-info">
+                        <h5 data-i18n="testimonials.thomas.name">Thomas R.</h5>
+                        <p data-i18n="testimonials.thomas.role">Romancier policier · Ex-utilisateur Scrivener</p>
+
                     </div>
-                    <div class="lp-tool-item">
-                        <i data-lucide="palette"></i>
-                        <h4 data-t="tool.themes.title">Thèmes</h4>
-                        <p data-t="tool.themes.desc">Personnalisez totalement l'apparence pour votre confort.</p>
-                    </div>
-                    <div class="lp-tool-item">
-                        <i data-lucide="hard-drive"></i>
-                        <h4 data-t="tool.backup.title">Backup & Cloud</h4>
-                        <p data-t="tool.backup.desc">Gestion transparente du stockage et sauvegardes Google Drive.</p>
+                </div>
+            </div>
+
+            <div class="testimonial-card">
+                <i data-lucide="quote" class="quote-icon"></i>
+                <div class="testimonial-stars">
+                    <i data-lucide="star"></i><i data-lucide="star"></i><i data-lucide="star"></i><i
+                        data-lucide="star"></i><i data-lucide="star"></i>
+                </div>
+                <div class="testimonial-content" data-i18n="testimonials.sophie.quote">
+                    "L'analyse de tension m'a fait comprendre pourquoi certains chapitres étaient plats.
+                    Voir la courbe m'a permis de restructurer tout mon acte 2. Un game-changer."
+                </div>
+                <div class="testimonial-author">
+                    <div class="author-avatar">SD</div>
+                    <div class="author-info">
+                        <h5 data-i18n="testimonials.sophie.name">Sophie D.</h5>
+                        <p data-i18n="testimonials.sophie.role">Écrivaine SF · Roman en cours : 87 000 mots</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="local-first" class="lp-cta-section">
-        <div class="lp-container">
-            <div class="lp-cta-content">
-                <div class="lp-icon-shield"><i data-lucide="shield-check"></i></div>
-                <h2 data-t="section.privacy.title">Vos histoires vous appartiennent.</h2>
-                <p data-t="section.privacy.desc">Plume est "Local-First". Vos données sont stockées uniquement dans
-                    votre navigateur. Pas de cloud
-                    obligatoire, pas de compte à créer, une confidentialité totale par défaut.</br> Vous pourrez bien
-                    sûr sauvegarder vos projets sur Google Drive pour conserver vos travaux sur plusieurs appareils</p>
-                <div class="lp-cta-buttons">
-                    <a href="app.html" class="lp-btn-primary-large" data-t="section.privacy.cta">Lancer Plume
-                        maintenant</a>
+    <!-- FAQ Section -->
+    <section class="faq-section" id="faq">
+        <div class="section-header">
+            <h2 data-i18n="faq.title">Questions fréquentes</h2>
+            <p data-i18n="faq.subtitle">Tout ce que vous voulez savoir avant de commencer</p>
+        </div>
+        <div class="faq-list">
+            <div class="faq-item">
+                <button class="faq-question">
+                    <span data-i18n="faq.q1">Est-ce vraiment 100% gratuit ? Il y aura des frais cachés ?</span>
+                    <i data-lucide="chevron-down" class="faq-chevron"></i>
+                </button>
+                <div class="faq-answer">
+                    <p data-i18n="faq.a1">Oui, totalement gratuit. Plume est un projet open source sous licence GNU GPL
+                        3.0. Il n'y a pas de version payante, pas de "premium", pas de publicités, et pas de collecte de
+                        données. Le code source est public sur GitHub. Si vous voulez soutenir le créateur de
+                        l'application vous le pouvez sur <a href="https://ko-fi.com/plume_locale"
+                            target="_blank">ko-fi.com/plume_locale</a></p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">
+                    <span data-i18n="faq.q2">Où sont stockées mes données ? Quelqu'un peut-il y accéder ?</span>
+                    <i data-lucide="chevron-down" class="faq-chevron"></i>
+                </button>
+                <div class="faq-answer">
+                    <p data-i18n="faq.a2">Vos textes sont stockés uniquement dans votre navigateur
+                        (localStorage/IndexedDB), sur votre appareil. Aucun serveur ne reçoit vos données. Si vous
+                        activez la synchronisation Google Drive, c'est vous qui autorisez l'accès à votre propre Drive —
+                        Plume ne voit rien.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">
+                    <span data-i18n="faq.q3">Que se passe-t-il si je ferme l'onglet ou redémarre mon ordinateur ?</span>
+                    <i data-lucide="chevron-down" class="faq-chevron"></i>
+                </button>
+                <div class="faq-answer">
+                    <p data-i18n="faq.a3">Rien ne se perd. Plume sauvegarde automatiquement chaque modification dans
+                        votre navigateur. Vos projets seront là à la prochaine ouverture. Vous pouvez aussi exporter
+                        manuellement en JSON, DOCX ou TXT à tout moment. Par contre si vous videz le cache de votre
+                        navigateur et que vous n'avez pas fait de sauvegarde, vous perdrez tout votre travail !</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">
+                    <span data-i18n="faq.q4">Fonctionne-t-il sur mobile ?</span>
+                    <i data-lucide="chevron-down" class="faq-chevron"></i>
+                </button>
+                <div class="faq-answer">
+                    <p data-i18n="faq.a4">L'interface est optimisée pour ordinateur, car l'écriture narrative bénéficie
+                        d'un grand écran. L'application reste utilisable sur tablette. L'adaptation mobile complète
+                        n'est pas 100% finalisée.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">
+                    <span data-i18n="faq.q5">Puis-je importer mes projets Scrivener ou Word ?</span>
+                    <i data-lucide="chevron-down" class="faq-chevron"></i>
+                </button>
+                <div class="faq-answer">
+                    <p data-i18n="faq.a5">Oui. Plume supporte l'import de fichiers DOCX (Word) et de fichiers texte. Un
+                        import natif Scrivener (.scriv) est aussi possible.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <footer class="lp-footer">
-        <div class="lp-container">
-            <div class="lp-footer-bottom">
-                <p><span data-t="footer.tagline">Créé pour les auteurs, par des passionnés.</span> &copy; 2026 Plume
-                    Locale.</p>
-                <div class="lp-footer-links">
-                    <a href="https://ko-fi.com/plume_locale" target="_blank" data-t="nav.supportKofi">Soutenir sur
-                        Ko-fi</a>
-                    <a href="https://github.com/plume-locale/plume-locale.github.io">GitHub</a>
-                    <a href="doc/fr/">Documentation</a>
-                </div>
-            </div>
+    <!-- Final CTA -->
+    <section class="final-cta">
+        <h2 data-i18n="cta.title">Prêt à reprendre le contrôle de votre écriture ?</h2>
+        <p data-i18n="cta.subtitle">Aucune installation, aucun compte, aucune carte bancaire. Juste vous et vos
+            histoires.</p>
+        <a href="app.html" class="btn-primary" style="font-size: 1.1rem; padding: 1rem 2.5rem;" data-i18n="cta.button">
+            Commencer gratuitement maintenant →
+        </a>
+        <p class="cta-guarantee">
+            <i data-lucide="shield-check"></i>
+            <span data-i18n="cta.guarantee">Vos données ne quittent jamais votre
+                appareil</span>
+        </p>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-links">
+            <a href="https://github.com/plume-locale/plume-locale.github.io">
+                <i data-lucide="github"></i>
+                GitHub
+            </a>
+            <a href="doc/fr/" id="footer-doc-link">
+                <i data-lucide="book-open"></i>
+                <span data-i18n="nav.documentation">Documentation</span>
+            </a>
+            <a href="#features">
+                <i data-lucide="wrench"></i>
+                <span data-i18n="nav.features">Fonctionnalités</span>
+            </a>
         </div>
+        <p data-i18n="footer.created">Créé pour les auteurs, par un passionné. © 2026 Plume Locale.</p>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem;">
+            Open Source · GNU GPL 3.0 · <span data-i18n="footer.privacy">Vos données restent chez vous</span>
+        </p>
     </footer>
 
-    <script>
-        lucide.createIcons();
+    <!-- Translations -->
+    <script src="index-translations.js"></script>
 
-        function updateContent(lang) {
-            document.querySelectorAll('[data-t]').forEach(el => {
-                const key = el.getAttribute('data-t');
-                const translation = LANDING_TRANSLATIONS[lang][key];
-                if (translation) {
-                    if (el.tagName === 'A' || el.tagName === 'BUTTON' || el.tagName === 'SPAN' || el.classList.contains('badge') || el.tagName === 'H1' || el.tagName === 'H2' || el.tagName === 'H3' || el.tagName === 'H4' || el.tagName === 'P') {
-                        el.innerHTML = translation;
-                    } else {
-                        el.textContent = translation;
-                    }
+    <script>
+        let currentLang = 'fr';
+
+        // Fonction de traduction
+        function translatePage(lang) {
+            currentLang = lang;
+            const t = translations[lang];
+
+            // Traduire tous les éléments avec data-i18n
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                const keys = key.split('.');
+                let value = t;
+
+                // Navigation dans l'objet de traduction
+                for (const k of keys) {
+                    value = value?.[k];
+                    if (!value) break;
+                }
+
+                if (value) {
+                    el.innerHTML = value;
                 }
             });
+
+            // Mettre à jour les liens de documentation
+            const docPaths = {
+                'fr': 'doc/fr/',
+                'en': 'doc/en/',
+                'de': 'doc/de/',
+                'es': 'doc/es/'
+            };
+
+            const docLink = document.getElementById('doc-link');
+            const footerDocLink = document.getElementById('footer-doc-link');
+            if (docLink) docLink.href = docPaths[lang];
+            if (footerDocLink) footerDocLink.href = docPaths[lang];
+
+            // Mettre à jour l'attribut lang du HTML
             document.documentElement.lang = lang;
-        }
 
-        function setLanguage(lang) {
-            localStorage.setItem('plume_landing_lang', lang);
-            document.querySelectorAll('.lp-btn-lang').forEach(btn => {
-                btn.classList.toggle('lp-active', btn.textContent.toLowerCase() === lang);
-            });
-            updateContent(lang);
-        }
-
-        function toggleTheme() {
-            const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            setTheme(newTheme);
-        }
-
-        function setTheme(theme) {
-            document.documentElement.setAttribute('data-theme', theme);
-            localStorage.setItem('plume_landing_theme', theme);
-
-            const themeIcon = document.getElementById('theme-icon');
-            if (theme === 'light') {
-                themeIcon.setAttribute('data-lucide', 'sun');
-            } else {
-                themeIcon.setAttribute('data-lucide', 'moon');
+            // Traduire le titre et la meta description
+            if (t.meta) {
+                document.title = t.meta.title;
+                const metaDesc = document.querySelector('meta[name="description"]');
+                if (metaDesc) {
+                    metaDesc.setAttribute('content', t.meta.description);
+                }
             }
-            lucide.createIcons();
+
+            // Sauvegarder la préférence
+            localStorage.setItem('plume-lang', lang);
         }
 
-        // Init language
-        const savedLang = localStorage.getItem('plume_landing_lang') || 'fr';
-        setLanguage(savedLang);
+        // Sélecteur de langue
+        const langCurrent = document.getElementById('lang-current');
+        const langDropdown = document.getElementById('lang-dropdown');
+        const langOptions = document.querySelectorAll('.lang-option');
+        const currentLangText = document.getElementById('current-lang-text');
 
-        // Init theme
-        const savedTheme = localStorage.getItem('plume_landing_theme') || 'dark';
-        setTheme(savedTheme);
+        // ===== DARK MODE =====
+        const darkToggle = document.getElementById('dark-toggle');
+        const darkIcon = document.getElementById('dark-toggle-icon');
+
+        function getSystemTheme() {
+            return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+
+        function applyTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('plume-theme', theme);
+            // Swap icon
+            if (darkIcon) {
+                darkIcon.setAttribute('data-lucide', theme === 'dark' ? 'sun' : 'moon');
+                lucide.createIcons();
+            }
+        }
+
+        function initTheme() {
+            const saved = localStorage.getItem('plume-theme');
+            if (saved === 'dark' || saved === 'light') {
+                applyTheme(saved);
+            } else {
+                // Respect OS preference but don't set data-theme so the @media query handles it
+                const icon = getSystemTheme() === 'dark' ? 'sun' : 'moon';
+                if (darkIcon) darkIcon.setAttribute('data-lucide', icon);
+            }
+        }
+
+        if (darkToggle) {
+            darkToggle.addEventListener('click', () => {
+                const current = document.documentElement.getAttribute('data-theme');
+                // If no attr set, derive from OS
+                const effective = current || getSystemTheme();
+                applyTheme(effective === 'dark' ? 'light' : 'dark');
+            });
+        }
+
+        // Toggle dropdown
+        if (langCurrent) {
+            langCurrent.addEventListener('click', (e) => {
+                e.stopPropagation();
+                langDropdown.classList.toggle('active');
+            });
+        }
+
+        // Fermer dropdown en cliquant ailleurs
+        document.addEventListener('click', () => {
+            if (langDropdown) {
+                langDropdown.classList.remove('active');
+            }
+        });
+
+        // Sélection de langue
+        langOptions.forEach(option => {
+            option.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const lang = option.getAttribute('data-lang');
+
+                // Mettre à jour l'affichage
+                const langMap = {
+                    'fr': 'FR',
+                    'en': 'EN',
+                    'de': 'DE',
+                    'es': 'ES'
+                };
+                if (currentLangText) {
+                    currentLangText.textContent = langMap[lang];
+                }
+
+                // Mettre à jour l'état actif
+                langOptions.forEach(opt => {
+                    opt.classList.toggle('active', opt.getAttribute('data-lang') === lang);
+                });
+
+                // Traduire la page
+                translatePage(lang);
+
+                // Fermer dropdown
+                if (langDropdown) {
+                    langDropdown.classList.remove('active');
+                }
+            });
+        });
+
+        // Détecter la langue du navigateur au chargement
+        function initLanguage() {
+            const savedLang = localStorage.getItem('plume-lang');
+            const browserLang = navigator.language.substring(0, 2);
+            const supportedLangs = ['fr', 'en', 'de', 'es'];
+
+            let initialLang = 'fr'; // Langue par défaut
+
+            if (savedLang && supportedLangs.includes(savedLang)) {
+                initialLang = savedLang;
+            } else if (supportedLangs.includes(browserLang)) {
+                initialLang = browserLang;
+            }
+
+            // Mettre à jour l'affichage
+            const langMap = {
+                'fr': 'FR',
+                'en': 'EN',
+                'de': 'DE',
+                'es': 'ES'
+            };
+            if (currentLangText) {
+                currentLangText.textContent = langMap[initialLang];
+            }
+
+            // Activer l'option correspondante
+            langOptions.forEach(opt => {
+                opt.classList.toggle('active', opt.getAttribute('data-lang') === initialLang);
+            });
+
+            // Traduire la page si nécessaire
+            if (initialLang !== 'fr') {
+                translatePage(initialLang);
+            }
+        }
+
+        // Tab switching pour features
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.feature-content');
+
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const targetTab = btn.getAttribute('data-tab');
+
+                // Remove active class from all
+                tabBtns.forEach(b => b.classList.remove('active'));
+                tabContents.forEach(c => c.classList.remove('active'));
+
+                // Add active to clicked
+                btn.classList.add('active');
+                const target = document.getElementById(targetTab);
+                if (target) {
+                    target.classList.add('active');
+                }
+            });
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // ===== FAQ Accordion =====
+        document.querySelectorAll('.faq-item').forEach(item => {
+            const btn = item.querySelector('.faq-question');
+            const answer = item.querySelector('.faq-answer');
+            btn.addEventListener('click', () => {
+                const isOpen = item.classList.contains('open');
+                // Close all
+                document.querySelectorAll('.faq-item').forEach(i => {
+                    i.classList.remove('open');
+                    i.querySelector('.faq-answer').classList.remove('open');
+                });
+                // Open clicked if it was closed
+                if (!isOpen) {
+                    item.classList.add('open');
+                    answer.classList.add('open');
+                }
+            });
+        });
+
+        // ===== Carousel =====
+        let slideIndex = 1;
+
+        function showSlides(n) {
+            const slides = document.querySelectorAll(".carousel-slide");
+            const dots = document.querySelectorAll(".dot");
+
+            if (slides.length === 0) return;
+
+            if (n > slides.length) { slideIndex = 1 }
+            if (n < 1) { slideIndex = slides.length }
+
+            slides.forEach(slide => {
+                slide.style.display = "none";
+                slide.classList.remove("active");
+            });
+
+            dots.forEach(dot => dot.classList.remove("active"));
+
+            if (slides[slideIndex - 1]) {
+                slides[slideIndex - 1].style.display = "flex";
+                slides[slideIndex - 1].classList.add("active");
+            }
+            if (dots[slideIndex - 1]) {
+                dots[slideIndex - 1].classList.add("active");
+            }
+
+            // Re-render icons if needed (optional, but good if content changes)
+            if (window.lucide) lucide.createIcons();
+        }
+
+        window.moveSlide = function (n) {
+            showSlides(slideIndex += n);
+        }
+
+        window.currentSlide = function (n) {
+            showSlides(slideIndex = n);
+        }
+
+        // Initialize
+        initTheme();
+        initLanguage();
+        showSlides(slideIndex);
+        lucide.createIcons();
     </script>
 </body>
 
