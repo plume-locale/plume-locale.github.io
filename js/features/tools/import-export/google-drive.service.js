@@ -169,6 +169,14 @@ const GoogleDriveService = {
                     'Authorization': `Bearer ${this.accessToken}`
                 }
             });
+            if (!response.ok) {
+                console.error("Failed to fetch user info, status:", response.status);
+                // Si Unauthorized on a peut être un token expiré
+                if (response.status === 401) {
+                    this.accessToken = null;
+                }
+                return null;
+            }
             const data = await response.json();
             this.userInfo = data;
             return data;

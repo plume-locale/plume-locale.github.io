@@ -236,9 +236,10 @@ const InterfaceCustomizerViewModel = {
 
         // 0. Déterminer quels composants sont masqués par les modules désactivés
         // Un composant n'est masqué que si TOUS les modules auxquels il appartient sont inactifs.
+        const activeModules = settings.activeModules || [];
         const activeComponentIds = new Set(
             InterfaceCustomizerModel.modules
-                .filter(m => settings.activeModules.includes(m.id))
+                .filter(m => activeModules.includes(m.id))
                 .flatMap(m => m.components)
         );
 
@@ -327,7 +328,7 @@ const InterfaceCustomizerViewModel = {
 
         // 4. Masquer les sections de l'accordéon (Sidebar) si le module est inactif
         InterfaceCustomizerModel.modules.forEach(m => {
-            const isModuleActive = settings.activeModules.includes(m.id);
+            const isModuleActive = (settings.activeModules || []).includes(m.id);
             m.components.forEach(compId => {
                 if (compId.startsWith('nav-item-')) {
                     const el = document.getElementById(compId);
