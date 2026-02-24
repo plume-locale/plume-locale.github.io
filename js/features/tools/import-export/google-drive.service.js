@@ -18,7 +18,7 @@ const GoogleDriveService = {
     // included, separated by spaces.
     // drive.file: View and manage Google Drive files and folders that you have opened or created with this app
     // drive.appdata: View and manage its own configuration data in your Google Drive
-    SCOPES: 'https://www.googleapis.com/auth/drive.file',
+    SCOPES: 'https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email',
 
     tokenClient: null,
     gapiInited: false,
