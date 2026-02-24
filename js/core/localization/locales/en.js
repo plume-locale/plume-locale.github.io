@@ -19,6 +19,9 @@ window.LOCALE_EN = {
     "mention.score.present": "Present in this scene",
     "mention.quick_create.title": "Create '{0}'",
     "mention.quick_create.desc": "Add this new {0} to your project",
+    "mention.toolbar.title": "Mention Shortcuts",
+    "mention.guide.title": "How to use mentions?",
+    "mention.guide.content": "Type these shortcuts directly in your text to link elements:<br><b>@@</b> Characters<br><b>##</b> Locations / World<br><b>!!</b> Project Notes<br><b>??</b> Codex / Encyclopedia",
     "nav.investigation": "Investigation",
 
     // Front Matter
@@ -324,6 +327,7 @@ window.LOCALE_EN = {
     "toolbar.subscript": "Subscript",
     "toolbar.synonyms": "Synonyms Dictionary (Ctrl+Shift+S)",
     "toolbar.horizontal_rule": "Horizontal Rule",
+    "toolbar.structure_map": "Toggle structure map (X-ray view)",
 
 
     "toolbar.remove_format": "Remove Formatting",
@@ -363,6 +367,7 @@ window.LOCALE_EN = {
     "modal.structure_block.btn_create": "Apply Block",
     "modal.structure_block.confirm_unwrap": "Remove the block? (Text will be preserved)",
     "modal.structure_block.confirm_delete": "Delete block AND its content?",
+    "modal.structure_block.no_layer": "NO LAYER",
 
     "toolbar.structure_block.unwrap": "Unwrap text from block",
     "toolbar.structure_block.delete": "Delete block and content",
@@ -999,6 +1004,19 @@ window.LOCALE_EN = {
     "arc.category.action": "Action",
     "arc.category.worldbuilding": "Worldbuilding",
     "arc.category.linked_characters": "Linked Characters",
+
+    "arc.export.col_arc": "Arc",
+    "arc.export.col_category": "Category",
+    "arc.export.col_board_column": "Column",
+    "arc.export.col_type": "Type",
+    "arc.export.col_content": "Content",
+    "arc.export.col_notes": "Notes / Details",
+    "arc.export.error_no_arc": "No arc to export.",
+    "arc.import.error_empty": "Excel file is empty or invalid.",
+    "arc.import.success": "Successful import of the narrative board.",
+    "arc.toolbar.export_excel": "Export to Excel (.xlsx)",
+    "arc.toolbar.export_md": "Export to Markdown (.md)",
+    "arc.toolbar.import_excel": "Import from Excel (.xlsx)",
 
     "arc.type.note": "Note",
     "arc.type.image": "Image",
@@ -3180,6 +3198,8 @@ window.LOCALE_EN = {
     "tour.step.editor_synopsis.desc": "A quick summary to keep track of your plot.",
     "tour.step.editor_toolbar.title": "Formatting",
     "tour.step.editor_toolbar.desc": "All your classic editing tools just a click away.",
+    "tour.editor.mentions.title": "🔗 Mentions & Links",
+    "tour.editor.mentions.description": "<p>Easily link your characters and locations directly in your text!</p><p>Type <b>@@</b> for characters or <b>##</b> for world elements. It's magic! ✨</p>",
     "tour.step.editor_content.title": "Writing Area",
     "tour.step.editor_content.desc": "Write here. Everything is saved automatically.",
     "tour.step.tools_sidebar.title": "Supporting Tools",
