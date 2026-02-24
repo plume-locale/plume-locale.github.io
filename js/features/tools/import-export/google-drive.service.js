@@ -32,11 +32,45 @@ const GoogleDriveService = {
             return;
         }
 
+        if (!navigator.onLine) {
+            console.error("Device is offline, cannot initialize Google Drive.");
+            if (onInitCallback) onInitCallback(false);
+            return;
+        }
+
+        // Dynamically load Google scripts if missing
+        if (!document.getElementById('gapi-script')) {
+            const script = document.createElement('script');
+            script.id = 'gapi-script';
+            script.src = 'https://apis.google.com/js/api.js';
+            script.async = true;
+            script.defer = true;
+            document.head.appendChild(script);
+        }
+        if (!document.getElementById('gis-script')) {
+            const script = document.createElement('script');
+            script.id = 'gis-script';
+            script.src = 'https://accounts.google.com/gsi/client';
+            script.async = true;
+            script.defer = true;
+            document.head.appendChild(script);
+        }
+
+        let attempts = 0;
+        const maxAttempts = 100; // 10 seconds timeout
+
         const checkScripts = setInterval(() => {
             if (typeof gapi !== 'undefined' && typeof google !== 'undefined') {
                 clearInterval(checkScripts);
                 this.loadGapi(onInitCallback);
                 this.loadGis(onInitCallback);
+            } else {
+                attempts++;
+                if (attempts >= maxAttempts) {
+                    clearInterval(checkScripts);
+                    console.error("Timeout loading Google Drive scripts.");
+                    if (onInitCallback) onInitCallback(false);
+                }
             }
         }, 100);
     },
@@ -88,7 +122,8 @@ const GoogleDriveService = {
 
     handleAuthClick: function (callback) {
         if (!this.tokenClient) {
-            console.error("Google Drive Service not initialized");
+            console.error("Google Drive Service not initialized.");
+            if (typeof alert === "function") alert("Le service Google Drive n'est pas initialisé ou en cours de chargement. Vérifiez votre connexion internet.");
             return;
         }
 
