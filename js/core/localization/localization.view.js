@@ -39,7 +39,7 @@ class LocalizationView {
                     } else if (el.hasAttribute('title') && !el.hasAttribute('data-i18n-title')) {
                         el.title = translation;
                     } else {
-                        el.textContent = translation;
+                        el.innerHTML = translation;
                     }
                 }
             }
