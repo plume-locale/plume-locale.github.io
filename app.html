@@ -54,8 +54,8 @@
 <link rel="stylesheet" href="./css/thriller-board.css">
 <link rel="stylesheet" href="./css/theme-manager.css">
 <link rel="stylesheet" href="./css/synonyms.css">
-<link rel="stylesheet" href="./css/map.css">
 <link rel="stylesheet" href="./css/keyboard-shortcuts.css">
+<link rel="stylesheet" href="./css/map.css">
 <link rel="stylesheet" href="./css/stats.css">
 <link rel="stylesheet" href="./css/import-export-hub.css">
 <link rel="stylesheet" href="./css/synonyms.css">
@@ -3087,30 +3087,67 @@
                                     <div class="hub-card highlight">
                                         <div id="hub-gdrive-sync-status" class="hub-sync-status">
                                             <i data-lucide="refresh-cw"></i>
-                                            <span id="hub-gdrive-status-text">Prêt à synchroniser</span>
+                                            <span id="hub-gdrive-status-text"
+                                                data-i18n="modal.hub.cloud_status_ready">Prêt à synchroniser</span>
                                         </div>
                                         <div class="hub-action-row">
                                             <button class="btn btn-primary"
                                                 onclick="ImportExportViewModel.syncNowWithGDrive()">
-                                                <i data-lucide="upload"></i> Sauvegarder maintenant
+                                                <i data-lucide="upload"></i> <span
+                                                    data-i18n="modal.hub.cloud_btn_save">Sauvegarder maintenant</span>
                                             </button>
                                             <button class="btn btn-outline"
                                                 onclick="ImportExportViewModel.restoreFromGDrive()">
-                                                <i data-lucide="download"></i> Restaurer la sauvegarde
+                                                <i data-lucide="download"></i> <span
+                                                    data-i18n="modal.hub.cloud_btn_restore">Restaurer la
+                                                    sauvegarde</span>
                                             </button>
                                         </div>
                                     </div>
 
                                     <div class="hub-card">
-                                        <h4>Options de synchronisation</h4>
+                                        <h4 data-i18n="modal.hub.cloud_options_title">Options de synchronisation</h4>
                                         <label class="hub-checkbox-item" style="cursor: pointer;">
                                             <input type="checkbox" id="hub-gdrive-autosave"
                                                 onchange="ImportExportViewModel.toggleGDriveAutoSave(this.checked)">
-                                            <span>Sauvegarde automatique à chaque enregistrement</span>
+                                            <span data-i18n="modal.hub.cloud_autosave_label">Sauvegarde automatique à
+                                                chaque enregistrement</span>
                                         </label>
-                                        <p class="hub-muted" style="margin-top: 0.5rem;">Vos données sont stockées de
+                                        <p class="hub-muted" style="margin-top: 0.5rem;"
+                                            data-i18n="modal.hub.cloud_secure_info">Vos données sont stockées de
                                             manière sécurisée sur votre propre Google Drive.</p>
                                     </div>
+                                </div>
+
+                                <div class="hub-card"
+                                    style="margin-top: 1.5rem; padding: 1.25rem; border-left: 4px solid var(--accent-gold); background-color: var(--bg-hover);">
+                                    <h4 style="margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;"
+                                        data-i18n="gdrive.help.title">
+                                        <i data-lucide="info"
+                                            style="width: 16px; height: 16px; color: var(--accent-gold);"></i>
+                                        Comment fonctionne la sauvegarde ?
+                                    </h4>
+                                    <ul
+                                        style="font-size: 0.85rem; line-height: 1.5; color: var(--text-secondary); margin: 0; padding-left: 1.25rem;">
+                                        <li style="margin-bottom: 0.5rem;" data-i18n="gdrive.help.folder">
+                                            <strong>Création d'un dossier Plume Backups :</strong> L'intégration Google
+                                            Drive créera désormais automatiquement un dossier "Plume Backups"
+                                            spécifiquement pour vous la première fois (et vérifiera qu'il existe les
+                                            fois suivantes). Tous les fichiers de vos projets s'y trouveront, fini le
+                                            cauchemar à la racine du Drive !
+                                        </li>
+                                        <li style="margin-bottom: 0.5rem;" data-i18n="gdrive.help.sync">
+                                            <strong>Sauvegarde de tous les projets :</strong> Lorsque vous cliquez sur
+                                            "Sauvegarder", Plume ne récupère plus seulement le projet ouvert. Le système
+                                            va récupérer toute la base de données locale et pousser chaque livre sous
+                                            forme de son propre fichier .json vers le dossier Plume Backups. Un message
+                                            de log vous indiquera "Sauvegarde terminée (X projets)".
+                                        </li>
+                                        <li data-i18n="gdrive.help.note"><strong>Note importante :</strong> La
+                                            restauration quant à elle, téléchargera toujours le projet ciblé (le fichier
+                                            correspondant au nom actuel de l'espace de travail), parce que c'est une
+                                            option d'écrasement locale.</li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
@@ -4365,6 +4402,7 @@
 <script src="./js/features/editor/narrative-overview/narrative-overview.view.js"></script>
 <script src="./js/features/editor/narrative-overview/narrative-overview.handlers.js"></script>
 <script src="./js/features/editor/narrative-overview/narrative-overview.main.js"></script>
+<script src="./js/index-translations.js"></script>
 
     </body>
 </html>

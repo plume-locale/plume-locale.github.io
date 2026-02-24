@@ -190,17 +190,21 @@ const GoogleDriveService = {
      * Uploads a file to Google Drive.
      * @param {string} content - JSON string content
      * @param {string} filename 
+     * @param {string} folderId - Optional Google Drive Folder ID
      */
-    saveFile: async function (content, filename) {
+    saveFile: async function (content, filename, folderId = null) {
         if (!this.accessToken) return { error: 'Not logged in' };
 
         // Search for existing file
-        const existingFileId = await this.findFile(filename);
+        const existingFileId = await this.findFile(filename, folderId);
 
         const fileMetadata = {
             'name': filename,
             'mimeType': 'application/json'
         };
+        if (folderId && !existingFileId) {
+            fileMetadata.parents = [folderId];
+        }
 
         const boundary = '-------314159265358979323846';
         const delimiter = "\r\n--" + boundary + "\r\n";
@@ -253,10 +257,14 @@ const GoogleDriveService = {
         }
     },
 
-    findFile: async function (filename) {
+    findFile: async function (filename, folderId = null) {
         try {
+            let query = `name = '${filename}' and trashed = false`;
+            if (folderId) {
+                query += ` and '${folderId}' in parents`;
+            }
             const response = await gapi.client.drive.files.list({
-                'q': `name = '${filename}' and trashed = false`,
+                'q': query,
                 'fields': 'files(id, name)',
                 'spaces': 'drive'
             });
@@ -274,9 +282,10 @@ const GoogleDriveService = {
     /**
      * Downloads a file from Google Drive.
      * @param {string} filename 
+     * @param {string} folderId 
      */
-    loadFile: async function (filename) {
-        const fileId = await this.findFile(filename);
+    loadFile: async function (filename, folderId = null) {
+        const fileId = await this.findFile(filename, folderId);
         if (!fileId) {
             throw new Error(`File '${filename}' not found in Drive.`);
         }
@@ -287,5 +296,33 @@ const GoogleDriveService = {
         });
 
         return response.result; // This should be the JSON object/content
+    },
+
+    findOrCreateFolder: async function (folderName) {
+        if (!this.accessToken) return null;
+        try {
+            const response = await gapi.client.drive.files.list({
+                'q': `mimeType='application/vnd.google-apps.folder' and name='${folderName}' and trashed=false`,
+                'fields': 'files(id, name)',
+                'spaces': 'drive'
+            });
+            const files = response.result.files;
+            if (files && files.length > 0) {
+                return files[0].id;
+            }
+
+            const folderMetadata = {
+                'name': folderName,
+                'mimeType': 'application/vnd.google-apps.folder'
+            };
+            const createResponse = await gapi.client.drive.files.create({
+                resource: folderMetadata,
+                fields: 'id'
+            });
+            return createResponse.result.id;
+        } catch (err) {
+            console.error("Error with folder:", err);
+            return null;
+        }
     }
 };

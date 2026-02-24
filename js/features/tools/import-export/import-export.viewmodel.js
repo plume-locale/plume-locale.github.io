@@ -225,12 +225,30 @@ const ImportExportViewModel = {
         ImportExportView.updateGDriveStatus(Localization.t('gdrive.status.saving'), 'sync');
 
         try {
-            const dataStr = JSON.stringify(window.project, null, 2);
-            const filename = `backup_plume_${(window.project.title || Localization.t('export.json.default_filename')).replace(/\s+/g, '_')}.json`;
+            const folderId = await GoogleDriveService.findOrCreateFolder('Plume Backups');
+            if (!folderId) {
+                throw new Error("Impossible de créer ou de trouver le dossier 'Plume Backups'.");
+            }
 
-            await GoogleDriveService.saveFile(dataStr, filename);
+            let allProjects = [];
+            if (typeof window.loadAllProjectsFromDB === 'function') {
+                allProjects = await window.loadAllProjectsFromDB();
+            } else if (window.project) {
+                allProjects = [window.project];
+            }
+
+            if (!allProjects.length && window.project) {
+                allProjects = [window.project];
+            }
+
+            for (const proj of allProjects) {
+                const dataStr = JSON.stringify(proj, null, 2);
+                const filename = `backup_plume_${(proj.title || Localization.t('export.json.default_filename')).replace(/\s+/g, '_')}.json`;
+                await GoogleDriveService.saveFile(dataStr, filename, folderId);
+            }
+
             ImportExportView.updateGDriveStatus(Localization.t('gdrive.status.synced'), 'success');
-            ImportExportView.showNotification(Localization.t('gdrive.success.sync'));
+            ImportExportView.showNotification(Localization.t('gdrive.success.sync', allProjects.length));
         } catch (err) {
             console.error(err);
             alert(Localization.t('gdrive.error.sync', err.message));
@@ -250,7 +268,8 @@ const ImportExportViewModel = {
         ImportExportView.updateGDriveStatus(Localization.t('gdrive.status.downloading'), 'sync');
 
         try {
-            const result = await GoogleDriveService.loadFile(filename);
+            const folderId = await GoogleDriveService.findOrCreateFolder('Plume Backups');
+            const result = await GoogleDriveService.loadFile(filename, folderId);
             // Result is likely the JSON object already if using gapi client properly with alt=media
             // But gapi client get returns a response obj.
 

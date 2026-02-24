@@ -1732,7 +1732,7 @@ function renderEditor(act, chapter, scene) {
                 if (typeof InterfaceCustomizerViewModel !== 'undefined') {
                     InterfaceCustomizerViewModel.applySettings();
                 }
-            </script>
+            <\/script>
         </div>
 
         <div class="chapter-progress-indicator" id="chapterProgressIndicator">
