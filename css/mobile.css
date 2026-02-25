@@ -2502,8 +2502,8 @@ body.force-mobile-nav .split-mode-toggle {
     .nav-btn,
     .toolbar-btn,
     button {
-        min-height: 44px;
-        min-width: 44px;
+        min-height: 33px;
+        min-width: 33px;
     }
 
     /* Remove hover effects on touch devices */
