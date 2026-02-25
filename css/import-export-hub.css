@@ -413,3 +413,64 @@
     font-weight: 500;
     color: var(--text-secondary);
 }
+
+/* ==========================================
+   RESPONSIVE LAYOUT
+   ========================================== */
+@media (max-width: 900px) {
+    .hub-modal-content {
+        min-width: 0 !important;
+        min-height: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        border-radius: 0 !important;
+    }
+
+    .hub-header-main {
+        padding: 1rem 1.5rem;
+    }
+
+    .hub-tabs-nav {
+        padding: 0 1rem;
+        overflow-x: auto;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .hub-title-section h2 {
+        font-size: 1.25rem;
+    }
+
+    .hub-content-view {
+        padding: 1.5rem;
+    }
+
+    .hub-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .hub-export-layout {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .hub-checkbox-list {
+        grid-template-columns: 1fr;
+    }
+
+    .hub-drop-zone {
+        padding: 2rem 1rem;
+    }
+
+    .hub-user-profile {
+        flex-direction: column;
+        text-align: center;
+        padding: 1rem;
+        gap: 1rem;
+    }
+
+    .hub-settings-grid {
+        grid-template-columns: 1fr;
+    }
+}

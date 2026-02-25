@@ -11,12 +11,11 @@ let currentPageFormat = localStorage.getItem('plume_page_format') || 'none';
 let isMobile = window.innerWidth <= 900;
 
 // Update isMobile on resize
+// Note: on évite renderSidebarAccordion() ici car il recrée tout le DOM
+// de la sidebar — opération lourde qui freeze sur mobile.
+// Le responsive est géré par CSS, pas besoin de re-render.
 window.addEventListener('resize', () => {
-    const wasMobile = isMobile;
     isMobile = window.innerWidth <= 900;
-    if (wasMobile !== isMobile) {
-        renderSidebarAccordion();
-    }
 });
 
 // --- DISPATCHER DE REPOSITORY ---
@@ -311,6 +310,13 @@ function switchView(view, options = {}) {
     // Fermer tous les panneaux du toolsSidebar quand on quitte la vue structure
     if (currentView === 'editor' && view !== 'editor') {
         closeAllToolsSidebarPanels();
+    }
+
+    // Nettoyer les listeners tactiles du mindmap quand on quitte la vue mindmap
+    if (currentView === 'mindmap' && view !== 'mindmap') {
+        if (window.mindmapHandlers && typeof window.mindmapHandlers.destroyEvents === 'function') {
+            window.mindmapHandlers.destroyEvents();
+        }
     }
 
     currentView = view;

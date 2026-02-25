@@ -60,6 +60,8 @@
     align-items: center;
     justify-content: center;
     transition: background 0.3s ease;
+    touch-action: none;
+    /* Prevents scroll on drag handle; compensates for passive:true on touchmove */
 }
 
 #floatingMenuHandle::after {
@@ -975,10 +977,14 @@
     z-index: 10001;
     opacity: 0;
     transition: opacity 0.3s ease;
+    pointer-events: none;
+    /* Critical: never capture events when invisible/inactive */
 }
 
 .sidebar-overlay.active {
     opacity: 1;
+    pointer-events: auto;
+    /* Only capture events when truly active/visible */
 }
 
 /* Tablet styles (landscape phones and portrait tablets) */
@@ -1049,24 +1055,15 @@ body.force-mobile-nav #headerStatsContainer {
 
 body.force-mobile-nav .header-actions {
     gap: 0.35rem;
-    margin-right: 2.8rem !important;
 }
 
-body.force-mobile-nav #headerUndoBtn,
-body.force-mobile-nav #headerRedoBtn,
-body.force-mobile-nav #storage-badge,
 body.force-mobile-nav #pomodoroHeaderBtn,
-body.force-mobile-nav #headerImportBtn,
-body.force-mobile-nav #headerShortcutsBtn,
-body.force-mobile-nav #headerThemesBtn,
-body.force-mobile-nav #headerProjectsBtn,
-body.force-mobile-nav #docDropdown,
-body.force-mobile-nav #langDropdown {
+body.force-mobile-nav #headerProjectsBtn {
     display: none !important;
 }
 
-body.force-mobile-nav .split-mode-toggle span {
-    display: none;
+body.force-mobile-nav .split-mode-toggle {
+    display: none !important;
 }
 
 /* Mobile styles (phones) */
@@ -1121,11 +1118,33 @@ body.force-mobile-nav .split-mode-toggle span {
         padding: 0.5rem;
     }
 
-    /* Header Mobile */
+    /* Header Mobile - Apple iOS Premium Style */
     .app-header {
-        height: 56px;
-        padding: 0 0.75rem;
-        gap: 0.5rem;
+        height: 52px;
+        padding: 0 0.5rem;
+        gap: 0.25rem;
+        background: rgba(255, 255, 255, 0.85);
+        /* fallback */
+        background: rgba(var(--bg-primary-rgb, 255, 255, 255), 0.85);
+        backdrop-filter: saturate(180%) blur(20px);
+        -webkit-backdrop-filter: saturate(180%) blur(20px);
+        border-bottom: 0.5px solid rgba(0, 0, 0, 0.08);
+        box-shadow: none;
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: center;
+        justify-content: flex-start;
+    }
+
+    .app-logo {
+        order: 1;
+        flex-shrink: 0;
+        font-size: 1.1rem;
+    }
+
+    [data-theme="dark"] .app-header {
+        background: rgba(28, 28, 30, 0.85);
+        border-bottom: 0.5px solid rgba(255, 255, 255, 0.08);
     }
 
     .app-logo {
@@ -1291,30 +1310,66 @@ body.force-mobile-nav .split-mode-toggle span {
         display: none !important;
     }
 
+    .header-search {
+        order: 2;
+    }
+
     /* Header actions mobile - compacts et alignés */
     .header-actions {
-        gap: 0.35rem;
+        order: 3;
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
         margin-left: auto;
-        margin-right: 0.5rem !important;
-        /* No hamburger to avoid - using bottom nav */
+        margin-right: 0 !important;
+        flex-shrink: 0;
     }
 
     .header-action-btn {
         width: 32px;
         height: 32px;
         padding: 0;
-        font-size: 0.9rem;
+        font-size: 1rem;
+        flex-shrink: 0;
+        border: none !important;
+        background: transparent !important;
+        border-radius: 50% !important;
+        color: var(--text-primary) !important;
+        transition: background-color 0.2s ease, opacity 0.2s cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    .header-action-btn:active {
+        background: rgba(120, 120, 128, 0.16) !important;
+        transform: scale(0.96);
+    }
+
+    .mobile-nav-toggle-btn {
+        order: 4;
+        border: none !important;
+        background: transparent !important;
+        border-radius: 50% !important;
+        color: var(--text-primary) !important;
+        width: 32px !important;
+        height: 32px !important;
+        box-shadow: none !important;
+        position: static !important;
+        transform: none !important;
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+        flex-shrink: 0;
+        margin-left: 0.25rem;
+    }
+
+    .mobile-nav-toggle-btn:active {
+        background: rgba(120, 120, 128, 0.16) !important;
+        transform: scale(0.96) !important;
     }
 
     /* Split toggle plus compact sur mobile */
     .split-mode-toggle {
-        padding: 0.35rem 0.6rem;
-        font-size: 0.75rem;
-        gap: 0.25rem;
-    }
-
-    .split-mode-toggle span {
-        display: none;
+        display: none !important;
     }
 
     /* Logo plus compact */
@@ -1750,15 +1805,7 @@ body.force-mobile-nav .split-mode-toggle span {
         padding: 0.25rem 0.5rem;
     }
 
-    /* Modals */
-    .modal-content {
-        width: 95%;
-        max-width: 95%;
-        margin: 1rem;
-        max-height: 90vh;
-    }
-
-    /* Boutons */
+    /* Links panel toggle - comme toolbar */
     .btn {
         padding: 0.7rem 1rem;
         font-size: 15px;
@@ -2136,38 +2183,6 @@ body.force-mobile-nav .split-mode-toggle span {
         box-shadow: none !important;
     }
 
-    /* Modals (Unified) */
-    .modal-content {
-        width: 100%;
-        max-width: 100%;
-        margin: 0;
-        height: 100%;
-        max-height: 100%;
-        border-radius: 0;
-        border: none;
-    }
-
-    .modal-header {
-        padding: 1rem;
-    }
-
-    .modal-body {
-        padding: 1rem;
-    }
-
-    .modal-footer,
-    .modal-actions {
-        padding: 1rem;
-        flex-direction: column;
-        gap: 0.75rem;
-    }
-
-    .modal-footer .btn,
-    .modal-actions .btn {
-        width: 100%;
-        margin: 0;
-    }
-
     /* Forms */
     .form-input,
     .form-textarea {
@@ -2352,16 +2367,6 @@ body.force-mobile-nav .split-mode-toggle span {
         font-size: 1.3rem;
         bottom: 16px;
         right: 16px;
-    }
-
-    .modal-content {
-        width: 98%;
-        margin: 0.5rem auto;
-        padding: 1rem;
-    }
-
-    .modal-title {
-        font-size: 1.2rem;
     }
 
     .btn {

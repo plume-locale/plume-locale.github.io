@@ -151,11 +151,13 @@ const ColorPaletteView = {
             handleDrag(e.clientX);
         });
 
+        // CORRECTION FREEZE MOBILE : passive: true permet au navigateur de scroller
+        // sans bloquer le thread principal. Le drag sidebar ne nécessite pas preventDefault.
         document.addEventListener('touchmove', (e) => {
             if (isResizing) {
                 handleDrag(e.touches[0].clientX);
             }
-        }, { passive: true });
+        }, { passive: true }); // ← ne jamais mettre passive: false ici (freezes mobile)
 
         const stopResizing = () => {
             if (isResizing) {

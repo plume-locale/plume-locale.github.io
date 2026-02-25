@@ -333,24 +333,80 @@
         position: static !important;
         transform: none !important;
         min-width: 0 !important;
-        flex: 1;
+        flex: 1 1 auto;
         display: flex !important;
         align-items: center;
-        margin: 0 0.5rem !important;
+        margin: 0 0.2rem !important;
+        justify-content: flex-start;
+        /* Animation duration for smooth sliding */
+        transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1) !important;
+    }
+
+    /* iOS Jony Ive Focus Expand Effect */
+    .app-header .header-search:focus-within {
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        padding: 0 0.5rem !important;
+        margin: 0 !important;
+        z-index: 999 !important;
+        background: rgba(255, 255, 255, 0.90) !important;
+        /* Matches JS/iOS background */
+        backdrop-filter: saturate(180%) blur(20px) !important;
+        -webkit-backdrop-filter: saturate(180%) blur(20px) !important;
+    }
+
+    [data-theme="dark"] .app-header .header-search:focus-within {
+        background: rgba(28, 28, 30, 0.90) !important;
     }
 
     .header-search .search-input-wrapper {
         flex: 1;
-        min-width: 0;
-        max-width: 160px;
-        /* Reduced to leave space for undo/redo */
+        min-width: 60px;
+        max-width: 200px;
+        position: relative;
+        transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    .header-search:focus-within .search-input-wrapper {
+        max-width: 100% !important;
+        width: 100% !important;
+        margin: 0 0.5rem;
+        /* space from edges */
     }
 
     .header-search .search-input {
-        height: 34px;
+        width: 100%;
+        height: 32px;
         padding: 0 0.5rem 0 1.75rem;
-        /* More compact padding */
-        font-size: 0.8rem;
+        font-size: 0.85rem;
+        border-radius: 16px;
+        /* Perfect iOS Pill */
+        background: rgba(0, 0, 0, 0.06);
+        border: none;
+        box-shadow: none;
+        transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    .header-search .search-input:focus {
+        background: rgba(0, 0, 0, 0.08);
+        /* slightly darker on focus */
+        max-width: 100% !important;
+        height: 36px;
+        /* Grow slightly taller */
+        font-size: 1rem;
+        /* More legible text */
+        border-radius: 18px;
+    }
+
+    [data-theme="dark"] .header-search .search-input {
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    [data-theme="dark"] .header-search .search-input:focus {
+        background: rgba(255, 255, 255, 0.15);
     }
 
     /* Thinner search icon */
@@ -371,12 +427,18 @@
     .header-global-actions {
         padding-right: 0.4rem;
         gap: 0.2rem;
+        flex-shrink: 0;
     }
 
     .header-global-actions .header-action-btn {
         width: 30px;
         height: 30px;
         padding: 4px;
+        border: none !important;
+        background: transparent !important;
+        border-radius: 50% !important;
+        color: var(--text-primary) !important;
+        box-shadow: none !important;
     }
 
     .header-global-actions .header-action-btn [data-lucide] {

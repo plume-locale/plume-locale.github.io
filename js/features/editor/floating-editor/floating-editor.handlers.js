@@ -53,14 +53,15 @@ const FloatingEditorHandlers = {
         }
 
         // Global move/end handlers
+        // NOTE: passive: true is mandatory here to avoid freezing mobile scroll.
+        // The drag menu already uses CSS 'touch-action: none' on the handle element
+        // to prevent default scroll behavior during drag without blocking the main thread.
         document.addEventListener('touchmove', (e) => {
             if (!floatingEditorModel.isDragging) return;
             const touch = e.touches[0];
             const menu = FloatingEditorView.elements.menu;
             FloatingEditorViewModel.handleDrag(touch.clientX, touch.clientY, menu.offsetWidth, menu.offsetHeight);
-            e.preventDefault();
-            e.stopPropagation();
-        }, { passive: false });
+        }, { passive: true });
 
         document.addEventListener('touchend', () => {
             FloatingEditorViewModel.endDrag();

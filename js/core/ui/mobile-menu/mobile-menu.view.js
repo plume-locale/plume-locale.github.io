@@ -10,14 +10,14 @@ const MobileMenuView = {
      * donc les fonctions globales dans Main sont importantes.
      */
     init: function () {
-        // Observer le resize
+        // Observer le resize avec debounce plus long pour éviter les freezes mobile
         let resizeTimeout;
         window.addEventListener('resize', function () {
             clearTimeout(resizeTimeout);
             resizeTimeout = setTimeout(function () {
                 MobileMenuView.checkHeaderOverflow();
                 MobileMenuViewModel.handleResize(window.innerWidth);
-            }, 100);
+            }, 150);
         });
 
         // Vérifier au chargement
@@ -116,6 +116,7 @@ const MobileMenuView = {
 
     /**
      * Vérifie le débordement du header et ajuste les classes.
+     * OPTIMISÉ : sur mobile (≤ 900px) on conserve force-mobile-nav sans forcer un reflow.
      */
     checkHeaderOverflow: function () {
         const header = document.querySelector('.app-header');
@@ -123,6 +124,14 @@ const MobileMenuView = {
         const body = document.body;
 
         if (!header || !headerNav) return;
+
+        // Sur mobile (≤ 900px), on force directement le mode mobile sans provoquer
+        // un reflow coûteux (suppression/réajout de classe).
+        if (window.innerWidth <= 900) {
+            body.classList.add('force-mobile-nav');
+            MobileMenuRepository.updateState({ isMobileMode: true });
+            return;
+        }
 
         // Temporairement forcer le mode desktop pour mesurer
         body.classList.remove('force-mobile-nav');

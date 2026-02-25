@@ -12,6 +12,12 @@ class MindmapHandlers {
         this.touchDragData = null;
         this.touchDragElement = null;
         this.touchDragClone = null;
+
+        // Bound listeners for cleanup
+        this._touchMoveBound = null;
+        this._touchEndBound = null;
+        this._globalTouchMoveBound = this.handleTouchMove.bind(this);
+        this._globalTouchEndBound = this.handleTouchEnd.bind(this);
     }
 
     initEvents() {
@@ -36,8 +42,10 @@ class MindmapHandlers {
 
         // Touch Canvas
         wrapper.addEventListener('touchstart', this.handleCanvasTouchStart.bind(this), { passive: false });
-        document.addEventListener('touchmove', this.handleTouchMove.bind(this), { passive: false });
-        document.addEventListener('touchend', this.handleTouchEnd.bind(this));
+        // NOTE: passive: true avoids blocking scroll in other views.
+        // CSS touch-action:none on .mindmap-canvas-wrapper handles prevention during pan/drag.
+        document.addEventListener('touchmove', this._globalTouchMoveBound, { passive: true });
+        document.addEventListener('touchend', this._globalTouchEndBound);
 
         // Zoom & Drag Drop
         wrapper.addEventListener('wheel', this.handleWheel.bind(this), { passive: false });
@@ -151,12 +159,20 @@ class MindmapHandlers {
     handleTouchMove(e) {
         const touch = e.touches[0];
         if (this.model.mindmapState.isDragging) {
-            e.preventDefault();
+            // e.preventDefault() has no effect with passive:true listener.
+            // CSS touch-action:none on .mindmap-canvas-wrapper handles it.
             this.dragNode(touch.clientX, touch.clientY);
         } else if (this.model.mindmapState.isPanning) {
-            e.preventDefault();
             this.panCanvas(touch.clientX, touch.clientY);
         }
+    }
+
+    /**
+     * Removes global document listeners. Call when leaving the mindmap view.
+     */
+    destroyEvents() {
+        document.removeEventListener('touchmove', this._globalTouchMoveBound);
+        document.removeEventListener('touchend', this._globalTouchEndBound);
     }
 
     dragNode(clientX, clientY) {
