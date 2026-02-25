@@ -667,7 +667,7 @@ window.LOCALE_DE = {
     "scrivener.step1_title": "Öffnen Sie Ihren .scriv-Ordner",
     "scrivener.step1_desc": "Navigieren Sie im Windows-Explorer in den Ordner <code>MeinRoman.scriv</code>",
     "scrivener.step2_title": "Alles auswählen",
-    "scrivener.step2_desc": "Drücken Sie <kbd>Strg+A</kbd>, um alles auszuwählen, und ziehen Sie es hierher, <br> oder klicken Sie auf \"Dateien auswählen\"",
+    "scrivener.step2_desc": "Drücken Sie <kbd>Ctrl+A</kbd>, um alles auszuwählen, und ziehen Sie es hierher, <br> oder klicken Sie auf \"Dateien auswählen\"",
     "scrivener.step3_title": "Die .scrivx-Datei ist obligatorisch",
     "scrivener.step3_desc": "Sie enthält die Projektstruktur. Die RTF-Dateien in <code>Files/</code> enthalten den Text.",
     "scrivener.dropzone_title": "Dateien hierher ziehen",

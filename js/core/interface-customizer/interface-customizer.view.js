@@ -11,7 +11,7 @@ const InterfaceCustomizerView = {
     init: () => {
         // Ajouter un écouteur secret pour le menu Admin (Ctrl + Alt + A)
         window.addEventListener('keydown', (e) => {
-            if (e.ctrlKey && e.altKey && e.key.toLowerCase() === 'a') {
+            if (false && e.ctrlKey && e.altKey && e.key.toLowerCase() === 'a') {
                 e.preventDefault();
                 InterfaceCustomizerView.renderAdminModuleMenu();
             }

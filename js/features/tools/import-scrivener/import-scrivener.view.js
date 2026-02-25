@@ -304,10 +304,10 @@ const ImportScrivenerView = {
             if (result.success) {
                 this.renderSuccess(result.data);
             } else {
-                this.renderError(result.error || 'Erreur inconnue');
+                this.renderError(result.error || Localization.t('scrivener.error_unknown'));
             }
         } catch (e) {
-            this.renderError(e.message || 'Erreur lors de l\'import');
+            this.renderError(e.message || Localization.t('scrivener.error_import'));
         }
     },
 
@@ -360,7 +360,7 @@ const ImportScrivenerView = {
                 this.renderError(result.error);
             }
         } catch (e) {
-            this.renderError(e.message || 'Erreur lors de l\'analyse');
+            this.renderError(e.message || Localization.t('scrivener.error_analyze'));
         }
     },
 

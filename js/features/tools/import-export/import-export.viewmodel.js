@@ -76,7 +76,7 @@ const ImportExportViewModel = {
             ImportExportView.closeHubModal();
         } catch (e) {
             console.error(e);
-            alert("Erreur d'import : " + e.message);
+            alert(Localization.t('import.json.error', [e.message]));
         }
     },
 
@@ -218,7 +218,7 @@ const ImportExportViewModel = {
 
     syncNowWithGDrive: async function () {
         if (typeof GoogleDriveService === 'undefined' || !GoogleDriveService.accessToken) {
-            alert("Veuillez d'abord vous connecter à Google Drive.");
+            alert(Localization.t('gdrive.error.not_connected'));
             return;
         }
 
@@ -227,7 +227,7 @@ const ImportExportViewModel = {
         try {
             const folderId = await GoogleDriveService.findOrCreateFolder('Plume Backups');
             if (!folderId) {
-                throw new Error("Impossible de créer ou de trouver le dossier 'Plume Backups'.");
+                throw new Error(Localization.t('gdrive.error.folder_creation'));
             }
 
             let allProjects = [];

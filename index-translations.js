@@ -349,7 +349,7 @@ const translations = {
             q4: "Does it work on mobile?",
             a4: "The interface is optimized for desktop, as narrative writing benefits from a large screen. The application remains usable on tablets. Full mobile adaptation is under development.",
             q5: "Can I import my Scrivener or Word projects?",
-            a5: "Yes. Plume supports importing DOCX (Word) and text files. Native Scrivener import (.scriv) is under development. In the meantime, copy-pasting from Scrivener works perfectly."
+            a5: "Yes. Plume supports importing DOCX (Word) and text files. Native Scrivener import (.scriv) is also available."
         }
     },
 
@@ -525,7 +525,7 @@ const translations = {
             q4: "Funktioniert es auf dem Handy?",
             a4: "Die Oberfläche ist für Desktop optimiert, da narratives Schreiben von einem großen Bildschirm profitiert. Die Anwendung bleibt auf Tablets nutzbar. Eine vollständige mobile Anpassung ist in Entwicklung.",
             q5: "Kann ich meine Scrivener- oder Word-Projekte importieren?",
-            a5: "Ja. Plume unterstützt den Import von DOCX- (Word) und Textdateien. Ein nativer Scrivener-Import (.scriv) ist in Entwicklung. In der Zwischenzeit funktioniert Copy-Paste aus Scrivener perfekt."
+            a5: "Ja. Plume unterstützt den Import von DOCX- (Word) und Textdateien. Ein nativer Scrivener-Import (.scriv) ist ebenfalls möglich."
         }
     },
 
@@ -701,7 +701,7 @@ const translations = {
             q4: "¿Funciona en móvil?",
             a4: "La interfaz está optimizada para escritorio, ya que la escritura narrativa se beneficia de una pantalla grande. La aplicación sigue siendo utilizable en tabletas. La adaptación móvil completa está en desarrollo.",
             q5: "¿Puedo importar mis proyectos de Scrivener o Word?",
-            a5: "Sí. Plume soporta la importación de archivos DOCX (Word) y archivos de texto. La importación nativa de Scrivener (.scriv) está en desarrollo. Mientras tanto, copiar y pegar desde Scrivener funciona perfectamente."
+            a5: "Sí. Plume soporta la importación de archivos DOCX (Word) y archivos de texto. También es posible la importación nativa de Scrivener (.scriv)."
         }
     }
 };

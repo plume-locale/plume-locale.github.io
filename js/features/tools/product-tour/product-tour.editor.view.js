@@ -257,7 +257,7 @@ const ProductTourEditorView = {
     _initShortcuts: function () {
         window.addEventListener('keydown', (e) => {
             // Ctrl + Alt + T pour basculer l'éditeur
-            if (e.ctrlKey && e.altKey && e.key === 't') {
+            if (false && e.ctrlKey && e.altKey && e.key === 't') {
                 e.preventDefault();
                 ProductTourEditorViewModel.toggleEditor();
             }

@@ -533,9 +533,9 @@ const ImportScrivenerModel = {
 
         // Si le Text a des enfants, ce sont des scènes
         if (textItem.children && textItem.children.length > 0) {
-            for (const child of textItem.children) {
+            for (const [index, child] of textItem.children.entries()) {
                 const sceneContent = await this._readRtfContent(child.id, rtfMap);
-                const scene = createScene(child.title || 'Scène', {
+                const scene = createScene(child.title || Localization.t('scrivener.default_scene_title', [index + 1]), {
                     content: sceneContent || '',
                     summary: child.synopsis || ''
                 });
@@ -569,9 +569,9 @@ const ImportScrivenerModel = {
             const scene = createScene(Localization.t('scrivener.default_scene_title', [1]), { content: folderContent || '' });
             chapter.scenes.push(scene);
         } else {
-            for (const child of children) {
+            for (const [index, child] of children.entries()) {
                 const content = await this._readRtfContent(child.id, rtfMap);
-                const scene = createScene(child.title || 'Scène', {
+                const scene = createScene(child.title || Localization.t('scrivener.default_scene_title', [index + 1]), {
                     content: content || '',
                     summary: child.synopsis || ''
                 });
@@ -597,7 +597,7 @@ const ImportScrivenerModel = {
             if (!rtfText || !rtfText.trim()) return '';
             return this.rtfToHtml(rtfText);
         } catch (e) {
-            console.warn(`[Scrivener] Impossible de lire RTF pour ID ${id}:`, e);
+            console.warn(`[Scrivener] ${Localization.t('scrivener.log_error_read_rtf', [id])}:`, e);
             return '';
         }
     },
