@@ -1833,7 +1833,7 @@ window.LOCALE_FR = {
     "tour.driver.prev": "Précédent",
     "tour.driver.progress": "Étape {0} sur {1}",
 
-    "tour.step.welcome.title": "🪶 Bienvenue dans Plume",
+    "tour.step.welcome.title": "Bienvenue dans Plume",
     "tour.step.welcome.desc": "<p>Plume est votre espace d'écriture complet pour créer des histoires captivantes.</p><p>Cette visite guidée vous présentera les fonctionnalités principales en quelques minutes.</p><p><strong>Vous pouvez quitter à tout moment en appuyant sur Échap.</strong></p>",
     "tour.step.project_title.title": "Titre du Projet",
     "tour.step.project_title.desc": "<p>Cliquez sur le titre pour renommer votre projet.</p><p>Chaque projet est sauvegardé automatiquement dans votre navigateur.</p>",
@@ -1957,7 +1957,7 @@ window.LOCALE_FR = {
     "tour.corkboard.add_act.title": "Ajouter des Actes",
     "tour.corkboard.add_act.description": "Besoin d'aller plus loin ? Ajoutez un nouvel acte à la fin de votre projet.",
 
-    "tour.mobile.welcome.title": "🪶 Bienvenue",
+    "tour.mobile.welcome.title": "Bienvenue",
     "tour.mobile.welcome.desc": "<p>Plume est votre espace d'écriture complet.</p><p>Découvrez les fonctionnalités principales.</p>",
     "tour.mobile.structure.title": "Structure",
     "tour.mobile.structure.desc": "<p>Organisez votre histoire en actes, chapitres et scènes.</p>",
@@ -3102,7 +3102,7 @@ window.LOCALE_FR = {
     "tour.project_list.backup_btn.description": "Ouvre la fenêtre qui gère les imports/exports et la sauvegarde Google Drive.",
     "tour.project_list.delete_btn.title": "Supprimer le projet",
     "tour.project_list.delete_btn.description": "Détruit complètement ce projet de votre navigateur de manière locale et irréversible.",
-    "tour.projects.welcome.title": "🪶 Bienvenue dans Plume",
+    "tour.projects.welcome.title": "Bienvenue dans Plume",
     "tour.projects.welcome.description": "<p>Plume est votre espace d'écriture complet pour créer des histoires captivantes.</p><p>Cette visite guidée vous présentera les fonctionnalités principales en quelques minutes.</p><p><strong>Vous pouvez quitter à tout moment en appuyant sur Échap.</strong></p>",
     "tour.projects.sidebar.title": "📝 Outils d'Écriture",
     "tour.projects.sidebar.description": "<p>Organisez et visualisez votre histoire de différentes manières :</p><ul><li><span style=\"color: rgb(255, 152, 0); font-weight: 700;\">Groupe histoire</span></li><li><span style=\"color: rgb(255, 152, 0); font-weight: 700;\">Groupe construction de monde</span></li><li><span style=\"color: rgb(255, 152, 0); font-weight: 700;\">Groupe Visualisation</span></li><li><span style=\"color: rgb(255, 152, 0); font-weight: 700;\">Groupe Stats/analyse</span></li><li><span style=\"color: rgb(255, 152, 0); font-weight: 700;\">Groupe Sauvegarde</span></li></ul>",
@@ -3167,7 +3167,7 @@ window.LOCALE_FR = {
 
     "tour.start_tooltip": "Lancer la visite guidée",
     "tour.btn.trigger.title": "Aide visuelle",
-    "tour.welcome.title": "🪶 Bienvenue dans Plume",
+    "tour.welcome.title": "Bienvenue dans Plume",
     "tour.welcome.subtitle": "Découvrez votre nouvel espace de création",
     "tour.welcome.content.intro": "Plume est conçu pour vous aider à structurer et écrire vos récits de manière professionnelle.",
     "tour.welcome.content.question": "Voulez-vous une courte présentation des fonctionnalités principales ?",

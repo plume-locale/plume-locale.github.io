@@ -28,7 +28,7 @@ const ProductTourWelcomeView = {
         modal.id = 'tourWelcomeModal';
         modal.innerHTML = `
             <div class="tour-welcome-header">
-                <div class="tour-welcome-icon">🪶</div>
+                <div class="tour-welcome-icon"><i data-lucide="feather" style="width: 48px; height: 48px; color: var(--primary-color);"></i></div>
                 <h2 class="tour-welcome-title">${Localization.t('tour.welcome.title')}</h2>
                 <p class="tour-welcome-subtitle">${Localization.t('tour.welcome.subtitle')}</p>
             </div>
@@ -55,6 +55,11 @@ const ProductTourWelcomeView = {
         // Ajouter au DOM
         document.body.appendChild(overlay);
         document.body.appendChild(modal);
+
+        // Render Lucide icons in the modal
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
 
         // Attacher les événements
         const startBtn = document.getElementById('tourStartBtn');

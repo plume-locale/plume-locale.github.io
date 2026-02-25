@@ -2093,7 +2093,7 @@ window.LOCALE_EN = {
     "tour.driver.prev": "Previous",
     "tour.driver.progress": "Step {0} of {1}",
 
-    "tour.step.welcome.title": "🪶 Welcome to Plume",
+    "tour.step.welcome.title": "Welcome to Plume",
     "tour.step.welcome.desc": "<p>Plume is your complete writing space for creating captivating stories.</p><p>This guided tour will introduce you to the main features in a few minutes.</p><p><strong>You can exit at any time by pressing Esc.</strong></p>",
     "tour.step.project_title.title": "Project Title",
     "tour.step.project_title.desc": "<p>Click the title to rename your project.</p><p>Each project is automatically saved in your browser.</p>",
@@ -2200,7 +2200,7 @@ window.LOCALE_EN = {
     "tour.corkboard.add_act.title": "Add Acts",
     "tour.corkboard.add_act.description": "Need to go further? Add a new act at the end of your project.",
 
-    "tour.mobile.welcome.title": "🪶 Welcome",
+    "tour.mobile.welcome.title": "Welcome",
     "tour.mobile.welcome.desc": "<p>Plume is your complete writing space.</p><p>Discover the main features.</p>",
     "tour.mobile.structure.title": "Structure",
     "tour.mobile.structure.desc": "<p>Organize your story into acts, chapters and scenes.</p>",
@@ -3101,7 +3101,7 @@ window.LOCALE_EN = {
     "tour.project_list.backup_btn.description": "Open the window that manages imports/exports and Google Drive backup.",
     "tour.project_list.delete_btn.title": "Delete Project",
     "tour.project_list.delete_btn.description": "Completely and irreversibly destroys this project from your browser locally.",
-    "tour.projects.welcome.title": "🪶 Welcome to Plume",
+    "tour.projects.welcome.title": "Welcome to Plume",
     "tour.projects.welcome.description": "<p>Plume is your complete writing space for creating captivating stories.</p><p>This guided tour will introduce you to the main features in a few minutes.</p><p><strong>You can exit at any time by pressing Esc.</strong></p>",
     "tour.projects.sidebar.title": "📝 Writing Tools",
     "tour.projects.sidebar.description": "<p>Organize and visualize your story in different ways:</p><ul><li><span style=\"color: rgb(255, 152, 0); font-weight: 700;\">Story Group</span></li><li><span style=\"color: rgb(255, 152, 0); font-weight: 700;\">Worldbuilding Group</span></li><li><span style=\"color: rgb(255, 152, 0); font-weight: 700;\">Visualization Group</span></li><li><span style=\"color: rgb(255, 152, 0); font-weight: 700;\">Stats/Analysis Group</span></li><li><span style=\"color: rgb(255, 152, 0); font-weight: 700;\">Backup Group</span></li></ul>",
@@ -3166,7 +3166,7 @@ window.LOCALE_EN = {
 
     "tour.start_tooltip": "Start Guided Tour",
     "tour.btn.trigger.title": "Visual Aid",
-    "tour.welcome.title": "🪶 Welcome to Plume",
+    "tour.welcome.title": "Welcome to Plume",
     "tour.welcome.subtitle": "Discover your new creative space",
     "tour.welcome.content.intro": "Plume is designed to help you structure and write your stories professionally.",
     "tour.welcome.content.question": "Would you like a short presentation of the main features?",
