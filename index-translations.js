@@ -77,7 +77,7 @@ const translations = {
                 feature2: "Contrôle total de vos données",
                 feature3: "Sauvegarde manuelle à faire vers l'emplacement de votre choix",
                 feature4: "Aucune dépendance externe",
-                cta: "Télécharger la version 1.0.2 sur votre ordinateur"
+                cta: "Télécharger la dernière version sur votre ordinateur"
             },
             note: "Dans les deux cas, vos données sont stockées localement dans votre navigateur. Le mode en ligne offre simplement la synchronisation automatique avec Google Drive pour accéder à vos projets depuis plusieurs appareils."
         },
@@ -253,7 +253,7 @@ const translations = {
                 feature2: "Full control over your data",
                 feature3: "Manual backup to the cloud of your choice",
                 feature4: "No external dependencies",
-                cta: "Download"
+                cta: "Download directly the last version on you computer"
             },
             note: "In both cases, your data is stored locally in your browser. The online mode simply offers automatic synchronization with Google Drive to access your projects from multiple devices."
         },
@@ -429,7 +429,7 @@ const translations = {
                 feature2: "Volle Kontrolle über Ihre Daten",
                 feature3: "Manuelle Sicherung in die Cloud Ihrer Wahl",
                 feature4: "Keine externen Abhängigkeiten",
-                cta: "Herunterladen"
+                cta: "Laden Sie die neueste Version auf Ihren Computer herunter."
             },
             note: "In beiden Fällen werden Ihre Daten lokal in Ihrem Browser gespeichert. Der Online-Modus bietet einfach die automatische Synchronisation mit Google Drive, um von mehreren Geräten auf Ihre Projekte zuzugreifen."
         },
@@ -605,7 +605,7 @@ const translations = {
                 feature2: "Control total sobre tus datos",
                 feature3: "Respaldo manual a la nube de tu elección",
                 feature4: "Sin dependencias externas",
-                cta: "Descargar"
+                cta: "Descargue la última versión a su computadora"
             },
             note: "En ambos casos, tus datos se almacenan localmente en tu navegador. El modo en línea simplemente ofrece sincronización automática con Google Drive para acceder a tus proyectos desde múltiples dispositivos."
         },

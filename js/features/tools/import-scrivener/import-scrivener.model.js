@@ -27,13 +27,13 @@ const ImportScrivenerModel = {
         // Détection d'erreur de parsing
         const parseError = doc.querySelector('parsererror');
         if (parseError) {
-            throw new Error('Fichier .scrivx invalide ou corrompu : ' + parseError.textContent.substring(0, 200));
+            throw new Error(Localization.t('scrivener.error_invalid_scrivx', [parseError.textContent.substring(0, 200)]));
         }
 
         // Titre du projet (peut être dans l'attribut ou dans ProjectTitle)
         const projectTitle = doc.querySelector('ScrivenerProject > ProjectTitle')?.textContent?.trim()
             || doc.querySelector('ScrivenerProject')?.getAttribute('Identifier')
-            || 'Projet Scrivener';
+            || Localization.t('scrivener.default_project_title');
 
         // Trouver le DraftFolder (le Manuscrit)
         const draftFolder = this._findDraftFolder(doc);
@@ -41,7 +41,7 @@ const ImportScrivenerModel = {
         if (!draftFolder) {
             // Fallback: prendre tous les items du binder
             const binderEl = doc.querySelector('Binder');
-            if (!binderEl) throw new Error('Structure Scrivener non reconnue : aucun Binder trouvé.');
+            if (!binderEl) throw new Error(Localization.t('scrivener.error_no_binder'));
             return {
                 projectTitle,
                 binder: this._parseBinder(binderEl)
@@ -85,7 +85,7 @@ const ImportScrivenerModel = {
         const id = item.getAttribute('ID') || item.getAttribute('UUID') || '';
         const type = item.getAttribute('Type') || 'Text';
         const titleEl = item.querySelector(':scope > Title');
-        const title = titleEl?.textContent?.trim() || 'Sans titre';
+        const title = titleEl?.textContent?.trim() || Localization.t('scrivener.untitled_item');
 
         // Récupérer le synopsis/résumé
         const synopsis = item.querySelector(':scope > MetaData > Synopsis')?.textContent?.trim()
@@ -450,7 +450,7 @@ const ImportScrivenerModel = {
         const topLevelItems = binderRoot.children || [];
 
         if (topLevelItems.length === 0) {
-            throw new Error('Le Manuscrit Scrivener est vide.');
+            throw new Error(Localization.t('scrivener.error_empty_manuscript'));
         }
 
         // Stratégie :
@@ -466,9 +466,9 @@ const ImportScrivenerModel = {
                     if (act) acts.push(act);
                 } else if (folderItem.type === 'Text') {
                     // Text au niveau racine → mettre dans un acte générique
-                    let lastAct = acts.find(a => a.title === (projectTitle || 'Acte 1'));
+                    let lastAct = acts.find(a => a.title === (projectTitle || Localization.t('scrivener.default_act_title', [1])));
                     if (!lastAct) {
-                        lastAct = createAct(projectTitle || 'Acte 1');
+                        lastAct = createAct(projectTitle || Localization.t('scrivener.default_act_title', [1]));
                         acts.push(lastAct);
                     }
                     const chapter = await this._buildChapterFromText(folderItem, rtfMap);
@@ -477,7 +477,7 @@ const ImportScrivenerModel = {
             }
         } else {
             // Tous des texts → un seul acte
-            const act = createAct(projectTitle || 'Manuscrit');
+            const act = createAct(projectTitle || Localization.t('scrivener.default_manuscript_title'));
             for (const item of topLevelItems) {
                 const chapter = await this._buildChapterFromText(item, rtfMap);
                 if (chapter) act.chapters.push(chapter);
@@ -492,7 +492,7 @@ const ImportScrivenerModel = {
      * Construit un Acte Plume depuis un Folder Scrivener
      */
     async _buildAct(folderItem, rtfMap) {
-        const act = createAct(folderItem.title || 'Acte sans titre');
+        const act = createAct(folderItem.title || Localization.t('scrivener.default_act_title', ['']));
         if (folderItem.synopsis) act.metadata.description = folderItem.synopsis;
 
         const children = folderItem.children || [];
@@ -502,7 +502,7 @@ const ImportScrivenerModel = {
             const content = await this._readRtfContent(folderItem.id, rtfMap);
             if (content) {
                 const chapter = createChapter(folderItem.title);
-                const scene = createScene('Scène 1', { content });
+                const scene = createScene(Localization.t('scrivener.default_scene_title', [1]), { content });
                 chapter.scenes.push(scene);
                 act.chapters.push(chapter);
             }
@@ -528,7 +528,7 @@ const ImportScrivenerModel = {
      */
     async _buildChapterFromText(textItem, rtfMap) {
         const content = await this._readRtfContent(textItem.id, rtfMap);
-        const chapter = createChapter(textItem.title || 'Chapitre sans titre');
+        const chapter = createChapter(textItem.title || Localization.t('scrivener.default_chapter_title'));
         if (textItem.synopsis) chapter.metadata.description = textItem.synopsis;
 
         // Si le Text a des enfants, ce sont des scènes
@@ -543,7 +543,7 @@ const ImportScrivenerModel = {
             }
         } else {
             // Un seul Text = une scène dans ce chapitre
-            const scene = createScene('Scène 1', {
+            const scene = createScene(Localization.t('scrivener.default_scene_title', [1]), {
                 content: content || '',
                 summary: textItem.synopsis || ''
             });
@@ -557,7 +557,7 @@ const ImportScrivenerModel = {
      * Construit un Chapitre Plume depuis un Folder Scrivener (les enfants = scènes)
      */
     async _buildChapterFromFolder(folderItem, rtfMap) {
-        const chapter = createChapter(folderItem.title || 'Chapitre sans titre');
+        const chapter = createChapter(folderItem.title || Localization.t('scrivener.default_chapter_title'));
         if (folderItem.synopsis) chapter.metadata.description = folderItem.synopsis;
 
         const children = folderItem.children || [];
@@ -566,7 +566,7 @@ const ImportScrivenerModel = {
         const folderContent = await this._readRtfContent(folderItem.id, rtfMap);
 
         if (children.length === 0) {
-            const scene = createScene('Scène 1', { content: folderContent || '' });
+            const scene = createScene(Localization.t('scrivener.default_scene_title', [1]), { content: folderContent || '' });
             chapter.scenes.push(scene);
         } else {
             for (const child of children) {
@@ -609,7 +609,7 @@ const ImportScrivenerModel = {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
             reader.onload = e => resolve(e.target.result);
-            reader.onerror = () => reject(new Error('Erreur lecture fichier: ' + file.name));
+            reader.onerror = () => reject(new Error(Localization.t('scrivener.error_read_file', [file.name])));
             // RTF utilise souvent Windows-1252 (latin1)
             reader.readAsText(file, 'windows-1252');
         });

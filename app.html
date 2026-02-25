@@ -2768,12 +2768,12 @@
                                 </button>
                             </div>
                             <div class="hub-card">
-                                <h4>Importer depuis Scrivener</h4>
-                                <p class="hub-muted">Importez un projet <code>.scriv</code> (Scrivener 2 ou 3) avec sa
+                                <h4 data-i18n="modal.hub.scrivener_title">Importer depuis Scrivener</h4>
+                                <p class="hub-muted" data-i18n="modal.hub.scrivener_desc">Importez un projet <code>.scriv</code> (Scrivener 2 ou 3) avec sa
                                     structure en actes, chapitres et scènes.</p>
                                 <button class="btn btn-outline hub-action-btn"
                                     onclick="ImportExportView.closeHubModal(); openImportScrivenerModal();">
-                                    <i data-lucide="folder-open"></i> Importer un projet .scriv
+                                    <i data-lucide="folder-open"></i> <span data-i18n="modal.hub.btn_scrivener">Importer un projet .scriv</span>
                                 </button>
                             </div>
                             <div class="hub-card highlight">
@@ -3985,7 +3985,7 @@
             <div class="modal-content" style="max-width:620px;max-height:88vh;overflow-y:auto;">
                 <div class="modal-title" style="display:flex;align-items:center;gap:0.75rem;">
                     <i data-lucide="folder-open" style="width:20px;height:20px;color:var(--accent-gold);"></i>
-                    Importer depuis Scrivener
+                    <span data-i18n="scrivener.title">Importer depuis Scrivener</span>
                     <button class="btn-icon" onclick="ImportScrivenerView.close()" style="margin-left:auto;">
                         <i data-lucide="x"></i>
                     </button>

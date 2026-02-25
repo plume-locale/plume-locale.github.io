@@ -42,10 +42,9 @@ const ImportScrivenerView = {
                     <div class="scriv-intro-icon">
                         <i data-lucide="folder-open" style="width:40px;height:40px;color:var(--accent-gold);"></i>
                     </div>
-                    <h3 style="margin:0 0 0.5rem;">Importer un projet Scrivener</h3>
+                    <h3 style="margin:0 0 0.5rem;">${Localization.t('scrivener.title')}</h3>
                     <p style="color:var(--text-muted);margin:0;font-size:0.9rem;">
-                        Sélectionnez les fichiers de votre projet <strong>.scriv</strong> pour importer
-                        la structure et le texte dans Plume.
+                        ${Localization.t('scrivener.intro_desc')}
                     </p>
                 </div>
 
@@ -54,23 +53,22 @@ const ImportScrivenerView = {
                     <div class="scriv-step">
                         <span class="scriv-step-num">1</span>
                         <div>
-                            <strong>Ouvrez votre dossier <code>.scriv</code></strong>
-                            <p>Dans l'explorateur Windows, naviguez dans le dossier <code>MonRoman.scriv</code></p>
+                            <strong>${Localization.t('scrivener.step1_title')}</strong>
+                            <p>${Localization.t('scrivener.step1_desc')}</p>
                         </div>
                     </div>
                     <div class="scriv-step">
                         <span class="scriv-step-num">2</span>
                         <div>
-                            <strong>Sélectionnez tout le contenu</strong>
-                            <p>Faites <kbd>Ctrl+A</kbd> pour tout sélectionner, puis glissez-déposez ici, <br>
-                            ou cliquez "Sélectionner les fichiers"</p>
+                            <strong>${Localization.t('scrivener.step2_title')}</strong>
+                            <p>${Localization.t('scrivener.step2_desc')}</p>
                         </div>
                     </div>
                     <div class="scriv-step">
                         <span class="scriv-step-num">3</span>
                         <div>
-                            <strong>Le fichier <code>.scrivx</code> est obligatoire</strong>
-                            <p>Il contient la structure du projet. Les fichiers RTF dans <code>Files/</code> contiennent le texte.</p>
+                            <strong>${Localization.t('scrivener.step3_title')}</strong>
+                            <p>${Localization.t('scrivener.step3_desc')}</p>
                         </div>
                     </div>
                 </div>
@@ -78,27 +76,25 @@ const ImportScrivenerView = {
                 <!-- Dropzone -->
                 <div class="scriv-dropzone" id="scrivDropzone">
                     <i data-lucide="upload-cloud" style="width:36px;height:36px;color:var(--accent-gold);margin-bottom:0.75rem;"></i>
-                    <p style="font-weight:600;margin:0 0 0.5rem;">Glissez-déposez les fichiers ici</p>
+                    <p style="font-weight:600;margin:0 0 0.5rem;">${Localization.t('scrivener.dropzone_title')}</p>
                     <p style="color:var(--text-muted);font-size:0.85rem;margin:0 0 1rem;">
-                        Ou cliquez pour sélectionner
+                        ${Localization.t('scrivener.dropzone_subtitle')}
                     </p>
                     <input type="file" id="scrivFileInput" multiple accept=".scrivx,.rtf,.rtfd" style="display:none;">
                     <button class="btn btn-primary" onclick="document.getElementById('scrivFileInput').click()">
                         <i data-lucide="folder-open" style="width:14px;height:14px;margin-right:6px;"></i>
-                        Sélectionner les fichiers
+                        ${Localization.t('scrivener.btn_select_files')}
                     </button>
                     <p style="color:var(--text-muted);font-size:0.75rem;margin-top:0.75rem;">
-                        Formats acceptés : <code>.scrivx</code>, <code>.rtf</code>
+                        ${Localization.t('scrivener.accepted_formats')}
                     </p>
                 </div>
 
                 <!-- Tip -->
                 <div class="scriv-tip">
                     <i data-lucide="lightbulb" style="width:14px;height:14px;margin-right:6px;color:var(--accent-gold);vertical-align:middle;"></i>
-                    <strong>Astuce :</strong>
-                    Scrivener 3 stocke les textes dans <code>Files/Data/&lt;UUID&gt;/content.rtf</code>.
-                    Scrivener 2 les stocke dans <code>Files/Docs/&lt;ID&gt;.rtf</code>.
-                    Sélectionnez toute l'arborescence pour un import complet.
+                    <strong>${Localization.t('scrivener.tip_title')}</strong>
+                    ${Localization.t('scrivener.tip_desc')}
                 </div>
             </div>
         `;
@@ -115,10 +111,10 @@ const ImportScrivenerView = {
             <div style="text-align:center;padding:3rem;">
                 <div class="import-chapter-spinner"></div>
                 <p style="margin-top:1.5rem;font-size:1.1rem;font-weight:600;">
-                    Analyse du projet Scrivener…
+                    ${Localization.t('scrivener.analyzing')}
                 </p>
                 <p style="color:var(--text-muted);margin-top:0.5rem;">
-                    ${fileCount} fichier${fileCount > 1 ? 's' : ''} sélectionné${fileCount > 1 ? 's' : ''}
+                    ${Localization.t('scrivener.files_selected', [fileCount, fileCount > 1 ? 's' : '', fileCount > 1 ? 's' : ''])}
                 </p>
             </div>
         `;
@@ -166,29 +162,29 @@ const ImportScrivenerView = {
                 <div class="scriv-summary">
                     <div class="scriv-summary-row">
                         <div class="scriv-summary-item">
-                            <span class="scriv-summary-label">Projet</span>
+                            <span class="scriv-summary-label">${Localization.t('scrivener.summary_project')}</span>
                             <strong class="scriv-summary-value" style="color:var(--accent-gold);">${this._escapeHtml(projectTitle)}</strong>
                         </div>
                         <div class="scriv-summary-item">
-                            <span class="scriv-summary-label">Version</span>
+                            <span class="scriv-summary-label">${Localization.t('scrivener.summary_version')}</span>
                             <strong class="scriv-summary-value">Scrivener ${version}</strong>
                         </div>
                         <div class="scriv-summary-item">
-                            <span class="scriv-summary-label">Fichiers RTF</span>
+                            <span class="scriv-summary-label">${Localization.t('scrivener.summary_rtf_files')}</span>
                             <strong class="scriv-summary-value">${rtfFilesCount}</strong>
                         </div>
                     </div>
                     <div class="scriv-summary-row" style="margin-top:0.75rem;">
                         <div class="scriv-summary-item">
-                            <span class="scriv-summary-label">Actes détectés</span>
+                            <span class="scriv-summary-label">${Localization.t('scrivener.summary_acts')}</span>
                             <strong class="scriv-summary-value">${actCount}</strong>
                         </div>
                         <div class="scriv-summary-item">
-                            <span class="scriv-summary-label">Chapitres</span>
+                            <span class="scriv-summary-label">${Localization.t('scrivener.summary_chapters')}</span>
                             <strong class="scriv-summary-value">~${chapterCount}</strong>
                         </div>
                         <div class="scriv-summary-item">
-                            <span class="scriv-summary-label">Scènes</span>
+                            <span class="scriv-summary-label">${Localization.t('scrivener.summary_scenes')}</span>
                             <strong class="scriv-summary-value">~${sceneCount}</strong>
                         </div>
                     </div>
@@ -197,13 +193,13 @@ const ImportScrivenerView = {
                 <!-- Titre -->
                 <div style="margin-bottom:1.25rem;">
                     <label style="display:block;font-weight:600;margin-bottom:0.5rem;font-size:0.875rem;">
-                        Titre du projet dans Plume
+                        ${Localization.t('scrivener.input_label')}
                     </label>
                     <input type="text"
                            id="scrivProjectTitle"
                            class="form-input"
                            value="${this._escapeHtml(projectTitle)}"
-                           placeholder="Titre du projet"
+                           placeholder="${Localization.t('scrivener.input_placeholder')}"
                            style="width:100%;">
                 </div>
 
@@ -211,7 +207,7 @@ const ImportScrivenerView = {
                 <div style="margin-bottom:1.25rem;">
                     <div style="font-weight:600;margin-bottom:0.75rem;font-size:0.875rem;">
                         <i data-lucide="git-branch" style="width:14px;height:14px;vertical-align:middle;margin-right:6px;"></i>
-                        Structure importée
+                        ${Localization.t('scrivener.structure_title')}
                     </div>
                     <div class="scriv-tree">
                         ${treeHtml}
@@ -223,11 +219,11 @@ const ImportScrivenerView = {
                 <div style="display:flex;gap:0.75rem;justify-content:flex-end;">
                     <button class="btn btn-secondary" onclick="ImportScrivenerView.renderInitialState()">
                         <i data-lucide="arrow-left" style="width:14px;height:14px;margin-right:6px;"></i>
-                        Retour
+                        ${Localization.t('scrivener.btn_back')}
                     </button>
                     <button class="btn btn-primary" onclick="ImportScrivenerView.confirmImport()" id="scrivConfirmBtn">
                         <i data-lucide="download" style="width:14px;height:14px;margin-right:6px;"></i>
-                        Importer dans Plume
+                        ${Localization.t('scrivener.btn_confirm')}
                     </button>
                 </div>
             </div>
@@ -240,7 +236,7 @@ const ImportScrivenerView = {
         const btn = document.getElementById('scrivConfirmBtn');
         if (btn) {
             btn.disabled = true;
-            btn.innerHTML = `<div class="import-chapter-spinner" style="width:16px;height:16px;border-width:2px;display:inline-block;margin-right:8px;vertical-align:middle;"></div> Import en cours…`;
+            btn.innerHTML = `<div class="import-chapter-spinner" style="width:16px;height:16px;border-width:2px;display:inline-block;margin-right:8px;vertical-align:middle;"></div> ${Localization.t('scrivener.importing')}`;
         }
     },
 
@@ -251,17 +247,19 @@ const ImportScrivenerView = {
         content.innerHTML = `
             <div style="text-align:center;padding:2rem;">
                 <i data-lucide="check-circle" style="width:64px;height:64px;color:#4CAF50;margin-bottom:1rem;"></i>
-                <p style="font-size:1.3rem;font-weight:700;margin-bottom:0.5rem;">Import réussi !</p>
+                <p style="font-size:1.3rem;font-weight:700;margin-bottom:0.5rem;">${Localization.t('scrivener.success_title')}</p>
                 <p style="color:var(--text-muted);margin-bottom:1.5rem;">
-                    <strong>${data.actsImported}</strong> acte${data.actsImported > 1 ? 's' : ''},
-                    <strong>${data.chaptersImported}</strong> chapitre${data.chaptersImported > 1 ? 's' : ''},
-                    <strong>${data.scenesImported}</strong> scène${data.scenesImported > 1 ? 's' : ''}
-                    importé${data.scenesImported > 1 ? 's' : ''} depuis
-                    <strong>${this._escapeHtml(data.projectTitle)}</strong>.
+                    ${Localization.t('scrivener.success_desc', [
+            data.actsImported, data.actsImported > 1 ? 's' : '',
+            data.chaptersImported, data.chaptersImported > 1 ? 's' : '',
+            data.scenesImported, data.scenesImported > 1 ? 's' : '',
+            data.scenesImported > 1 ? 's' : '',
+            this._escapeHtml(data.projectTitle)
+        ])}
                 </p>
                 <button class="btn btn-primary" onclick="ImportScrivenerView.close()">
                     <i data-lucide="edit-3" style="width:14px;height:14px;margin-right:6px;"></i>
-                    Commencer à écrire
+                    ${Localization.t('scrivener.btn_start_writing')}
                 </button>
             </div>
         `;
@@ -277,14 +275,14 @@ const ImportScrivenerView = {
             <div style="text-align:center;padding:2rem;">
                 <i data-lucide="alert-circle" style="width:48px;height:48px;color:var(--accent-red, #e74c3c);margin-bottom:1rem;"></i>
                 <p style="font-size:1.1rem;font-weight:600;color:var(--accent-red, #e74c3c);margin-bottom:0.5rem;">
-                    Erreur d'import
+                    ${Localization.t('scrivener.error_title')}
                 </p>
                 <p style="color:var(--text-muted);margin-bottom:1.5rem;max-width:440px;margin-left:auto;margin-right:auto;white-space:pre-wrap;font-size:0.9rem;">
                     ${this._escapeHtml(message)}
                 </p>
                 <button class="btn btn-primary" onclick="ImportScrivenerView.renderInitialState()">
                     <i data-lucide="refresh-cw" style="width:14px;height:14px;margin-right:6px;"></i>
-                    Réessayer
+                    ${Localization.t('scrivener.btn_retry')}
                 </button>
             </div>
         `;

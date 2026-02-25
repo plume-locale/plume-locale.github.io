@@ -43,10 +43,7 @@ const ImportScrivenerViewModel = {
             const { scrivxFile, rtfMap, version } = ImportScrivenerModel.buildFileMap(files);
 
             if (!scrivxFile) {
-                throw new Error(
-                    'Aucun fichier .scrivx trouvé dans la sélection.\n' +
-                    'Sélectionnez le fichier .scrivx de votre projet Scrivener.'
-                );
+                throw new Error(Localization.t('scrivener.error_no_scrivx'));
             }
 
             this.state.scrivxFile = scrivxFile;
@@ -70,7 +67,7 @@ const ImportScrivenerViewModel = {
                 preview,
                 rtfFilesCount: rtfCount,
                 warnings: rtfCount === 0
-                    ? ['Aucun fichier RTF trouvé — le texte sera vide. Sélectionnez aussi les fichiers du dossier Files/.']
+                    ? [Localization.t('scrivener.warning_no_rtf')]
                     : []
             };
 
@@ -90,11 +87,11 @@ const ImportScrivenerViewModel = {
      */
     async confirmImport(projectTitleOverride) {
         if (!this.state.parsedBinder) {
-            return { success: false, error: 'Aucune donnée à importer.' };
+            return { success: false, error: Localization.t('scrivener.error_no_data') };
         }
 
         try {
-            const title = projectTitleOverride || this.state.projectTitle || 'Projet Scrivener';
+            const title = projectTitleOverride || this.state.projectTitle || Localization.t('scrivener.default_project_title');
 
             // Construire la structure Plume complète (avec lecture des RTF)
             const acts = await ImportScrivenerModel.buildPlumeStructure(
@@ -104,7 +101,7 @@ const ImportScrivenerViewModel = {
             );
 
             if (!acts || acts.length === 0) {
-                throw new Error('Aucun contenu importé depuis le projet Scrivener.');
+                throw new Error(Localization.t('scrivener.error_empty_import'));
             }
 
             // Ajouter au projet Plume
@@ -179,7 +176,7 @@ const ImportScrivenerViewModel = {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
             reader.onload = e => resolve(e.target.result);
-            reader.onerror = () => reject(new Error('Erreur lecture : ' + file.name));
+            reader.onerror = () => reject(new Error(Localization.t('scrivener.error_read_file', [file.name])));
             reader.readAsText(file, encoding);
         });
     }
