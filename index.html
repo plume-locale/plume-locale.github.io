@@ -2153,15 +2153,17 @@
         // Détecter la langue du navigateur au chargement
         function initLanguage() {
             const savedLang = localStorage.getItem('plume-lang');
-            const browserLang = navigator.language.substring(0, 2);
+            const browserLang = (navigator.language || navigator.userLanguage || '').substring(0, 2).toLowerCase();
             const supportedLangs = ['fr', 'en', 'de', 'es'];
 
-            let initialLang = 'fr'; // Langue par défaut
+            let initialLang;
 
             if (savedLang && supportedLangs.includes(savedLang)) {
                 initialLang = savedLang;
             } else if (supportedLangs.includes(browserLang)) {
                 initialLang = browserLang;
+            } else {
+                initialLang = 'en'; // Langue par défaut pour langues non supportées
             }
 
             // Mettre à jour l'affichage

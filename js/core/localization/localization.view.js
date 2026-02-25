@@ -79,7 +79,7 @@ class LocalizationView {
         if (langToggleBtn) {
             const flags = {
                 'fr': '🇫🇷',
-                'en': '🇬🇧',
+                'en': 'EN',
                 'de': '🇩🇪',
                 'es': '🇪🇸'
             };

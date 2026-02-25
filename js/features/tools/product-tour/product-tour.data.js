@@ -235,7 +235,6 @@ const ProductTourData = {
                 "popover": {
                     "title": "tour.editor.sidebar.title",
                     "description": "tour.editor.sidebar.description",
-                    "image": null,
                     "side": "right",
                     "align": "start"
                 },
@@ -243,16 +242,13 @@ const ProductTourData = {
                 "onHighlighted": null,
                 "onDeselected": null,
                 "onNext": null,
-                "onPrevious": null,
-                "clickBefore": null,
-                "clickAfter": null
+                "onPrevious": null
             },
             {
                 "element": ".sidebar-header-actions",
                 "popover": {
                     "title": "tour.editor.sidebar_header.title",
                     "description": "tour.editor.sidebar_header.description",
-                    "image": null,
                     "side": "bottom",
                     "align": "start"
                 },
@@ -260,16 +256,13 @@ const ProductTourData = {
                 "onHighlighted": null,
                 "onDeselected": null,
                 "onNext": null,
-                "onPrevious": null,
-                "clickBefore": null,
-                "clickAfter": null
+                "onPrevious": null
             },
             {
                 "element": ".tree-toolbar",
                 "popover": {
                     "title": "tour.editor.tree_toolbar.title",
                     "description": "tour.editor.tree_toolbar.description",
-                    "image": null,
                     "side": "bottom",
                     "align": "start"
                 },
@@ -277,16 +270,13 @@ const ProductTourData = {
                 "onHighlighted": null,
                 "onDeselected": null,
                 "onNext": null,
-                "onPrevious": null,
-                "clickBefore": null,
-                "clickAfter": null
+                "onPrevious": null
             },
             {
                 "element": ".editor-header",
                 "popover": {
                     "title": "tour.editor.header.title",
                     "description": "tour.editor.header.description",
-                    "image": null,
                     "side": "bottom",
                     "align": "start"
                 },
@@ -294,16 +284,13 @@ const ProductTourData = {
                 "onHighlighted": null,
                 "onDeselected": null,
                 "onNext": null,
-                "onPrevious": null,
-                "clickBefore": null,
-                "clickAfter": null
+                "onPrevious": null
             },
             {
                 "element": ".editor-synopsis",
                 "popover": {
                     "title": "tour.editor.synopsis.title",
                     "description": "tour.editor.synopsis.description",
-                    "image": null,
                     "side": "bottom",
                     "align": "start"
                 },
@@ -311,16 +298,13 @@ const ProductTourData = {
                 "onHighlighted": null,
                 "onDeselected": null,
                 "onNext": null,
-                "onPrevious": null,
-                "clickBefore": null,
-                "clickAfter": null
+                "onPrevious": null
             },
             {
                 "element": "#editorToolbar",
                 "popover": {
                     "title": "tour.editor.toolbar.title",
                     "description": "tour.editor.toolbar.description",
-                    "image": null,
                     "side": "top",
                     "align": "center"
                 },
@@ -328,16 +312,13 @@ const ProductTourData = {
                 "onHighlighted": null,
                 "onDeselected": null,
                 "onNext": null,
-                "onPrevious": null,
-                "clickBefore": null,
-                "clickAfter": null
+                "onPrevious": null
             },
             {
                 "element": "#toolMentionsBtn",
                 "popover": {
                     "title": "tour.editor.mentions.title",
                     "description": "tour.editor.mentions.description",
-                    "image": null,
                     "side": "top",
                     "align": "center"
                 },
@@ -345,16 +326,41 @@ const ProductTourData = {
                 "onHighlighted": null,
                 "onDeselected": null,
                 "onNext": null,
-                "onPrevious": null,
-                "clickBefore": null,
-                "clickAfter": null
+                "onPrevious": null
+            },
+            {
+                "element": "#toolStructureBlockBtn",
+                "popover": {
+                    "title": "tour.editor.structure_block.title",
+                    "description": "tour.editor.structure_block.description",
+                    "side": "bottom",
+                    "align": "start"
+                },
+                "onHighlightStarted": null,
+                "onHighlighted": null,
+                "onDeselected": null,
+                "onNext": null,
+                "onPrevious": null
+            },
+            {
+                "element": "div#toolNarrativeOverviewBtn > button",
+                "popover": {
+                    "title": "tour.editor.narrative_overview.title",
+                    "description": "tour.editor.narrative_overview.description",
+                    "side": "bottom",
+                    "align": "start"
+                },
+                "onHighlightStarted": null,
+                "onHighlighted": null,
+                "onDeselected": null,
+                "onNext": null,
+                "onPrevious": null
             },
             {
                 "element": ".editor-textarea",
                 "popover": {
                     "title": "tour.editor.textarea.title",
                     "description": "tour.editor.textarea.description",
-                    "image": null,
                     "side": "top",
                     "align": "center"
                 },
@@ -362,16 +368,13 @@ const ProductTourData = {
                 "onHighlighted": null,
                 "onDeselected": null,
                 "onNext": null,
-                "onPrevious": null,
-                "clickBefore": null,
-                "clickAfter": null
+                "onPrevious": null
             },
             {
                 "element": "#toolsSidebar",
                 "popover": {
                     "title": "tour.editor.tools_sidebar.title",
                     "description": "tour.editor.tools_sidebar.description",
-                    "image": null,
                     "side": "left",
                     "align": "start"
                 },
@@ -379,16 +382,13 @@ const ProductTourData = {
                 "onHighlighted": null,
                 "onDeselected": null,
                 "onNext": null,
-                "onPrevious": null,
-                "clickBefore": null,
-                "clickAfter": null
+                "onPrevious": null
             },
             {
                 "element": "#toolVersionsBtn",
                 "popover": {
                     "title": "tour.editor.tool_versions.title",
                     "description": "tour.editor.tool_versions.description",
-                    "image": null,
                     "side": "bottom",
                     "align": "start"
                 },
@@ -397,15 +397,13 @@ const ProductTourData = {
                 "onDeselected": null,
                 "onNext": null,
                 "onPrevious": null,
-                "clickBefore": "#toolVersionsBtn",
-                "clickAfter": null
+                "clickBefore": "#toolVersionsBtn"
             },
             {
                 "element": "#btnNewVersion",
                 "popover": {
                     "title": "tour.editor.new_version.title",
                     "description": "tour.editor.new_version.description",
-                    "image": null,
                     "side": "bottom",
                     "align": "start"
                 },
@@ -414,15 +412,69 @@ const ProductTourData = {
                 "onDeselected": null,
                 "onNext": null,
                 "onPrevious": null,
-                "clickBefore": null,
-                "clickAfter": "#toolVersionsBtn"
+                "clickAfter": null
+            },
+            {
+                "element": "div#sceneVersionsList > div > div > div > button",
+                "popover": {
+                    "title": "tour.editor.favorite_version.title",
+                    "description": "tour.editor.favorite_version.description",
+                    "side": "bottom",
+                    "align": "start"
+                },
+                "onHighlightStarted": null,
+                "onHighlighted": null,
+                "onDeselected": null,
+                "onNext": null,
+                "onPrevious": null
+            },
+            {
+                "element": "div#sceneVersionsList > div > div > div > button:nth-of-type(2)",
+                "popover": {
+                    "title": "tour.editor.diff_version.title",
+                    "description": "tour.editor.diff_version.description",
+                    "side": "bottom",
+                    "align": "start"
+                },
+                "onHighlightStarted": null,
+                "onHighlighted": null,
+                "onDeselected": null,
+                "onNext": null,
+                "onPrevious": null
+            },
+            {
+                "element": "div#sceneVersionsList > div > div > div > button:nth-of-type(3)",
+                "popover": {
+                    "title": "tour.editor.rename_version.title",
+                    "description": "tour.editor.rename_version.description",
+                    "side": "bottom",
+                    "align": "start"
+                },
+                "onHighlightStarted": null,
+                "onHighlighted": null,
+                "onDeselected": null,
+                "onNext": null,
+                "onPrevious": null
+            },
+            {
+                "element": "div#sceneVersionsList > div > div > div > button:nth-of-type(4)",
+                "popover": {
+                    "title": "tour.editor.delete_version.title",
+                    "description": "tour.editor.delete_version.description",
+                    "side": "bottom",
+                    "align": "start"
+                },
+                "onHighlightStarted": null,
+                "onHighlighted": null,
+                "onDeselected": null,
+                "onNext": null,
+                "onPrevious": "#toolVersionsBtn"
             },
             {
                 "element": "#toolAnnotationsBtn",
                 "popover": {
                     "title": "tour.editor.annotations.title",
                     "description": "tour.editor.annotations.description",
-                    "image": null,
                     "side": "bottom",
                     "align": "start"
                 },
@@ -439,7 +491,6 @@ const ProductTourData = {
                 "popover": {
                     "title": "tour.editor.todos.title",
                     "description": "tour.editor.todos.description",
-                    "image": null,
                     "side": "bottom",
                     "align": "start"
                 },
@@ -456,7 +507,6 @@ const ProductTourData = {
                 "popover": {
                     "title": "tour.editor.arcs.title",
                     "description": "tour.editor.arcs.description",
-                    "image": null,
                     "side": "bottom",
                     "align": "start"
                 },
@@ -469,11 +519,10 @@ const ProductTourData = {
                 "clickAfter": "#toolArcsBtn"
             },
             {
-                "element": "#headerProjectTitle",
+                "element": "#toolPlotBtn",
                 "popover": {
-                    "title": "tour.editor.finish.title",
-                    "description": "tour.editor.finish.description",
-                    "image": null,
+                    "title": "tour.editor.plot.title",
+                    "description": "tour.editor.plot.description",
                     "side": "bottom",
                     "align": "start"
                 },
@@ -482,8 +531,70 @@ const ProductTourData = {
                 "onDeselected": null,
                 "onNext": null,
                 "onPrevious": null,
-                "clickBefore": null,
-                "clickAfter": null
+                "clickBefore": "#toolPlotBtn",
+                "clickAfter": "#toolPlotBtn"
+            },
+            {
+                "element": "#toolInvestigationBtn",
+                "popover": {
+                    "title": "tour.editor.investigation.title",
+                    "description": "tour.editor.investigation.description",
+                    "side": "bottom",
+                    "align": "start"
+                },
+                "onHighlightStarted": null,
+                "onHighlighted": null,
+                "onDeselected": null,
+                "onNext": null,
+                "onPrevious": null,
+                "clickBefore": "#toolInvestigationBtn",
+                "clickAfter": "#toolInvestigationBtn"
+            },
+            {
+                "element": "#toolLinksPanelBtn",
+                "popover": {
+                    "title": "tour.editor.auto_detection.title",
+                    "description": "tour.editor.auto_detection.description",
+                    "side": "bottom",
+                    "align": "start"
+                },
+                "onHighlightStarted": null,
+                "onHighlighted": null,
+                "onDeselected": null,
+                "onNext": null,
+                "onPrevious": null,
+                "clickBefore": "#toolLinksPanelBtn",
+                "clickAfter": "#toolLinksPanelBtn"
+            },
+            {
+                "element": "#toolRepetitionBtn",
+                "popover": {
+                    "title": "tour.editor.repetition.title",
+                    "description": "tour.editor.repetition.description",
+                    "side": "bottom",
+                    "align": "start"
+                },
+                "onHighlightStarted": null,
+                "onHighlighted": null,
+                "onDeselected": null,
+                "onNext": null,
+                "onPrevious": null,
+                "clickBefore": "#toolRepetitionBtn",
+                "clickAfter": "#toolRepetitionBtn"
+            },
+            {
+                "element": "#headerProjectTitle",
+                "popover": {
+                    "title": "tour.editor.finish.title",
+                    "description": "tour.editor.finish.description",
+                    "side": "bottom",
+                    "align": "start"
+                },
+                "onHighlightStarted": null,
+                "onHighlighted": null,
+                "onDeselected": null,
+                "onNext": null,
+                "onPrevious": null
             }
         ],
         "characters": [

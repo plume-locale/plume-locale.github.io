@@ -19,7 +19,19 @@ class LocalizationManager {
      */
     init() {
         // Here we could load from localStorage
-        const savedLocale = localStorage.getItem('plume_locale') || 'fr';
+        let savedLocale = localStorage.getItem('plume_locale');
+
+        if (!savedLocale) {
+            const browserLang = (navigator.language || navigator.userLanguage || '').split('-')[0].toLowerCase();
+            const availableLocales = Object.keys(this.model.locales);
+
+            if (availableLocales.includes(browserLang)) {
+                savedLocale = browserLang;
+            } else {
+                savedLocale = 'en';
+            }
+        }
+
         this.setLocale(savedLocale);
 
         console.log(`Localization Manager initialized. Locale: ${savedLocale}`);

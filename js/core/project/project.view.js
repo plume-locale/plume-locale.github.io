@@ -468,20 +468,23 @@ const ProjectView = {
         }
 
         editorView.innerHTML = `
-            <div style="height: 100%; overflow-y: auto; padding: 2rem 3rem;">
-                <h2 style="margin-bottom: 2rem; color: var(--accent-gold);">
-                    <i data-lucide="scan-search" style="width:24px;height:24px;vertical-align:middle;margin-right:8px;"></i>${Localization.t('project.view.analysis_title')}
+            <div class="analysis-container" style="height: 100%; overflow-y: auto; padding: 2rem 3rem;">
+                <h2 style="margin-bottom: 2rem; color: var(--accent-gold); display: flex; align-items: center; gap: 0.5rem;">
+                    <i data-lucide="scan-search" style="width:28px;height:28px;"></i>
+                    ${Localization.t('project.view.analysis_title')}
                 </h2>
-                <div style="background: var(--bg-secondary); padding: 2rem; border-radius: 8px; margin-bottom: 2rem;">
-                    <label style="display: block; font-weight: 600; margin-bottom: 1rem; font-size: 1rem;">${Localization.t('project.view.analysis_scope_label')}</label>
-                    <select id="analysisScope" class="form-input" style="width: 100%; max-width: 400px; font-size: 1rem;">
+                
+                <div style="background: var(--bg-secondary); padding: 1.5rem 2rem; border-radius: 12px; margin-bottom: 2rem; border: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 0.75rem;">
+                    <label style="font-weight: 600; font-size: 1rem; color: var(--text-primary);">${Localization.t('project.view.analysis_scope_label')}</label>
+                    <select id="analysisScope" class="form-input" style="width: 100%; max-width: 400px; font-size: 1rem; padding: 0.6rem; border-radius: 8px;">
                         <option value="current">${Localization.t('project.view.analysis_scope_current')}</option>
                         <option value="chapter">${Localization.t('project.view.analysis_scope_chapter')}</option>
                         <option value="act">${Localization.t('project.view.analysis_scope_act')}</option>
                         <option value="all" selected>${Localization.t('project.view.analysis_scope_all')}</option>
                     </select>
                 </div>
-                <div id="analysisResults"></div>
+
+                <div id="analysisResults" class="analysis-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); gap: 1.5rem; align-items: start;"></div>
             </div>`;
 
         if (typeof lucide !== 'undefined') lucide.createIcons();
@@ -510,85 +513,130 @@ const ProjectView = {
         if (!container) return;
 
         container.innerHTML = `
-            <div style="margin-top: 1rem;">
                 <!-- General Stats -->
-                <div style="background: var(--bg-primary); padding: 1rem; border-radius: 4px; border: 1px solid var(--border-color); margin-bottom: 1rem;">
-                    <div style="font-weight: 700; font-size: 1rem; margin-bottom: 0.75rem; color: var(--accent-gold);"><i data-lucide="bar-chart-3" style="width:16px;height:16px;vertical-align:middle;margin-right:6px;"></i>${Localization.t('project.view.analysis_stats_general')}</div>
-                    <div style="font-size: 1.2rem; font-weight: 600;">${analysis.wordCount.toLocaleString(Localization.currentLang === 'fr' ? 'fr-FR' : 'en-US')} ${Localization.t('project.view.words')}</div>
+                <div class="stat-card" style="background: var(--bg-card); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border-color); box-shadow: 0 4px 6px rgba(0,0,0,0.05); transition: transform 0.2s, box-shadow 0.2s;">
+                    <div style="font-weight: 700; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 1rem; color: var(--accent-gold); display: flex; align-items: center; gap: 0.5rem;">
+                        <i data-lucide="bar-chart-3" style="width:18px;height:18px;"></i>
+                        ${Localization.t('project.view.analysis_stats_general')}
+                    </div>
+                    <div style="font-size: 2rem; font-weight: 700; color: var(--text-primary);">${analysis.wordCount.toLocaleString(Localization.currentLang === 'fr' ? 'fr-FR' : 'en-US')}</div>
+                    <div style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0.25rem;">${Localization.t('project.view.words')}</div>
                 </div>
 
                 <!-- Readability -->
-                <div style="background: var(--bg-primary); padding: 1rem; border-radius: 4px; border: 1px solid var(--border-color); margin-bottom: 1rem;">
-                    <div style="font-weight: 700; font-size: 1rem; margin-bottom: 0.75rem; color: var(--accent-gold);"><i data-lucide="book-open" style="width:16px;height:16px;vertical-align:middle;margin-right:6px;"></i>${Localization.t('project.view.analysis_readability')}</div>
-                    <div style="font-size: 1.1rem; margin-bottom: 0.25rem;">${Localization.t('project.view.analysis_score')} <strong>${analysis.readability.score}</strong> / 100</div>
-                    <div style="color: var(--text-muted);">${Localization.t('project.view.analysis_level')} ${analysis.readability.level}</div>
-                    <div style="margin-top: 0.5rem; font-size: 0.75rem; color: var(--text-muted); line-height: 1.4;">
+                <div class="stat-card" style="background: var(--bg-card); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border-color); box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                    <div style="font-weight: 700; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 1rem; color: var(--accent-gold); display: flex; align-items: center; gap: 0.5rem;">
+                        <i data-lucide="book-open" style="width:18px;height:18px;"></i>
+                        ${Localization.t('project.view.analysis_readability')}
+                    </div>
+                    <div style="font-size: 1.5rem; font-weight: 700; margin-bottom: 0.25rem;">
+                        ${Localization.t('project.view.analysis_score')} <span style="color: var(--primary-color);">${analysis.readability.score}</span> / 100
+                    </div>
+                    <div style="font-weight: 600; color: var(--text-secondary); margin-bottom: 0.75rem;">${Localization.t('project.view.analysis_level')} ${analysis.readability.level}</div>
+                    <div style="padding: 0.75rem; background: var(--bg-secondary); border-radius: 8px; font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;">
                         ${Localization.t('project.view.analysis_readability_help')}
                     </div>
                 </div>
 
                 <!-- Sentence Length -->
-                <div style="background: var(--bg-primary); padding: 1rem; border-radius: 4px; border: 1px solid var(--border-color); margin-bottom: 1rem;">
-                    <div style="font-weight: 700; font-size: 1rem; margin-bottom: 0.75rem; color: var(--accent-gold);"><i data-lucide="ruler" style="width:16px;height:16px;vertical-align:middle;margin-right:6px;"></i>${Localization.t('project.view.analysis_sentence_length')}</div>
-                    <div style="display: flex; gap: 1rem; margin-bottom: 0.75rem;">
-                        <div><strong>${Localization.t('project.view.analysis_avg')}</strong> ${analysis.sentenceLength.avg} ${Localization.t('project.view.words')}</div>
-                        <div><strong>${Localization.t('project.view.analysis_min')}</strong> ${analysis.sentenceLength.min}</div>
-                        <div><strong>${Localization.t('project.view.analysis_max')}</strong> ${analysis.sentenceLength.max}</div>
+                <div class="stat-card" style="background: var(--bg-card); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border-color); box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                    <div style="font-weight: 700; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 1rem; color: var(--accent-gold); display: flex; align-items: center; gap: 0.5rem;">
+                        <i data-lucide="ruler" style="width:18px;height:18px;"></i>
+                        ${Localization.t('project.view.analysis_sentence_length')}
                     </div>
-                    <div style="font-size: 0.8rem; font-weight: 600; margin-bottom: 0.5rem;">${Localization.t('project.view.analysis_distribution')}</div>
-                    ${analysis.sentenceLength.distribution.map(r => `
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem;">
-                            <span style="font-size: 0.75rem;">${r.label}</span>
-                            <div style="flex: 1; margin: 0 0.5rem; height: 8px; background: var(--bg-secondary); border-radius: 4px; overflow: hidden;">
-                                <div style="height: 100%; width: ${analysis.sentenceLength.distribution.reduce((s, d) => s + d.count, 0) > 0 ? (r.count * 100 / analysis.sentenceLength.distribution.reduce((s, d) => s + d.count, 0)) : 0}%; background: var(--accent-gold);"></div>
-                            </div>
-                            <span style="font-size: 0.75rem; font-weight: 600; min-width: 30px; text-align: right;">${r.count}</span>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 1.5rem; background: var(--bg-secondary); padding: 0.75rem; border-radius: 8px;">
+                        <div style="text-align: center;">
+                            <div style="font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted);">${Localization.t('project.view.analysis_avg')}</div>
+                            <div style="font-weight: 700; font-size: 1.1rem;">${analysis.sentenceLength.avg}</div>
                         </div>
-                    `).join('')}
+                        <div style="text-align: center;">
+                            <div style="font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted);">${Localization.t('project.view.analysis_min')}</div>
+                            <div style="font-weight: 700; font-size: 1.1rem;">${analysis.sentenceLength.min}</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted);">${Localization.t('project.view.analysis_max')}</div>
+                            <div style="font-weight: 700; font-size: 1.1rem;">${analysis.sentenceLength.max}</div>
+                        </div>
+                    </div>
+                    <div style="font-size: 0.8rem; font-weight: 700; margin-bottom: 0.75rem; color: var(--text-secondary);">${Localization.t('project.view.analysis_distribution')}</div>
+                    <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                        ${analysis.sentenceLength.distribution.map(r => `
+                            <div style="display: flex; flex-direction: column; gap: 0.2rem;">
+                                <div style="display: flex; justify-content: space-between; font-size: 0.75rem;">
+                                    <span>${r.label}</span>
+                                    <span style="font-weight: 700;">${r.count}</span>
+                                </div>
+                                <div style="width: 100%; height: 6px; background: var(--bg-secondary); border-radius: 3px; overflow: hidden;">
+                                    <div style="height: 100%; width: ${analysis.sentenceLength.distribution.reduce((s, d) => s + d.count, 0) > 0 ? (r.count * 100 / analysis.sentenceLength.distribution.reduce((s, d) => s + d.count, 0)) : 0}%; background: var(--accent-gold); border-radius: 3px;"></div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
                 </div>
 
                 <!-- Narrative Distribution -->
-                <div style="background: var(--bg-primary); padding: 1rem; border-radius: 4px; border: 1px solid var(--border-color); margin-bottom: 1rem;">
-                    <div style="font-weight: 700; font-size: 1rem; margin-bottom: 0.75rem; color: var(--accent-gold);"><i data-lucide="message-circle" style="width:16px;height:16px;vertical-align:middle;margin-right:6px;"></i>${Localization.t('project.view.analysis_narrative_distribution')}</div>
-                    <div style="display: flex; gap: 1rem; margin-bottom: 0.75rem;">
-                        <div><strong>${Localization.t('project.view.analysis_dialogues')}</strong> ${analysis.narrativeDistribution.dialogue}%</div>
-                        <div><strong>${Localization.t('project.view.analysis_narration')}</strong> ${analysis.narrativeDistribution.narrative}%</div>
+                <div class="stat-card" style="background: var(--bg-card); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border-color); box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                    <div style="font-weight: 700; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 1rem; color: var(--accent-gold); display: flex; align-items: center; gap: 0.5rem;">
+                        <i data-lucide="message-circle" style="width:18px;height:18px;"></i>
+                        ${Localization.t('project.view.analysis_narrative_distribution')}
                     </div>
-                    <div style="height: 20px; background: var(--bg-secondary); border-radius: 4px; overflow: hidden; display: flex;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+                        <div style="display: flex; flex-direction: column;">
+                            <span style="font-size: 0.75rem; color: var(--text-muted);">${Localization.t('project.view.analysis_dialogues')}</span>
+                            <span style="font-size: 1.2rem; font-weight: 700; color: #4CAF50;">${analysis.narrativeDistribution.dialogue}%</span>
+                        </div>
+                        <div style="display: flex; flex-direction: column; text-align: right;">
+                            <span style="font-size: 0.75rem; color: var(--text-muted);">${Localization.t('project.view.analysis_narration')}</span>
+                            <span style="font-size: 1.2rem; font-weight: 700; color: var(--accent-gold);">${analysis.narrativeDistribution.narrative}%</span>
+                        </div>
+                    </div>
+                    <div style="height: 12px; background: var(--bg-secondary); border-radius: 6px; overflow: hidden; display: flex; margin-bottom: 1rem;">
                         <div style="height: 100%; width: ${analysis.narrativeDistribution.dialogue}%; background: #4CAF50;" title="Dialogues"></div>
                         <div style="height: 100%; width: ${analysis.narrativeDistribution.narrative}%; background: var(--accent-gold);" title="Narration"></div>
                     </div>
-                    <div style="margin-top: 0.5rem; font-size: 0.75rem; color: var(--text-muted);">
-                        ${analysis.narrativeDistribution.dialogCount} ${Localization.t('project.view.analysis_dialogue_segments')}
+                    <div style="font-size: 0.8rem; color: var(--text-muted); text-align: center; border-top: 1px solid var(--border-color); padding-top: 0.75rem;">
+                        <strong>${analysis.narrativeDistribution.dialogCount}</strong> ${Localization.t('project.view.analysis_dialogue_segments')}
                     </div>
                 </div>
 
                 <!-- Word Frequency -->
-                <div style="background: var(--bg-primary); padding: 1rem; border-radius: 4px; border: 1px solid var(--border-color); margin-bottom: 1rem;">
-                    <div style="font-weight: 700; font-size: 1rem; margin-bottom: 0.75rem; color: var(--accent-gold);"><i data-lucide="type" style="width:16px;height:16px;vertical-align:middle;margin-right:6px;"></i>${Localization.t('project.view.analysis_frequent_words')}</div>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 0.5rem;">
+                <div class="stat-card" style="background: var(--bg-card); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border-color); box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                    <div style="font-weight: 700; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 1rem; color: var(--accent-gold); display: flex; align-items: center; gap: 0.5rem;">
+                        <i data-lucide="type" style="width:18px;height:18px;"></i>
+                        ${Localization.t('project.view.analysis_frequent_words')}
+                    </div>
+                    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
                         ${analysis.wordFrequency.map(([word, count]) => `
-                            <div style="padding: 0.4rem 0.6rem; background: var(--bg-secondary); border-radius: 2px; font-size: 0.75rem;">
-                                <strong>${word}</strong>: ${count}×
+                            <div style="padding: 0.4rem 0.75rem; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 20px; font-size: 0.8rem; display: flex; align-items: center; gap: 0.4rem;">
+                                <strong>${word}</strong>
+                                <span style="font-size: 0.7rem; opacity: 0.6; background: var(--text-muted); color: white; padding: 1px 6px; border-radius: 10px;">${count}</span>
                             </div>
                         `).join('')}
                     </div>
                 </div>
 
                 <!-- Repetitions -->
-                <div style="background: var(--bg-primary); padding: 1rem; border-radius: 4px; border: 1px solid var(--border-color);">
-                    <div style="font-weight: 700; font-size: 1rem; margin-bottom: 0.75rem; color: var(--accent-red);"><i data-lucide="alert-triangle" style="width:16px;height:16px;vertical-align:middle;margin-right:6px;"></i>${Localization.t('project.view.analysis_repetitions')}</div>
+                <div class="stat-card" style="background: var(--bg-card); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--accent-red); box-shadow: 0 4px 12px rgba(196, 69, 54, 0.1);">
+                    <div style="font-weight: 700; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 1rem; color: var(--accent-red); display: flex; align-items: center; gap: 0.5rem;">
+                        <i data-lucide="alert-triangle" style="width:18px;height:18px;"></i>
+                        ${Localization.t('project.view.analysis_repetitions')}
+                    </div>
                     ${analysis.repetitions.length > 0 ? `
-                                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 0.5rem;">
-                                        ${analysis.repetitions.map(([word, count]) => `
-                                            <div style="padding: 0.4rem 0.6rem; background: rgba(196, 69, 54, 0.1); border: 1px solid var(--accent-red); border-radius: 2px; font-size: 0.75rem;">
-                                                <strong>${word}</strong>: ${count}×
-                                            </div>
-                                        `).join('')}
-                                    </div>
-                                ` : `<div style="color: var(--text-muted); font-size: 0.85rem;">${Localization.t('project.view.analysis_no_repetitions')}</div>`}
-                </div>
-            </div>`;
+                        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                            ${analysis.repetitions.map(([word, count]) => `
+                                <div style="padding: 0.4rem 0.75rem; background: rgba(196, 69, 54, 0.05); border: 1px solid var(--accent-red); border-radius: 20px; font-size: 0.8rem; color: var(--accent-red); display: flex; align-items: center; gap: 0.4rem;">
+                                    <strong>${word}</strong>
+                                    <span style="font-size: 0.7rem; background: var(--accent-red); color: white; padding: 1px 6px; border-radius: 10px;">${count}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    ` : `
+                        <div style="background: rgba(81, 207, 102, 0.1); color: #2e7d32; padding: 1rem; border-radius: 8px; font-size: 0.85rem; text-align: center; border: 1px solid #c8e6c9;">
+                            <i data-lucide="check-circle" style="width:16px;height:16px;vertical-align:middle;margin-right:6px;"></i>
+                            ${Localization.t('project.view.analysis_no_repetitions')}
+                        </div>
+                    `}
+                </div>`;
 
         if (typeof lucide !== 'undefined') lucide.createIcons();
     },
