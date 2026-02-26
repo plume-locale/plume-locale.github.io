@@ -638,6 +638,67 @@ function updateGNToolsSidebar() {
     `;
     if (typeof lucide !== 'undefined') lucide.createIcons({ root: toolsSidebar });
 
+    const mobileToolsGrid = document.querySelector('.mobile-tools-grid');
+    const mobileToolsTitle = document.querySelector('.mobile-tools-sheet-title');
+    if (mobileToolsGrid) {
+        if (mobileToolsTitle) mobileToolsTitle.innerHTML = Localization.t('globalnotes.title') || 'Notes Globales';
+        mobileToolsGrid.innerHTML = `
+            <button class="mobile-tool-item" onclick="if(typeof GlobalNotesView !== 'undefined') { GlobalNotesView.addNewItem('board'); closeMobileToolsSheet(); }">
+                <i data-lucide="layout-grid"></i>
+                <span data-i18n="globalnotes.tool.board">${Localization.t('globalnotes.tool.board') || 'Tableau'}</span>
+            </button>
+            <button class="mobile-tool-item" onclick="if(typeof GlobalNotesView !== 'undefined') { GlobalNotesView.addNewItem('column'); closeMobileToolsSheet(); }">
+                <i data-lucide="columns"></i>
+                <span data-i18n="globalnotes.tool.column">${Localization.t('globalnotes.tool.column') || 'Colonne'}</span>
+            </button>
+            <button class="mobile-tool-item" onclick="if(typeof GlobalNotesView !== 'undefined') { GlobalNotesView.addNewItem('note'); closeMobileToolsSheet(); }">
+                <i data-lucide="sticky-note"></i>
+                <span data-i18n="globalnotes.tool.note">${Localization.t('globalnotes.tool.note') || 'Note'}</span>
+            </button>
+            <button class="mobile-tool-item" onclick="if(typeof GlobalNotesView !== 'undefined') { GlobalNotesView.addNewItem('checklist'); closeMobileToolsSheet(); }">
+                <i data-lucide="list-checks"></i>
+                <span data-i18n="globalnotes.tool.checklist">${Localization.t('globalnotes.tool.checklist') || 'Checklist'}</span>
+            </button>
+            <button class="mobile-tool-item" onclick="if(typeof GlobalNotesView !== 'undefined') { GlobalNotesView.addNewItem('table'); closeMobileToolsSheet(); }">
+                <i data-lucide="table"></i>
+                <span data-i18n="globalnotes.tool.table">${Localization.t('globalnotes.tool.table') || 'Tableau'}</span>
+            </button>
+            <button class="mobile-tool-item" onclick="if(typeof GlobalNotesView !== 'undefined') { GlobalNotesView.addNewItem('sketch'); closeMobileToolsSheet(); }">
+                <i data-lucide="pen"></i>
+                <span data-i18n="globalnotes.tool.sketch">${Localization.t('globalnotes.tool.sketch') || 'Dessin'}</span>
+            </button>
+            <button class="mobile-tool-item" onclick="if(typeof GlobalNotesView !== 'undefined') { GlobalNotesView.addNewItem('line'); closeMobileToolsSheet(); }">
+                <i data-lucide="share-2"></i>
+                <span data-i18n="globalnotes.tool.line">${Localization.t('globalnotes.tool.line') || 'Connexion'}</span>
+            </button>
+            <button class="mobile-tool-item" onclick="if(typeof GlobalNotesView !== 'undefined') { GlobalNotesView.addNewItem('image'); closeMobileToolsSheet(); }">
+                <i data-lucide="image"></i>
+                <span data-i18n="globalnotes.tool.image">${Localization.t('globalnotes.tool.image') || 'Image'}</span>
+            </button>
+            <button class="mobile-tool-item" onclick="if(typeof GlobalNotesView !== 'undefined') { GlobalNotesView.addNewItem('file'); closeMobileToolsSheet(); }">
+                <i data-lucide="upload"></i>
+                <span data-i18n="globalnotes.tool.file">${Localization.t('globalnotes.tool.file') || 'Fichier'}</span>
+            </button>
+            <button class="mobile-tool-item" onclick="if(typeof GlobalNotesView !== 'undefined') { GlobalNotesView.addNewItem('video'); closeMobileToolsSheet(); }">
+                <i data-lucide="video"></i>
+                <span data-i18n="globalnotes.tool.video">${Localization.t('globalnotes.tool.video') || 'Vidéo'}</span>
+            </button>
+            <button class="mobile-tool-item" onclick="if(typeof GlobalNotesView !== 'undefined') { GlobalNotesView.addNewItem('link'); closeMobileToolsSheet(); }">
+                <i data-lucide="link"></i>
+                <span data-i18n="globalnotes.tool.link">${Localization.t('globalnotes.tool.link') || 'Lien'}</span>
+            </button>
+            <button class="mobile-tool-item" onclick="if(typeof GlobalNotesView !== 'undefined') { GlobalNotesView.addNewItem('map'); closeMobileToolsSheet(); }">
+                <i data-lucide="map-pin"></i>
+                <span data-i18n="globalnotes.tool.map">${Localization.t('globalnotes.tool.map') || 'Lieu'}</span>
+            </button>
+            <button class="mobile-tool-item" onclick="if(typeof GlobalNotesView !== 'undefined') { GlobalNotesView.addNewItem('color'); closeMobileToolsSheet(); }">
+                <i data-lucide="palette"></i>
+                <span data-i18n="globalnotes.tool.color">${Localization.t('globalnotes.tool.color') || 'Couleur'}</span>
+            </button>
+        `;
+        if (typeof lucide !== 'undefined') lucide.createIcons({ root: mobileToolsGrid });
+    }
+
     // Appliquer les réglages de personnalisation après le rendu
     if (typeof InterfaceCustomizerViewModel !== 'undefined') {
         InterfaceCustomizerViewModel.applySettings();
@@ -695,6 +756,47 @@ function updateEditorToolsSidebar() {
     `;
 
     if (typeof lucide !== 'undefined') lucide.createIcons({ root: toolsSidebar });
+
+    const mobileToolsGrid = document.querySelector('.mobile-tools-grid');
+    const mobileToolsTitle = document.querySelector('.mobile-tools-sheet-title');
+    if (mobileToolsGrid) {
+        if (mobileToolsTitle) mobileToolsTitle.innerHTML = Localization.t('mobile.tools.title') || 'Outils de scène';
+        mobileToolsGrid.innerHTML = `
+            <button class="mobile-tool-item" onclick="if(typeof toggleVersionsSidebar !== 'undefined') toggleVersionsSidebar(); closeMobileToolsSheet();">
+                <i data-lucide="git-branch"></i>
+                <span data-i18n="tools.versions">${Localization.t('tools.versions') || 'Versions'}</span>
+            </button>
+            <button class="mobile-tool-item" onclick="if(typeof toggleAnnotationsPanel !== 'undefined') toggleAnnotationsPanel(); closeMobileToolsSheet();">
+                <i data-lucide="message-square"></i>
+                <span data-i18n="tools.annotations">${Localization.t('tools.annotations') || 'Annotations'}</span>
+            </button>
+            <button class="mobile-tool-item" onclick="if(typeof toggleTodosPanel !== 'undefined') toggleTodosPanel(); closeMobileToolsSheet();">
+                <i data-lucide="check-square"></i>
+                <span data-i18n="tools.todos">${Localization.t('tools.todos') || 'TODOs'}</span>
+            </button>
+            <button class="mobile-tool-item" onclick="if(typeof toggleArcScenePanel !== 'undefined') toggleArcScenePanel(); closeMobileToolsSheet();">
+                <i data-lucide="git-commit-horizontal"></i>
+                <span data-i18n="tools.arcs">${Localization.t('tools.arcs') || 'Arcs'}</span>
+            </button>
+            <button class="mobile-tool-item" onclick="if(typeof PlotGridUI !== 'undefined') PlotGridUI.toggleSidebar(); closeMobileToolsSheet();">
+                <i data-lucide="layout-grid"></i>
+                <span data-i18n="tools.plot">${Localization.t('tools.plot') || 'Plot'}</span>
+            </button>
+            <button class="mobile-tool-item" onclick="if(typeof InvestigationSidebarUI !== 'undefined') InvestigationSidebarUI.toggleSidebar(); closeMobileToolsSheet();">
+                <i data-lucide="search"></i>
+                <span data-i18n="tools.investigation">${Localization.t('tools.investigation') || 'Recherche'}</span>
+            </button>
+            <button class="mobile-tool-item" onclick="if(typeof toggleLinksPanelVisibility !== 'undefined') toggleLinksPanelVisibility(); closeMobileToolsSheet();">
+                <i data-lucide="link-2"></i>
+                <span data-i18n="tools.links">${Localization.t('tools.links') || 'Liens'}</span>
+            </button>
+            <button class="mobile-tool-item" onclick="if(typeof toggleWordRepetitionPanel !== 'undefined') toggleWordRepetitionPanel(); closeMobileToolsSheet();">
+                <i data-lucide="repeat"></i>
+                <span data-i18n="tools.repetition">${Localization.t('tools.repetition') || 'Répétitions'}</span>
+            </button>
+        `;
+        if (typeof lucide !== 'undefined') lucide.createIcons({ root: mobileToolsGrid });
+    }
 
     // Immediately refresh badges
     if (typeof ToolsSidebarViewModel !== 'undefined') {

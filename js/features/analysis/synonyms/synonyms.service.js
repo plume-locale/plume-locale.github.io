@@ -1,10 +1,12 @@
 // ============================================================
-// synonyms.service.js - Service pour les synonymes français
+// synonyms.service.js - Service pour les synonymes (multi-langues)
 // ============================================================
-// [MVVM : Service] - Utilise le dictionnaire local français
+// [MVVM : Service] - Délègue à SynonymsDictionaryManager (fr/en/de/es)
 
 /**
- * Service de synonymes - Utilise le dictionnaire local français
+ * Service de synonymes - Multilingue (fr, en, de, es)
+ * Utilise SynonymsDictionaryManager pour sélectionner le bon dictionnaire
+ * selon la locale active dans Localization.
  * [MVVM : Service]
  */
 const SynonymsService = {
@@ -20,15 +22,8 @@ const SynonymsService = {
             return [];
         }
 
-        // Utiliser le dictionnaire local français
-        const results = searchLocalSynonyms(cleanWord);
-
-        // Si pas de résultats, chercher dans les synonymes existants
-        if (results.length === 0) {
-            return this._searchInAllSynonyms(cleanWord);
-        }
-
-        return results;
+        // Déléguer au gestionnaire multi-langues
+        return SynonymsDictionaryManager.search(cleanWord);
     },
 
     /**
@@ -43,7 +38,7 @@ const SynonymsService = {
             return [];
         }
 
-        return searchLocalSimilar(cleanWord);
+        return SynonymsDictionaryManager.searchSimilar(cleanWord);
     },
 
     /**
@@ -58,23 +53,7 @@ const SynonymsService = {
             return [];
         }
 
-        // Trouver les mots qui riment (même terminaison)
-        const ending = cleanWord.slice(-3);
-        const ending2 = cleanWord.slice(-2);
-        const rhymes = [];
-
-        for (const key of Object.keys(FrenchSynonymsDictionary)) {
-            if (key !== cleanWord) {
-                if (key.endsWith(ending)) {
-                    rhymes.push({ word: key, score: 100, tags: [], category: 'rime riche' });
-                } else if (key.endsWith(ending2)) {
-                    rhymes.push({ word: key, score: 70, tags: [], category: 'rime suffisante' });
-                }
-            }
-        }
-
-        // Trier par score et limiter
-        return rhymes.sort((a, b) => b.score - a.score).slice(0, 15);
+        return SynonymsDictionaryManager.searchRhymes(cleanWord);
     },
 
     /**
@@ -89,7 +68,7 @@ const SynonymsService = {
             return [];
         }
 
-        return searchLocalAntonyms(cleanWord);
+        return SynonymsDictionaryManager.searchAntonyms(cleanWord);
     },
 
     /**
@@ -120,23 +99,12 @@ const SynonymsService = {
      * @returns {Array} Mots dont le mot recherché est un synonyme
      * [MVVM : Service]
      */
+    /**
+     * @deprecated - La logique de recherche inversée est maintenant dans SynonymsDictionaryManager
+     * Conservé pour compatibilité ascendante.
+     */
     _searchInAllSynonyms(word) {
-        const results = [];
-
-        for (const [key, entry] of Object.entries(FrenchSynonymsDictionary)) {
-            if (entry.synonymes && entry.synonymes.includes(word)) {
-                // Le mot recherché est un synonyme de 'key'
-                // Donc on retourne les autres synonymes de 'key'
-                results.push({ word: key, score: 100, tags: [], category: 'autre' });
-                entry.synonymes.forEach((syn, index) => {
-                    if (syn !== word && !results.find(r => r.word === syn)) {
-                        results.push({ word: syn, score: 90 - index, tags: [], category: 'autre' });
-                    }
-                });
-            }
-        }
-
-        return results.slice(0, 15);
+        return SynonymsDictionaryManager.search(word);
     },
 
     /**
@@ -170,21 +138,7 @@ const SynonymsService = {
      * [MVVM : Service]
      */
     getStats() {
-        const entries = Object.keys(FrenchSynonymsDictionary).length;
-        let totalSynonyms = 0;
-        let totalAntonyms = 0;
-
-        for (const entry of Object.values(FrenchSynonymsDictionary)) {
-            totalSynonyms += (entry.synonymes || []).length;
-            totalAntonyms += (entry.antonymes || []).length;
-        }
-
-        return {
-            entries,
-            totalSynonyms,
-            totalAntonyms,
-            avgSynonymsPerWord: Math.round(totalSynonyms / entries * 10) / 10
-        };
+        return SynonymsDictionaryManager.getStats();
     }
 };
 

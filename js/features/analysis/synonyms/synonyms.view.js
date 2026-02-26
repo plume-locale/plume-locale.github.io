@@ -75,7 +75,7 @@ const SynonymsView = {
                 <div id="${SynonymsConfig.ui.resultsId}" class="synonyms-results"></div>
 
                 <div class="synonyms-recent">
-                    <span class="synonyms-recent-label">Récents:</span>
+                    <span class="synonyms-recent-label">${getSynonymsMessage('recent')}</span>
                     <div class="synonyms-recent-list"></div>
                 </div>
             </div>
@@ -226,11 +226,11 @@ const SynonymsView = {
      */
     _renderGroupedResults(groups, fromCache) {
         const categoryLabels = {
-            nom: 'Noms',
-            verbe: 'Verbes',
-            adjectif: 'Adjectifs',
-            adverbe: 'Adverbes',
-            autre: 'Autres'
+            nom: getSynonymsMessage('catNom'),
+            verbe: getSynonymsMessage('catVerbe'),
+            adjectif: getSynonymsMessage('catAdjectif'),
+            adverbe: getSynonymsMessage('catAdverbe'),
+            autre: getSynonymsMessage('catAutre')
         };
 
         let html = '';
@@ -304,7 +304,7 @@ const SynonymsView = {
                 const word = btn.closest('.synonyms-word-item').dataset.word;
                 const result = await SynonymsViewModel.copyToClipboard(word);
                 if (result.success) {
-                    this._showToast('Copié !');
+                    this._showToast(getSynonymsMessage('copied'));
                 }
             });
         });
@@ -338,7 +338,7 @@ const SynonymsView = {
         } else {
             // Comportement par défaut: copier dans le presse-papiers
             SynonymsViewModel.copyToClipboard(word);
-            this._showToast('Copié !');
+            this._showToast(getSynonymsMessage('copied'));
         }
     },
 
@@ -368,10 +368,13 @@ const SynonymsView = {
      */
     _updateRecentSearches() {
         const recentList = this._modal.querySelector('.synonyms-recent-list');
+        const recentLabel = this._modal.querySelector('.synonyms-recent-label');
+        if (recentLabel) recentLabel.textContent = getSynonymsMessage('recent');
+
         const recent = SynonymsViewModel.getRecentSearches(5);
 
         if (recent.length === 0) {
-            recentList.innerHTML = '<span class="synonyms-recent-empty">Aucune recherche récente</span>';
+            recentList.innerHTML = `<span class="synonyms-recent-empty">${getSynonymsMessage('recentEmpty')}</span>`;
             return;
         }
 
@@ -387,6 +390,26 @@ const SynonymsView = {
                 this._performSearch(btn.dataset.word);
             });
         });
+    },
+
+    /**
+     * Met à jour les textes de l'interface lors d'un changement de langue
+     * [MVVM : View]
+     */
+    _updateModalLabels() {
+        if (!this._modal) return;
+        const h3 = this._modal.querySelector('.synonyms-header h3');
+        if (h3) h3.textContent = getSynonymsMessage('title');
+        const closeBtn = this._modal.querySelector('.synonyms-close-btn');
+        if (closeBtn) closeBtn.title = getSynonymsMessage('close');
+        const input = this._modal.querySelector(`#${SynonymsConfig.ui.inputId}`);
+        if (input) input.placeholder = getSynonymsMessage('placeholder');
+        const tabs = this._modal.querySelectorAll('.synonyms-tab');
+        tabs.forEach(tab => {
+            const type = tab.dataset.type;
+            if (type) tab.textContent = getSynonymsMessage(type);
+        });
+        this._updateRecentSearches();
     },
 
     /**
@@ -493,6 +516,11 @@ if (document.readyState === 'loading') {
 } else {
     SynonymsView.init();
 }
+
+// Mise à jour de la modale lors d'un changement de langue
+window.addEventListener('localeChanged', () => {
+    SynonymsView._updateModalLabels();
+});
 
 // Export pour utilisation dans d'autres modules
 if (typeof module !== 'undefined' && module.exports) {

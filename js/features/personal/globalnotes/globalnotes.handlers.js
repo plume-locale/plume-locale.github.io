@@ -29,8 +29,9 @@ const GlobalNotesHandlers = {
         if (!this._bounds.onContextMenu) this._bounds.onContextMenu = this.onContextMenu.bind(this);
 
         // Remove old listeners to avoid duplicates
-        canvas.removeEventListener('mousedown', this._bounds.onCanvasMouseDown);
-        canvas.addEventListener('mousedown', this._bounds.onCanvasMouseDown);
+        canvas.removeEventListener('pointerdown', this._bounds.onCanvasMouseDown);
+        canvas.addEventListener('pointerdown', this._bounds.onCanvasMouseDown);
+        canvas.style.touchAction = 'none'; // Prevent browser gestures on the board
 
         canvas.removeEventListener('wheel', this._bounds.onWheel);
         canvas.addEventListener('wheel', this._bounds.onWheel, { passive: false });
@@ -39,8 +40,9 @@ const GlobalNotesHandlers = {
         canvas.addEventListener('contextmenu', this._bounds.onContextMenu);
 
         if (!this._windowListenersAttached) {
-            window.addEventListener('mousemove', this._bounds.onMouseMove);
-            window.addEventListener('mouseup', this._bounds.onMouseUp);
+            window.addEventListener('pointermove', this._bounds.onMouseMove);
+            window.addEventListener('pointerup', this._bounds.onMouseUp);
+            window.addEventListener('pointercancel', this._bounds.onMouseUp);
             window.addEventListener('click', () => this.hideContextMenu());
             this._windowListenersAttached = true;
             console.log('GlobalNotesHandlers: window listeners attached');
@@ -901,12 +903,15 @@ const GlobalNotesHandlers = {
         if (e.target.id === 'globalnotesCanvas' || e.target.id === 'globalnotesBoardContent') {
             GlobalNotesViewModel.clearSelection();
 
+            const clientX = e.clientX;
+            const clientY = e.clientY;
+
             // Start canvas panning
             this.dragData = {
                 isDragging: true,
                 type: 'canvas',
-                startX: e.clientX,
-                startY: e.clientY,
+                startX: clientX,
+                startY: clientY,
                 initialX: GlobalNotesViewModel.state.panX,
                 initialY: GlobalNotesViewModel.state.panY
             };
@@ -1023,15 +1028,18 @@ const GlobalNotesHandlers = {
     onMouseMove: function (e) {
         if (!this.dragData.isDragging) return;
 
-        const dx = e.clientX - this.dragData.startX;
-        const dy = e.clientY - this.dragData.startY;
+        const clientX = e.clientX;
+        const clientY = e.clientY;
+
+        const dx = clientX - this.dragData.startX;
+        const dy = clientY - this.dragData.startY;
 
         // Threshold for dragging (avoid intercepting clicks/dblclicks)
         if (!this.dragData.hasMoved) {
             if (Math.abs(dx) > 8 || Math.abs(dy) > 8) {
                 this.dragData.hasMoved = true;
                 // Add dragging class only after threshold
-                this.dragData.items.forEach(dragItem => {
+                this.dragData.items?.forEach(dragItem => {
                     dragItem.el.classList.add('dragging');
                 });
             } else {
@@ -1054,7 +1062,7 @@ const GlobalNotesHandlers = {
                     if (existingPlaceholder) existingPlaceholder.remove();
                 });
 
-                const dropzone = document.elementFromPoint(e.clientX, e.clientY)?.closest('.column-items-dropzone');
+                const dropzone = document.elementFromPoint(clientX, clientY)?.closest('.column-items-dropzone');
                 if (dropzone) {
                     const columnId = dropzone.getAttribute('data-column-id');
                     const draggedId = this.dragData.targetId;
@@ -1063,7 +1071,7 @@ const GlobalNotesHandlers = {
                         dropzone.classList.add('drag-over');
 
                         // Show placeholder for reordering
-                        const index = this.getDropIndex(dropzone, e.clientY);
+                        const index = this.getDropIndex(dropzone, clientY);
                         const placeholder = document.createElement('div');
                         placeholder.className = 'drop-placeholder';
                         placeholder.style.height = '4px';
@@ -1106,10 +1114,13 @@ const GlobalNotesHandlers = {
     onMouseUp: function (e) {
         if (!this.dragData.isDragging) return;
 
+        const clientX = e.clientX;
+        const clientY = e.clientY;
+
         if (this.dragData.type === 'item') {
             document.querySelectorAll('.column-items-dropzone').forEach(dz => dz.classList.remove('drag-over'));
 
-            const targetEl = document.elementFromPoint(e.clientX, e.clientY);
+            const targetEl = document.elementFromPoint(clientX, clientY);
             let dropColumnId = null;
             const dropzone = targetEl?.closest('.column-items-dropzone') || targetEl?.closest('.globalnotes-item-column')?.querySelector('.column-items-dropzone');
 
@@ -1163,6 +1174,11 @@ const GlobalNotesHandlers = {
                         width: parseInt(el.style.width),
                         height: parseInt(el.style.height)
                     });
+
+                    // If sketch item, re-init canvas at new size without stretching
+                    if (item.type === 'sketch') {
+                        this.resizeSketchCanvas(item.id, el);
+                    }
                 }
             }
         }
@@ -1237,6 +1253,71 @@ const GlobalNotesHandlers = {
     // --- SKETCH LOGIC ---
     sketchData: {}, // Store temporary context for active sketches
 
+    /**
+     * Resize the sketch canvas without stretching or erasing existing drawing.
+     * - If new size is LARGER  → expand buffer, keep drawing at original position
+     * - If new size is SMALLER → do nothing to buffer; container clips via overflow:hidden
+     */
+    resizeSketchCanvas: function (itemId, itemEl) {
+        const data = this.sketchData[itemId];
+        const canvas = itemEl ? itemEl.querySelector('canvas') : data?.ctx?.canvas;
+        if (!canvas || !data) return;
+
+        const ctx = data.ctx;
+        const dpr = window.devicePixelRatio || 1;
+        const zoom = (typeof GlobalNotesViewModel !== 'undefined') ? GlobalNotesViewModel.state.zoom : 1;
+
+        // Measure what the container now wants to show
+        const itemRect = itemEl.getBoundingClientRect();
+        const newCssWidth = itemRect.width / zoom;
+        const newCssHeight = itemRect.height / zoom;
+
+        // Current natural canvas size (in CSS px)
+        const curCssWidth = data.cssWidth || (canvas.width / dpr);
+        const curCssHeight = data.cssHeight || (canvas.height / dpr);
+
+        // If the new container is smaller → just let overflow:hidden clip it, do nothing else
+        if (newCssWidth <= curCssWidth && newCssHeight <= curCssHeight) {
+            // Ensure the canvas CSS size stays at its natural size so it isn't stretched
+            canvas.style.width = curCssWidth + 'px';
+            canvas.style.height = curCssHeight + 'px';
+            return;
+        }
+
+        // New size is larger → need to expand the buffer
+        const targetCssWidth = Math.max(newCssWidth, curCssWidth);
+        const targetCssHeight = Math.max(newCssHeight, curCssHeight);
+
+        // Snapshot BEFORE resizing (expanding clears the buffer)
+        const snapshot = canvas.toDataURL();
+
+        canvas.width = targetCssWidth * dpr;
+        canvas.height = targetCssHeight * dpr;
+        canvas.style.width = targetCssWidth + 'px';
+        canvas.style.height = targetCssHeight + 'px';
+
+        // Restore context settings (scale resets on canvas resize)
+        ctx.scale(dpr, dpr);
+        ctx.strokeStyle = canvas.getAttribute('data-color') || '#333';
+        ctx.lineWidth = data.brushSize || 2.5;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+
+        // Update tracked natural size
+        data.cssWidth = targetCssWidth;
+        data.cssHeight = targetCssHeight;
+
+        // Redraw at original size (top-left anchored, no stretch)
+        if (snapshot && snapshot !== 'data:,') {
+            const img = new Image();
+            img.onload = () => {
+                ctx.drawImage(img, 0, 0, curCssWidth, curCssHeight);
+                GlobalNotesViewModel.updateItemData(itemId, { image: canvas.toDataURL() });
+            };
+            img.src = snapshot;
+        }
+    },
+
     initSketch: function (itemId, canvas) {
         if (!canvas) return;
         const ctx = canvas.getContext('2d');
@@ -1244,24 +1325,30 @@ const GlobalNotesHandlers = {
         const zoom = (typeof GlobalNotesViewModel !== 'undefined') ? GlobalNotesViewModel.state.zoom : 1;
         const rect = canvas.getBoundingClientRect();
 
-        // getBoundingClientRect returns dimensions scaled by zoom, so divide to get CSS size
         const cssWidth = rect.width / zoom;
         const cssHeight = rect.height / zoom;
 
         canvas.width = cssWidth * dpr;
         canvas.height = cssHeight * dpr;
+        // Set canvas CSS size explicitly so it stays at natural size (not stretched by CSS 100%)
+        canvas.style.width = cssWidth + 'px';
+        canvas.style.height = cssHeight + 'px';
         ctx.scale(dpr, dpr);
 
         ctx.strokeStyle = canvas.getAttribute('data-color') || '#333';
-        ctx.lineWidth = 2.5;
         ctx.lineCap = 'round';
         ctx.lineJoin = 'round';
 
         this.sketchData[itemId] = {
-            ctx: ctx,
+            ctx,
             isDrawing: false,
-            points: []
+            points: [],
+            brushSize: parseFloat(canvas.getAttribute('data-size')) || 2.5,
+            cssWidth,
+            cssHeight
         };
+
+        ctx.lineWidth = this.sketchData[itemId].brushSize;
 
         // Load existing image if any
         const item = GlobalNotesRepository.getItems().find(i => i.id == itemId);
@@ -1276,13 +1363,83 @@ const GlobalNotesHandlers = {
         const data = this.sketchData[itemId];
         if (data) data.ctx.strokeStyle = color;
 
-        // Update UI
-        const container = el.closest('.sketch-tools');
-        container.querySelectorAll('.sketch-color').forEach(c => c.classList.remove('active'));
-        el.classList.add('active');
+        // Update UI if el is provided (from preset buttons)
+        if (el) {
+            const container = el.closest('.sketch-tools');
+            if (container) {
+                container.querySelectorAll('.sketch-color').forEach(c => c.classList.remove('active'));
+                el.classList.add('active');
+            }
+        }
 
-        const canvas = el.closest('.item-sketch').querySelector('canvas');
+        const itemEl = document.querySelector(`.globalnotes-item[data-id="${itemId}"]`);
+        const canvas = itemEl?.querySelector('canvas');
         if (canvas) canvas.setAttribute('data-color', color);
+
+        // Update the preview button color if it exists
+        const previewBtn = itemEl?.querySelector('.sketch-color-preview');
+        if (previewBtn) previewBtn.style.backgroundColor = color;
+
+        // Persist color choice
+        GlobalNotesViewModel.updateItemData(itemId, { color: color });
+    },
+
+    setSketchBrushSize: function (itemId, size) {
+        const data = this.sketchData[itemId];
+        if (data) {
+            data.brushSize = parseFloat(size);
+            data.ctx.lineWidth = data.brushSize;
+        }
+
+        const itemEl = document.querySelector(`.globalnotes-item[data-id="${itemId}"]`);
+        const valueLabel = itemEl?.querySelector('.brush-size-value');
+        if (valueLabel) valueLabel.innerText = size + 'px';
+
+        const canvas = itemEl?.querySelector('canvas');
+        if (canvas) canvas.setAttribute('data-size', size);
+    },
+
+    openSketchColorPicker: function (e, itemId) {
+        e.stopPropagation();
+        e.preventDefault();
+
+        // Toggle: if already open, close it
+        const existing = document.querySelector('.sketch-palette-popup');
+        if (existing) { existing.remove(); return; }
+
+        // Use project colors or fallback palette
+        const fallbackColors = ['#333333', '#000000', '#ffffff', '#ef4444', '#f97316', '#eab308', '#22c55e', '#3b82f6', '#8b5cf6', '#ec4899', '#14b8a6', '#6366f1', '#f43f5e', '#0ea5e9', '#84cc16', '#a78bfa'];
+        const colors = (typeof ColorPaletteViewModel !== 'undefined')
+            ? ColorPaletteViewModel.getAvailableColors()
+            : fallbackColors;
+
+        const rect = e.currentTarget.getBoundingClientRect();
+        const palette = document.createElement('div');
+        palette.className = 'globalnotes-color-palette-popup sketch-palette-popup';
+        palette.style.position = 'fixed';
+        palette.style.zIndex = '999999';
+        palette.style.top = (rect.bottom + 8) + 'px';
+        palette.style.left = Math.min(rect.left, window.innerWidth - 260) + 'px';
+
+        let html = `<div class="palette-header"><span>Couleurs</span><button class="palette-close-btn" onclick="document.querySelector('.sketch-palette-popup')?.remove()">&times;</button></div><div class="palette-grid">`;
+        colors.forEach(color => {
+            html += `<div class="palette-swatch" style="background:${color}" title="${color}" onclick="GlobalNotesHandlers.setSketchColor('${itemId}','${color}');document.querySelector('.sketch-palette-popup')?.remove();"></div>`;
+        });
+        html += `</div><div class="palette-custom"><input type="color" oninput="GlobalNotesHandlers.setSketchColor('${itemId}',this.value)" onchange="document.querySelector('.sketch-palette-popup')?.remove()"><input type="text" placeholder="#HEX" onkeydown="if(event.key==='Enter'&&this.value.length>=4){GlobalNotesHandlers.setSketchColor('${itemId}',this.value);document.querySelector('.sketch-palette-popup')?.remove();}"></div>`;
+
+        palette.innerHTML = html;
+        document.body.appendChild(palette);
+
+        // Delay attaching the close handler to avoid closing on the same event
+        setTimeout(() => {
+            const closeHandler = (ev) => {
+                if (!palette.contains(ev.target)) {
+                    palette.remove();
+                    document.removeEventListener('pointerdown', closeHandler);
+                }
+            };
+            document.addEventListener('pointerdown', closeHandler);
+        }, 0);
     },
 
     clearSketch: function (itemId) {
@@ -1300,41 +1457,60 @@ const GlobalNotesHandlers = {
         if (!data) return;
 
         data.isDrawing = true;
+
+        // Capture pointer to fix choppy lines especially when moving fast or out of bounds
+        if (typeof e.target.setPointerCapture === 'function') {
+            e.target.setPointerCapture(e.pointerId);
+        }
+
         const zoom = (typeof GlobalNotesViewModel !== 'undefined') ? GlobalNotesViewModel.state.zoom : 1;
         const rect = e.target.getBoundingClientRect();
-        const x = (e.clientX - rect.left) / zoom;
-        const y = (e.clientY - rect.top) / zoom;
-        data.points = [{ x, y }];
+        const clientX = e.clientX;
+        const clientY = e.clientY;
+        const x = (clientX - rect.left) / zoom;
+        const y = (clientY - rect.top) / zoom;
+        data.points = [{ x, y }, { x, y }]; // Need 2 points to start for smoothing logic
     },
 
     drawSketch: function (e, itemId) {
         e.stopPropagation();
+        if (e.touches && typeof e.preventDefault === 'function') {
+            e.preventDefault(); // Prevent scrolling while sketching
+        }
         const data = this.sketchData[itemId];
         if (!data || !data.isDrawing) return;
 
         const zoom = (typeof GlobalNotesViewModel !== 'undefined') ? GlobalNotesViewModel.state.zoom : 1;
         const rect = e.target.getBoundingClientRect();
-        const x = (e.clientX - rect.left) / zoom;
-        const y = (e.clientY - rect.top) / zoom;
+        const clientX = e.clientX;
+        const clientY = e.clientY;
+        const x = (clientX - rect.left) / zoom;
+        const y = (clientY - rect.top) / zoom;
 
         data.points.push({ x, y });
 
-        // Draw smoothing line
-        if (data.points.length > 2) {
-            const ctx = data.ctx;
-            ctx.beginPath();
-            ctx.moveTo(data.points[data.points.length - 2].x, data.points[data.points.length - 2].y);
+        // High-quality smoothed line drawing
+        const ctx = data.ctx;
+        ctx.lineWidth = data.brushSize;
+        ctx.beginPath();
 
-            // Quadratic curve to midpoint
-            const midPoint = {
-                x: (data.points[data.points.length - 2].x + x) / 2,
-                y: (data.points[data.points.length - 2].y + y) / 2
-            };
+        // Use the midpoint of the last two movements for the smoother curve
+        const p1 = data.points[data.points.length - 2];
+        const p2 = data.points[data.points.length - 1];
 
-            ctx.quadraticCurveTo(data.points[data.points.length - 2].x, data.points[data.points.length - 2].y, midPoint.x, midPoint.y);
-            ctx.lineTo(x, y);
-            ctx.stroke();
-        }
+        const midPoint1 = {
+            x: (data.points[data.points.length - 3]?.x || p1.x + 0.1) + (p1.x - (data.points[data.points.length - 3]?.x || p1.x)) / 2,
+            y: (data.points[data.points.length - 3]?.y || p1.y + 0.1) + (p1.y - (data.points[data.points.length - 3]?.y || p1.y)) / 2
+        };
+
+        const midPoint2 = {
+            x: p1.x + (p2.x - p1.x) / 2,
+            y: p1.y + (p2.y - p1.y) / 2
+        };
+
+        ctx.moveTo(midPoint1.x, midPoint1.y);
+        ctx.quadraticCurveTo(p1.x, p1.y, midPoint2.x, midPoint2.y);
+        ctx.stroke();
     },
 
     endSketch: function (itemId, canvas) {
@@ -1342,6 +1518,14 @@ const GlobalNotesHandlers = {
         if (!data || !data.isDrawing) return;
 
         data.isDrawing = false;
+
+        // Ensure the last bit of the line is drawn
+        if (data.points.length > 0) {
+            const p = data.points[data.points.length - 1];
+            data.ctx.lineTo(p.x, p.y);
+            data.ctx.stroke();
+        }
+
         data.points = [];
 
         // Save to item data

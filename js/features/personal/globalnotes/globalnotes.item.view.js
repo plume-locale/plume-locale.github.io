@@ -28,14 +28,14 @@ const GlobalNotesItemView = {
                  data-id="${item.id}" 
                  data-type="${item.type}"
                  style="${style}"
-                 onmousedown="GlobalNotesHandlers.onItemMouseDown(event, '${item.id}')"
+                 onpointerdown="GlobalNotesHandlers.onItemMouseDown(event, '${item.id}')"
                  ondblclick="GlobalNotesHandlers.onItemDbClick(event, '${item.id}')">
                 
                 <div class="item-inner" style="${isColorItem ? 'padding: 0;' : ''}">
                     ${GlobalNotesItemView.renderItemContent(item)}
                 </div>
                 
-                ${!isInColumn ? `<div class="resizer resizer-br" onmousedown="GlobalNotesHandlers.onResizeStart(event, '${item.id}')"></div>` : ''}
+                ${!isInColumn ? `<div class="resizer resizer-br" onpointerdown="GlobalNotesHandlers.onResizeStart(event, '${item.id}')"></div>` : ''}
             </div>
         `;
     },
@@ -59,7 +59,7 @@ const GlobalNotesItemView = {
                             <i data-lucide="folder"></i>
                         </div>
                         <div class="board-name" contenteditable="true" 
-                             onmousedown="event.stopPropagation()"
+                             onpointerdown="event.stopPropagation()"
                              onblur="GlobalNotesHandlers.renameBoard('${item.id}', this.innerText, event)">
                             ${data.title || 'Untitled Board'}
                         </div>
@@ -69,7 +69,7 @@ const GlobalNotesItemView = {
                 return `
                     <div class="item-image-container">
                         ${data.url ? `<img src="${data.url}" />` : `
-                            <div class="image-placeholder" onmousedown="event.stopPropagation()">
+                            <div class="image-placeholder" onpointerdown="event.stopPropagation()">
                                 <i data-lucide="image"></i>
                                 <div class="image-placeholder-actions">
                                     <button class="btn-image-action" onclick="GlobalNotesHandlers.triggerImageUpload('${item.id}')">
@@ -89,7 +89,7 @@ const GlobalNotesItemView = {
                 `;
             case 'link':
                 return `
-                    <div class="link-item-container" onmousedown="event.stopPropagation()">
+                    <div class="link-item-container" onpointerdown="event.stopPropagation()">
                         ${data.url ? `
                             <div class="link-preview" onclick="window.open('${data.url}', '_blank')">
                                 ${data.image ? `<img src="${data.image}" class="link-image" />` : `
@@ -134,18 +134,18 @@ const GlobalNotesItemView = {
                             ${(data.items || []).map((li, idx) => `
                                 <div class="checklist-row">
                                     <div class="check-box ${li.checked ? 'checked' : ''}" 
-                                         onmousedown="event.stopPropagation()"
+                                         onpointerdown="event.stopPropagation()"
                                          onclick="GlobalNotesHandlers.toggleChecklistItem('${item.id}', ${idx})">
                                         ${li.checked ? '<i data-lucide="check"></i>' : ''}
                                     </div>
                                     <span class="checklist-text" contenteditable="true" 
-                                          onmousedown="event.stopPropagation()"
+                                          onpointerdown="event.stopPropagation()"
                                           onblur="GlobalNotesHandlers.updateChecklistItem('${item.id}', ${idx}, this.innerText)">${li.text}</span>
                                 </div>
                             `).join('')}
                         </div>
                         <button class="btn-add-list" 
-                                onmousedown="event.stopPropagation()"
+                                onpointerdown="event.stopPropagation()"
                                 onclick="GlobalNotesHandlers.addChecklistItem('${item.id}')">
                             <i data-lucide="plus"></i> Add item
                         </button>
@@ -179,7 +179,7 @@ const GlobalNotesItemView = {
                 `;
             case 'file':
                 return `
-                    <div class="item-file" onmousedown="event.stopPropagation()">
+                    <div class="item-file" onpointerdown="event.stopPropagation()">
                         ${data.url ? `
                             <div class="file-content" onclick="GlobalNotesHandlers.triggerFileUpload('${item.id}')">
                                 <div class="file-icon"><i data-lucide="file-text"></i></div>
@@ -205,7 +205,7 @@ const GlobalNotesItemView = {
                          <div class="color-content" onclick="GlobalNotesHandlers.promptColorChange('${item.id}')">
                             <div class="color-label" contenteditable="true" 
                                  style="color: ${textColor} !important;"
-                                 onmousedown="event.stopPropagation()"
+                                 onpointerdown="event.stopPropagation()"
                                  onblur="GlobalNotesViewModel.updateItemData('${item.id}', { label: this.innerText })">
                                  ${data.label || 'Primary'}
                             </div>
@@ -217,7 +217,7 @@ const GlobalNotesItemView = {
                 `;
             case 'table':
                 return `
-                <div class="item-table-container" onmousedown="event.stopPropagation()">
+                <div class="item-table-container" onpointerdown="event.stopPropagation()">
                     <div class="table-actions-top">
                         <button class="btn-table-action" title="${Localization.t('globalnotes.action.add_column')}" onclick="GlobalNotesHandlers.addTableColumn('${item.id}')">
                             <i data-lucide="plus"></i> <span>${Localization.t('globalnotes.action.add_column') || 'Add Column'}</span>
@@ -274,7 +274,7 @@ const GlobalNotesItemView = {
                     <div class="map-placeholder">
                         <i data-lucide="map"></i>
                         <div class="map-info" 
-                             onmousedown="event.stopPropagation()">
+                             onpointerdown="event.stopPropagation()">
                             <span class="map-title-label" contenteditable="true" onblur="GlobalNotesViewModel.updateItemData('${item.id}', { title: this.innerText })">${data.title || 'Location'}</span>
                             <div class="map-coords" onclick="GlobalNotesHandlers.editMapItem('${item.id}')">${data.lat || 0}, ${data.lng || 0}</div>
                         </div>
@@ -293,25 +293,36 @@ const GlobalNotesItemView = {
             `;
             case 'sketch':
                 return `
-                <div class="item-sketch" onmousedown="event.stopPropagation()">
+                <div class="item-sketch" onpointerdown="event.stopPropagation()" onpointerup="event.stopPropagation()">
                     <div class="sketch-toolbar">
                         <div class="sketch-tools">
-                            <div class="sketch-color active" style="background: #333" onmousedown="event.stopPropagation(); GlobalNotesHandlers.setSketchColor('${item.id}', '#333', this)"></div>
-                            <div class="sketch-color" style="background: #ef4444" onmousedown="event.stopPropagation(); GlobalNotesHandlers.setSketchColor('${item.id}', '#ef4444', this)"></div>
-                            <div class="sketch-color" style="background: #3b82f6" onmousedown="event.stopPropagation(); GlobalNotesHandlers.setSketchColor('${item.id}', '#3b82f6', this)"></div>
-                            <div class="sketch-color" style="background: #10b981" onmousedown="event.stopPropagation(); GlobalNotesHandlers.setSketchColor('${item.id}', '#10b981', this)"></div>
+                            <div class="sketch-color-preview" title="Open Color Palette" style="background: ${item.data.color || '#333'}" onpointerdown="GlobalNotesHandlers.openSketchColorPicker(event, '${item.id}')"></div>
+                            <div class="sketch-divider"></div>
+                            <div class="sketch-color active" style="background: #333" onpointerdown="event.stopPropagation(); GlobalNotesHandlers.setSketchColor('${item.id}', '#333', this)"></div>
+                            <div class="sketch-color" style="background: #ef4444" onpointerdown="event.stopPropagation(); GlobalNotesHandlers.setSketchColor('${item.id}', '#ef4444', this)"></div>
+                            <div class="sketch-color" style="background: #3b82f6" onpointerdown="event.stopPropagation(); GlobalNotesHandlers.setSketchColor('${item.id}', '#3b82f6', this)"></div>
+                            <div class="sketch-color" style="background: #10b981" onpointerdown="event.stopPropagation(); GlobalNotesHandlers.setSketchColor('${item.id}', '#10b981', this)"></div>
                         </div>
-                        <button class="btn-clear-sketch" onmousedown="event.stopPropagation(); GlobalNotesHandlers.clearSketch('${item.id}')">
+                        <div class="sketch-brush-container">
+                            <i data-lucide="edit-3" style="width:12px; height:12px; opacity:0.5;"></i>
+                            <input type="range" class="sketch-brush-slider" min="1" max="50" step="1" value="${item.data.brushSize || 2}" 
+                                   onpointerdown="event.stopPropagation()"
+                                   oninput="GlobalNotesHandlers.setSketchBrushSize('${item.id}', this.value)">
+                            <span class="brush-size-value">${item.data.brushSize || 2}px</span>
+                        </div>
+                        <button class="btn-clear-sketch" title="Clear Canvas" onpointerdown="event.stopPropagation(); GlobalNotesHandlers.clearSketch('${item.id}')">
                             <i data-lucide="trash-2"></i>
                         </button>
                     </div>
                     <canvas class="sketch-canvas"
-                            data-color="#333"
-                            onmousedown="GlobalNotesHandlers.startSketch(event, '${item.id}')"
-                            onmousemove="GlobalNotesHandlers.drawSketch(event, '${item.id}')"
-                            onmouseup="GlobalNotesHandlers.endSketch('${item.id}', this)"
-                            onmouseleave="GlobalNotesHandlers.endSketch('${item.id}', this)"
-                            style="width: 100%; height: 100%; display: block;"></canvas>
+                            data-color="${item.data.color || '#333'}"
+                            data-size="2"
+                            onpointerdown="GlobalNotesHandlers.startSketch(event, '${item.id}')"
+                            onpointermove="GlobalNotesHandlers.drawSketch(event, '${item.id}')"
+                            onpointerup="GlobalNotesHandlers.endSketch('${item.id}', this)"
+                            onpointercancel="GlobalNotesHandlers.endSketch('${item.id}', this)"
+                            onpointerleave="GlobalNotesHandlers.endSketch('${item.id}', this)"
+                            style="width: 100%; height: 100%; display: block; touch-action: none;"></canvas>
                 </div>
             `;
             case 'line':
