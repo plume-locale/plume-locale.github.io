@@ -279,34 +279,6 @@ window.LOCALE_FR = {
     "tools.links_title": "Liens",
     "tools.repetition_title": "Répétitions",
 
-    // --- Scene Analysis Worksheet ---
-    "scene_analysis.title": "Fiche d'Analyse de Scène",
-    "scene_analysis.section.the_big_3": "Partie \"The Big 3\"",
-    "scene_analysis.section.objective": "Partie Objectif",
-    "scene_analysis.section.progression": "Partie Déroulement",
-
-    "scene_analysis.field.pov_number": "Scène / Point de vue",
-    "scene_analysis.field.scene": "Scène",
-    "scene_analysis.field.pov": "Point de vue",
-    "scene_analysis.field.scene_number_pov": "Numéro de scène et Point de vue",
-
-    "scene_analysis.question.char": "Comment cette scène développe le personnage ?",
-    "scene_analysis.question.world": "Comment cette scène apprend à l'audience quelque chose de nouveau sur ce monde ?",
-    "scene_analysis.question.plot": "Comment cette scène fait avancer l'intrigue ?",
-
-    "scene_analysis.label.goal": "Objectif de la scène :",
-    "scene_analysis.label.subplot": "Intrigue secondaire / Présage : ",
-    "scene_analysis.label.notes": "Notes/Rappel :",
-
-    "scene_analysis.label.start": "Situation de départ :",
-    "scene_analysis.label.obstacle": "Obstacle :",
-    "scene_analysis.label.resolution": "Résolution :",
-    "scene_analysis.label.twist": "Plot-twist :",
-    "scene_analysis.label.end": "Situation Finale :",
-    "scene_analysis.label.consequence": "Trace/Conséquence :",
-
-    "scene_analysis.placeholder": "Saisir ici...",
-
     // --- Sidebar Tools ---
     "tool.versions": "Versions",
     "tool.annotations": "Annotations",
