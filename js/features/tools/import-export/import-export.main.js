@@ -25,6 +25,8 @@ function initImportExportModule() {
     window.toggleAllScenes = ImportExportViewModel.toggleAllScenes;
     window.toggleAllExportOptions = (checked) => ImportExportViewModel.toggleAllExportOptions(checked);
     window.updateExportFormatInfo = ImportExportView.updateExportFormatInfo;
+    window.openStructuredExportModal = ImportExportViewModel.openStructuredExportModal;
+    window.executeStructuredExport = ImportExportViewModel.executeStructuredExport;
 
     // Google Drive Global Bindings
     window.handleAuthClick = ImportExportViewModel.handleAuthClick;

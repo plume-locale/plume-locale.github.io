@@ -162,6 +162,48 @@
     margin-top: 0.25rem;
 }
 
+.header-preparation-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 0.6rem 1rem;
+    background: var(--bg-secondary);
+    border-radius: 8px;
+    margin: 0.5rem 0;
+    border: 1px solid var(--border-color);
+    border-left: 3px solid var(--primary-color);
+}
+
+.preparation-hint {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.btn-preparation-open {
+    padding: 0.4rem 1rem;
+    font-size: 0.8rem;
+    background: var(--bg-primary);
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.btn-preparation-open:hover {
+    background: var(--primary-color);
+    color: white;
+}
+
 .summary-container {
     display: flex;
     align-items: flex-start;
@@ -1104,8 +1146,17 @@
 }
 
 @keyframes structPanelSlide {
-    from { opacity: 0; max-height: 0; padding: 0 0.75rem; }
-    to { opacity: 1; max-height: 400px; padding: 0.75rem; }
+    from {
+        opacity: 0;
+        max-height: 0;
+        padding: 0 0.75rem;
+    }
+
+    to {
+        opacity: 1;
+        max-height: 400px;
+        padding: 0.75rem;
+    }
 }
 
 .structure-advanced-panel .advanced-panel-header {
@@ -1167,4 +1218,27 @@
 .tree-customize-btn.active {
     color: var(--accent-gold);
     background: rgba(var(--accent-gold-rgb, 212, 175, 55), 0.1);
+}
+
+/* --- FEATURED TOOLBAR TOOLS --- */
+.toolbar-group-featured {
+    background: rgba(var(--primary-color-rgb), 0.04);
+    border-radius: 8px;
+    padding: 0 4px;
+    margin: 0 4px;
+    background: linear-gradient(to right, rgba(var(--primary-color-rgb), 0.05), rgba(var(--accent-gold-rgb), 0.05));
+    border: 1px dashed rgba(var(--primary-color-rgb), 0.2);
+}
+
+.featured-btn {
+    color: var(--primary-color) !important;
+}
+
+.featured-btn:hover {
+    background: var(--primary-color) !important;
+    color: white !important;
+}
+
+.featured-btn i {
+    stroke-width: 2.5px;
 }

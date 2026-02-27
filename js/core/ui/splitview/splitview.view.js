@@ -313,10 +313,22 @@ function renderEditorInContainer(act, chapter, scene, container, panel) {
                             <div class="header-stats">
                                 <span class="split-word-count-${panel}">${Localization.t('editor.word_count', [wordCount])}</span>
                             </div>
+
                             <button class="btn-focus-toggle" onclick="toggleFocusMode()" title="${Localization.t('editor.focus_mode_title')}">
                                 <i data-lucide="maximize" style="width:14px;height:14px;"></i>
                             </button>
                         </div>
+                    </div>
+
+                    <div class="header-preparation-row">
+                        <div class="preparation-hint">
+                            <i data-lucide="info" style="width:16px;height:16px;color:var(--primary-color);"></i>
+                            <span>${Localization.t('analysis.header_hint')}</span>
+                        </div>
+                        <button class="btn-preparation-open" onclick="SceneWorksheetHandlers.openPreparationSplit(${scene.id})">
+                            <i data-lucide="clipboard-list" style="width:14px;height:14px;"></i>
+                            <span>${Localization.t('nav.scene_analysis')}</span>
+                        </button>
                     </div>
                     
                     <div class="header-summary-row">

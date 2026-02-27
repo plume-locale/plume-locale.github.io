@@ -53,6 +53,7 @@
 <link rel="stylesheet" href="./css/synonyms.css">
 <link rel="stylesheet" href="./css/map.css">
 <link rel="stylesheet" href="./css/keyboard-shortcuts.css">
+<link rel="stylesheet" href="./css/changelog.css">
 <link rel="stylesheet" href="./css/import-export-hub.css">
 <link rel="stylesheet" href="./css/stats.css">
 <link rel="stylesheet" href="./css/storygrid.css">
@@ -1366,6 +1367,14 @@
                             <i data-lucide="settings-2"></i>
                             <span data-i18n="header.interface">Interface</span>
                         </button> -->
+
+                        <!-- Changelog -->
+                        <button class="extra-menu-item"
+                            onclick="openTab('changelog', {}, { forceNew: false }); this.closest('.extra-menu-dropdown').classList.remove('open');"
+                            id="headerChangelogBtn">
+                            <i data-lucide="scroll"></i>
+                            <span data-i18n="header.changelog">Changelog</span>
+                        </button>
 
                         <div class="extra-menu-separator"></div>
 
@@ -2705,42 +2714,99 @@
                 <div class="hub-main-container">
                     <!-- VIEW: Whole Project -->
                     <div class="hub-content-view active" id="hub-view-project">
-                        <div class="hub-view-intro">
-                            <h3 data-i18n="modal.hub.project_title">Gestion Globale du Projet</h3>
-                            <p data-i18n="modal.hub.project_desc">Exportez ou importez votre projet complet au format
-                                JSON
-                                (Sauvegarde complète).</p>
-                        </div>
-
-                        <div class="hub-grid">
-                            <div class="hub-card">
-                                <h4 data-i18n="modal.hub.export_project">Exporter le projet</h4>
-                                <p class="hub-muted" data-i18n="modal.hub.export_desc">Choisissez les éléments à inclure
-                                    dans votre fichier de sauvegarde :</p>
-
-                                <div class="hub-checkbox-list" id="projectExportChecklist">
-                                    <!-- Populated by JS -->
-                                </div>
-
-                                <button class="btn btn-primary hub-action-btn"
-                                    onclick="ImportExportViewModel.executeProjectExport()">
-                                    <i data-lucide="download"></i> <span data-i18n="modal.hub.btn_export_json">Générer
-                                        le
-                                        JSON</span>
-                                </button>
+                        <div id="project-hub-initial">
+                            <div class="hub-view-intro">
+                                <h3 data-i18n="modal.hub.project_title">Gestion Globale du Projet</h3>
+                                <p data-i18n="modal.hub.project_desc">Exportez ou importez votre projet complet au
+                                    format
+                                    JSON
+                                    (Sauvegarde complète).</p>
                             </div>
 
-                            <div class="hub-card">
-                                <h4 data-i18n="modal.hub.import_project">Importer un projet</h4>
-                                <p class="hub-muted" data-i18n="modal.hub.import_desc">Sélectionnez un fichier .json
-                                    pour
-                                    restaurer un projet existant.</p>
+                            <div class="hub-grid">
+                                <div class="hub-card">
+                                    <h4 data-i18n="modal.hub.export_project">Exporter le projet</h4>
+                                    <p class="hub-muted" data-i18n="modal.hub.export_desc">Choisissez les éléments à
+                                        inclure
+                                        dans votre fichier de sauvegarde :</p>
 
-                                <div class="hub-drop-zone" onclick="ImportExportView.triggerFileInput()">
-                                    <i data-lucide="upload-cloud"></i>
-                                    <span data-i18n="modal.hub.drop_json">Cliquer ou glisser le fichier</span>
-                                    <input type="file" id="hubImportFileInput" hidden accept=".json"
-                                        onchange="ImportExportViewModel.handleHubFileImport(this)">
+                                    <div class="hub-checkbox-list" id="projectExportChecklist">
+                                        <!-- Populated by JS -->
+                                    </div>
+
+                                    <button class="btn btn-primary hub-action-btn"
+                                        onclick="ImportExportViewModel.executeProjectExport()">
+                                        <i data-lucide="download"></i> <span
+                                            data-i18n="modal.hub.btn_export_json">Générer
+                                            le
+                                            JSON</span>
+                                    </button>
+                                </div>
+
+                                <div class="hub-card highlight">
+                                    <h4 data-i18n="modal.hub.export_structured">Export structuré (ZIP)</h4>
+                                    <p class="hub-muted" data-i18n="modal.hub.export_structured_desc">Générez une
+                                        archive ZIP contenant tous vos éléments organisés dans des dossiers, parfait
+                                        pour Obsidian ou Notion.</p>
+
+                                    <button class="btn btn-primary hub-action-btn"
+                                        onclick="ImportExportViewModel.openStructuredExportModal()">
+                                        <i data-lucide="folder-archive"></i> <span
+                                            data-i18n="modal.hub.btn_export_structured">Configurer l'export
+                                            structuré</span>
+                                    </button>
+                                </div>
+
+                                <div class="hub-card">
+                                    <h4 data-i18n="modal.hub.import_project">Importer un projet</h4>
+                                    <p class="hub-muted" data-i18n="modal.hub.import_desc">Sélectionnez un fichier .json
+                                        pour
+                                        restaurer un projet existant.</p>
+
+                                    <div class="hub-drop-zone" onclick="ImportExportView.triggerFileInput()">
+                                        <i data-lucide="upload-cloud"></i>
+                                        <span data-i18n="modal.hub.drop_json">Cliquer ou glisser le fichier</span>
+                                        <input type="file" id="hubImportFileInput" hidden accept=".json"
+                                            onchange="ImportExportViewModel.handleHubFileImport(this)">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Structured ZIP Export sub-view -->
+                        <div id="project-hub-structured-export" style="display: none;">
+                            <div class="hub-export-layout">
+                                <!-- RIGHT COLUMN: Settings (Now Left) -->
+                                <div class="hub-export-column">
+                                    <h4 data-i18n="modal.hub.export_structured_settings">Paramètres d'export (ZIP)</h4>
+                                    <p class="hub-muted" style="font-size: 0.85rem; margin-bottom: 1rem;"
+                                        data-i18n="modal.hub.export_structured_settings_desc">Sélectionnez les éléments
+                                        à inclure dans l'archive.</p>
+
+                                    <div class="hub-checkbox-list" id="seExportChecklist"
+                                        style="margin-bottom: 1.5rem;">
+                                        <!-- Populated by JS -->
+                                    </div>
+
+                                    <button class="btn btn-primary hub-action-btn"
+                                        onclick="ImportExportViewModel.executeStructuredExport()">
+                                        <i data-lucide="download"></i> <span
+                                            data-i18n="modal.hub.btn_start_zip">Démarrer l'export ZIP</span>
+                                    </button>
+
+                                    <button class="btn btn-link" onclick="ImportExportView.closeStructuredExportModal()"
+                                        style="margin-top: 0.5rem; color: var(--text-muted);">
+                                        <i data-lucide="arrow-left" style="width: 14px; height: 14px;"></i>
+                                        <span data-i18n="btn.back">Retour</span>
+                                    </button>
+                                </div>
+
+                                <!-- LEFT COLUMN: Manuscript (Now Right) -->
+                                <div class="hub-export-column">
+                                    <h4 data-i18n="modal.export.manuscript_section">Manuscrit & Narration</h4>
+                                    <div class="hub-tree-container" id="seExportTreeContainer">
+                                        <!-- Populated by JS -->
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -4139,6 +4205,8 @@
 <script src="./js/features/analysis/stats/stats.viewmodel.js"></script>
 <script src="./js/features/analysis/stats/stats.view.js"></script>
 <script src="./js/features/analysis/stats/stats.main.js"></script>
+<script src="./js/features/analysis/scene-worksheet.view.js"></script>
+<script src="./js/features/analysis/scene-worksheet.handlers.js"></script>
 <script src="./js/features/tools/auto-detect/auto-detect.model.js"></script>
 <script src="./js/features/tools/auto-detect/auto-detect.repository.js"></script>
 <script src="./js/features/tools/auto-detect/auto-detect.viewmodel.js"></script>
@@ -4390,6 +4458,9 @@
 <script src="./js/features/editor/narrative-overview/narrative-overview.view.js"></script>
 <script src="./js/features/editor/narrative-overview/narrative-overview.handlers.js"></script>
 <script src="./js/features/editor/narrative-overview/narrative-overview.main.js"></script>
+<script src="./js/features/tools/changelog/changelog.data.js"></script>
+<script src="./js/features/tools/changelog/changelog.view.js"></script>
+<script src="./js/features/tools/import-export/import-export.structured-export.js"></script>
 
     </body>
 </html>

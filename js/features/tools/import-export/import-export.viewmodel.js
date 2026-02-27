@@ -377,6 +377,58 @@ const ImportExportViewModel = {
         ImportExportView.setAllOptions(checked);
     },
 
+    // --- Structured ZIP Export ---
+
+    openStructuredExportModal: function () {
+        ImportExportView.openStructuredExportModal();
+        ImportExportModel.initSelectionState(true);
+        ImportExportView.renderExportTree(window.project, ImportExportModel.selectionState);
+    },
+
+    executeStructuredExport: async function () {
+        if (!window.project) return;
+        if (typeof StructuredExport === 'undefined') {
+            alert('Module d\'export structuré non chargé.');
+            return;
+        }
+
+        const selection = {
+            frontMatter: document.getElementById('se-check-frontmatter')?.checked ?? false,
+            manuscript: document.getElementById('se-check-manuscript')?.checked ?? false,
+            analysis: document.getElementById('se-check-analysis')?.checked ?? false,
+            characters: document.getElementById('se-check-characters')?.checked ?? false,
+            world: document.getElementById('se-check-world')?.checked ?? false,
+            codex: document.getElementById('se-check-codex')?.checked ?? false,
+            timeline: document.getElementById('se-check-timeline')?.checked ?? false,
+            notes: document.getElementById('se-check-notes')?.checked ?? false,
+            relations: document.getElementById('se-check-relations')?.checked ?? false,
+            arcs: document.getElementById('se-check-arcs')?.checked ?? false,
+            plotgrid: document.getElementById('se-check-plotgrid')?.checked ?? false,
+            investigation: document.getElementById('se-check-investigation')?.checked ?? false,
+            mindmaps: document.getElementById('se-check-mindmaps')?.checked ?? false,
+            globalnotes: document.getElementById('se-check-globalnotes')?.checked ?? false,
+            map: document.getElementById('se-check-map')?.checked ?? false,
+        };
+
+        const btn = document.getElementById('seExportBtn');
+        if (btn) { btn.disabled = true; btn.textContent = 'Export en cours…'; }
+
+        try {
+            const filename = await StructuredExport.buildZIP(
+                window.project,
+                selection,
+                ImportExportModel.selectionState
+            );
+            ImportExportView.closeStructuredExportModal();
+            ImportExportView.showNotification(`📦 Export structuré téléchargé : ${filename}`);
+        } catch (e) {
+            console.error(e);
+            alert('Erreur lors de l\'export : ' + e.message);
+        } finally {
+            if (btn) { btn.disabled = false; btn.textContent = 'Exporter le ZIP'; }
+        }
+    },
+
     executeNovelExport: async function () {
         const options = ImportExportView.getOptions();
         const format = options.format; // docx, markdown, txt, html, epub

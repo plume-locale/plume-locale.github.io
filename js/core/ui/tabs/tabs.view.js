@@ -23,6 +23,11 @@ function renderTabs() {
     }
 
     if (typeof lucide !== 'undefined') lucide.createIcons();
+
+    // Toujours mettre à jour le bouton de toggle split dans le header
+    if (typeof updateSplitToggleButton === 'function') {
+        updateSplitToggleButton();
+    }
 }
 
 /** [MVVM : View] - Génère le HTML du bouton preset dans la barre d'onglets */

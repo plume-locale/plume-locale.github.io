@@ -1745,19 +1745,19 @@ function getEditorToolbarHTML(panel = null, hideExtraTools = false) {
             </button>
         </div>
 
-        <!-- Other -->
+        <!-- Other formatting -->
         <div class="toolbar-group">
             <button class="toolbar-btn" onmousedown="event.preventDefault()" onclick="${fnName}(${fnPrefix}'insertHorizontalRule')" title="${Localization.t('toolbar.horizontal_rule')}"><i data-lucide="minus" style="width:14px;height:14px;"></i></button>
             <button class="toolbar-btn" onmousedown="event.preventDefault()" onclick="${fnName}(${fnPrefix}'removeFormat')" title="${Localization.t('toolbar.remove_format')}"><i data-lucide="eraser" style="width:14px;height:14px;"></i></button>
-            <button class="toolbar-btn" id="toolStructureBlockBtn" onmousedown="event.preventDefault()" onclick="StructureBlockUI.wrapSelection()" title="${Localization.t('toolbar.structure_block')}">
-                <i data-lucide="layers" style="width:14px;height:14px;"></i>
-            </button>
         </div>
 
-        <!-- Narrative Overview Toggle -->
-        <div class="toolbar-group" id="toolNarrativeOverviewBtn">
-            <button class="toolbar-btn" onmousedown="event.preventDefault()" onclick="NarrativeOverviewMain.toggleVisibility()" title="Aperçu narratif chronologique">
-                <i data-lucide="book-open" style="width:14px;height:14px;"></i>
+        <!-- Special Tools Group (Highlighted) -->
+        <div class="toolbar-group toolbar-group-featured">
+            <button class="toolbar-btn featured-btn" id="toolStructureBlockBtn" onmousedown="event.preventDefault()" onclick="StructureBlockUI.wrapSelection()" title="${Localization.t('toolbar.structure_block')}">
+                <i data-lucide="layers" style="width:16px;height:16px;"></i>
+            </button>
+            <button class="toolbar-btn featured-btn" id="toolNarrativeOverviewBtn" onmousedown="event.preventDefault()" onclick="NarrativeOverviewMain.toggleVisibility()" title="Aperçu narratif chronologique">
+                <i data-lucide="book-open" style="width:16px;height:16px;"></i>
             </button>
         </div>
 
@@ -1808,10 +1808,22 @@ function renderEditor(act, chapter, scene) {
                         <div class="header-stats">
                             <span id="sceneWordCount">${Localization.t('editor.word_count', [wordCount])}</span>
                         </div>
+
                         <button class="btn-focus-toggle" onclick="toggleFocusMode()" title="${Localization.t('editor.focus_mode_title')}">
                             <i data-lucide="maximize" style="width:14px;height:14px;"></i>
                         </button>
                     </div>
+                </div>
+
+                <div class="header-preparation-row">
+                    <div class="preparation-hint">
+                        <i data-lucide="info" style="width:16px;height:16px;color:var(--primary-color);"></i>
+                        <span>${Localization.t('analysis.header_hint')}</span>
+                    </div>
+                    <button class="btn-preparation-open" onclick="SceneWorksheetHandlers.openPreparationSplit(${scene.id})">
+                        <i data-lucide="clipboard-list" style="width:14px;height:14px;"></i>
+                        <span>${Localization.t('nav.scene_analysis')}</span>
+                    </button>
                 </div>
                 
                 <div class="header-summary-row">

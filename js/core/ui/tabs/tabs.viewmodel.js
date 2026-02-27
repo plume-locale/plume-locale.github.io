@@ -26,6 +26,11 @@ function initTabsSystem() {
 
 /** [MVVM : ViewModel] - Ouvre un nouvel onglet ou active l'existant */
 function openTab(view, params = {}, options = {}) {
+    // Synchronisation automatique des onglets d'analyse quand on change de scène dans l'éditeur
+    if (view === 'editor' && params.sceneId) {
+        syncAnalysisTabsWithScene(params.sceneId);
+    }
+
     // Si options est une chaîne, c'est l'ancien paneId
     if (typeof options === 'string') options = { paneId: options };
 
@@ -176,6 +181,7 @@ function generateTabId(view, params) {
     if (view === 'world' && params.worldId) return `world-${params.worldId}`;
     if (view === 'notes' && params.noteId) return `note-${params.noteId}`;
     if (view === 'codex' && params.codexId) return `codex-${params.codexId}`;
+    if (view === 'scene_analysis' && params.sceneId) return `scene-analysis-${params.sceneId}`;
 
     // Pour les vues globales sans ID spécifique
     return `view-${view}`;
@@ -209,8 +215,11 @@ function getTabTitle(view, params) {
         return elem ? elem.name : Localization.t('nav.world');
     }
     if (view === 'notes' && params.noteId) {
-        const note = project.notes.find(n => n.id === params.noteId);
         return note ? note.title : Localization.t('nav.notes');
+    }
+    if (view === 'scene_analysis' && params.sceneId) {
+        const scene = findSceneById(params.sceneId);
+        return scene ? Localization.t('analysis.side_tab_title', [scene.title]) : Localization.t('nav.scene_analysis');
     }
 
     return viewLabels[view] || view;
@@ -366,4 +375,33 @@ function findSceneById(sceneId) {
         }
     }
     return null;
+}
+
+/** [MVVM : ViewModel] - Synchronise les onglets d'analyse avec une scène */
+function syncAnalysisTabsWithScene(sceneId) {
+    let changed = false;
+    Object.keys(tabsState.panes).forEach(paneId => {
+        const pane = tabsState.panes[paneId];
+        pane.tabs.forEach((tab, index) => {
+            if (tab.view === 'scene_analysis') {
+                const oldId = tab.id;
+                tab.params.sceneId = sceneId;
+                const newId = generateTabId(tab.view, tab.params);
+
+                if (oldId !== newId) {
+                    tab.id = newId;
+                    tab.title = getTabTitle(tab.view, tab.params);
+                    if (pane.activeTabId === oldId) {
+                        pane.activeTabId = newId;
+                    }
+                    changed = true;
+                }
+            }
+        });
+    });
+
+    if (changed) {
+        // Force refresh only if something changed
+        if (typeof renderTabs === 'function') renderTabs();
+    }
 }

@@ -48,7 +48,13 @@ const ImportExportView = {
         if (activeView) activeView.classList.add('active');
 
         // Refresh specific view logic
-        if (tabId === 'project') this.renderProjectExportChecklist();
+        if (tabId === 'project') {
+            this.renderProjectExportChecklist();
+            const initial = document.getElementById('project-hub-initial');
+            const structured = document.getElementById('project-hub-structured-export');
+            if (initial) initial.style.display = 'block';
+            if (structured) structured.style.display = 'none';
+        }
         if (tabId === 'manuscript') {
             const initial = document.getElementById('manuscript-hub-initial');
             const exportView = document.getElementById('manuscript-hub-export');
@@ -119,7 +125,14 @@ const ImportExportView = {
     },
 
     renderExportTree: function (project, selectionState) {
-        const container = document.getElementById('hubExportTreeContainer') || document.getElementById('exportTreeContainer');
+        let container = null;
+        const structuredView = document.getElementById('project-hub-structured-export');
+        if (structuredView && structuredView.style.display === 'block') {
+            container = document.getElementById('seExportTreeContainer');
+        } else {
+            container = document.getElementById('hubExportTreeContainer') || document.getElementById('exportTreeContainer');
+        }
+
         if (!container) return;
 
         if (!project.acts || project.acts.length === 0) {
@@ -343,5 +356,76 @@ const ImportExportView = {
     closeModal: function (modalId) {
         const el = document.getElementById(modalId);
         if (el) el.classList.remove('active');
+    },
+
+    /**
+     * Populate the section checklist for ZIP export.
+     */
+    renderStructuredExportChecklist: function () {
+        const container = document.getElementById('seExportChecklist');
+        if (!container) return;
+
+        const sections = [
+            { id: 'se-check-frontmatter', icon: 'book-marked', label: Localization.t('modal.export.front_matter') || 'Liminaires & annexes' },
+            { id: 'se-check-manuscript', icon: 'book-open', label: Localization.t('modal.export.manuscript') || 'Manuscrit (scènes + versions)' },
+            { id: 'se-check-analysis', icon: 'clipboard-list', label: Localization.t('nav.scene_analysis') || 'Préparation de scène' },
+            { id: 'se-check-characters', icon: 'users', label: Localization.t('nav.characters') || 'Personnages' },
+            { id: 'se-check-world', icon: 'globe', label: Localization.t('nav.world') || 'Univers' },
+            { id: 'se-check-codex', icon: 'library', label: Localization.t('nav.codex') || 'Codex' },
+            { id: 'se-check-timeline', icon: 'calendar-days', label: Localization.t('nav.timeline') || 'Frise chronologique' },
+            { id: 'se-check-notes', icon: 'sticky-note', label: Localization.t('nav.notes') || 'Notes' },
+            { id: 'se-check-relations', icon: 'network', label: Localization.t('nav.relations') || 'Relations' },
+            { id: 'se-check-arcs', icon: 'waypoints', label: Localization.t('nav.arcs') || 'Arcs narratifs' },
+            { id: 'se-check-plotgrid', icon: 'grid-3x3', label: Localization.t('nav.plotgrid') || 'Grille narrative' },
+            { id: 'se-check-investigation', icon: 'search', label: Localization.t('nav.investigation') || 'Tableau d\'enquête' },
+            { id: 'se-check-mindmaps', icon: 'brain-circuit', label: Localization.t('nav.mindmap') || 'Cartes mentales (.json)' },
+            { id: 'se-check-globalnotes', icon: 'layout-panel-left', label: Localization.t('nav.globalnotes') || 'Notes globales (.json)' },
+            { id: 'se-check-map', icon: 'map', label: Localization.t('nav.map') || 'Carte du monde (.png + points)' },
+        ];
+
+        container.innerHTML = sections.map(s => `
+            <label class="hub-checkbox-item">
+                <input type="checkbox" id="${s.id}" ${s.checked ? 'checked' : ''}>
+                <i data-lucide="${s.icon}" style="width:16px;height:16px;color:var(--accent-gold);"></i>
+                <span>${s.label}</span>
+            </label>
+        `).join('');
+
+        if (window.lucide) window.lucide.createIcons();
+
+        // Handle manuscript toggle visibility (visible if either manuscript or analysis is checked)
+        const checkM = document.getElementById('se-check-manuscript');
+        const checkA = document.getElementById('se-check-analysis');
+        const tree = document.getElementById('seExportTreeContainer')?.parentElement;
+
+        const updateTreeVisibility = () => {
+            if (tree && (checkM || checkA)) {
+                tree.style.display = (checkM?.checked || checkA?.checked) ? '' : 'none';
+            }
+        };
+
+        if (checkM) checkM.addEventListener('change', updateTreeVisibility);
+        if (checkA) checkA.addEventListener('change', updateTreeVisibility);
+        updateTreeVisibility();
+    },
+
+    openStructuredExportModal: function () {
+        const initial = document.getElementById('project-hub-initial');
+        const structured = document.getElementById('project-hub-structured-export');
+        if (initial && structured) {
+            initial.style.display = 'none';
+            structured.style.display = 'block';
+            this.renderStructuredExportChecklist();
+        }
+    },
+
+    closeStructuredExportModal: function () {
+        const initial = document.getElementById('project-hub-initial');
+        const structured = document.getElementById('project-hub-structured-export');
+        if (initial && structured) {
+            initial.style.display = 'block';
+            structured.style.display = 'none';
+        }
     }
 };
+

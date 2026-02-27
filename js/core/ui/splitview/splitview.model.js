@@ -21,7 +21,8 @@ const viewLabels = {
     get timelineviz() { return Localization.t('nav.timeline'); },
     get investigation() { return Localization.t('nav.investigation'); },
     get globalnotes() { return Localization.t('nav.globalnotes'); },
-    get front_matter() { return Localization.t('nav.front_matter'); }
+    get front_matter() { return Localization.t('nav.front_matter'); },
+    get changelog() { return Localization.t('nav.changelog') || 'Changelog'; }
 };
 
 const viewIcons = {
@@ -43,5 +44,6 @@ const viewIcons = {
     'timelineviz': 'clock',
     'investigation': 'search',
     'globalnotes': 'layout',
-    'front_matter': 'book-open-check'
+    'front_matter': 'book-open-check',
+    'changelog': 'scroll'
 };

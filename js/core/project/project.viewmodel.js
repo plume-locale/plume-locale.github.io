@@ -185,7 +185,14 @@ const ProjectViewModel = {
                             content: `<i>Note de template : ${chapTemplate.description || ""}</i><br><br>`,
                             status: 'draft',
                             createdAt: new Date().toISOString(),
-                            updatedAt: new Date().toISOString()
+                            updatedAt: new Date().toISOString(),
+                            analysis: {
+                                pov: "",
+                                sceneNumber: "",
+                                big3: { char: "", world: "", plot: "" },
+                                objective: { goal: "", subplot: "", notes: "" },
+                                progression: { start: "", obstacle: "", resolution: "", twist: "", end: "", consequence: "" }
+                            }
                         }
                     ]
                 }))

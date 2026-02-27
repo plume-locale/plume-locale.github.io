@@ -337,6 +337,10 @@ function renderViewInSplitPanel(view, container, state, panel) {
             }
             break;
 
+        case 'changelog':
+            ChangelogView.renderInContainer(tempContainer);
+            break;
+
         case 'projects':
             if (typeof ProjectView !== 'undefined' && typeof ProjectView.renderLandingPage === 'function') {
                 ProjectView.renderLandingPage(projects);
@@ -354,6 +358,11 @@ function renderViewInSplitPanel(view, container, state, panel) {
 
         case 'investigation':
             if (typeof renderInvestigationBoard === 'function') renderInvestigationBoard();
+            break;
+        case 'scene_analysis':
+            if (typeof SceneWorksheetView !== 'undefined' && typeof SceneWorksheetView.render === 'function') {
+                SceneWorksheetView.render(tempContainer.id, state);
+            }
             break;
 
         default:
