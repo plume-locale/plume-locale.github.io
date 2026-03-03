@@ -305,6 +305,65 @@ function updateInventoryItemViewModel(id, listType, index, field, value) {
     };
 }
 
+function addInventoryEventViewModel(charId, itemIndex) {
+    const char = CharacterRepository.getById(charId);
+    if (!char || !char.inventory || !char.inventory[itemIndex]) return { success: false };
+
+    const item = char.inventory[itemIndex];
+    if (!item.history) item.history = [];
+
+    item.history.push({
+        id: Date.now().toString(),
+        action: '',
+        sceneId: null,
+        description: '',
+        createdAt: Date.now()
+    });
+
+    const updatedChar = CharacterRepository.update(charId, { inventory: char.inventory });
+    return {
+        success: !!updatedChar,
+        data: updatedChar,
+        sideEffects: { shouldSave: true, shouldRefreshInventory: 'inventory' }
+    };
+}
+
+function removeInventoryEventViewModel(charId, itemIndex, eventId) {
+    const char = CharacterRepository.getById(charId);
+    if (!char || !char.inventory || !char.inventory[itemIndex]) return { success: false };
+
+    const item = char.inventory[itemIndex];
+    if (item.history) {
+        item.history = item.history.filter(e => e.id !== eventId);
+    }
+
+    const updatedChar = CharacterRepository.update(charId, { inventory: char.inventory });
+    return {
+        success: !!updatedChar,
+        data: updatedChar,
+        sideEffects: { shouldSave: true, shouldRefreshInventory: 'inventory' }
+    };
+}
+
+function updateInventoryEventViewModel(charId, itemIndex, eventId, updates) {
+    const char = CharacterRepository.getById(charId);
+    if (!char || !char.inventory || !char.inventory[itemIndex]) return { success: false };
+
+    const item = char.inventory[itemIndex];
+    const event = (item.history || []).find(e => e.id === eventId);
+    if (!event) return { success: false };
+
+    Object.assign(event, updates);
+    event.updatedAt = Date.now();
+
+    const updatedChar = CharacterRepository.update(charId, { inventory: char.inventory });
+    return {
+        success: !!updatedChar,
+        data: updatedChar,
+        sideEffects: { shouldSave: true }
+    };
+}
+
 /**
  * Mise à jour des stats de personnalité.
  */
@@ -343,4 +402,67 @@ function updateAvatarViewModel(id, choice) {
 
     CharacterRepository.update(id, updates);
     return { success: true, sideEffects: { shouldSave: true } };
+}
+
+/**
+ * Gestion de l'évolution (Timeline)
+ */
+
+function addEvolutionStageViewModel(charId, period) {
+    const char = CharacterRepository.getById(charId);
+    if (!char) return { success: false };
+
+    if (!char.evolution) char.evolution = { past: [], present: [], future: [] };
+    if (!char.evolution[period]) char.evolution[period] = [];
+
+    const newStage = {
+        id: Date.now().toString(),
+        sceneId: null,
+        text: '',
+        createdAt: Date.now()
+    };
+
+    char.evolution[period].push(newStage);
+
+    const updatedChar = CharacterRepository.update(charId, { evolution: char.evolution });
+
+    return {
+        success: !!updatedChar,
+        data: updatedChar,
+        sideEffects: { shouldSave: true, shouldRefreshEvolution: true }
+    };
+}
+
+function removeEvolutionStageViewModel(charId, period, stageId) {
+    const char = CharacterRepository.getById(charId);
+    if (!char || !char.evolution || !char.evolution[period]) return { success: false };
+
+    char.evolution[period] = char.evolution[period].filter(s => s.id !== stageId);
+
+    const updatedChar = CharacterRepository.update(charId, { evolution: char.evolution });
+
+    return {
+        success: !!updatedChar,
+        data: updatedChar,
+        sideEffects: { shouldSave: true, shouldRefreshEvolution: true }
+    };
+}
+
+function updateEvolutionStageViewModel(charId, period, stageId, updates) {
+    const char = CharacterRepository.getById(charId);
+    if (!char || !char.evolution || !char.evolution[period]) return { success: false };
+
+    const stage = char.evolution[period].find(s => s.id === stageId);
+    if (!stage) return { success: false };
+
+    Object.assign(stage, updates);
+    stage.updatedAt = Date.now();
+
+    const updatedChar = CharacterRepository.update(charId, { evolution: char.evolution });
+
+    return {
+        success: !!updatedChar,
+        data: updatedChar,
+        sideEffects: { shouldSave: true, shouldRefreshEvolution: true }
+    };
 }

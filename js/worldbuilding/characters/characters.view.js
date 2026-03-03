@@ -174,13 +174,20 @@ function openCharacterDetail(id, options = {}) {
     }
 }
 
+function getPluralSuffix(count) {
+    if (count <= 1) return '';
+    const locale = Localization.getLocale();
+    if (locale === 'de') return 'n'; // Szene -> Szenen
+    return 's'; // Default (fr, en, es)
+}
+
 /**
  * [MVVM : View]
  * Template de la fiche personnage complet (Fidèle à l'original).
  */
 function renderCharacterSheet(character, racesList, groupsList, linkedScenes) {
     const metaInfo = [];
-    if (character.age) metaInfo.push(`${character.age}${character.birthPlace ? ', né à ' + character.birthPlace : ''}`);
+    if (character.age) metaInfo.push(`${character.age}${character.birthPlace ? `, ${Localization.t('char.meta.born_at')} ` + character.birthPlace : ''}`);
     if (character.residence) metaInfo.push(character.residence);
 
     const raceOptions = (racesList || []).map(r =>
@@ -328,46 +335,46 @@ function renderCharacterSheet(character, racesList, groupsList, linkedScenes) {
                     </div>
                 </div>
             </div>
-            
+
             <!-- Physique -->
             <div class="character-section" id="section-physique">
                 <div class="character-section-header" onclick="toggleCharacterSection('physique')">
                     <div class="character-section-title">${Localization.t('char.section.physical')}</div>
-                        <span class="character-section-toggle"><i data-lucide="chevron-down" style="width:18px;height:18px;"></i></span>
-                    </div>
+                    <span class="character-section-toggle"><i data-lucide="chevron-down" style="width:18px;height:18px;"></i></span>
+                </div>
                 <div class="character-section-content">
                     <div class="character-field-row">
                         <div class="character-field">
                             <label class="character-field-label">${Localization.t('char.field.height')}</label>
-                            <input type="text" value="${character.height || ''}" placeholder="cm"
-                                   onchange="updateCharacterField('${character.id}', 'height', this.value)">
+                            <input type="number" id="charHeight" value="${character.height || ''}" placeholder="${Localization.t('char.field.unit_cm')}"
+                                    onchange="updateCharacterField('${character.id}', 'height', this.value)">
                         </div>
                         <div class="character-field">
                             <label class="character-field-label">${Localization.t('char.field.weight')}</label>
-                            <input type="text" value="${character.weight || ''}" placeholder="kg"
-                                   onchange="updateCharacterField('${character.id}', 'weight', this.value)">
+                            <input type="number" id="charWeight" value="${character.weight || ''}" placeholder="${Localization.t('char.field.unit_kg')}"
+                                    onchange="updateCharacterField('${character.id}', 'weight', this.value)">
                         </div>
                         <div class="character-field">
                             <label class="character-field-label">${Localization.t('char.field.body_type')}</label>
                             <input type="text" value="${character.bodyType || ''}" 
-                                   onchange="updateCharacterField('${character.id}', 'bodyType', this.value)">
+                                    onchange="updateCharacterField('${character.id}', 'bodyType', this.value)">
                         </div>
                     </div>
                     <div class="character-field-row">
                         <div class="character-field">
                             <label class="character-field-label">${Localization.t('char.field.hair_color')}</label>
                             <input type="text" value="${character.hairColor || ''}" 
-                                   onchange="updateCharacterField('${character.id}', 'hairColor', this.value)">
+                                    onchange="updateCharacterField('${character.id}', 'hairColor', this.value)">
                         </div>
                         <div class="character-field">
                             <label class="character-field-label">${Localization.t('char.field.eye_color')}</label>
                             <input type="text" value="${character.eyeColor || ''}" 
-                                   onchange="updateCharacterField('${character.id}', 'eyeColor', this.value)">
+                                    onchange="updateCharacterField('${character.id}', 'eyeColor', this.value)">
                         </div>
                         <div class="character-field">
                             <label class="character-field-label">${Localization.t('char.field.voice')}</label>
                             <input type="text" value="${character.voice || ''}" 
-                                   onchange="updateCharacterField('${character.id}', 'voice', this.value)">
+                                    onchange="updateCharacterField('${character.id}', 'voice', this.value)">
                         </div>
                     </div>
                     <div class="character-field-row">
@@ -387,97 +394,10 @@ function renderCharacterSheet(character, racesList, groupsList, linkedScenes) {
                 </div>
             </div>
 
-            <!-- Radar Chart -->
-            <div class="character-section" id="section-radar">
-                <div class="character-section-header">
-                    <div class="character-section-title">${Localization.t('char.section.stats')}</div>
-                </div>
-                <div class="character-section-content" style="display: flex; flex-direction: column; align-items: center;">
-                    <canvas id="radarChart-${character.id}" width="300" height="300"></canvas>
-                    <div class="radar-controls">
-                        ${Object.entries(character.personality).map(([stat, val]) => `
-                            <div class="radar-control-item" style="display: flex; align-items: center; gap: 10px; width: 100%; margin-bottom: 5px;">
-                                <label style="flex: 1; font-size: 0.8rem;">${Localization.t('char.stats.' + stat)}</label>
-                                <input type="range" min="0" max="20" value="${val}" style="flex: 2;" onchange="updatePersonalityStat('${character.id}', '${stat}', this.value)">
-                                <span class="radar-value" style="width: 25px; text-align: right; font-weight: bold;">${val}</span>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Évolution - Full width -->
-            <div class="character-section full-width" id="section-evolution">
-                <div class="character-section-header" onclick="toggleCharacterSection('evolution')">
-                    <div class="character-section-title">${Localization.t('char.section.evolution')}</div>
-                    <span class="character-section-toggle"><i data-lucide="chevron-down" style="width:18px;height:18px;"></i></span>
-                </div>
-                <div class="character-section-content">
-                    <div class="character-field">
-                        <label class="character-field-label">${Localization.t('char.field.goals')}</label>
-                        <textarea rows="3" onchange="updateCharacterField('${character.id}', 'goals', this.value)">${character.goals || ''}</textarea>
-                    </div>
-                        
-                    <div class="character-timeline">
-                        <div class="timeline-card">
-                            <div class="timeline-card-title">${Localization.t('char.field.past')}</div>
-                            <textarea placeholder="${Localization.t('char.field.past')}..." onchange="updateCharacterField('${character.id}', 'past', this.value)">${character.past || ''}</textarea>
-                        </div>
-                        <div class="timeline-card">
-                            <div class="timeline-card-title">${Localization.t('char.field.present')}</div>
-                            <textarea placeholder="${Localization.t('char.field.present')}..." onchange="updateCharacterField('${character.id}', 'present', this.value)">${character.present || ''}</textarea>
-                        </div>
-                        <div class="timeline-card">
-                            <div class="timeline-card-title">${Localization.t('char.field.future')}</div>
-                            <textarea placeholder="${Localization.t('char.field.future')}..." onchange="updateCharacterField('${character.id}', 'future', this.value)">${character.future || ''}</textarea>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-
-            <!-- Caractère - Full width -->
-            <div class="character-section full-width" id="section-caractere">
-                <div class="character-section-header" onclick="toggleCharacterSection('caractere')">
-                    <div class="character-section-title">${Localization.t('char.section.traits')}</div>
-                    <span class="character-section-toggle"><i data-lucide="chevron-down" style="width:18px;height:18px;"></i></span>
-                </div>
-                <div class="character-section-content">
-                    <!-- Traits sélectionnés -->
-                    <div class="character-field">
-                        <label class="character-field-label">${Localization.t('char.field.traits_selected')}</label>
-                        <div class="selected-traits-container" id="selectedTraits-${character.id}">
-                            ${(character.traits || []).map((t, i) => `
-                                <span class="selected-trait">${t}<span class="trait-remove" data-trait="${String(t).replace(/"/g, '&quot;')}" data-char-id="${character.id}" onclick="removeCharacterTrait(this.dataset.charId, this.dataset.trait)"><i data-lucide="x" style="width:10px;height:10px;"></i></span></span>
-                            `).join('') || `<span class="no-traits">${Localization.t('char.field.traits_hint')}</span>`}
-                        </div>
-                    </div>
-                    
-                    <!-- Catégories de traits -->
-                    <div class="traits-categories">
-                        ${renderTraitsCategories(character.id, character.traits || [])}
-                    </div>
-                    
-                    <div class="character-field" style="margin-top: 1rem;">
-                        <label class="character-field-label">${Localization.t('char.field.tastes')}</label>
-                        <textarea rows="2" onchange="updateCharacterField('${character.id}', 'tastes', this.value)">${character.tastes || ''}</textarea>
-                    </div>
-                    <div class="character-field">
-                        <label class="character-field-label">${Localization.t('char.field.habits')}</label>
-                        <textarea rows="2" onchange="updateCharacterField('${character.id}', 'habits', this.value)">${character.habits || ''}</textarea>
-                    </div>
-                    <div class="character-field">
-                        <label class="character-field-label">${Localization.t('char.field.fears')}</label>
-                        <textarea rows="2" onchange="updateCharacterField('${character.id}', 'fears', this.value)">${character.fears || ''}</textarea>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Profil -->
-            <div class="character-section" id="section-profil">
-                <div class="character-section-header" onclick="toggleCharacterSection('profil')">
-                    <div class="character-section-title">${Localization.t('char.section.profile')}</div>
+            <!-- Moteur Dramatique & Psychologie -->
+            <div class="character-section" id="section-profil-psy">
+                <div class="character-section-header" onclick="toggleCharacterSection('profil-psy')">
+                    <div class="character-section-title">${Localization.t('char.section.profile_psychology')}</div>
                     <span class="character-section-toggle"><i data-lucide="chevron-down" style="width:18px;height:18px;"></i></span>
                 </div>
                 <div class="character-section-content">
@@ -493,16 +413,61 @@ function renderCharacterSheet(character, racesList, groupsList, linkedScenes) {
                         <label class="character-field-label">${Localization.t('char.field.beliefs')}</label>
                         <textarea rows="2" onchange="updateCharacterField('${character.id}', 'beliefs', this.value)">${character.beliefs || ''}</textarea>
                     </div>
-                    <div class="character-field-row">
-                        <div class="character-field">
-                            <label class="character-field-label">${Localization.t('char.field.places')}</label>
-                            <input type="text" value="${character.importantPlaces || ''}" 
-                                   onchange="updateCharacterField('${character.id}', 'importantPlaces', this.value)">
-                        </div>
-                        <div class="character-field">
-                            <label class="character-field-label">${Localization.t('char.field.phrases')}</label>
-                            <textarea rows="3" onchange="updateCharacterField('${character.id}', 'catchphrases', this.value)">${character.catchphrases || ''}</textarea>
-                        </div>
+                    <div class="character-field">
+                        <label class="character-field-label">${Localization.t('char.field.places')}</label>
+                        <textarea rows="3" onchange="updateCharacterField('${character.id}', 'importantPlaces', this.value)">${character.importantPlaces || ''}</textarea>
+                    </div>
+                    <div class="character-field">
+                        <label class="character-field-label">${Localization.t('char.field.phrases')}</label>
+                        <textarea rows="3" onchange="updateCharacterField('${character.id}', 'catchphrases', this.value)">${character.catchphrases || ''}</textarea>
+                    </div>
+                    <div class="character-field">
+                        <label class="character-field-label">${Localization.t('char.field.tastes')}</label>
+                        <textarea rows="2" onchange="updateCharacterField('${character.id}', 'tastes', this.value)">${character.tastes || ''}</textarea>
+                    </div>
+                    <div class="character-field">
+                        <label class="character-field-label">${Localization.t('char.field.habits')}</label>
+                        <textarea rows="2" onchange="updateCharacterField('${character.id}', 'habits', this.value)">${character.habits || ''}</textarea>
+                    </div>
+                    <div class="character-field">
+                        <label class="character-field-label">${Localization.t('char.field.fears')}</label>
+                        <textarea rows="2" onchange="updateCharacterField('${character.id}', 'fears', this.value)">${character.fears || ''}</textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Radar Chart (Personality Graph) -->
+            <div class="character-section" id="section-radar">
+                <div class="character-section-header" onclick="toggleCharacterSection('radar')">
+                    <div class="character-section-title">${Localization.t('char.section.stats')}</div>
+                    <span class="character-section-toggle"><i data-lucide="chevron-down" style="width:18px;height:18px;"></i></span>
+                </div>
+                <div class="character-section-content" style="display: flex; flex-direction: column; align-items: center;">
+                    <canvas id="radarChart-${character.id}" width="280" height="280"></canvas>
+                    <div class="radar-controls" style="width: 100%; margin-top: 15px;">
+                        ${Object.entries(character.personality).map(([stat, val]) => `
+                            <div class="radar-control-item" data-stat="${stat}" style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                                <label style="flex: 1; font-size: 0.75rem;">${Localization.t('char.stats.' + stat)}</label>
+                                <input type="range" min="0" max="20" value="${val}" style="flex: 2;" 
+                                    oninput="this.parentElement.querySelector('.radar-value').textContent = this.value"
+                                    onchange="updatePersonalityStat('${character.id}', '${stat}', this.value)">
+                                <span class="radar-value" style="width: 20px; text-align: right; font-weight: bold; font-size: 0.8rem;">${val}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Autres -->
+            <div class="character-section" id="section-autres">
+                <div class="character-section-header" onclick="toggleCharacterSection('autres')">
+                    <div class="character-section-title">${Localization.t('char.section.others')}</div>
+                    <span class="character-section-toggle"><i data-lucide="chevron-down" style="width:18px;height:18px;"></i></span>
+                </div>
+                <div class="character-section-content">
+                    <div class="character-field">
+                        <textarea rows="5" placeholder="${Localization.t('char.field.notes_placeholder')}" 
+                                  onchange="updateCharacterField('${character.id}', 'notes', this.value)">${character.notes || ''}</textarea>
                     </div>
                 </div>
             </div>
@@ -522,21 +487,45 @@ function renderCharacterSheet(character, racesList, groupsList, linkedScenes) {
                     </button>
                 </div>
             </div>
-            
-            <!-- Autres -->
-            <div class="character-section" id="section-autres">
-                <div class="character-section-header" onclick="toggleCharacterSection('autres')">
-                    <div class="character-section-title">${Localization.t('char.section.others')}</div>
+
+            <!-- Évolution Timeline -->
+            <div class="character-section full-width" id="section-evolution">
+                <div class="character-section-header" onclick="toggleCharacterSection('evolution')">
+                    <div class="character-section-title">${Localization.t('char.section.evolution')}</div>
                     <span class="character-section-toggle"><i data-lucide="chevron-down" style="width:18px;height:18px;"></i></span>
                 </div>
                 <div class="character-section-content">
                     <div class="character-field">
-                        <textarea rows="5" placeholder="${Localization.t('char.field.notes_placeholder')}" 
-                                  onchange="updateCharacterField('${character.id}', 'notes', this.value)">${character.notes || ''}</textarea>
+                        <label class="character-field-label">${Localization.t('char.field.goals')}</label>
+                        <textarea rows="3" onchange="updateCharacterField('${character.id}', 'goals', this.value)">${character.goals || ''}</textarea>
+                    </div>
+                    <div class="character-evolution-timeline" id="evolutionTimeline-${character.id}">
+                        ${renderEvolutionTimeline(character)}
                     </div>
                 </div>
             </div>
             
+            <!-- Traits de Caractère -->
+            <div class="character-section full-width" id="section-caractere">
+                <div class="character-section-header" onclick="toggleCharacterSection('caractere')">
+                    <div class="character-section-title">${Localization.t('char.section.traits')}</div>
+                    <span class="character-section-toggle"><i data-lucide="chevron-down" style="width:18px;height:18px;"></i></span>
+                </div>
+                <div class="character-section-content">
+                    <div class="character-field">
+                        <label class="character-field-label">${Localization.t('char.field.traits_selected')}</label>
+                        <div class="selected-traits-container" id="selectedTraits-${character.id}">
+                            ${(character.traits || []).map((t, i) => `
+                                <span class="selected-trait">${t}<span class="trait-remove" data-trait="${String(t).replace(/"/g, '&quot;')}" data-char-id="${character.id}" onclick="removeCharacterTrait(this.dataset.charId, this.dataset.trait)"><i data-lucide="x" style="width:10px;height:10px;"></i></span></span>
+                            `).join('') || `<span class="no-traits">${Localization.t('char.field.traits_hint')}</span>`}
+                        </div>
+                    </div>
+                    <div class="traits-categories">
+                        ${renderTraitsCategories(character.id, character.traits || [])}
+                    </div>
+                </div>
+            </div>
+
             </div><!-- Fin de character-sections-grid -->
             
 
@@ -593,6 +582,10 @@ function processCharacterSideEffects(result) {
             });
             initCharacterRadar(result.data);
         }
+    }
+
+    if (effects.shouldRefreshEvolution && result.data) {
+        refreshEvolutionTimeline(result.data);
     }
 }
 
@@ -679,15 +672,101 @@ function refreshInventoryList(character, listType) {
     }
 }
 
+function addInventoryEvent(charId, itemIndex) {
+    const result = addInventoryEventViewModel(charId, itemIndex);
+    processCharacterSideEffects(result);
+}
+
+function removeInventoryEvent(charId, itemIndex, eventId) {
+    const result = removeInventoryEventViewModel(charId, itemIndex, eventId);
+    processCharacterSideEffects(result);
+}
+
+function updateInventoryEvent(charId, itemIndex, eventId, field, value) {
+    const result = updateInventoryEventViewModel(charId, itemIndex, eventId, { [field]: value });
+    processCharacterSideEffects(result);
+}
+
 function renderInventoryItem(charId, listType, item, index) {
+    // Récupérer les scènes comme dans renderEvolutionStage
+    const scenes = typeof InvestigationStore !== 'undefined' ? InvestigationStore.getScenesWithContext() : [];
+
     return `
-        <div class="inventory-item">
-            <button class="inventory-item-delete" onclick="removeInventoryItem('${charId}', '${listType}', ${index})"><i data-lucide="x" style="width:12px;height:12px;"></i></button>
-            <div class="character-field-row">
-                <input type="text" value="${item.name || ''}" placeholder="${Localization.t('char.field.inventory_name')}" onchange="updateInventoryItem('${charId}', '${listType}', ${index}, 'name', this.value)">
-                <input type="number" value="${item.quantity || 1}" style="width: 50px;" onchange="updateInventoryItem('${charId}', '${listType}', ${index}, 'quantity', parseInt(this.value))">
+        <div class="inventory-item" style="border: 1px solid var(--border-color); padding: 15px; border-radius: 8px; margin-bottom: 25px; background: var(--bg-card); box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+                <div style="flex-grow: 1;">
+                    <div class="character-field-row" style="margin-bottom: 10px; gap: 15px;">
+                        <div style="flex: 4;">
+                            <label class="character-field-label">${Localization.t('char.field.inventory_name')}</label>
+                            <input type="text" value="${item.name || ''}" placeholder="${Localization.t('char.field.inventory_name')}" 
+                                   onchange="updateInventoryItem('${charId}', '${listType}', ${index}, 'name', this.value)" 
+                                   style="width: 100%; font-weight: 600; font-size: 1rem;">
+                        </div>
+                        <div style="flex: 1; max-width: 80px;">
+                            <label class="character-field-label">Qté</label>
+                            <input type="number" value="${item.quantity || 1}" 
+                                   onchange="updateInventoryItem('${charId}', '${listType}', ${index}, 'quantity', parseInt(this.value))" 
+                                   style="width: 100%; border-radius: 4px;">
+                        </div>
+                    </div>
+                    <div class="character-field">
+                        <label class="character-field-label">${Localization.t('char.field.description')}</label>
+                        <textarea rows="2" placeholder="${Localization.t('char.field.description')}" 
+                                  onchange="updateInventoryItem('${charId}', '${listType}', ${index}, 'description', this.value)" 
+                                  style="width: 100%; font-size: 0.9rem;">${item.description || ''}</textarea>
+                    </div>
+                </div>
+                <button class="btn-icon" style="margin-left: 10px; color: var(--error-color);" onclick="removeInventoryItem('${charId}', '${listType}', ${index})" title="Supprimer l'objet">
+                    <i data-lucide="trash-2" style="width:16px;height:16px;"></i>
+                </button>
             </div>
-            <input type="text" value="${item.description || ''}" placeholder="${Localization.t('char.field.description')}" onchange="updateInventoryItem('${charId}', '${listType}', ${index}, 'description', this.value)">
+
+            <!-- Lifecycle / History Timeline -->
+            <div class="inventory-history" style="margin-top: 20px; padding-top: 15px; border-top: 1px dashed var(--border-color);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                    <label class="character-field-label" style="margin-bottom: 0; font-weight: 700; color: var(--text-main);">
+                        Historique & Événements
+                    </label>
+                    <button class="btn-icon" onclick="addInventoryEvent('${charId}', ${index})" title="Ajouter un événement">
+                        <i data-lucide="plus" style="width:16px;height:16px;"></i>
+                    </button>
+                </div>
+                
+                <div class="inventory-events-list">
+                    ${(item.history || []).map((event, eventIdx) => `
+                        <div class="evolution-stage-card" style="margin-bottom: 12px;" data-event-id="${event.id}">
+                            <div class="stage-card-header">
+                                <div class="scene-selector-wrapper">
+                                    <i data-lucide="film" class="scene-icon"></i>
+                                    <select class="scene-select-mini" onchange="updateInventoryEvent('${charId}', ${index}, '${event.id}', 'sceneId', this.value)">
+                                        <option value="">-- ${Localization.t('char.evolution.no_scene')} --</option>
+                                        ${scenes.map(s => {
+        const breadcrumb = `${s.actTitle} › ${s.chapterTitle} › ${s.title}`;
+        return `<option value="${s.id || s.uid}" ${event.sceneId == (s.id || s.uid) ? 'selected' : ''}>${breadcrumb}</option>`;
+    }).join('')}
+                                    </select>
+                                </div>
+                                <button class="btn-delete-stage" onclick="removeInventoryEvent('${charId}', ${index}, '${event.id}')">
+                                    <i data-lucide="trash-2"></i>
+                                </button>
+                            </div>
+                            <div style="padding: 10px; display: flex; flex-direction: column; gap: 8px;">
+                                <input type="text" class="stage-textarea" 
+                                       value="${event.action || ''}" 
+                                       placeholder="Action (ex: Trouve l'objet, Le perd, Volé par...)" 
+                                       onchange="updateInventoryEvent('${charId}', ${index}, '${event.id}', 'action', this.value)"
+                                       style="font-weight: 600; border: none; background: transparent; padding: 0;">
+                                <textarea class="stage-textarea" 
+                                          rows="2" 
+                                          placeholder="Précisions sur l'événement..." 
+                                          onchange="updateInventoryEvent('${charId}', ${index}, '${event.id}', 'description', this.value)"
+                                          style="font-size: 0.85rem; border: none; background: transparent; padding: 0;">${event.description || ''}</textarea>
+                            </div>
+                        </div>
+                    `).join('')}
+                    ${!(item.history && item.history.length) ? `<div style="text-align: center; color: var(--text-muted); font-size: 0.85rem; padding: 15px; background: var(--bg-main); border-radius: 4px; border: 1px solid var(--border-color);">Aucun événement enregistré pour cet objet.</div>` : ''}
+                </div>
+            </div>
         </div>
     `;
 }
@@ -814,12 +893,94 @@ function refreshTraitsDisplay(character) {
 
 function changeCharacterAvatar(id, currentEmoji, currentImage) {
     const defaultValue = currentImage || currentEmoji || '';
-    const choice = prompt('Emoji ou URL d\'image :', defaultValue);
+    const choice = prompt(Localization.t('char.prompt.avatar'), defaultValue);
     if (choice === null) return;
 
     const result = updateAvatarViewModel(id, choice);
     processCharacterSideEffects(result);
 }
+
+// --- EVOLUTION TIMELINE RENDERERS ---
+
+function renderEvolutionTimeline(character) {
+    const periods = ['past', 'present', 'future'];
+    const evolution = character.evolution || { past: [], present: [], future: [] };
+
+    return `
+        <div class="evolution-periods-container">
+            ${periods.map(period => `
+                <div class="evolution-period-column" data-period="${period}">
+                    <div class="period-header">
+                        <i data-lucide="${period === 'past' ? 'history' : (period === 'present' ? 'clock' : 'fast-forward')}"></i>
+                        <span>${Localization.t('char.field.' + period)}</span>
+                        <button class="btn-add-evolution" onclick="addEvolutionStage('${character.id}', '${period}')" title="${Localization.t('char.evolution.add_stage')}">
+                            <i data-lucide="plus"></i>
+                        </button>
+                    </div>
+                    <div class="period-stages">
+                        ${(evolution[period] || []).map(stage => renderEvolutionStage(character.id, period, stage)).join('')}
+                    </div>
+                </div>
+            `).join('')}
+        </div>
+    `;
+}
+
+function renderEvolutionStage(charId, period, stage) {
+    const scenes = typeof InvestigationStore !== 'undefined' ? InvestigationStore.getScenesWithContext() : [];
+    const isInitial = stage.isInitial;
+
+    return `
+        <div class="evolution-stage-card ${isInitial ? 'is-initial' : ''}" data-stage-id="${stage.id}">
+            <div class="stage-card-header">
+                <div class="scene-selector-wrapper">
+                    <i data-lucide="film" class="scene-icon"></i>
+                    <select class="scene-select-mini" onchange="updateEvolutionStage('${charId}', '${period}', '${stage.id}', { sceneId: this.value })">
+                        <option value="">-- ${Localization.t('char.evolution.no_scene')} --</option>
+                        ${scenes.map(s => {
+        const breadcrumb = `${s.actTitle} › ${s.chapterTitle} › ${s.title}`;
+        return `<option value="${s.id || s.uid}" ${stage.sceneId == (s.id || s.uid) ? 'selected' : ''}>${breadcrumb}</option>`;
+    }).join('')}
+                    </select>
+                </div>
+                ${!isInitial ? `
+                    <button class="btn-delete-stage" onclick="removeEvolutionStage('${charId}', '${period}', '${stage.id}')">
+                        <i data-lucide="trash-2"></i>
+                    </button>
+                ` : `<span class="initial-badge">${Localization.t('char.evolution.initial')}</span>`}
+            </div>
+            <textarea class="stage-textarea" 
+                      placeholder="${Localization.t('char.evolution.placeholder')}" 
+                      onchange="updateEvolutionStage('${charId}', '${period}', '${stage.id}', { text: this.value })">${stage.text || ''}</textarea>
+        </div>
+    `;
+}
+
+function refreshEvolutionTimeline(character) {
+    const container = document.getElementById(`evolutionTimeline-${character.id}`);
+    if (container) {
+        container.innerHTML = renderEvolutionTimeline(character);
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+}
+
+// Actions user -> ViewModel
+function addEvolutionStage(charId, period) {
+    const result = addEvolutionStageViewModel(charId, period);
+    processCharacterSideEffects(result);
+}
+
+function removeEvolutionStage(charId, period, stageId) {
+    if (!confirm(Localization.t('char.evolution.confirm_delete'))) return;
+    const result = removeEvolutionStageViewModel(charId, period, stageId);
+    processCharacterSideEffects(result);
+}
+
+function updateEvolutionStage(charId, period, stageId, updates) {
+    const result = updateEvolutionStageViewModel(charId, period, stageId, updates);
+    processCharacterSideEffects(result);
+}
+
 
 // Génération du HTML pour les scènes liées
 function renderCharacterLinkedScenes(linkedScenes) {
@@ -827,11 +988,10 @@ function renderCharacterLinkedScenes(linkedScenes) {
 
     return `
         <div class="detail-section" style="margin-bottom: 20px;">
-            <div class="detail-section-title"><i data-lucide="file-text" style="width:14px;height:14px;vertical-align:middle;margin-right:4px;"></i>Apparaît dans ${linkedScenes.length} scène(s)</div>
+            <div class="detail-section-title"><i data-lucide="file-text" style="width:14px;height:14px;vertical-align:middle;margin-right:4px;"></i>${Localization.t('char.section.linked_scenes_count', linkedScenes.length, getPluralSuffix(linkedScenes.length))}</div>
             <div class="quick-links" style="display: flex; flex-wrap: wrap; gap: 5px; margin-top: 10px;">
                 ${linkedScenes.map(scene => {
-        const actNumNum = scene.actNumber || '?';
-        const breadcrumb = `Acte ${actNumNum} › Chapitre ${scene.chapterNumber || '?'} › ${scene.sceneTitle}`;
+        const breadcrumb = `${scene.actTitle || Localization.t('investigation.common.act')} › ${scene.chapterTitle || Localization.t('investigation.common.chapter')} › ${scene.sceneTitle}`;
 
         return `
                     <span class="link-badge" onclick="openScene('${scene.actId}', '${scene.chapterId}', '${scene.sceneId}')" 

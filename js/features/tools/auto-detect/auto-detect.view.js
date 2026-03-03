@@ -152,7 +152,41 @@ const AutoDetectView = {
                     </div>
                 `;
             }).join('');
-        } else {
+        }
+
+        // Ajout des objets issus de l'inventaire des personnages (si événement dans cette scène)
+        const allCharacters = AutoDetectRepository.getCharacters();
+        let inventoryHtml = '';
+        allCharacters.forEach(char => {
+            if (char.inventory) {
+                char.inventory.forEach(item => {
+                    if (item.history) {
+                        const event = item.history.find(h =>
+                            (h.sceneId != null && h.sceneId != undefined) &&
+                            (h.sceneId == scene.id || h.sceneId == scene.uid)
+                        );
+                        if (event) {
+                            inventoryHtml += `
+                                <div class="link-item present" style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px; padding: 4px; border-radius: 4px; background: rgba(0,0,0,0.03);">
+                                    <i data-lucide="package" style="width: 20px; height: 20px;"></i>
+                                    <div style="display: flex; flex-direction: column; min-width: 0;">
+                                        <span style="font-weight: 600; font-size: 0.8rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${item.name} (${char.name})</span>
+                                        <span style="font-size: 0.7rem; opacity: 0.8;">${event.action || ''}</span>
+                                    </div>
+                                </div>
+                            `;
+                        }
+                    }
+                });
+            }
+        });
+
+        if (inventoryHtml) {
+            html += `<h4 style="margin: 12px 0 8px 0; font-size: 0.8rem; opacity: 0.8; text-align: left;"><i data-lucide="package" style="width:14px;height:14px;vertical-align:-2px;margin-right:4px;"></i> ${Localization.t('autodetect.objects.title')} (Inventaire)</h4>`;
+            html += inventoryHtml;
+        }
+
+        if (linkedElements.length === 0 && !inventoryHtml) {
             html += `<p class="text-muted small" style="font-size: 0.75rem; margin-bottom: 12px; opacity: 0.7;">${Localization.t('autodetect.elements.none_linked')}</p>`;
         }
 
@@ -255,14 +289,17 @@ const AutoDetectView = {
         }
         html += '</div>';
 
-        // SECTION 2 : UNIVERS (Simplifié pour sidebar)
+        // SECTION 2 : UNIVERS (Simplifié pour sidebar - sans les objets)
         html += '<div style="margin-bottom: 1.5rem;">';
         html += `<div class="quick-links-title" style="font-size: 0.85rem; font-weight: 600; margin-bottom: 0.75rem; color: var(--text-muted);"><i data-lucide="globe" style="width:14px;height:14px;vertical-align:middle;margin-right:4px;"></i> ${Localization.t('nav.world')}</div>`;
 
-        // World Elements
-        const elementLinks = (scene.linkedElements || []).map(id => {
+        // World Elements (Filtrer pour exclure les objets qui iront dans leur propre section)
+        const elementLinks = (scene.linkedElements || []).filter(id => {
             const elem = project.world ? project.world.find(e => e.id === id) : null;
-            return elem ? `<div class="link-item" style="margin-bottom: 4px;"><i data-lucide="${this.getElementIcon(elem.type)}" style="width:12px;height:12px;vertical-align:middle;margin-right:4px;"></i>${elem.name}</div>` : '';
+            return elem && (!elem.type || elem.type.toLowerCase() !== 'objet');
+        }).map(id => {
+            const elem = project.world.find(e => e.id == id);
+            return `<div class="link-item" style="margin-bottom: 4px;"><i data-lucide="${this.getElementIcon(elem.type)}" style="width:12px;height:12px;vertical-align:middle;margin-right:4px;"></i>${elem.name}</div>`;
         }).join('');
 
         // Map Locations
@@ -274,11 +311,55 @@ const AutoDetectView = {
         html += (elementLinks + locationLinks) || `<p class="text-muted small" style="font-size: 0.75rem; opacity: 0.7;">${Localization.t('autodetect.elements.none_locations')}</p>`;
         html += '</div>';
 
-        // SECTION 3 : TIMELINE
+        // SECTION 3 : OBJETS (Nouveau)
+        html += '<div style="margin-bottom: 1.5rem;">';
+        html += `<div class="quick-links-title" style="font-size: 0.85rem; font-weight: 600; margin-bottom: 0.75rem; color: var(--text-muted);"><i data-lucide="box" style="width:14px;height:14px;vertical-align:middle;margin-right:4px;"></i> ${Localization.t('autodetect.objects.title')}</div>`;
+
+        let objectsItemsHtml = '';
+
+        // 1. Objets de l'univers liés à la scène
+        (scene.linkedElements || []).forEach(id => {
+            const elem = project.world ? project.world.find(e => e.id == id) : null;
+            if (elem && elem.type && elem.type.toLowerCase() === 'objet') {
+                objectsItemsHtml += `<div class="link-item" style="margin-bottom: 4px;"><i data-lucide="box" style="width:12px;height:12px;vertical-align:middle;margin-right:4px;"></i>${elem.name}</div>`;
+            }
+        });
+
+        // 2. Inventaire des personnages (ceux ayant un historique marqué pour cette scène)
+        allCharacters.forEach(char => {
+            if (char.inventory && char.inventory.length > 0) {
+                char.inventory.forEach(item => {
+                    if (item.history && item.history.length > 0) {
+                        const sceneEvent = item.history.find(h =>
+                            (h.sceneId != null && h.sceneId != undefined) &&
+                            (h.sceneId == scene.id || h.sceneId == scene.uid)
+                        );
+                        if (sceneEvent) {
+                            objectsItemsHtml += `
+                                <div class="link-item" style="margin-bottom: 8px;">
+                                    <div style="display: flex; align-items: center; gap: 6px; font-weight: 600; font-size: 0.8rem;">
+                                        <i data-lucide="package" style="width:14px;height:14px;"></i>
+                                        <span>${item.name} (${char.name})</span>
+                                    </div>
+                                    <div style="margin-left: 20px; font-size: 0.75rem; opacity: 0.8; line-height: 1.2;">
+                                        ${sceneEvent.action || ''}
+                                    </div>
+                                </div>
+                            `;
+                        }
+                    }
+                });
+            }
+        });
+
+        html += objectsItemsHtml || `<p class="text-muted small" style="font-size: 0.75rem; opacity: 0.7;">${Localization.t('autodetect.objects.none')}</p>`;
+        html += '</div>';
+
+        // SECTION 4 : TIMELINE (Ancienne section 3)
         html += '<div>';
         html += `<div class="quick-links-title" style="font-size: 0.85rem; font-weight: 600; margin-bottom: 0.75rem; color: var(--text-muted);"><i data-lucide="train-track" style="width:14px;height:14px;vertical-align:middle;margin-right:4px;"></i> ${Localization.t('nav.timeline')}</div>`;
         const eventLinks = (scene.events || []).map(ev => {
-            const evData = project.events ? project.events.find(e => e.id === ev.id) : null;
+            const evData = project.events ? project.events.find(e => e.id == (ev.id || ev)) : null;
             return evData ? `<div class="link-item" style="margin-bottom: 4px;"><i data-lucide="calendar" style="width:12px;height:12px;vertical-align:middle;margin-right:4px;"></i>${evData.title}</div>` : '';
         }).join('');
         html += eventLinks || `<p class="text-muted small" style="font-size: 0.75rem; opacity: 0.7;">${Localization.t('autodetect.timeline.none_events')}</p>`;

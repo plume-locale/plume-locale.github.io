@@ -73,6 +73,9 @@ const SceneWorksheetView = {
                                 </select>
                             </div>
                          </div>
+                        <div id="pov-context-${sceneId}">
+                            ${this.renderPovContext(data.pov, sceneId)}
+                        </div>
                     </div>
 
                     <!-- IMPACT & REVELATIONS -->
@@ -145,5 +148,53 @@ const SceneWorksheetView = {
                     style="width: 100%; height: 70px; padding: 10px; border-radius: 8px; border: 1px solid #bbdefb; resize: vertical;">${value || ''}</textarea>
             </div>
         `;
+    },
+
+    renderPovContext: function (povId, sceneId) {
+        if (!povId || typeof project === 'undefined' || !project.characters) return '';
+        const povChar = project.characters.find(c => c.id == povId);
+        if (!povChar) return '';
+
+        let html = '';
+
+        // Goals (Long term)
+        if (povChar.goals) {
+            html += `
+                <div style="margin-top: 15px; padding: 12px; background: rgba(var(--primary-rgb-value, 110, 68, 255), 0.08); border-left: 4px solid var(--primary-color); border-radius: 4px; animation: fadeIn 0.3s ease;">
+                    <div style="font-weight: bold; font-size: 0.85rem; color: var(--primary-color); margin-bottom: 5px; display: flex; align-items: center; gap: 5px;">
+                        <i data-lucide="target" style="width: 14px; height: 14px;"></i> 
+                        ${Localization.t('char.field.goals')} : ${povChar.name || povChar.firstName}
+                    </div>
+                    <div style="font-style: italic; font-size: 0.9rem; color: var(--text-secondary); white-space: pre-wrap;">${povChar.goals}</div>
+                </div>
+            `;
+        }
+
+        // Evolution (Planned for this Scene)
+        if (povChar.evolution && sceneId) {
+            const periods = [
+                { id: 'past', icon: 'history' },
+                { id: 'present', icon: 'clock' },
+                { id: 'future', icon: 'fast-forward' }
+            ];
+
+            periods.forEach((period, pIdx) => {
+                const stages = (povChar.evolution[period.id] || []).filter(s => s.sceneId == sceneId);
+
+                stages.forEach((stage, sIdx) => {
+                    html += `
+                        <div style="margin-top: 10px; padding: 12px; background: rgba(255, 193, 7, 0.1); border-left: 4px solid #ffc107; border-radius: 4px; animation: fadeIn ${0.4 + (pIdx * 0.1) + (sIdx * 0.05)}s ease;">
+                            <div style="font-weight: bold; font-size: 0.85rem; color: #ff8f00; margin-bottom: 5px; display: flex; align-items: center; gap: 5px;">
+                                <i data-lucide="${period.icon}" style="width: 14px; height: 14px;"></i> 
+                                ${Localization.t('char.field.' + period.id)} : ${Localization.t('char.evolution.scene_target')}
+                            </div>
+                            <div style="font-size: 0.9rem; color: var(--text-secondary); white-space: pre-wrap;">${stage.text}</div>
+                        </div>
+                    `;
+                });
+            });
+        }
+
+        return html;
     }
 };

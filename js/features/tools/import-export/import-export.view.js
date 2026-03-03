@@ -322,6 +322,9 @@ const ImportExportView = {
             if (avatarEl && user.picture) {
                 avatarEl.innerHTML = `<img src="${user.picture}" style="width:100%;height:100%;object-fit:cover;">`;
             }
+
+            // Sync the list of backups
+            ImportExportViewModel.refreshBackupsList();
         } else {
             if (loggedOutDiv) loggedOutDiv.style.display = 'block';
             if (loggedInDiv) loggedInDiv.style.display = 'none';
@@ -350,6 +353,38 @@ const ImportExportView = {
             }
             if (window.lucide) window.lucide.createIcons();
         }
+    },
+
+    renderGDriveBackups: function (files) {
+        const container = document.getElementById('hub-gdrive-backups-list');
+        if (!container) return;
+
+        if (!files || files.length === 0) {
+            container.innerHTML = `<p style="color: var(--text-muted); text-align: center; padding: 2rem;">${Localization.t('gdrive.backups.empty') || 'Aucune sauvegarde trouvée dans le dossier "Plume Backups".'}</p>`;
+            return;
+        }
+
+        let html = '';
+        files.forEach(file => {
+            const date = new Date(file.createdTime).toLocaleString();
+            const size = file.size ? (file.size / 1024).toFixed(1) + ' KB' : '';
+            html += `
+                <div class="hub-backup-item">
+                    <label class="hub-checkbox-item">
+                        <input type="checkbox" class="gdrive-backup-checkbox" data-id="${file.id}" data-name="${file.name}">
+                        <div class="hub-backup-info">
+                            <span class="hub-backup-name">${file.name}</span>
+                            <span class="hub-backup-meta">${date} • ${size}</span>
+                        </div>
+                    </label>
+                    <a href="https://drive.google.com/open?id=${file.id}" target="_blank" class="hub-backup-link" title="Voir sur Drive">
+                        <i data-lucide="external-link" style="width: 14px; height: 14px;"></i>
+                    </a>
+                </div>
+            `;
+        });
+        container.innerHTML = html;
+        if (window.lucide) window.lucide.createIcons();
     },
 
     // Generic

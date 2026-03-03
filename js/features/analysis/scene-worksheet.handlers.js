@@ -16,6 +16,15 @@ const SceneWorksheetHandlers = {
         // Save to project and update last modified
         scene.updatedAt = new Date().toISOString();
         if (typeof saveProject === 'function') saveProject();
+
+        // Reactive update for POV context
+        if (field === 'pov' && typeof SceneWorksheetView !== 'undefined') {
+            const povContainer = document.getElementById(`pov-context-${sceneId}`);
+            if (povContainer) {
+                povContainer.innerHTML = SceneWorksheetView.renderPovContext(value);
+                if (typeof lucide !== 'undefined') lucide.createIcons();
+            }
+        }
     },
 
     /**

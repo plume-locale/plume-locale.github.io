@@ -79,16 +79,22 @@ const InvestigationStore = {
         // Manual extraction to get hierarchy
         if (window.project && window.project.acts) {
             window.project.acts.forEach((act, actIndex) => {
-                const actTitle = act.title || `${Localization.t('investigation.common.act')} ${actIndex + 1}`;
+                const actNumber = actIndex + 1;
+                const actTitle = act.title || `${Localization.t('investigation.common.act')} ${actNumber}`;
 
                 (act.chapters || []).forEach((chapter, chapIndex) => {
-                    const chapterTitle = chapter.title || `${Localization.t('investigation.common.chapter')} ${chapIndex + 1}`;
+                    const chapterNumber = chapIndex + 1;
+                    const chapterTitle = chapter.title || `${Localization.t('investigation.common.chapter')} ${chapterNumber}`;
 
                     (chapter.scenes || []).forEach((scene, sceneIndex) => {
+                        const sceneNumber = sceneIndex + 1;
                         enrichedScenes.push({
                             ...scene,
                             actTitle,
+                            actNumber,
                             chapterTitle,
+                            chapterNumber,
+                            sceneNumber,
                             index: enrichedScenes.length
                         });
                     });

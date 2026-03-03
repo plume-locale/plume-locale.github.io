@@ -1,7 +1,7 @@
 /* ==========================================
    CHANGELOG VIEW — Rendu de la vue Changelog
    Lit les données depuis window.CHANGELOG_DATA
-   (défini dans changelog.data.js — pas de fetch,
+   (défini dans changelog.manual.data.js — pas de fetch,
     fonctionne même en file://)
    ========================================== */
 
@@ -123,8 +123,12 @@ const ChangelogView = (() => {
         if (!container) return;
         _currentContainer = container;
 
-        // Lire les données depuis window.CHANGELOG_DATA
-        const data = window.CHANGELOG_DATA;
+        // Lire les données depuis CHANGELOG_I18N_DATA (multi-langue) ou CHANGELOG_DATA (fallback)
+        const locale = (window.Localization && window.Localization.getLocale)
+            ? window.Localization.getLocale()
+            : 'fr';
+        const i18n = window.CHANGELOG_I18N_DATA;
+        const data = (i18n && (i18n[locale] || i18n['fr'])) || window.CHANGELOG_DATA;
 
         // ── Cas : données absentes ────────────────────────────────────
         if (!data || !Array.isArray(data) || data.length === 0) {
@@ -172,6 +176,11 @@ const ChangelogView = (() => {
 
         if (window.lucide) lucide.createIcons({ nodes: [container] });
     }
+
+    // ── Re-rendu automatique lors d'un changement de langue ──────────────
+    window.addEventListener('localeChanged', () => {
+        if (_currentContainer) renderInContainer(_currentContainer);
+    });
 
     return { renderInContainer, _selectVersion };
 })();

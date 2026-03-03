@@ -370,7 +370,7 @@ function findSceneById(sceneId) {
     if (!project || !project.acts) return null;
     for (const act of project.acts) {
         for (const chapter of act.chapters) {
-            const scene = chapter.scenes.find(s => s.id === sceneId);
+            const scene = chapter.scenes.find(s => s.id == sceneId);
             if (scene) return scene;
         }
     }

@@ -276,7 +276,6 @@
     font-size: 0.75rem;
     font-weight: 500;
     color: var(--accent-red);
-    text-transform: capitalize;
 }
 
 .character-field input,
@@ -609,40 +608,223 @@
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
-/* Timeline cards (Passé/Présent/Futur) */
-.character-timeline {
+/* Character Evolution Timeline */
+.character-evolution-timeline {
+    margin-top: 2rem;
+}
+
+.evolution-periods-container {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
+    gap: 1.5rem;
+    align-items: start;
 }
 
-.timeline-card {
+.evolution-period-column {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    position: relative;
+    padding-bottom: 2rem;
+}
+
+/* Vertical line connecting stages */
+.evolution-period-column::after {
+    content: '';
+    position: absolute;
+    left: 17px;
+    top: 40px;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--primary-color) 0%, transparent 100%);
+    opacity: 0.3;
+    z-index: 0;
+}
+
+.period-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem;
+    color: var(--accent-red);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.85rem;
+    background: rgba(212, 175, 55, 0.05);
+    border-radius: 8px;
+    border-bottom: 2px solid var(--primary-color);
+    margin-bottom: 0.5rem;
+    position: relative;
+    z-index: 1;
+}
+
+.period-header i {
+    width: 16px;
+    height: 16px;
+}
+
+.btn-add-evolution {
+    margin-left: auto;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.btn-add-evolution:hover {
+    transform: scale(1.1) rotate(90deg);
+    background: var(--accent-gold);
+}
+
+.period-stages {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    position: relative;
+    z-index: 1;
+}
+
+.evolution-stage-card {
     background: var(--bg-secondary);
-    border-radius: 6px;
+    border-radius: 12px;
     padding: 1rem;
     border: 1px solid var(--border-color);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 12px var(--shadow);
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
 }
 
-.timeline-card-title {
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: var(--accent-red);
-    margin-bottom: 0.5rem;
+.evolution-stage-card:hover {
+    border-color: var(--primary-color);
+    transform: translateY(-2px);
+    background: var(--bg-tertiary);
 }
 
-.timeline-card textarea {
-    width: 100%;
-    border: none;
+.evolution-stage-card.is-initial {
+    border-left: 4px solid var(--primary-color);
+}
+
+.stage-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+}
+
+.scene-selector-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex: 1;
+    min-width: 0;
+}
+
+.scene-icon {
+    color: var(--text-muted);
+    flex-shrink: 0;
+    width: 14px;
+    height: 14px;
+}
+
+.scene-select-mini {
     background: transparent;
-    resize: vertical;
-    font-family: inherit;
-    font-size: 0.9rem;
-    color: var(--text-secondary);
-    min-height: 100px;
+    border: none;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    width: 100%;
+    cursor: pointer;
+    outline: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-.timeline-card textarea:focus {
+.scene-select-mini option {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+}
+
+.btn-delete-stage {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    padding: 2px;
+    cursor: pointer;
+    opacity: 0.5;
+    transition: all 0.2s;
+}
+
+.btn-delete-stage:hover {
+    color: var(--accent-red);
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.initial-badge {
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    color: var(--primary-color);
+    font-weight: 800;
+    background: rgba(212, 175, 55, 0.1);
+    padding: 2px 6px;
+    border-radius: 4px;
+    letter-spacing: 0.5px;
+}
+
+.stage-textarea {
+    width: 100%;
+    min-height: 80px;
+    background: transparent;
+    border: none;
+    resize: vertical;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: var(--text-secondary);
+    font-family: inherit;
+    padding: 0;
+}
+
+.stage-textarea:focus {
     outline: none;
+}
+
+/* Glassmorphism effect for stage cards */
+[data-theme="dark"] .evolution-stage-card {
+    background: rgba(45, 45, 60, 0.6);
+    backdrop-filter: blur(8px);
+    border-color: rgba(212, 175, 55, 0.1);
+}
+
+[data-theme="dark"] .evolution-stage-card:hover {
+    background: rgba(55, 55, 75, 0.8);
+    border-color: rgba(212, 175, 55, 0.3);
+}
+
+/* Responsive evolution container */
+@media (max-width: 1200px) {
+    .evolution-periods-container {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .evolution-period-column::after {
+        display: none;
+    }
 }
 
 /* Inventory items */

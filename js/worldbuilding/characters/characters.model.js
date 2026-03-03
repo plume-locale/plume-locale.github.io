@@ -67,8 +67,14 @@ const CharacterModel = {
             beliefs: data.beliefs || '',
             importantPlaces: data.importantPlaces || '',
             catchphrases: data.catchphrases || '',
-            // Évolution
+            // Évolution (Timeline)
             goals: data.goals || '',
+            evolution: data.evolution || {
+                past: Array.isArray(data.past) ? data.past : [{ id: (Date.now() - 3).toString(), sceneId: null, text: data.past || data.background || '', isInitial: true }],
+                present: Array.isArray(data.present) ? data.present : [{ id: (Date.now() - 2).toString(), sceneId: null, text: data.present || '', isInitial: true }],
+                future: Array.isArray(data.future) ? data.future : [{ id: (Date.now() - 1).toString(), sceneId: null, text: data.future || '', isInitial: true }]
+            },
+            // Legacy fallback (maintained for compatibility if needed elsewhere, but primarily using evolution object)
             past: data.past || data.background || '',
             present: data.present || '',
             future: data.future || '',
@@ -92,7 +98,16 @@ const CharacterModel = {
         // Si déjà migré (présence de firstName par exemple), on vérifie juste les champs manquants
         const migrated = this.create(char);
 
-        // Cas particuliers de migration
+        // Migration de l'évolution
+        if (!char.evolution) {
+            migrated.evolution = {
+                past: [{ id: (Date.now() - 3).toString(), sceneId: null, text: char.past || char.background || '', isInitial: true }],
+                present: [{ id: (Date.now() - 2).toString(), sceneId: null, text: char.present || '', isInitial: true }],
+                future: [{ id: (Date.now() - 1).toString(), sceneId: null, text: char.future || '', isInitial: true }]
+            };
+        }
+
+        // Cas particuliers de migration de personnalité
         if (!char.personality || typeof char.personality === 'string') {
             const oldPersonality = char.personality || '';
             migrated.personality = {

@@ -324,5 +324,21 @@ const GoogleDriveService = {
             console.error("Error with folder:", err);
             return null;
         }
+    },
+
+    listFiles: async function (folderId) {
+        if (!this.accessToken) return [];
+        try {
+            const response = await gapi.client.drive.files.list({
+                'q': `'${folderId}' in parents and trashed = false`,
+                'fields': 'files(id, name, createdTime, size, iconLink)',
+                'spaces': 'drive',
+                'orderBy': 'createdTime desc'
+            });
+            return response.result.files;
+        } catch (err) {
+            console.error("Error listing files:", err);
+            return [];
+        }
     }
 };

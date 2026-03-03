@@ -249,6 +249,7 @@ const ImportExportViewModel = {
 
             ImportExportView.updateGDriveStatus(Localization.t('gdrive.status.synced'), 'success');
             ImportExportView.showNotification(Localization.t('gdrive.success.sync', allProjects.length));
+            this.refreshBackupsList();
         } catch (err) {
             console.error(err);
             alert(Localization.t('gdrive.error.sync', err.message));
@@ -298,6 +299,86 @@ const ImportExportViewModel = {
             console.error(err);
             ImportExportView.updateGDriveStatus(Localization.t('gdrive.error.restore_title'), 'error');
             alert(Localization.t('gdrive.error.restore_msg', err.message || Localization.t('gdrive.error.file_not_found')));
+        }
+    },
+
+    refreshBackupsList: async function () {
+        if (typeof GoogleDriveService === 'undefined' || !GoogleDriveService.accessToken) return;
+
+        try {
+            const folderId = await GoogleDriveService.findOrCreateFolder('Plume Backups');
+            if (!folderId) return;
+
+            const files = await GoogleDriveService.listFiles(folderId);
+            ImportExportView.renderGDriveBackups(files);
+        } catch (err) {
+            console.error("Error refreshing backups list:", err);
+        }
+    },
+
+    importSelectedFromGDrive: async function () {
+        const checkboxes = document.querySelectorAll('.gdrive-backup-checkbox:checked');
+        if (checkboxes.length === 0) {
+            alert(Localization.t('gdrive.error.no_selection') || 'Aucun fichier sélectionné.');
+            return;
+        }
+
+        if (!confirm(Localization.t('gdrive.confirm.import_multiple', [checkboxes.length]) || `Importer ${checkboxes.length} fichier(s) ? Les données actuelles pourraient être écrasées.`)) return;
+
+        ImportExportView.updateGDriveStatus(Localization.t('gdrive.status.downloading'), 'sync');
+
+        let successCount = 0;
+        for (const cb of checkboxes) {
+            const fileId = cb.dataset.id;
+            const filename = cb.dataset.name;
+
+            try {
+                // We need to fetch the file content by ID
+                const response = await gapi.client.drive.files.get({
+                    fileId: fileId,
+                    alt: 'media'
+                });
+
+                let importedData;
+                if (typeof response.result === 'string') {
+                    importedData = JSON.parse(response.result);
+                } else if (response.result.body) {
+                    importedData = JSON.parse(response.result.body);
+                } else {
+                    importedData = response.result;
+                }
+
+                // If multiple projects, we might need a better merge logic.
+                // For now, if one project is imported, it replaces window.project.
+                // If the user selects many, the last one wins if they are the same project ID?
+                // Or maybe they are different projects.
+
+                // For simplicity, let's assume if it has Acts, it's a project.
+                if (importedData.acts) {
+                    // If we have a project DB, save it there
+                    if (typeof window.saveProjectToDB === 'function') {
+                        await window.saveProjectToDB(importedData);
+                    } else {
+                        window.project = importedData;
+                        if (typeof saveProject === 'function') saveProject();
+                    }
+                    successCount++;
+                }
+            } catch (err) {
+                console.error(`Error importing ${filename}:`, err);
+            }
+        }
+
+        if (successCount > 0) {
+            if (typeof renderActsList === 'function') renderActsList();
+            if (typeof updateProjectList === 'function') updateProjectList(); // Refresh project hub if open
+
+            ImportExportView.updateGDriveStatus(Localization.t('gdrive.status.restored'), 'success');
+            alert(Localization.t('gdrive.success.restored_count', [successCount]) || `${successCount} projet(s) restauré(s) avec succès.`);
+            ImportExportView.closeHubModal();
+        } else {
+            ImportExportView.updateGDriveStatus(Localization.t('gdrive.status.error'), 'error');
+            alert(Localization.t('gdrive.error.import_failed') || 'Échec de l\'importation.');
         }
     },
 
