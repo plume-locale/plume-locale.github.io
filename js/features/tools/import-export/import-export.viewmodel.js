@@ -181,9 +181,10 @@ const ImportExportViewModel = {
             return;
         }
         GoogleDriveService.init((success) => {
-            if (success) {
-                // Check if we can silent login?
-                // For now, user initiates login.
+            if (success && GoogleDriveService.userInfo) {
+                // Session restored silently (e.g. after F5): update UI immediately
+                ImportExportView.updateGDriveUI(GoogleDriveService.userInfo, true);
+                ImportExportView.updateGDriveStatus(Localization.t('gdrive.status.connected'), 'success');
             }
         });
     },

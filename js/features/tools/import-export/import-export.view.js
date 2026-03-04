@@ -62,8 +62,8 @@ const ImportExportView = {
             if (exportView) exportView.style.display = 'none';
         }
         if (tabId === 'cloud') {
-            if (typeof GoogleDriveService !== 'undefined' && GoogleDriveService.user) {
-                this.updateGDriveUI(GoogleDriveService.user, true);
+            if (typeof GoogleDriveService !== 'undefined' && GoogleDriveService.userInfo) {
+                this.updateGDriveUI(GoogleDriveService.userInfo, true);
             }
         }
 

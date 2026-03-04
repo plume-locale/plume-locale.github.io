@@ -100,6 +100,7 @@ const GoogleDriveService = {
                         throw (resp);
                     }
                     this.accessToken = resp.access_token;
+                    this._saveTokenToSession(resp);
                     // Token acquired
                     this.fetchUserInfo();
                 },
@@ -113,9 +114,41 @@ const GoogleDriveService = {
 
     checkInitComplete: function (callback) {
         if (this.gapiInited && this.gisInited) {
-            // Check if we have a stored token/session (not really possible with pure client-side without re-auth, 
-            // but we can check if user granted previously)
-            // For now, we assume user invokes login manually.
+            // Try to restore a previous session from localStorage
+            const stored = localStorage.getItem('gd_token');
+            if (stored) {
+                try {
+                    const tokenData = JSON.parse(stored);
+                    if (tokenData.expires_at > Date.now()) {
+                        // Token still valid: restore it directly without any popup
+                        gapi.client.setToken({ access_token: tokenData.access_token });
+                        this.accessToken = tokenData.access_token;
+                        this.fetchUserInfo().then(() => {
+                            if (callback) callback(true);
+                        });
+                        return;
+                    } else {
+                        // Token expired: attempt a silent re-auth (no popup if consent was already granted)
+                        localStorage.removeItem('gd_token');
+                        this.tokenClient.callback = async (resp) => {
+                            if (resp.error !== undefined) {
+                                // Silent re-auth failed, user will need to log in manually
+                                if (callback) callback(true);
+                                return;
+                            }
+                            this.accessToken = resp.access_token;
+                            this._saveTokenToSession(resp);
+                            gapi.client.setToken({ access_token: resp.access_token });
+                            await this.fetchUserInfo();
+                            if (callback) callback(true);
+                        };
+                        this.tokenClient.requestAccessToken({ prompt: '' });
+                        return;
+                    }
+                } catch (e) {
+                    localStorage.removeItem('gd_token');
+                }
+            }
             if (callback) callback(true);
         }
     },
@@ -133,6 +166,7 @@ const GoogleDriveService = {
                 throw (resp);
             }
             this.accessToken = resp.access_token;
+            this._saveTokenToSession(resp);
             const user = await this.fetchUserInfo();
             if (callback) callback(user);
         };
@@ -154,7 +188,24 @@ const GoogleDriveService = {
             gapi.client.setToken('');
             this.accessToken = null;
             this.userInfo = null;
+            localStorage.removeItem('gd_token');
             if (callback) callback();
+        }
+    },
+
+    /**
+     * Saves the OAuth token response to localStorage with its expiry timestamp.
+     * @param {Object} resp - Token response from Google (contains access_token and expires_in)
+     */
+    _saveTokenToSession: function (resp) {
+        try {
+            const expiresAt = Date.now() + ((resp.expires_in || 3600) * 1000);
+            sessionStorage.setItem('gd_token', JSON.stringify({
+                access_token: resp.access_token,
+                expires_at: expiresAt
+            }));
+        } catch (e) {
+            console.warn('Could not save Google Drive token to sessionStorage:', e);
         }
     },
 
