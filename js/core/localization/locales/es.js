@@ -1785,6 +1785,8 @@ window.LOCALE_ES = {
     "gdrive.help.note": "<strong>Nota importante:</strong> La restauración, por otro lado, siempre descargará el proyecto seleccionado (el archivo correspondiente al nombre actual del área de trabajo), ya que es una opción de sobreescritura local.",
     "gdrive.backups.title": "Archivos de copia de seguridad (Plume Backups)",
     "gdrive.backups.empty": "No se encontraron copias de seguridad en la carpeta \"Plume Backups\".",
+    "gdrive.backups.created": "Creado",
+    "gdrive.backups.modified": "Modificado",
     "gdrive.error.no_selection": "Seleccione al menos un archivo para importar.",
     "gdrive.confirm.import_multiple": "¿Desea importar {0} archivo(s)? Los datos actuales en su navegador se sobrescribirán si los proyectos tienen el mismo nombre.",
     "gdrive.success.restored_count": "✅ ¡{0} proyecto(s) restaurado(s) con éxito desde Google Drive!",

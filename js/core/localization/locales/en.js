@@ -1853,6 +1853,8 @@ window.LOCALE_EN = {
     "gdrive.help.note": "<strong>Important note:</strong> Restoration, on the other hand, will always download the targeted project (the file corresponding to the current workspace name), because it is a local overwrite option.",
     "gdrive.backups.title": "Backup Files (Plume Backups)",
     "gdrive.backups.empty": "No backups found in the \"Plume Backups\" folder.",
+    "gdrive.backups.created": "Created",
+    "gdrive.backups.modified": "Modified",
     "gdrive.error.no_selection": "Please select at least one file to import.",
     "gdrive.confirm.import_multiple": "Do you want to import {0} file(s)? Current data in your browser will be overwritten if projects have the same name.",
     "gdrive.success.restored_count": "✅ {0} project(s) successfully restored from Google Drive!",

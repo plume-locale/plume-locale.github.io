@@ -366,7 +366,8 @@ const ImportExportView = {
 
         let html = '';
         files.forEach(file => {
-            const date = new Date(file.createdTime).toLocaleString();
+            const createdDate = new Date(file.createdTime).toLocaleString();
+            const modifiedDate = file.modifiedTime ? new Date(file.modifiedTime).toLocaleString() : null;
             const size = file.size ? (file.size / 1024).toFixed(1) + ' KB' : '';
             html += `
                 <div class="hub-backup-item">
@@ -374,7 +375,7 @@ const ImportExportView = {
                         <input type="checkbox" class="gdrive-backup-checkbox" data-id="${file.id}" data-name="${file.name}">
                         <div class="hub-backup-info">
                             <span class="hub-backup-name">${file.name}</span>
-                            <span class="hub-backup-meta">${date} • ${size}</span>
+                            <span class="hub-backup-meta">${Localization.t('gdrive.backups.created')} : ${createdDate}${modifiedDate ? ' • ' + Localization.t('gdrive.backups.modified') + ' : ' + modifiedDate : ''} • ${size}</span>
                         </div>
                     </label>
                     <a href="https://drive.google.com/open?id=${file.id}" target="_blank" class="hub-backup-link" title="Voir sur Drive">

@@ -1595,6 +1595,8 @@ window.LOCALE_FR = {
     "gdrive.help.note": "<strong>Note importante :</strong> La restauration quant à elle, téléchargera toujours le projet ciblé (le fichier correspondant au nom actuel de l'espace de travail), parce que c'est une option d'écrasement locale.",
     "gdrive.backups.title": "Fichiers de sauvegarde (Plume Backups)",
     "gdrive.backups.empty": "Aucune sauvegarde trouvée dans le dossier \"Plume Backups\".",
+    "gdrive.backups.created": "Créé",
+    "gdrive.backups.modified": "Modifié",
     "gdrive.error.no_selection": "Veuillez sélectionner au moins un fichier à importer.",
     "gdrive.confirm.import_multiple": "Voulez-vous importer {0} fichier(s) ? Les données actuelles dans votre navigateur seront écrasées si les projets portent le même nom.",
     "gdrive.success.restored_count": "✅ {0} projet(s) restauré(s) avec succès depuis Google Drive !",

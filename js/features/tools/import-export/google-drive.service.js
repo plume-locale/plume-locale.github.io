@@ -382,9 +382,9 @@ const GoogleDriveService = {
         try {
             const response = await gapi.client.drive.files.list({
                 'q': `'${folderId}' in parents and trashed = false`,
-                'fields': 'files(id, name, createdTime, size, iconLink)',
+                'fields': 'files(id, name, createdTime, modifiedTime, size, iconLink)',
                 'spaces': 'drive',
-                'orderBy': 'createdTime desc'
+                'orderBy': 'modifiedTime desc'
             });
             return response.result.files;
         } catch (err) {

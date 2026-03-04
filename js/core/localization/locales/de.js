@@ -1786,6 +1786,8 @@ window.LOCALE_DE = {
     "gdrive.help.note": "<strong>Wichtiger Hinweis:</strong> Die Wiederherstellung hingegen lädt immer nur das Zielprojekt herunter (die Datei, die dem aktuellen Namen des Arbeitsbereichs entspricht), da es sich um eine lokale Überschreibungsoption handelt.",
     "gdrive.backups.title": "Sicherungsdateien (Plume Backups)",
     "gdrive.backups.empty": "Keine Sicherungen im Ordner \"Plume Backups\" gefunden.",
+    "gdrive.backups.created": "Erstellt",
+    "gdrive.backups.modified": "Geändert",
     "gdrive.error.no_selection": "Bitte wählen Sie mindestens eine Datei zum Importieren aus.",
     "gdrive.confirm.import_multiple": "Möchten Sie {0} Datei(en) importieren? Aktuelle Daten in Ihrem Browser werden überschrieben, wenn die Projekte denselben Namen haben.",
     "gdrive.success.restored_count": "✅ {0} Projekt(e) erfolgreich von Google Drive wiederhergestellt!",
