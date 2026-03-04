@@ -200,12 +200,12 @@ const GoogleDriveService = {
     _saveTokenToSession: function (resp) {
         try {
             const expiresAt = Date.now() + ((resp.expires_in || 3600) * 1000);
-            sessionStorage.setItem('gd_token', JSON.stringify({
+            localStorage.setItem('gd_token', JSON.stringify({
                 access_token: resp.access_token,
                 expires_at: expiresAt
             }));
         } catch (e) {
-            console.warn('Could not save Google Drive token to sessionStorage:', e);
+            console.warn('Could not save Google Drive token to localStorage:', e);
         }
     },
 
