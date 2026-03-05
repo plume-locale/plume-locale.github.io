@@ -1601,6 +1601,8 @@ window.LOCALE_FR = {
     "gdrive.confirm.import_multiple": "Voulez-vous importer {0} fichier(s) ? Les données actuelles dans votre navigateur seront écrasées si les projets portent le même nom.",
     "gdrive.success.restored_count": "✅ {0} projet(s) restauré(s) avec succès depuis Google Drive !",
     "gdrive.error.import_failed": "Échec de l'importation de certains fichiers.",
+    "gdrive.warning.session_expired": "⚠️ Votre session Google Drive a expiré. Plume n'est plus en sauvegarde automatique. Reconnectez-vous.",
+    "gdrive.warning.reconnect_btn": "Se reconnecter",
     "btn.import_selected": "Importer la sélection",
     "export.novel.default_title": "Sans Titre",
     "export.novel.success": "✓ Export {0} terminé",

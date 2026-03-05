@@ -25,6 +25,8 @@ const GoogleDriveService = {
     gisInited: false,
     accessToken: null,
     userInfo: null,
+    onTokenExpired: null, // Callback appelé quand le token GDrive expire sans re-auth possible
+    _hadStoredToken: false, // Vrai si un token était persisted au démarrage
 
     init: function (onInitCallback) {
         if (this.gapiInited && this.gisInited) {
@@ -129,14 +131,20 @@ const GoogleDriveService = {
                         return;
                     } else {
                         // Token expired: attempt a silent re-auth (no popup if consent was already granted)
+                        this._hadStoredToken = true; // On avait un token, il a expiré
                         localStorage.removeItem('gd_token');
                         this.tokenClient.callback = async (resp) => {
                             if (resp.error !== undefined) {
-                                // Silent re-auth failed, user will need to log in manually
+                                // Silent re-auth failed — notifier l'UI
+                                console.warn('[GDrive] Re-auth silencieuse échouée, token expiré.');
+                                if (typeof this.onTokenExpired === 'function') {
+                                    this.onTokenExpired();
+                                }
                                 if (callback) callback(true);
                                 return;
                             }
                             this.accessToken = resp.access_token;
+                            this._hadStoredToken = false;
                             this._saveTokenToSession(resp);
                             gapi.client.setToken({ access_token: resp.access_token });
                             await this.fetchUserInfo();
@@ -304,6 +312,14 @@ const GoogleDriveService = {
             return response.result;
         } catch (err) {
             console.error("Error saving file:", err);
+            // Détecter une expiration de token (401)
+            if (err && (err.status === 401 || (err.result && err.result.error && err.result.error.code === 401))) {
+                this.accessToken = null;
+                localStorage.removeItem('gd_token');
+                if (typeof this.onTokenExpired === 'function') {
+                    this.onTokenExpired();
+                }
+            }
             throw err;
         }
     },
@@ -375,6 +391,14 @@ const GoogleDriveService = {
             console.error("Error with folder:", err);
             return null;
         }
+    },
+
+    /**
+     * Vérifie si un token était stocké mais a expiré (sans re-auth réussie).
+     * Utile pour afficher un badge d'avertissement au chargement.
+     */
+    isSessionLost: function () {
+        return this._hadStoredToken && !this.accessToken;
     },
 
     listFiles: async function (folderId) {

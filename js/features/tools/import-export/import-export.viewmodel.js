@@ -180,11 +180,19 @@ const ImportExportViewModel = {
             console.warn('GoogleDriveService not loaded.');
             return;
         }
+        // Enregistrer le callback d'expiration AVANT l'init
+        GoogleDriveService.onTokenExpired = () => {
+            this._onGDriveTokenExpired();
+        };
         GoogleDriveService.init((success) => {
             if (success && GoogleDriveService.userInfo) {
                 // Session restored silently (e.g. after F5): update UI immediately
                 ImportExportView.updateGDriveUI(GoogleDriveService.userInfo, true);
                 ImportExportView.updateGDriveStatus(Localization.t('gdrive.status.connected'), 'success');
+                this.updateGDriveHeaderBadge('connected');
+            } else if (GoogleDriveService.isSessionLost && GoogleDriveService.isSessionLost()) {
+                // Token était présent mais re-auth silencieuse a échoué
+                // → _onGDriveTokenExpired sera appelé via callback
             }
         });
     },
@@ -195,7 +203,10 @@ const ImportExportViewModel = {
             if (user) {
                 ImportExportView.updateGDriveUI(user, true);
                 ImportExportView.updateGDriveStatus(Localization.t('gdrive.status.connected'), 'success');
-                // Check preferences for auto-save?
+                this.updateGDriveHeaderBadge('connected');
+                // Cacher la bannière d'expiration si elle est visible
+                const banner = document.getElementById('gdriveExpiredBanner');
+                if (banner) banner.style.display = 'none';
             }
         });
     },
@@ -205,7 +216,105 @@ const ImportExportViewModel = {
         GoogleDriveService.handleSignoutClick(() => {
             ImportExportView.updateGDriveUI(null, false);
             ImportExportView.updateGDriveStatus(Localization.t('gdrive.status.disconnected'), 'normal');
+            this.updateGDriveHeaderBadge('none');
+            // Cacher la bannière d'expiration
+            const banner = document.getElementById('gdriveExpiredBanner');
+            if (banner) banner.style.display = 'none';
         });
+    },
+
+    /**
+     * Appelé quand le token Google Drive expire et que la re-auth silencieuse échoue.
+     * Affiche une alerte persistante dans le header et un toast.
+     */
+    _onGDriveTokenExpired: function () {
+        // Badge rouge dans le header
+        this.updateGDriveHeaderBadge('expired');
+
+        // Bannière persistante
+        let banner = document.getElementById('gdriveExpiredBanner');
+        if (!banner) {
+            banner = document.createElement('div');
+            banner.id = 'gdriveExpiredBanner';
+            banner.style.cssText = [
+                'position: fixed',
+                'bottom: 1.5rem',
+                'left: 50%',
+                'transform: translateX(-50%)',
+                'z-index: 9999',
+                'background: var(--accent-red, #c44536)',
+                'color: #fff',
+                'padding: 0.85rem 1.5rem',
+                'border-radius: 10px',
+                'box-shadow: 0 4px 24px rgba(0,0,0,0.3)',
+                'display: flex',
+                'align-items: center',
+                'gap: 1rem',
+                'font-size: 0.95rem',
+                'max-width: 520px',
+                'cursor: pointer',
+                'animation: gdriveBannerIn 0.3s ease'
+            ].join(';');
+
+            // Ajouter le keyframe si absent
+            if (!document.getElementById('gdriveBannerStyle')) {
+                const style = document.createElement('style');
+                style.id = 'gdriveBannerStyle';
+                style.textContent = `
+                    @keyframes gdriveBannerIn {
+                        from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+                        to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+
+            const icon = '\u26a0\ufe0f';
+            const msgKey = 'gdrive.warning.session_expired';
+            const msg = (typeof Localization !== 'undefined' && Localization.t)
+                ? Localization.t(msgKey)
+                : 'Session Google Drive expirée. Cliquez pour vous reconnecter.';
+
+            banner.innerHTML = `
+                <span style="font-size:1.3em">${icon}</span>
+                <span style="flex:1">${msg}</span>
+                <button onclick="ImportExportViewModel.showBackupMenu(); document.getElementById('gdriveExpiredBanner').style.display='none';"
+                    style="background:rgba(255,255,255,0.25); border:1px solid rgba(255,255,255,0.5); color:#fff; padding:0.4rem 0.9rem; border-radius:6px; cursor:pointer; font-size:0.9rem; white-space:nowrap;"
+                    data-i18n="gdrive.warning.reconnect_btn">Se reconnecter</button>
+                <span onclick="this.parentElement.style.display='none'"
+                    style="cursor:pointer; opacity:0.8; font-size:1.1em; padding: 0 0.25rem;" title="Fermer">×</span>
+            `;
+            document.body.appendChild(banner);
+        } else {
+            banner.style.display = 'flex';
+        }
+    },
+
+    /**
+     * Met à jour le badge de statut Google Drive dans le header.
+     * @param {'connected'|'expired'|'none'} state
+     */
+    updateGDriveHeaderBadge: function (state) {
+        const dot = document.getElementById('headerGDriveStatusDot');
+        if (!dot) return;
+        if (state === 'connected') {
+            dot.style.display = 'inline-block';
+            dot.style.background = 'var(--accent-green, #51cf66)';
+            dot.title = typeof Localization !== 'undefined' ? Localization.t('gdrive.status.connected') : 'Google Drive connecté';
+        } else if (state === 'expired') {
+            dot.style.display = 'inline-block';
+            dot.style.background = 'var(--accent-red, #c44536)';
+            dot.title = typeof Localization !== 'undefined' ? Localization.t('gdrive.warning.session_expired') : 'Session Google Drive expirée !';
+            // Faire pulser le bouton parent pour attirer l’attention
+            const btn = document.getElementById('headerBackupBtn');
+            if (btn) {
+                btn.style.color = 'var(--accent-red, #c44536)';
+            }
+        } else {
+            dot.style.display = 'none';
+            const btn = document.getElementById('headerBackupBtn');
+            if (btn) btn.style.color = '';
+        }
     },
 
     toggleGDriveAutoSave: function (checked) {

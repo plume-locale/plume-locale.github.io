@@ -377,6 +377,11 @@ const ProjectViewModel = {
         if (typeof renderActsList === 'function') renderActsList();
         if (typeof refreshAllViews === 'function') refreshAllViews();
 
+        // Initialiser le baseline de session d'écriture pour ce projet
+        setTimeout(() => {
+            if (typeof initTodaySession === 'function') initTodaySession();
+        }, 200);
+
         await ProjectRepository.saveSetting('currentProjectId', projectId);
         ProjectView.renderSidebarList(projects);
 

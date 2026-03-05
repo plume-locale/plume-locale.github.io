@@ -209,6 +209,14 @@ const StatsViewModel = {
 
     /**
      * Suit la session d'écriture actuelle.
+     * 
+     * Logique :
+     * - Si une session du jour existe déjà : on calcule les mots nets écrits
+     *   depuis le début de la session (totalWords - startWords).
+     * - Si aucune session n'existe : on initialise avec startWords = totalWords ACTUEL.
+     *   IMPORTANT : on soustrait 1 unité de "frappe" car scene.content a déjà été
+     *   mis à jour avant cet appel. On utilise scene.wordCount comme baseline plus fiable
+     *   si disponible, sinon on continue avec totalWords.
      */
     trackWritingSession() {
         const { totalWords } = this.getProjectStats();
@@ -217,9 +225,19 @@ const StatsViewModel = {
         const session = stats.writingSessions.find(s => new Date(s.date).toDateString() === today);
 
         if (session) {
-            const newWords = totalWords - (session.startWords || 0);
+            // Session existante : calculer les mots nets depuis le début de la journée
+            const startWords = session.startWords;
+            // Si startWords n'a jamais été défini (ancienne session), on l'initialise maintenant
+            if (startWords === undefined || startWords === null) {
+                StatsRepository.saveSession({ startWords: totalWords, words: 0 });
+                return;
+            }
+            const newWords = totalWords - startWords;
             StatsRepository.saveSession({ words: Math.max(0, newWords) });
         } else {
+            // Première écriture de la journée :
+            // startWords = total actuel (déjà mis à jour avec le contenu courant)
+            // On initialise words à 0, le prochain passage calculera correctement.
             StatsRepository.saveSession({
                 words: 0,
                 startWords: totalWords

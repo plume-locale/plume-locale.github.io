@@ -3552,5 +3552,15 @@ window.LOCALE_ES = {
     "tour.editor.investigation.description": "Mostrar los elementos de investigación vinculados a la escena actual", "tour.editor.auto_detection.title": "Autodetección",
     "tour.editor.auto_detection.description": "Aquí Plume detecta a tus personajes y lugares, y tú puedes confirmar o denegar su presencia.", "tour.editor.repetition.title": "Analizador de repetición de palabras",
     "tour.editor.repetition.description": "Muestra el menú de repetición de palabras donde puedes analizar tu texto y mejorar la diversidad de tu vocabulario.", "tour.editor.finish.title": "¡Tour Terminado!",
-    "tour.editor.finish.description": "<p>¡Ahora conoces los conceptos básicos de Plume!</p><p>Explora las otras secciones para descubrir aún más características:</p><ul><li>Personajes y Universo</li><li>Visualizaciones y gráficos</li><li>Herramientas de análisis y estadísticas</li></ul><p><strong>¡Buena suerte con tu escritura! ✍️</strong></p>"
+    "tour.editor.finish.description": "<p>¡Ahora conoces los conceptos básicos de Plume!</p><p>Explora las otras secciones para descubrir aún más características:</p><ul><li>Personajes y Universo</li><li>Visualizaciones y gráficos</li><li>Herramientas de análisis y estadísticas</li></ul><p><strong>¡Buena suerte con tu escritura! ✍️</strong></p>",
+
+    // --- Google Drive status & warnings ---
+    "gdrive.status.connected": "Conectado",
+    "gdrive.status.disconnected": "Desconectado",
+    "gdrive.status.saving": "Guardando...",
+    "gdrive.status.synced": "Sincronizado",
+    "gdrive.status.restored": "Restaurado",
+    "gdrive.status.downloading": "Descargando...",
+    "gdrive.warning.session_expired": "⚠️ Tu sesión de Google Drive ha caducado. Plume ya no guarda automáticamente. Por favor, vuelve a conectarte.",
+    "gdrive.warning.reconnect_btn": "Reconectarse"
 };

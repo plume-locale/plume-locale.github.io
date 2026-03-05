@@ -3563,5 +3563,14 @@ window.LOCALE_DE = {
     "tour.editor.investigation.description": "Zeigen Sie die Ermittlungselemente an, die mit Ihrer aktuellen Szene verbunden sind", "tour.editor.auto_detection.title": "Auto-Erkennung",
     "tour.editor.auto_detection.description": "Hier erkennt Plume Ihre Charaktere und Orte, und Sie können deren Anwesenheit bestätigen oder nicht.", "tour.editor.repetition.title": "Wortwiederholungs-Analyse",
     "tour.editor.repetition.description": "Zeigt das Menü für Wortwiederholungen an, in dem Sie Ihren Text analysieren und den Wortschatz abwechslungsreicher gestalten können!", "tour.editor.finish.title": "Tour Beendet!",
-    "tour.editor.finish.description": "<p>Sie kennen jetzt die Grundlagen von Plume!</p><p>Erkunden Sie die anderen Abschnitte, um noch mehr Funktionen zu entdecken:</p><ul><li>Charaktere und Universum</li><li>Visualisierungen und Grafiken</li><li>Analyse- und Statistik-Tools</li></ul><p><strong>Viel Erfolg beim Schreiben! ✍️</strong></p>"
+    "tour.editor.finish.description": "<p>Sie kennen jetzt die Grundlagen von Plume!</p><p>Erkunden Sie die anderen Abschnitte, um noch mehr Funktionen zu entdecken:</p><ul><li>Charaktere und Universum</li><li>Visualisierungen und Grafiken</li><li>Analyse- und Statistik-Tools</li></ul><p><strong>Viel Erfolg beim Schreiben! ✍️</strong></p>",
+    "gdrive.status.syncing": "Synchronisierung läuft...",
+    "gdrive.status.synced": "Synchronisiert",
+    "gdrive.status.connected": "Verbunden",
+    "gdrive.status.disconnected": "Getrennt",
+    "gdrive.status.saving": "Speichern...",
+    "gdrive.status.restored": "Wiederhergestellt",
+    "gdrive.status.downloading": "Herunterladen...",
+    "gdrive.warning.session_expired": "⚠️ Ihre Google Drive-Sitzung ist abgelaufen. Plume sichert nicht mehr automatisch. Bitte erneut anmelden.",
+    "gdrive.warning.reconnect_btn": "Erneut anmelden"
 };

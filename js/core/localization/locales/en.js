@@ -1859,6 +1859,8 @@ window.LOCALE_EN = {
     "gdrive.confirm.import_multiple": "Do you want to import {0} file(s)? Current data in your browser will be overwritten if projects have the same name.",
     "gdrive.success.restored_count": "✅ {0} project(s) successfully restored from Google Drive!",
     "gdrive.error.import_failed": "Failed to import some files.",
+    "gdrive.warning.session_expired": "⚠️ Your Google Drive session has expired. Plume is no longer auto-saving. Please reconnect.",
+    "gdrive.warning.reconnect_btn": "Reconnect",
     "btn.import_selected": "Import selection",
     "export.novel.default_title": "Untitled",
     "export.novel.success": "✓ Export {0} finished",

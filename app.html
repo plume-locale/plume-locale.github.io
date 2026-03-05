@@ -1351,6 +1351,8 @@
                             id="headerBackupBtn">
                             <i data-lucide="cloud"></i>
                             <span data-i18n="btn.google_drive">Import/Export & Google Drive</span>
+                            <span id="headerGDriveStatusDot"
+                                style="display:none; width:8px; height:8px; border-radius:50%; margin-left:auto; flex-shrink:0;"></span>
                         </button>
                         <!-- Shortcuts -->
                         <button class="extra-menu-item" onclick="KeyboardShortcutsHandlers.openShortcutsModal()"
@@ -3188,9 +3190,12 @@
 
                                 <!-- NEW SECTION: BACKUPS LIST -->
                                 <div class="hub-card" style="margin-top: 1.5rem;">
-                                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
-                                        <h4 data-i18n="gdrive.backups.title" style="margin: 0;">Fichiers de sauvegarde (Plume Backups)</h4>
-                                        <button class="btn btn-icon btn-sm" onclick="ImportExportViewModel.refreshBackupsList()" title="Actualiser">
+                                    <div
+                                        style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+                                        <h4 data-i18n="gdrive.backups.title" style="margin: 0;">Fichiers de sauvegarde
+                                            (Plume Backups)</h4>
+                                        <button class="btn btn-icon btn-sm"
+                                            onclick="ImportExportViewModel.refreshBackupsList()" title="Actualiser">
                                             <i data-lucide="refresh-cw"></i>
                                         </button>
                                     </div>
@@ -3202,8 +3207,10 @@
                                         </div>
                                     </div>
                                     <div style="margin-top: 1rem; display: flex; justify-content: flex-end;">
-                                        <button class="btn btn-primary" onclick="ImportExportViewModel.importSelectedFromGDrive()">
-                                            <i data-lucide="file-import"></i> <span data-i18n="btn.import_selected">Importer la sélection</span>
+                                        <button class="btn btn-primary"
+                                            onclick="ImportExportViewModel.importSelectedFromGDrive()">
+                                            <i data-lucide="file-import"></i> <span
+                                                data-i18n="btn.import_selected">Importer la sélection</span>
                                         </button>
                                     </div>
                                 </div>
