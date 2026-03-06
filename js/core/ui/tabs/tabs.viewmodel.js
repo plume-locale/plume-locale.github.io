@@ -211,10 +211,11 @@ function getTabTitle(view, params) {
         return char ? (char.name || char.firstName) : Localization.t('nav.characters');
     }
     if (view === 'world' && params.worldId) {
-        const elem = project.world.find(e => e.id === params.worldId);
+        const elem = project?.world?.find(e => e.id == params.worldId);
         return elem ? elem.name : Localization.t('nav.world');
     }
     if (view === 'notes' && params.noteId) {
+        const note = (typeof NotesRepository !== 'undefined') ? NotesRepository.getById(params.noteId) : (project?.notes?.find(n => n.id == params.noteId));
         return note ? note.title : Localization.t('nav.notes');
     }
     if (view === 'scene_analysis' && params.sceneId) {

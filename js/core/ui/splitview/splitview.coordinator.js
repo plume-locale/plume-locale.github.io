@@ -129,7 +129,7 @@ function renderViewInSplitPanel(view, container, state, panel) {
 
         case 'notes':
             if (state.noteId) {
-                const note = project.notes?.find(n => n.id == state.noteId);
+                const note = (typeof NotesRepository !== 'undefined') ? NotesRepository.getById(state.noteId) : (project?.notes?.find(n => n.id == state.noteId));
                 if (note) {
                     if (typeof renderNoteDetailInContainer === 'function') {
                         renderNoteDetailInContainer(note, tempContainer);
