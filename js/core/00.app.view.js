@@ -2407,7 +2407,11 @@ function updateSceneContent() {
 
     if (typeof saveProject === 'function') saveProject();
     if (typeof updateStats === 'function') updateStats();
-    if (typeof renderActsList === 'function') renderActsList();
+    if (typeof updateStructureWordCounts === 'function') {
+        updateStructureWordCounts(currentActId, currentChapterId, currentSceneId);
+    } else if (typeof renderActsList === 'function') {
+        renderActsList();
+    }
     if (typeof trackWritingSession === 'function') trackWritingSession();
 
     if (typeof focusModeActive !== 'undefined' && focusModeActive && typeof updateWritingProgress === 'function') {
@@ -2447,7 +2451,11 @@ function updateChapterSceneContent(actId, chapterId, sceneId) {
 
     if (typeof saveProject === 'function') saveProject();
     if (typeof updateStats === 'function') updateStats();
-    if (typeof renderActsList === 'function') renderActsList();
+    if (typeof updateStructureWordCounts === 'function') {
+        updateStructureWordCounts(actId, chapterId, sceneId);
+    } else if (typeof renderActsList === 'function') {
+        renderActsList();
+    }
     if (typeof trackWritingSession === 'function') trackWritingSession();
 
     // Recalculer les proportions de l'indicateur
@@ -2692,7 +2700,11 @@ function updateActSceneContent(actId, chapterId, sceneId) {
 
     if (typeof saveProject === 'function') saveProject();
     if (typeof updateStats === 'function') updateStats();
-    if (typeof renderActsList === 'function') renderActsList();
+    if (typeof updateStructureWordCounts === 'function') {
+        updateStructureWordCounts(actId, chapterId, sceneId);
+    } else if (typeof renderActsList === 'function') {
+        renderActsList();
+    }
     if (typeof trackWritingSession === 'function') trackWritingSession();
 
     // Recalculer les proportions de l'indicateur
@@ -2936,7 +2948,11 @@ function saveSceneSynopsis(actId, chapterId, sceneId, textarea) {
 
     // Sauvegarder le projet
     if (typeof saveProject === 'function') saveProject();
-    if (typeof renderActsList === 'function') renderActsList();
+    if (typeof updateStructureWordCounts === 'function') {
+        updateStructureWordCounts(actId, chapterId, sceneId);
+    } else if (typeof renderActsList === 'function') {
+        renderActsList();
+    }
 }
 
 /**

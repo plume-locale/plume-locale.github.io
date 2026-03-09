@@ -214,6 +214,9 @@ const SceneVersionViewModel = {
             if (active) {
                 active.content = content;
                 active.wordCount = scene.wordCount;
+                if (typeof SceneVersionView !== 'undefined' && typeof SceneVersionView.updateActiveVersionStats === 'function') {
+                    SceneVersionView.updateActiveVersionStats(active.wordCount);
+                }
             }
         }
     }

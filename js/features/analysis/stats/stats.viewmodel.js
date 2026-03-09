@@ -227,14 +227,24 @@ const StatsViewModel = {
 
         if (session) {
             // Session existante : calculer les mots nets depuis le début de la journée
-            const startWords = session.startWords;
+            let startWords = session.startWords;
             // Si startWords n'a jamais été défini (ancienne session), on l'initialise maintenant
             if (startWords === undefined || startWords === null) {
                 StatsRepository.saveSession({ startWords: totalWords, words: 0 });
                 return;
             }
-            const newWords = totalWords - startWords;
-            StatsRepository.saveSession({ words: Math.max(0, newWords) });
+
+            let newWords = totalWords - startWords;
+
+            // Si totalWords chute (ex: l'utilisateur supprime du texte, ou le navigateur reformate le code HTML)
+            // On ajuste le baseline pour ne pas détruire le progrès accompli ('mots écrits' ne diminue pas).
+            if (newWords < (session.words || 0)) {
+                startWords = totalWords - (session.words || 0);
+                StatsRepository.saveSession({ startWords: startWords });
+                newWords = session.words || 0;
+            }
+
+            StatsRepository.saveSession({ words: newWords });
         } else {
             // Première écriture de la journée :
             // startWords = total actuel (déjà mis à jour avec le contenu courant)

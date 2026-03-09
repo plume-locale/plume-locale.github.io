@@ -376,6 +376,56 @@ function renderActsList() {
 
 // --- STATS HELPERS ---
 
+window.updateStructureWordCounts = function (actId, chapterId, sceneId) {
+    const vm = typeof getStructureViewModel === 'function' ? getStructureViewModel() : null;
+    if (!vm || !vm.acts) return;
+    const act = vm.acts.find(a => a.id == actId);
+    if (!act) return;
+
+    // Update Scene Badge and Chapter Badge
+    const chapter = act.chapters.find(c => c.id == chapterId);
+    if (chapter) {
+        let chTotalWords = 0;
+
+        // Single scene chapter has badge on chapter header instead of scene item
+        const isSingleScene = chapter.scenes.length === 1;
+
+        chapter.scenes.forEach(scene => {
+            const words = (scene.content && typeof StatsModel !== 'undefined') ? StatsModel.getWordCount(scene.content) : (scene.wordCount || 0);
+            chTotalWords += words;
+
+            if (scene.id == sceneId) {
+                let badge = null;
+                if (isSingleScene) {
+                    badge = document.querySelector(`.chapter-group[data-chapter-id="${chapterId}"] > .chapter-header .word-count-badge`);
+                } else {
+                    badge = document.querySelector(`.scene-item[data-scene-id="${sceneId}"] .word-count-badge`);
+                }
+                if (badge) {
+                    badge.textContent = formatWordCount(words);
+                    badge.title = `${words.toLocaleString()} mots`;
+                }
+            }
+        });
+
+        if (!isSingleScene) {
+            const chBadge = document.querySelector(`.chapter-group[data-chapter-id="${chapterId}"] > .chapter-header .word-count-badge`);
+            if (chBadge) {
+                chBadge.textContent = formatWordCount(chTotalWords);
+                chBadge.title = `${chTotalWords.toLocaleString()} mots`;
+            }
+        }
+    }
+
+    // Update Act Badge
+    const actStats = getActStats(act);
+    const actBadge = document.querySelector(`.act-group[data-act-id="${actId}"] > .act-header .word-count-badge`);
+    if (actBadge) {
+        actBadge.textContent = formatWordCount(actStats.totalWords);
+        actBadge.title = `${actStats.totalWords.toLocaleString()} mots`;
+    }
+};
+
 function getActStats(act) {
     let totalWords = 0;
     if (act.chapters) {

@@ -141,6 +141,14 @@ const SceneVersionView = {
         if (typeof lucide !== 'undefined') lucide.createIcons();
     },
 
+    updateActiveVersionStats(wordCount) {
+        const activeStats = document.querySelector('#sceneVersionsList .version-card.active .version-card-stats');
+        if (activeStats) {
+            const locale = Localization.getLocale() === 'fr' ? 'fr-FR' : 'en-US';
+            activeStats.textContent = Localization.t('versions.stats.words', [(wordCount || 0).toLocaleString(locale)]);
+        }
+    },
+
     reattachAnnotationListeners() {
         const markers = document.querySelectorAll('[data-annotation-id]');
         markers.forEach(marker => {

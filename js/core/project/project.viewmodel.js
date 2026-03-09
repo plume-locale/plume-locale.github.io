@@ -121,6 +121,11 @@ const ProjectViewModel = {
             }
 
             console.log('✅ Projets chargés:', projects.length);
+
+            // Initialiser le baseline de session d'écriture pour le projet chargé
+            setTimeout(() => {
+                if (typeof initTodaySession === 'function') initTodaySession();
+            }, 200);
         } catch (error) {
             console.error('❌ Erreur chargement projets:', error);
             project = ProjectModel.createDefault();
