@@ -351,14 +351,28 @@ const ImportExportViewModel = {
                 allProjects = [window.project];
             }
 
-            for (const proj of allProjects) {
+            // Filtrer le projet par défaut vide (Mon Roman, My Novel, etc.)
+            const defaultTitles = ["Mon Roman", "My Novel", "Mein Roman", "Mi Novela", Localization.t('project.model.default_title')];
+            const projectsToBackup = allProjects.filter(p => {
+                const isDefaultTitle = defaultTitles.includes(p.title);
+                const isEmpty = !p.acts || p.acts.length === 0;
+                return !(isDefaultTitle && isEmpty);
+            });
+
+            if (projectsToBackup.length === 0) {
+                ImportExportView.updateGDriveStatus(Localization.t('gdrive.status.synced'), 'success');
+                ImportExportView.showNotification(Localization.t('gdrive.success.sync', 0));
+                return;
+            }
+
+            for (const proj of projectsToBackup) {
                 const dataStr = JSON.stringify(proj, null, 2);
                 const filename = `backup_plume_${(proj.title || Localization.t('export.json.default_filename')).replace(/\s+/g, '_')}.json`;
                 await GoogleDriveService.saveFile(dataStr, filename, folderId);
             }
 
             ImportExportView.updateGDriveStatus(Localization.t('gdrive.status.synced'), 'success');
-            ImportExportView.showNotification(Localization.t('gdrive.success.sync', allProjects.length));
+            ImportExportView.showNotification(Localization.t('gdrive.success.sync', projectsToBackup.length));
             this.refreshBackupsList();
         } catch (err) {
             console.error(err);
