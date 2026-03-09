@@ -17,7 +17,8 @@
         // Doit être appelé AVANT toute frappe, au chargement du projet.
         window.initTodaySession = () => {
             const stats = StatsRepository.getStats();
-            if (!stats || !stats.writingSessions) return;
+            if (!stats) return;
+            if (!Array.isArray(stats.writingSessions)) stats.writingSessions = [];
 
             const today = new Date().toDateString();
             const session = stats.writingSessions.find(s => new Date(s.date).toDateString() === today);

@@ -20,6 +20,9 @@ const StatsRepository = {
         if (!project.stats.smartGoal) {
             project.stats.smartGoal = StatsModel.getDefaultStats().smartGoal;
         }
+        if (!Array.isArray(project.stats.writingSessions)) {
+            project.stats.writingSessions = [];
+        }
 
         return project.stats;
     },

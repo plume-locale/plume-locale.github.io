@@ -222,6 +222,7 @@ const StatsViewModel = {
         const { totalWords } = this.getProjectStats();
         const today = new Date().toDateString();
         const stats = StatsRepository.getStats();
+        if (!Array.isArray(stats.writingSessions)) stats.writingSessions = [];
         const session = stats.writingSessions.find(s => new Date(s.date).toDateString() === today);
 
         if (session) {
