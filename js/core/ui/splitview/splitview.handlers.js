@@ -9,11 +9,11 @@ function updateSplitSceneContent(editor) {
     const actId = parseInt(editor.dataset.actId);
     const panel = editor.dataset.panel;
 
-    const act = project.acts.find(a => a.id === actId);
+    const act = project.acts.find(a => a.id == actId);
     if (!act) return;
-    const chapter = act.chapters.find(c => c.id === chapterId);
+    const chapter = act.chapters.find(c => c.id == chapterId);
     if (!chapter) return;
-    const scene = chapter.scenes.find(s => s.id === sceneId);
+    const scene = chapter.scenes.find(s => s.id == sceneId);
     if (!scene) return;
 
     scene.content = editor.innerHTML;
@@ -33,6 +33,8 @@ function updateSplitSceneContent(editor) {
     if (typeof saveProject === 'function') {
         saveProject();
     }
+    if (typeof updateStats === 'function') updateStats();
+    if (typeof trackWritingSession === 'function') trackWritingSession();
 }
 
 /** [Mixte] - Synchronise le contenu du textarea (View) vers les données de la note (Model) */
@@ -44,6 +46,8 @@ function updateSplitNoteContent(textarea) {
         if (typeof saveProject === 'function') {
             saveProject();
         }
+        if (typeof updateStats === 'function') updateStats();
+        if (typeof trackWritingSession === 'function') trackWritingSession();
     }
 }
 

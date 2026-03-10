@@ -2169,13 +2169,20 @@
                 </div>
                 <div class="form-group">
                     <label class="form-label" data-i18n="modal.world.type">Type</label>
-                    <select class="form-input" id="worldTypeInput">
-                        <option value="Lieu" data-i18n="world.type.place">Lieu</option>
-                        <option value="Objet" data-i18n="world.type.object">Objet</option>
-                        <option value="Concept" data-i18n="world.type.concept">Concept</option>
-                        <option value="Organisation" data-i18n="world.type.organization">Organisation</option>
-                        <option value="Événement" data-i18n="world.type.event">Événement</option>
+                    <select class="form-input" id="worldTypeInput" onchange="updateWorldModalHint()">
+                        <option value="Géographie" data-i18n="world.type.geography">Géographie</option>
+                        <option value="Lieux & Bâtiments" data-i18n="world.type.places">Lieux & Bâtiments</option>
+                        <option value="Peuples & Ethnies" data-i18n="world.type.peoples">Peuples & Ethnies</option>
+                        <option value="Cultures & Traditions" data-i18n="world.type.cultures">Cultures & Traditions
+                        </option>
+                        <option value="Histoire & Chronologie" data-i18n="world.type.history">Histoire & Chronologie
+                        </option>
+                        <option value="Faune & Flore" data-i18n="world.type.biology">Faune & Flore</option>
+                        <option value="Objets & Artefacts" data-i18n="world.type.objects">Objets & Artefacts</option>
                     </select>
+                    <div id="worldTypeHint"
+                        style="font-size: 0.75rem; color: var(--text-muted); line-height: 1.3; background: var(--bg-secondary); padding: 8px 12px; border-radius: 6px; border: 1px solid var(--border-color); margin-top: 5px; display: none;">
+                    </div>
                 </div>
                 <div class="form-group">
                     <label class="form-label" data-i18n="modal.world.desc">Description rapide</label>
@@ -2589,18 +2596,34 @@
                 </div>
                 <div class="form-group">
                     <label class="form-label" data-i18n="modal.codex.label_category">Catégorie</label>
-                    <select class="form-input" id="codexCategoryInput">
-                        <option value="Culture" data-i18n="codex.category.Culture">Culture</option>
-                        <option value="Histoire" data-i18n="codex.category.Histoire">Histoire</option>
-                        <option value="Technologie" data-i18n="codex.category.Technologie">Technologie</option>
-                        <option value="Géographie" data-i18n="codex.category.Géographie">Géographie</option>
-                        <option value="Politique" data-i18n="codex.category.Politique">Politique</option>
-                        <option value="Magie/Pouvoir" data-i18n="codex.category.Magie/Pouvoir">Magie/Pouvoir
+                    <select class="form-input" id="codexCategoryInput" onchange="updateCodexModalHint()">
+                        <option value="Magie & Pouvoirs" data-i18n="codex.category.Magie">Magie & Pouvoirs</option>
+                        <option value="Sciences & Technologie" data-i18n="codex.category.Technologie">Sciences &
+                            Technologie</option>
+                        <option value="Religions & Cultes" data-i18n="codex.category.Religion">Religions & Cultes
                         </option>
-                        <option value="Religion" data-i18n="codex.category.Religion">Religion</option>
-                        <option value="Société" data-i18n="codex.category.Société">Société</option>
-                        <option value="Autre" data-i18n="codex.category.Autre">Autre</option>
+                        <option value="Philosophies & Idéologies" data-i18n="codex.category.Philosophie">Philosophies &
+                            Idéologies</option>
+                        <option value="Mythes & Légendes" data-i18n="codex.category.Mythes">Mythes & Légendes</option>
+                        <option value="Politique & Géopolitique" data-i18n="codex.category.Politique">Politique &
+                            Géopolitique</option>
+                        <option value="Lois & Justice" data-i18n="codex.category.Lois">Lois & Justice</option>
+                        <option value="Économie & Commerce" data-i18n="codex.category.Économie">Économie & Commerce
+                        </option>
+                        <option value="Systèmes Sociaux & Castes" data-i18n="codex.category.Société">Systèmes Sociaux &
+                            Castes</option>
+                        <option value="Factions & Organisations" data-i18n="codex.category.Factions">Factions &
+                            Organisations</option>
+                        <option value="Linguistique & Grammaire" data-i18n="codex.category.Linguistique">Linguistique &
+                            Grammaire</option>
+                        <option value="Cosmologie & Métaphysique" data-i18n="codex.category.Cosmologie">Cosmologie &
+                            Métaphysique</option>
+                        <option value="Glossaire & Terminologie" data-i18n="codex.category.Glossaire">Glossaire &
+                            Terminologie</option>
                     </select>
+                    <div id="codexCategoryHint"
+                        style="font-size: 0.75rem; color: var(--text-muted); line-height: 1.3; background: var(--bg-secondary); padding: 8px 12px; border-radius: 6px; border: 1px solid var(--border-color); margin-top: 5px; display: none;">
+                    </div>
                 </div>
                 <div class="form-group">
                     <label class="form-label" data-i18n="modal.codex.label_summary">Résumé rapide</label>
@@ -4491,6 +4514,7 @@
 <script src="./js/features/editor/narrative-overview/narrative-overview.main.js"></script>
 <script src="./js/features/tools/changelog/changelog.i18n.data.js"></script>
 <script src="./js/features/tools/changelog/changelog.view.js"></script>
+<script src="./js/worldbuilding/atlas/atlas.schema.js"></script>
 <script src="./js/features/tools/import-export/import-export.structured-export.js"></script>
 
     </body>

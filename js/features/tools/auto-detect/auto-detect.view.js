@@ -144,7 +144,7 @@ const AutoDetectView = {
                     <div class="link-item present" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
                         <div style="display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0;">
                             <i data-lucide="${iconName}" style="width: 20px; height: 20px;"></i>
-                            <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${elem.name} (${elem.type})">${elem.name}</span>
+                            <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${(elem.fields && elem.fields.nom) ? elem.fields.nom : (elem.name || '')} (${elem.type})">${(elem.fields && elem.fields.nom) ? elem.fields.nom : (elem.name || '')}</span>
                         </div>
                         <button onclick="toggleElementInScene(currentActId, currentChapterId, currentSceneId, ${elem.id}); openScene(currentActId, currentChapterId, currentSceneId);" title="${Localization.t('autodetect.elements.unlink_title')}" class="btn-icon">
                             <i data-lucide="x" style="width: 16px; height: 16px;"></i>
@@ -299,7 +299,8 @@ const AutoDetectView = {
             return elem && (!elem.type || elem.type.toLowerCase() !== 'objet');
         }).map(id => {
             const elem = project.world.find(e => e.id == id);
-            return `<div class="link-item" style="margin-bottom: 4px;"><i data-lucide="${this.getElementIcon(elem.type)}" style="width:12px;height:12px;vertical-align:middle;margin-right:4px;"></i>${elem.name}</div>`;
+            const name = (elem.fields && elem.fields.nom) ? elem.fields.nom : (elem.name || '');
+            return `<div class="link-item" style="margin-bottom: 4px;"><i data-lucide="${this.getElementIcon(elem.type)}" style="width:12px;height:12px;vertical-align:middle;margin-right:4px;"></i>${name}</div>`;
         }).join('');
 
         // Map Locations
@@ -321,7 +322,8 @@ const AutoDetectView = {
         (scene.linkedElements || []).forEach(id => {
             const elem = project.world ? project.world.find(e => e.id == id) : null;
             if (elem && elem.type && elem.type.toLowerCase() === 'objet') {
-                objectsItemsHtml += `<div class="link-item" style="margin-bottom: 4px;"><i data-lucide="box" style="width:12px;height:12px;vertical-align:middle;margin-right:4px;"></i>${elem.name}</div>`;
+                const name = (elem.fields && elem.fields.nom) ? elem.fields.nom : (elem.name || '');
+                objectsItemsHtml += `<div class="link-item" style="margin-bottom: 4px;"><i data-lucide="box" style="width:12px;height:12px;vertical-align:middle;margin-right:4px;"></i>${name}</div>`;
             }
         });
 

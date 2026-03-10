@@ -833,9 +833,10 @@ function renderSceneElements(actId, chapterId, scene) {
     return scene.linkedElements.map(elemId => {
         const element = vm.world.find(e => e.id === elemId);
         if (!element) return '';
+        const name = (element.fields && element.fields.nom) ? element.fields.nom : (element.name || '');
         return `
             <span class="link-badge" onclick="event.stopPropagation(); switchView('world'); openWorldDetail(${elemId});">
-                ${element.name}
+                ${name}
                 <span class="link-badge-remove" onclick="event.stopPropagation(); toggleElementInScene(${actId}, ${chapterId}, ${scene.id}, ${elemId}); openScene(${actId}, ${chapterId}, ${scene.id});"><i data-lucide="x" style="width:10px;height:10px;"></i></span>
            </span>`;
     }).join('');
@@ -916,10 +917,11 @@ function openElementLinker(actId, chapterId, sceneId) {
             <div class="tag-selector">
                 ${project.world.map(elem => {
             const isLinked = scene.linkedElements && scene.linkedElements.includes(elem.id);
+            const name = (elem.fields && elem.fields.nom) ? elem.fields.nom : (elem.name || '');
             return `
                         <div class="tag-option ${isLinked ? 'selected' : ''}" 
                              onclick="toggleElementInScene(${actId}, ${chapterId}, ${sceneId}, ${elem.id}); this.classList.toggle('selected');">
-                            ${elem.name} <small>(${elem.type})</small>
+                            ${name} <small>(${elem.type})</small>
                         </div>`;
         }).join('')}
             </div>

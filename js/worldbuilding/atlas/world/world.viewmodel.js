@@ -10,9 +10,11 @@ function addWorldElementViewModel(name, type, description) {
     if (!name) return { success: false, message: Localization.t('world.error.name_required') };
 
     const elementData = {
-        name: name,
-        type: type,
-        description: description
+        category: type,
+        fields: {
+            nom: name.trim(),
+            resume_court: description ? description.trim() : ''
+        }
     };
 
     const newElement = WorldModel.create(elementData);
@@ -53,15 +55,18 @@ function getGroupedWorldElementsViewModel() {
     const groups = {};
 
     elements.forEach(elem => {
-        const type = elem.type || 'Autre';
-        if (!groups[type]) groups[type] = [];
-        groups[type].push(WorldModel.migrate(elem));
+        const migrated = WorldModel.migrate(elem);
+        const category = migrated.category || 'Autre';
+        if (!groups[category]) groups[category] = [];
+        groups[category].push(migrated);
     });
 
-    // Sort elements alphabetically within each group
-    Object.keys(groups).forEach(type => {
-        groups[type].sort((a, b) => {
-            return (a.name || '').toLowerCase().localeCompare((b.name || '').toLowerCase(), 'fr');
+    // Sort elements alphabetically within each group using fields.nom
+    Object.keys(groups).forEach(cat => {
+        groups[cat].sort((a, b) => {
+            const nameA = (a.fields && a.fields.nom) ? a.fields.nom : (a.name || '');
+            const nameB = (b.fields && b.fields.nom) ? b.fields.nom : (b.name || '');
+            return nameA.toLowerCase().localeCompare(nameB.toLowerCase(), 'fr');
         });
     });
 
@@ -118,13 +123,26 @@ function getLinkedScenesForElementViewModel(elementId) {
  * Generic field update.
  */
 function updateWorldFieldViewModel(id, field, value) {
-    const updated = WorldRepository.update(id, { [field]: value });
+    const element = WorldRepository.getById(id);
+    if (!element) return { success: false, sideEffects: {} };
+
+    const updates = {};
+    if (field === 'category') {
+        updates.category = value;
+        updates.type = value; // Retro-compatibility
+    } else {
+        updates.fields = { ...(element.fields || {}) };
+        updates.fields[field] = value;
+        if (field === 'nom') updates.name = value;
+    }
+
+    const updated = WorldRepository.update(id, updates);
 
     return {
         success: !!updated,
         sideEffects: {
             shouldSave: true,
-            shouldRefreshList: (field === 'name' || field === 'type')
+            shouldRefreshList: (field === 'nom' || field === 'name' || field === 'category')
         }
     };
 }

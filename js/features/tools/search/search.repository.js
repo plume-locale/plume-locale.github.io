@@ -147,15 +147,30 @@ const SearchRepository = {
         if (!project.world) return results;
 
         project.world.forEach(element => {
-            const searchText = [
+            let searchText = [
                 String(element.name || ''),
                 String(element.description || ''),
                 String(element.details || ''),
-                String(element.type || '')
-            ].join(' ').toLowerCase();
+                String(element.type || ''),
+                String(element.category || '')
+            ].join(' ');
+
+            // Nouveau système Atlas
+            if (element.fields) {
+                const fieldValues = Object.values(element.fields).filter(v => typeof v === 'string').join(' ');
+                searchText += ' ' + fieldValues;
+            }
+
+            searchText = searchText.toLowerCase();
 
             if (searchText.includes(lowerQuery)) {
-                const preview = element.description || element.details || Localization.t('search.default.nodesc');
+                let preview = '';
+                if (element.fields && element.fields.resume_court) {
+                    preview = element.fields.resume_court;
+                } else {
+                    preview = element.description || element.details || Localization.t('search.default.nodesc');
+                }
+
                 results.push(
                     SearchResultModel.createWorldResult(element, originalQuery, preview)
                 );
@@ -264,21 +279,36 @@ const SearchRepository = {
         if (!project.codex) return results;
 
         project.codex.forEach(entry => {
-            const searchText = [
+            let searchText = [
                 String(entry.title || ''),
                 String(entry.summary || ''),
                 String(entry.content || ''),
                 String(entry.category || '')
-            ].join(' ').toLowerCase();
+            ].join(' ');
+
+            // Nouveau système Atlas
+            if (entry.fields) {
+                const fieldValues = Object.values(entry.fields).filter(v => typeof v === 'string').join(' ');
+                searchText += ' ' + fieldValues;
+            }
+
+            searchText = searchText.toLowerCase();
 
             if (searchText.includes(lowerQuery)) {
-                const matchIndex = entry.content
-                    ? entry.content.toLowerCase().indexOf(lowerQuery)
-                    : -1;
+                const plainContent = entry.fields && entry.fields.notes_de_l_auteur
+                    ? SearchRepository.extractTextFromHTML(entry.fields.notes_de_l_auteur)
+                    : SearchRepository.extractTextFromHTML(entry.content || '');
 
-                const preview = matchIndex >= 0
-                    ? SearchRepository.getPreview(entry.content, matchIndex, originalQuery.length)
-                    : (entry.summary || entry.content || '').substring(0, 150);
+                const matchIndex = plainContent.toLowerCase().indexOf(lowerQuery);
+
+                let preview = '';
+                if (matchIndex >= 0) {
+                    preview = SearchRepository.getPreview(plainContent, matchIndex, originalQuery.length);
+                } else if (entry.fields && entry.fields.resume_court) {
+                    preview = entry.fields.resume_court;
+                } else {
+                    preview = (entry.summary || plainContent || '').substring(0, 150);
+                }
 
                 results.push(
                     SearchResultModel.createCodexResult(entry, originalQuery, matchIndex, preview)

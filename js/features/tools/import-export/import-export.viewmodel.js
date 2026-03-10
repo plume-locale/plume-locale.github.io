@@ -494,8 +494,12 @@ const ImportExportViewModel = {
         }
 
         if (successCount > 0) {
-            if (typeof renderActsList === 'function') renderActsList();
-            if (typeof updateProjectList === 'function') updateProjectList(); // Refresh project hub if open
+            if (typeof ProjectViewModel !== 'undefined' && typeof ProjectViewModel.init === 'function') {
+                await ProjectViewModel.init();
+            } else {
+                if (typeof renderActsList === 'function') renderActsList();
+                if (typeof updateProjectList === 'function') updateProjectList(); // Refresh project hub if open
+            }
 
             ImportExportView.updateGDriveStatus(Localization.t('gdrive.status.restored'), 'success');
             alert(Localization.t('gdrive.success.restored_count', [successCount]) || `${successCount} projet(s) restauré(s) avec succès.`);

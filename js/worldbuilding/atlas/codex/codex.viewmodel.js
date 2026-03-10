@@ -23,9 +23,11 @@ const CodexViewModel = {
         }
 
         const entryData = {
-            title: title.trim(),
             category: category,
-            summary: summary ? summary.trim() : ''
+            fields: {
+                nom: title.trim(),
+                resume_court: summary ? summary.trim() : ''
+            }
         };
 
         const newEntry = CodexModel.create(entryData);
@@ -67,17 +69,30 @@ const CodexViewModel = {
      * @param {*} value - Nouvelle valeur
      */
     updateField(id, field, value) {
+        const entry = CodexRepository.getById(id);
+        if (!entry) return;
+
         const updates = {};
-        updates[field] = value;
+        if (field === 'category') {
+            updates[field] = value;
+        } else {
+            updates.fields = { ...(entry.fields || {}) };
+            updates.fields[field] = value;
+            if (field === 'nom') updates.title = value; // Sync for backward compat and tabs
+        }
 
         const updatedEntry = CodexRepository.update(id, updates);
 
         if (updatedEntry) {
             saveProject();
 
-            // Si le titre ou la catégorie change, la liste doit être rafraîchie
-            if (field === 'title' || field === 'category') {
+            // Si le titre, nom ou la catégorie change, la liste doit être rafraîchie
+            if (field === 'title' || field === 'nom' || field === 'category') {
                 CodexView.renderList();
+                // Rafraîchir aussi les onglets (pour le titre)
+                if ((field === 'title' || field === 'nom') && typeof refreshTabs === 'function') {
+                    refreshTabs();
+                }
             }
         }
     },

@@ -85,19 +85,49 @@ const ImportExportRepository = {
         if (content.world && content.world.length > 0) {
             markdown += `\n\n# ${Localization.t('export.models.world')}\n\n`;
             content.world.forEach(item => {
-                markdown += `## ${item.name} (${item.type})\n\n`;
-                if (item.description) markdown += `${this.stripHTML(item.description)}\n\n`;
-                if (item.details) markdown += `### ${Localization.t('world.fields.details')}\n\n${this.stripHTML(item.details)}\n\n`;
-                if (item.history) markdown += `### ${Localization.t('world.fields.history')}\n\n${this.stripHTML(item.history)}\n\n`;
+                const name = (item.fields && item.fields.nom) ? item.fields.nom : (item.name || '');
+                const type = item.category || item.type || '';
+                markdown += `## ${name}${type ? ` (${type})` : ''}\n\n`;
+
+                if (item.fields) {
+                    if (item.fields.resume_court) markdown += `${this.stripHTML(item.fields.resume_court)}\n\n`;
+                    if (item.fields.notes_de_l_auteur) markdown += `### ${Localization.t('world.fields.details')}\n\n${this.stripHTML(item.fields.notes_de_l_auteur)}\n\n`;
+
+                    // Exporter les autres champs dynamiques
+                    Object.entries(item.fields).forEach(([key, val]) => {
+                        if (!['nom', 'resume_court', 'notes_de_l_auteur'].includes(key) && val) {
+                            markdown += `**${key}**: ${this.stripHTML(String(val))}\n\n`;
+                        }
+                    });
+                } else {
+                    if (item.description) markdown += `${this.stripHTML(item.description)}\n\n`;
+                    if (item.details) markdown += `### ${Localization.t('world.fields.details')}\n\n${this.stripHTML(item.details)}\n\n`;
+                    if (item.history) markdown += `### ${Localization.t('world.fields.history')}\n\n${this.stripHTML(item.history)}\n\n`;
+                }
             });
         }
 
         if (content.codex && content.codex.length > 0) {
             markdown += `\n\n# ${Localization.t('export.models.codex')}\n\n`;
             content.codex.forEach(entry => {
-                markdown += `## ${entry.title} (${entry.category})\n\n`;
-                if (entry.summary) markdown += `> ${entry.summary}\n\n`;
-                if (entry.content) markdown += `${this.stripHTML(entry.content)}\n\n`;
+                const title = (entry.fields && entry.fields.nom) ? entry.fields.nom : (entry.title || '');
+                const category = entry.category || '';
+                markdown += `## ${title}${category ? ` (${category})` : ''}\n\n`;
+
+                if (entry.fields) {
+                    if (entry.fields.resume_court) markdown += `> ${this.stripHTML(entry.fields.resume_court)}\n\n`;
+                    if (entry.fields.notes_de_l_auteur) markdown += `${this.stripHTML(entry.fields.notes_de_l_auteur)}\n\n`;
+
+                    // Autres champs si présents
+                    Object.entries(entry.fields).forEach(([key, val]) => {
+                        if (!['nom', 'resume_court', 'notes_de_l_auteur'].includes(key) && val) {
+                            markdown += `**${key}**: ${this.stripHTML(String(val))}\n\n`;
+                        }
+                    });
+                } else {
+                    if (entry.summary) markdown += `> ${entry.summary}\n\n`;
+                    if (entry.content) markdown += `${this.stripHTML(entry.content)}\n\n`;
+                }
             });
         }
 
@@ -190,10 +220,37 @@ const ImportExportRepository = {
             const worldTitle = Localization.t('export.models.world');
             text += `\n\n${worldTitle}\n${'='.repeat(worldTitle.length)}\n\n`;
             content.world.forEach(item => {
-                text += `${item.name} (${item.type})\n`;
-                text += `${'-'.repeat(item.name.length + item.type.length + 3)}\n\n`;
-                if (item.description) text += `${this.stripHTML(item.description)}\n\n`;
-                if (item.details) text += `${Localization.t('world.fields.details')}:\n${this.stripHTML(item.details)}\n\n`;
+                const name = (item.fields && item.fields.nom) ? item.fields.nom : (item.name || '');
+                const type = item.category || item.type || '';
+                text += `${name}${type ? ` (${type})` : ''}\n`;
+                text += `${'-'.repeat(name.length + (type ? type.length + 3 : 0))}\n\n`;
+
+                if (item.fields) {
+                    if (item.fields.resume_court) text += `${this.stripHTML(item.fields.resume_court)}\n\n`;
+                    if (item.fields.notes_de_l_auteur) text += `${Localization.t('world.fields.details')}:\n${this.stripHTML(item.fields.notes_de_l_auteur)}\n\n`;
+                } else {
+                    if (item.description) text += `${this.stripHTML(item.description)}\n\n`;
+                    if (item.details) text += `${Localization.t('world.fields.details')}:\n${this.stripHTML(item.details)}\n\n`;
+                }
+            });
+        }
+
+        if (content.codex && content.codex.length > 0) {
+            const codexTitle = Localization.t('export.models.codex');
+            text += `\n\n${codexTitle}\n${'='.repeat(codexTitle.length)}\n\n`;
+            content.codex.forEach(entry => {
+                const title = (entry.fields && entry.fields.nom) ? entry.fields.nom : (entry.title || '');
+                const category = entry.category || '';
+                text += `${title}${category ? ` (${category})` : ''}\n`;
+                text += `${'-'.repeat(title.length + (category ? category.length + 3 : 0))}\n\n`;
+
+                if (entry.fields) {
+                    if (entry.fields.resume_court) text += `[${entry.fields.resume_court}]\n\n`;
+                    if (entry.fields.notes_de_l_auteur) text += `${this.stripHTML(entry.fields.notes_de_l_auteur)}\n\n`;
+                } else {
+                    if (entry.summary) text += `[${entry.summary}]\n\n`;
+                    if (entry.content) text += `${this.stripHTML(entry.content)}\n\n`;
+                }
             });
         }
 
@@ -259,14 +316,39 @@ const ImportExportRepository = {
             });
         });
 
-        // --- Additional Models ---
-        if (content.characters && content.characters.length > 0) {
-            html += `    <h1>${Localization.t('export.models.characters')}</h1>\n`;
-            content.characters.forEach(char => {
-                html += `    <h2>${char.name}</h2>\n`;
-                if (char.role) html += `    <p><strong>${Localization.t('characters.fields.role')}</strong>: ${char.role}</p>\n`;
-                if (char.physicalDescription) html += `    <p><strong>${Localization.t('characters.fields.appearance')}</strong>:<br>${this.stripHTML(char.physicalDescription)}</p>\n`;
-                if (char.past) html += `    <p><strong>${Localization.t('characters.fields.past')}</strong>:<br>${this.stripHTML(char.past)}</p>\n`;
+        if (content.world && content.world.length > 0) {
+            html += `    <h1>${Localization.t('export.models.world')}</h1>\n`;
+            content.world.forEach(item => {
+                const name = (item.fields && item.fields.nom) ? item.fields.nom : (item.name || '');
+                const type = item.category || item.type || '';
+                html += `    <h2>${name}</h2>\n`;
+                if (type) html += `    <p><strong>${Localization.t('world.fields.type')}</strong>: ${type}</p>\n`;
+
+                if (item.fields) {
+                    if (item.fields.resume_court) html += `    <div class="summary">${this.stripHTML(item.fields.resume_court)}</div>\n`;
+                    if (item.fields.notes_de_l_auteur) html += `    <div>${item.fields.notes_de_l_auteur}</div>\n`;
+                } else {
+                    if (item.description) html += `    <div class="summary">${this.stripHTML(item.description)}</div>\n`;
+                    if (item.details) html += `    <div>${item.details}</div>\n`;
+                }
+            });
+        }
+
+        if (content.codex && content.codex.length > 0) {
+            html += `    <h1>${Localization.t('export.models.codex')}</h1>\n`;
+            content.codex.forEach(entry => {
+                const title = (entry.fields && entry.fields.nom) ? entry.fields.nom : (entry.title || '');
+                const category = entry.category || '';
+                html += `    <h2>${title}</h2>\n`;
+                if (category) html += `    <p><strong>${Localization.t('codex.fields.category')}</strong>: ${category}</p>\n`;
+
+                if (entry.fields) {
+                    if (entry.fields.resume_court) html += `    <div class="summary">${this.stripHTML(entry.fields.resume_court)}</div>\n`;
+                    if (entry.fields.notes_de_l_auteur) html += `    <div>${entry.fields.notes_de_l_auteur}</div>\n`;
+                } else {
+                    if (entry.summary) html += `    <div class="summary">${this.stripHTML(entry.summary)}</div>\n`;
+                    if (entry.content) html += `    <div>${entry.content}</div>\n`;
+                }
             });
         }
 

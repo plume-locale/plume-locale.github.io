@@ -103,9 +103,36 @@ const AutoDetectViewModel = {
         // --- 2. LIEUX/ÉLÉMENTS ---
         const elements = AutoDetectRepository.getWorldElements();
         elements.forEach(elem => {
-            const elemNameNormalized = AutoDetectModel.normalizeForSearch(elem.name);
-            const regex = new RegExp('\\b' + AutoDetectModel.escapeRegex(elemNameNormalized) + '\\b', 'i');
-            const isInText = regex.test(normalizedText);
+            const namesToDetect = [];
+
+            // 1. Nom principal (champ dynamique ou legacy)
+            if (elem.fields && elem.fields.nom) namesToDetect.push(elem.fields.nom);
+            if (elem.name) namesToDetect.push(elem.name);
+
+            // 2. Alias (nom_alternatif_alias dans COMMON_FIELDS)
+            if (elem.fields && elem.fields.nom_alternatif_alias) {
+                const aliases = elem.fields.nom_alternatif_alias;
+                if (Array.isArray(aliases)) {
+                    namesToDetect.push(...aliases);
+                } else if (typeof aliases === 'string' && aliases.trim()) {
+                    namesToDetect.push(...aliases.split(',').map(s => s.trim()));
+                }
+            }
+
+            const uniqueNames = [...new Set(namesToDetect)]
+                .filter(n => n && n.trim())
+                .map(name => AutoDetectModel.normalizeForSearch(name));
+
+            let isInText = false;
+            for (const name of uniqueNames) {
+                if (!name) continue;
+                const regex = new RegExp('\\b' + AutoDetectModel.escapeRegex(name) + '\\b', 'i');
+                if (regex.test(normalizedText)) {
+                    isInText = true;
+                    break;
+                }
+            }
+
             const isLinked = scene.linkedElements.includes(elem.id);
 
             if (isInText && !isLinked) {

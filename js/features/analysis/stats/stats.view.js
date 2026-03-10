@@ -11,6 +11,7 @@ const StatsView = {
      */
     updateHeaderStats() {
         const { totalWords, totalChapters } = StatsViewModel.getProjectStats();
+        console.log(`[Stats] Updating Header - TotalWords: ${totalWords}`);
         const locale = typeof Localization !== 'undefined' && Localization.getLocale() === 'fr' ? 'fr-FR' : 'en-US';
 
         const headerWords = document.getElementById('headerTotalWords');

@@ -2390,9 +2390,9 @@ function updateSceneContent() {
     const editor = document.querySelector('.editor-textarea');
     if (!editor) return;
 
-    const act = project.acts.find(a => a.id === currentActId);
-    const chapter = act?.chapters.find(c => c.id === currentChapterId);
-    const scene = chapter?.scenes.find(s => s.id === currentSceneId);
+    const act = project.acts.find(a => a.id == currentActId);
+    const chapter = act?.chapters.find(c => c.id == currentChapterId);
+    const scene = chapter?.scenes.find(s => s.id == currentSceneId);
     if (!scene) return;
 
     scene.content = editor.innerHTML;

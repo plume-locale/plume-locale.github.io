@@ -1,7 +1,250 @@
 /**
- * [MVVM : Codex View]
- * Gestion de l'affichage et des interactions DOM pour le Codex.
+ * Renders the detail view using ATLAS SCHEMA either in split view or normal view.
  */
+function _renderCodexDetailInContainer(entry, container, codexId) {
+    const catKey = entry.category || 'Culture';
+    const schemaCat = (window.ATLAS_SCHEMA && window.ATLAS_SCHEMA.CODEX.categories[catKey]) ?
+        window.ATLAS_SCHEMA.CODEX.categories[catKey] :
+        { icon: 'book', color: '#3b82f6', tabs: [] };
+
+    const typeIcon = schemaCat.icon || 'book';
+    const typeColor = schemaCat.color || 'var(--accent-gold)';
+
+    // Génération dynamique des sections à partir des Common Fields
+    let commonHtml = '';
+    if (window.COMMON_FIELDS) {
+        window.COMMON_FIELDS.forEach(f => {
+            if (f.id === 'nom' || f.id === 'resume_court' || f.id === 'statut_de_developpement' || f.id === 'image_illustration') return; // Rendus séparément ou différemment
+
+            const val = entry.fields ? (entry.fields[f.id] || '') : '';
+            let inputHtml = '';
+
+            if (f.type === 'textarea' || f.type === 'textarea-sm') {
+                const rows = f.type === 'textarea-sm' ? 3 : 6;
+                inputHtml = `<textarea class="form-input" rows="${rows}" style="width:100%; resize:vertical; line-height:1.6;" oninput="updateCodexField('${codexId}', '${f.id}', this.value)">${val}</textarea>`;
+            } else if (f.type === 'select') {
+                inputHtml = `<select class="form-input" style="width:100%" onchange="updateCodexField('${codexId}', '${f.id}', this.value)">
+                    <option value="">--</option>
+                    ${f.options.map(opt => `<option value="${opt}" ${val === opt ? 'selected' : ''}>${opt}</option>`).join('')}
+                </select>`;
+            } else {
+                inputHtml = `<input type="text" class="form-input" style="width:100%" value="${val}" onchange="updateCodexField('${codexId}', '${f.id}', this.value)">`;
+            }
+
+            const noteHtml = f.note ? `<div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem;">${f.note}</div>` : '';
+            commonHtml += `
+            <div class="detail-section">
+                <div class="detail-section-title">${f.name}</div>
+                ${inputHtml}
+                ${noteHtml}
+            </div>`;
+        });
+    }
+
+    // Génération dynamique des onglets/sections à partir du schéma
+    let sectionsHtml = '';
+    if (schemaCat.tabs) {
+        schemaCat.tabs.forEach((tab, index) => {
+            let fieldsHtml = '';
+            tab.fields.forEach(f => {
+                const val = entry.fields ? (entry.fields[f.id] || '') : '';
+                let inputHtml = '';
+
+                if (f.type === 'textarea' || f.type === 'textarea-sm') {
+                    const rows = f.type === 'textarea-sm' ? 3 : 6;
+                    inputHtml = `<textarea class="form-input" rows="${rows}" style="width:100%; resize:vertical; line-height:1.6;" oninput="updateCodexField('${codexId}', '${f.id}', this.value)">${val}</textarea>`;
+                } else if (f.type === 'select') {
+                    inputHtml = `<select class="form-input" style="width:100%" onchange="updateCodexField('${codexId}', '${f.id}', this.value)">
+                        <option value="">--</option>
+                        ${f.options ? f.options.map(opt => `<option value="${opt}" ${val === opt ? 'selected' : ''}>${opt}</option>`).join('') : ''}
+                    </select>`;
+                } else if (f.type === 'relation') {
+                    const opts = window.getAtlasRelationOptions ? window.getAtlasRelationOptions(f.target) : [];
+                    inputHtml = `<select class="form-input" style="width:100%" onchange="updateCodexField('${codexId}', '${f.id}', this.value)">
+                        <option value="">-- Aucun --</option>
+                        ${opts.map(o => `<option value="${o.id}" ${val == o.id ? 'selected' : ''}>${o.label} ${o.sub ? `(${o.sub})` : ''}</option>`).join('')}
+                    </select>`;
+                } else if (f.type === 'relation-multi') {
+                    const opts = window.getAtlasRelationOptions ? window.getAtlasRelationOptions(f.target) : [];
+                    let currentVals = Array.isArray(val) ? val : (val ? val.split(',').map(v => v.trim()) : []);
+                    inputHtml = `<div class="relation-multi-container form-input" style="max-height: 150px; overflow-y: auto; padding: 0.5rem; background: var(--bg-primary);">
+                        ${opts.length === 0 ? `<div style="color:var(--text-muted); font-size:0.85em;">Aucun élément trouvé (Cible: ${f.target})</div>` : ''}
+                        ${opts.map(o => {
+                        const isChecked = currentVals.includes(String(o.id));
+                        return `<label style="display:flex; align-items:center; gap:0.5rem; margin-bottom:0.25rem; font-size:0.9em; cursor:pointer;">
+                                        <input type="checkbox" value="${o.id}" ${isChecked ? 'checked' : ''} onchange="
+                                            const container = this.closest('.relation-multi-container'); 
+                                            const checked = Array.from(container.querySelectorAll('input:checked')).map(cb => cb.value); 
+                                            updateCodexField('${codexId}', '${f.id}', checked);
+                                        ">
+                                        ${o.label} ${o.sub ? `<span style="color:var(--text-muted); font-size:0.8em;">(${o.sub})</span>` : ''}
+                                    </label>`;
+                    }).join('')}
+                    </div>`;
+                } else {
+                    inputHtml = `<input type="text" class="form-input" style="width:100%" placeholder="" value="${val}" onchange="updateCodexField('${codexId}', '${f.id}', this.value)">`;
+                }
+
+                const noteHtml = f.note ? `<div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem;">${f.note}</div>` : '';
+                const titleHtml = `<div class="detail-section-title" style="margin-bottom:0.5rem; font-weight:600;">${f.name} ${f.required ? '<span style="color:var(--text-danger)">*</span>' : ''}</div>`;
+
+                fieldsHtml += `
+                <div class="detail-section" style="margin-bottom:1.5rem;">
+                    ${titleHtml}
+                    ${inputHtml}
+                    ${noteHtml}
+                </div>`;
+            });
+
+            sectionsHtml += `
+                <div class="schema-tab-section" style="margin-top: 2rem; border: 1px solid var(--border-color); border-radius: 8px; padding: 1.5rem; background: var(--bg-secondary);">
+                    <h3 style="margin-top: 0; margin-bottom: 1.5rem; color: ${typeColor}; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; font-family: 'Noto Serif JP', serif;">${tab.label}</h3>
+                    <div style="display: flex; flex-direction: column;">
+                        ${fieldsHtml}
+                    </div>
+                </div>
+            `;
+        });
+    }
+
+    // Le header avec le Nom et le Résumé court (champs majeurs du COMMON_FIELDS)
+    const nomVal = entry.fields && entry.fields.nom ? entry.fields.nom : entry.title;
+    const descVal = entry.fields && entry.fields.resume_court ? entry.fields.resume_court : (entry.summary || '');
+
+    // Categories select
+    const allCategories = window.ATLAS_SCHEMA ? Object.keys(window.ATLAS_SCHEMA.CODEX.categories) : ['Culture', 'Histoire', 'Technologie', 'Géographie', 'Politique', 'Magie/Pouvoir', 'Religion', 'Société', 'Autre'];
+    const catSelectOptions = allCategories.map(cat => `<option value="${cat}" ${catKey === cat ? 'selected' : ''}>${Localization.t(CODEX_TYPE_I18N[cat] || 'codex.category.Autre')}</option>`).join('');
+
+    const incomingLinks = window.getIncomingRelations ? window.getIncomingRelations(codexId) : [];
+    let incomingHtml = '';
+    if (incomingLinks.length > 0) {
+        incomingHtml = `
+        <h2 style="font-size:1.2rem; margin-top:2rem; margin-bottom: 1rem; border-bottom:2px solid var(--border-color); padding-bottom:0.5rem; font-family: 'Noto Serif JP', serif;"><i data-lucide="link" style="width:16px;height:16px;vertical-align:middle;margin-right:6px;"></i>Liens entrants (Références)</h2>
+        <div style="display:flex; flex-direction:column; gap:0.5rem; margin-bottom:2rem;">
+            ${incomingLinks.map(link => `
+                <div class="reference-item" style="display:flex; align-items:center; gap:0.5rem; padding:0.5rem; background:var(--bg-secondary); border-radius:4px; cursor:pointer; border: 1px solid var(--border-color);" onclick="${link.sourceSection === 'codex' ? `openCodexDetail('${link.id}')` : `openWorldDetail('${link.id}')`}">
+                    <i data-lucide="${link.icon}" style="width:14px;height:14px;color:var(--text-muted);"></i>
+                    <span style="font-weight:600;">${link.label}</span>
+                    <span style="color:var(--text-muted); font-size:0.8em; margin-left:auto;">(${link.fieldKey})</span>
+                </div>
+            `).join('')}
+        </div>
+        `;
+    }
+
+    container.innerHTML = `
+        <div class="detail-view" style="height:100%; overflow-y:auto; padding-bottom: 3rem;">
+            <div class="detail-header" style="position:sticky; top:0; background:var(--bg-primary); z-index:10; padding:1rem; border-bottom:1px solid var(--border-color); display:flex; align-items:center; justify-content:space-between; gap:1rem;">
+                <div style="display: flex; align-items: center; gap: 1rem; flex: 1;">
+                    <div style="width:42px; height:42px; border-radius:10px; background:${typeColor}; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                        <i data-lucide="${typeIcon}" style="width:20px;height:20px;color:var(--bg-primary);"></i>
+                    </div>
+                    <div style="flex:1;">
+                        <input type="text" class="form-input" value="${nomVal}"
+                               style="font-size: 1.5rem; font-weight: 600; font-family: 'Noto Serif JP', serif; width:100%; padding: 0; border:none; background:transparent; margin-bottom: 4px;"
+                               onchange="updateCodexField('${codexId}', 'nom', this.value)"
+                               placeholder="${Localization.t('codex.detail.placeholder.title')}">
+                        <select class="form-input" onchange="updateCodexField('${codexId}', 'category', this.value)" style="font-size: 0.8rem; padding: 0.1rem 0.6rem; background: var(--bg-secondary); color: var(--text-primary); border-radius: 12px; border: 1px solid var(--border-color); display:inline-block; width:auto; margin-bottom: 8px;">
+                            ${catSelectOptions}
+                        </select>
+                        <div style="font-size: 0.75rem; color: var(--text-muted); line-height: 1.3; background: var(--bg-primary); padding: 8px 12px; border-radius: 8px; border-left: 3px solid ${typeColor}; border: 1px solid var(--border-color); max-width: 500px;">
+                            <i data-lucide="info" style="width:12px;height:12px;vertical-align:middle;margin-right:4px;"></i>
+                            ${Localization.t((CODEX_TYPE_I18N[catKey] || 'codex.category.Autre') + '.desc')}
+                        </div>
+                    </div>
+                </div>
+                <div style="display:flex; gap:0.5rem;">
+                    <button class="btn btn-small" onclick="showReferencesForElement('${codexId}')"><i data-lucide="link" style="width:14px;height:14px;vertical-align:middle;margin-right:4px;"></i>${Localization.t('codex.refs.manage_links')}</button>
+                    ${container.id === 'editorView' ? `<button class="btn" onclick="switchView('editor')"><i data-lucide="arrow-left" style="width:14px;height:14px;vertical-align:middle;margin-right:4px;"></i>${Localization.t('codex.detail.btn.back_editor')}</button>` : ''}
+                </div>
+            </div>
+
+            <div style="padding: 1.5rem;">
+                <!-- Résumé = Champ commun prioritaire -->
+                <div class="detail-section" style="margin-bottom: 2rem;">
+                    <div class="detail-section-title"><i data-lucide="align-left" style="width:16px;height:16px;vertical-align:middle;margin-right:6px;"></i>Résumé court</div>
+                    <textarea class="form-input" rows="3" style="width:100%; resize:vertical; line-height:1.7;"
+                               oninput="updateCodexField('${codexId}', 'resume_court', this.value)">${descVal}</textarea>
+                </div>
+
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1.5rem; margin-bottom: 2rem;">
+                    ${commonHtml}
+                </div>
+
+                <!-- Sections spécifiques au Schéma de la catégorie -->
+                <h2 style="font-size:1.2rem; margin-top:2rem; margin-bottom: 1rem; border-bottom:2px solid var(--border-color); padding-bottom:0.5rem; font-family: 'Noto Serif JP', serif;">Données Spécifiques (${catKey})</h2>
+                ${sectionsHtml}
+                
+                ${incomingHtml}
+            </div>
+        </div>
+    `;
+    if (typeof lucide !== 'undefined') lucide.createIcons({ root: container });
+}
+
+// -------------------------------------------------------------
+// Mapping des types Codex vers leurs clés i18n
+// -------------------------------------------------------------
+const CODEX_TYPE_I18N = {
+    "Magie & Pouvoirs": "codex.category.Magie",
+    "Sciences & Technologie": "codex.category.Technologie",
+    "Religions & Cultes": "codex.category.Religion",
+    "Philosophies & Idéologies": "codex.category.Philosophie",
+    "Mythes & Légendes": "codex.category.Mythes",
+    "Politique & Géopolitique": "codex.category.Politique",
+    "Lois & Justice": "codex.category.Lois",
+    "Économie & Commerce": "codex.category.Économie",
+    "Systèmes Sociaux & Castes": "codex.category.Société",
+    "Factions & Organisations": "codex.category.Factions",
+    "Linguistique & Grammaire": "codex.category.Linguistique",
+    "Cosmologie & Métaphysique": "codex.category.Cosmologie",
+    "Glossaire & Terminologie": "codex.category.Glossaire",
+    "Magie/Pouvoir": "codex.category.Magie/Pouvoir",
+    "Autre": "codex.category.Autre"
+};
+
+const CODEX_TYPE_ICONS = {
+    "Magie & Pouvoirs": "sparkles",
+    "Sciences & Technologie": "flask-conical",
+    "Religions & Cultes": "sun",
+    "Philosophies & Idéologies": "lightbulb",
+    "Mythes & Légendes": "book-open",
+    "Politique & Géopolitique": "landmark",
+    "Lois & Justice": "scale",
+    "Économie & Commerce": "coins",
+    "Systèmes Sociaux & Castes": "users",
+    "Factions & Organisations": "swords",
+    "Linguistique & Grammaire": "message-square",
+    "Cosmologie & Métaphysique": "moon",
+    "Glossaire & Terminologie": "file-text",
+    "Autre": "book"
+};
+
+function getCodexCategoryIcon(category) {
+    if (CODEX_TYPE_ICONS[category]) return CODEX_TYPE_ICONS[category];
+    // Fallback for old simple categories
+    const oldIconMap = {
+        'Magie': 'sparkles',
+        'Technologie': 'flask-conical',
+        'Religion': 'sun',
+        'Philosophie': 'lightbulb',
+        'Mythes': 'book-open',
+        'Politique': 'landmark',
+        'Lois': 'scale',
+        'Économie': 'coins',
+        'Société': 'users',
+        'Factions': 'swords',
+        'Linguistique': 'message-square',
+        'Cosmologie': 'moon',
+        'Glossaire': 'file-text'
+    };
+    return oldIconMap[category] || 'book';
+}
+
+// Support pour le splitview : exposer globalement la fonction d'injection
+window.renderCodexDetailInContainer = function (entry, container) {
+    if (entry) _renderCodexDetailInContainer(entry, container, entry.id);
+};
 
 const CodexView = {
     /**
@@ -26,16 +269,18 @@ const CodexView = {
             const groupKey = 'codex_' + category;
             const isCollapsed = collapsedState[groupKey] === true;
 
-            // Sort entries alphabetically within each group
+            // Sort entries alphabetically within each group using fields.nom
             const sortedEntries = [...groups[category]].sort((a, b) => {
-                return (a.title || '').toLowerCase().localeCompare((b.title || '').toLowerCase(), 'fr');
+                const nameA = (a.fields && a.fields.nom) ? a.fields.nom : (a.title || '');
+                const nameB = (b.fields && b.fields.nom) ? b.fields.nom : (b.title || '');
+                return nameA.toLowerCase().localeCompare(nameB.toLowerCase(), 'fr');
             });
 
             html += `
                 <div class="treeview-group">
                     <div class="treeview-header" onclick="toggleCodexGroup('${groupKey}')">
                         <i data-lucide="${isCollapsed ? 'chevron-right' : 'chevron-down'}" class="treeview-chevron"></i>
-                        <span class="treeview-label">${Localization.t('codex.category.' + category)}</span>
+                        <span class="treeview-label">${Localization.t(CODEX_TYPE_I18N[category] || 'codex.category.Autre')}</span>
                         <span class="treeview-count">${groups[category].length}</span>
                     </div>
                     <div class="treeview-children ${isCollapsed ? 'collapsed' : ''}">
@@ -44,7 +289,7 @@ const CodexView = {
                 return `
                                 <div class="treeview-item" onclick="openCodexDetail('${entry.id}')">
                                     <span class="treeview-item-icon"><i data-lucide="${iconName}" style="width:14px;height:14px;vertical-align:middle;"></i></span>
-                                    <span class="treeview-item-label">${entry.title}</span>
+                                    <span class="treeview-item-label">${entry.fields && entry.fields.nom ? entry.fields.nom : entry.title}</span>
                                     <div class="treeview-item-actions">
                                         <button class="treeview-action-btn" onclick="event.stopPropagation(); openCodexDetail('${entry.id}', { forceNew: true })" title="${Localization.t('tabs.open_new')}"><i data-lucide="plus-square" style="width:12px;height:12px;"></i></button>
                                         <button class="treeview-action-btn" onclick="event.stopPropagation(); openCodexDetail('${entry.id}', { replaceCurrent: true })" title="${Localization.t('tabs.replace')}"><i data-lucide="maximize-2" style="width:12px;height:12px;"></i></button>
@@ -69,6 +314,7 @@ const CodexView = {
         const modal = document.getElementById('addCodexModal');
         if (modal) {
             modal.classList.add('active');
+            updateCodexModalHint(); // Initial hint
             setTimeout(() => {
                 const input = document.getElementById('codexTitleInput');
                 if (input) input.focus();
@@ -89,61 +335,10 @@ const CodexView = {
             return;
         }
 
-        // Handle split view mode (Legacy)
-        if (typeof splitViewActive !== 'undefined' && splitViewActive) {
-            // ... handled by splitview system if needed
-        }
-
         const editorView = document.getElementById('editorView');
         if (!editorView) return;
 
-        // Générer les options de catégorie
-        const categories = getCodexCategories();
-        const catIcon = getCodexCategoryIcon(entry.category);
-        const categoryOptions = categories.map(cat =>
-            `<option value="${cat}" ${entry.category === cat ? 'selected' : ''}>${Localization.t('codex.category.' + cat)}</option>`
-        ).join('');
-
-        editorView.innerHTML = `
-            <div class="detail-view">
-                <div class="detail-header" style="display:flex; align-items:center; justify-content:space-between; gap:1rem;">
-                    <div style="display: flex; align-items: center; gap: 1rem; flex: 1;">
-                        <div style="width:42px; height:42px; border-radius:10px; background:var(--accent-gold); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
-                            <i data-lucide="${catIcon}" style="width:20px;height:20px;color:var(--bg-primary);"></i>
-                        </div>
-                        <input type="text" class="form-input" value="${entry.title}"
-                               style="font-size: 1.6rem; font-weight: 600; font-family: 'Noto Serif JP', serif; padding: 0.5rem; border:none; background:transparent;"
-                               onchange="updateCodexField('${id}', 'title', this.value)"
-                               placeholder="${Localization.t('codex.detail.placeholder.title')}">
-                        <span style="font-size: 0.75rem; padding: 0.35rem 0.75rem; background: var(--accent-gold); color: var(--bg-primary); border-radius: 12px; font-weight:600; white-space:nowrap;">${Localization.t('codex.category.' + entry.category)}</span>
-                    </div>
-                    <div style="display:flex; gap:0.5rem;">
-                        <button class="btn btn-small" onclick="showReferencesForElement('${id}')"><i data-lucide="link" style="width:14px;height:14px;vertical-align:middle;margin-right:4px;"></i>${Localization.t('codex.refs.manage_links')}</button>
-                        <button class="btn" onclick="switchView('editor')"><i data-lucide="arrow-left" style="width:14px;height:14px;vertical-align:middle;margin-right:4px;"></i>${Localization.t('codex.detail.btn.back_editor')}</button>
-                    </div>
-                </div>
-
-                <div class="detail-section">
-                    <div class="detail-section-title"><i data-lucide="tag" style="width:16px;height:16px;vertical-align:middle;margin-right:6px;"></i>${Localization.t('codex.detail.category')}</div>
-                    <select class="form-input" onchange="updateCodexField('${id}', 'category', this.value)" style="width:100%;">
-                        ${categoryOptions}
-                    </select>
-                </div>
-
-                <div class="detail-section">
-                    <div class="detail-section-title"><i data-lucide="file-text" style="width:16px;height:16px;vertical-align:middle;margin-right:6px;"></i>${Localization.t('codex.detail.summary')}</div>
-                    <textarea class="form-input" rows="4" style="width:100%; resize:vertical; line-height:1.6;"
-                               oninput="updateCodexField('${id}', 'summary', this.value)">${entry.summary || ''}</textarea>
-                </div>
-
-                <div class="detail-section">
-                    <div class="detail-section-title"><i data-lucide="book-open" style="width:16px;height:16px;vertical-align:middle;margin-right:6px;"></i>${Localization.t('codex.detail.content')}</div>
-                    <textarea class="form-input" rows="20" style="width:100%; resize:vertical; line-height:1.7; font-size:1rem;"
-                              oninput="updateCodexField('${id}', 'content', this.value)">${entry.content || ''}</textarea>
-                </div>
-            </div>
-        `;
-        if (typeof lucide !== 'undefined') lucide.createIcons();
+        _renderCodexDetailInContainer(entry, editorView, id);
     },
 
     /**
@@ -202,7 +397,8 @@ const CodexView = {
         const modalContent = document.getElementById('referencesModalContent');
         const modal = document.getElementById('referencesModal');
 
-        if (modalTitle) modalTitle.textContent = Localization.t('codex.refs.title', [element.name]);
+        const name = (element.fields && element.fields.nom) ? element.fields.nom : (element.name || '');
+        if (modalTitle) modalTitle.textContent = Localization.t('codex.refs.title', [name]);
         if (modalContent) {
             modalContent.innerHTML = `
                 <div class="references-section">
@@ -282,6 +478,9 @@ function openCodexDetail(id, options = {}) {
 
 function updateCodexField(id, field, value) {
     CodexViewModel.updateField(id, field, value);
+    if (field === 'category') {
+        setTimeout(() => openCodexDetail(id), 10);
+    }
 }
 
 function showReferencesForCharacter(characterId) {
@@ -350,3 +549,22 @@ if (typeof window.toggleTreeviewGroup === 'undefined') {
         else if (groupKey.startsWith('world_') && typeof renderWorldList === 'function') renderWorldList();
     };
 }
+/**
+ * Updates the hint text in the Add Codex Entry modal based on the selected category.
+ */
+window.updateCodexModalHint = function () {
+    const select = document.getElementById('codexCategoryInput');
+    const hint = document.getElementById('codexCategoryHint');
+    if (!select || !hint) return;
+
+    const val = select.value;
+    const i18nKey = CODEX_TYPE_I18N[val] || 'codex.category.Autre';
+    const desc = Localization.t(i18nKey + '.desc');
+
+    if (desc && desc !== (i18nKey + '.desc')) {
+        hint.textContent = desc;
+        hint.style.display = 'block';
+    } else {
+        hint.style.display = 'none';
+    }
+};

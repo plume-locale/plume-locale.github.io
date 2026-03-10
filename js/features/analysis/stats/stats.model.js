@@ -14,7 +14,7 @@ const StatsModel = {
         // Strip HTML tags using regex for performance and to avoid DOM dependency in model
         const text = html.replace(/<[^>]*>/g, ' ');
         // Replace non-breaking spaces and other entities
-        const cleanText = text.replace(/&nbsp;/g, ' ').replace(/&[a-z]+;/g, ' ');
+        const cleanText = text.replace(/&nbsp;/gi, ' ').replace(/&[a-zA-Z0-9#]+;/g, '');
         return cleanText.split(/\s+/).filter(w => w.length > 0).length;
     },
 

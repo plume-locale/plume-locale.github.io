@@ -66,9 +66,9 @@ const StatsViewModel = {
     getTodayStats() {
         const stats = StatsRepository.getStats();
         const today = new Date();
-        today.setHours(0, 0, 0, 0);
+        const todayStr = this._getDateKey(today);
 
-        const session = stats.writingSessions.find(s => new Date(s.date).toDateString() === today.toDateString());
+        const session = stats.writingSessions.find(s => this._getDateKey(s.date) === todayStr);
         const words = session ? session.words : 0;
 
         let dailyGoal = stats.dailyGoal || 500;
@@ -102,18 +102,27 @@ const StatsViewModel = {
     },
 
     /**
+     * Retourne une clé de date localisée stable (YYYY-MM-DD).
+     * @private
+     */
+    _getDateKey(date) {
+        if (!date) return "";
+        const d = new Date(date);
+        if (isNaN(d.getTime())) return "";
+        return `${d.getFullYear()}-${(d.getMonth() + 1).toString().padStart(2, '0')}-${d.getDate().toString().padStart(2, '0')}`;
+    },
+
+    /**
      * Calcule le nombre de jours ouvrables entre deux dates.
      * @private
      */
     _calculateWorkingDays(start, end, daysOff) {
         let count = 0;
         let current = new Date(start);
-        const dayOffSet = new Set(daysOff.map(d => parseInt(d))); // Ensure numbers
+        const dayOffSet = new Set(daysOff.map(d => parseInt(d)));
 
-        // Sécurité pour éviter boucle infinie si dates invalides
         if (start > end) return 0;
 
-        // Copie pour ne pas modifier l'original
         current = new Date(current.getTime());
 
         while (current <= end) {
@@ -137,9 +146,8 @@ const StatsViewModel = {
         for (let i = 6; i >= 0; i--) {
             const date = new Date();
             date.setDate(date.getDate() - i);
-            const dateStr = date.toDateString();
-
-            const session = stats.writingSessions.find(s => new Date(s.date).toDateString() === dateStr);
+            const dateStr = this._getDateKey(date);
+            const session = stats.writingSessions.find(s => this._getDateKey(s.date) === dateStr);
             const words = session ? session.words : 0;
 
             history.push({
@@ -154,42 +162,38 @@ const StatsViewModel = {
     },
 
     /**
-     * Récupère l'historique sur une période configurée (1 mois, 3 mois, 6 mois, 1 an).
-     * @param {string} period '1m', '3m', '6m', '1y'
+     * Récupère l'historique sur une période configurée (1 semaine, 1 mois, 3 mois, 6 mois, 1 an).
+     * @param {string} period '1w', '1m', '3m', '6m', '1y'
      * @returns {Array} Array of { date, words }
      */
     getHistoryByPeriod(period) {
         const stats = StatsRepository.getStats();
         const history = [];
-        const endDate = new Date(); // Aujourd'hui
+        const endDate = new Date();
         let startDate = new Date();
 
-        // Définir la date de début selon la période
         switch (period) {
             case '1w': startDate.setDate(endDate.getDate() - 7); break;
             case '1m': startDate.setMonth(endDate.getMonth() - 1); break;
             case '3m': startDate.setMonth(endDate.getMonth() - 3); break;
             case '6m': startDate.setMonth(endDate.getMonth() - 6); break;
             case '1y': startDate.setFullYear(endDate.getFullYear() - 1); break;
-            default: startDate.setMonth(endDate.getMonth() - 1); // Par défaut 1 mois
+            default: startDate.setMonth(endDate.getMonth() - 1);
         }
 
-        // Reset hours
         startDate.setHours(0, 0, 0, 0);
         endDate.setHours(0, 0, 0, 0);
 
-        // Créer un array de dates continues
         const dailyGoal = stats.dailyGoal || 500;
 
         for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
-            const dateStr = d.toDateString();
-            // On cherche s'il y a une session pour ce jour
-            const session = stats.writingSessions.find(s => new Date(s.date).toDateString() === dateStr);
+            const dateStr = this._getDateKey(d);
+            const session = stats.writingSessions.find(s => this._getDateKey(s.date) === dateStr);
             history.push({
                 date: new Date(d),
                 dateStr: d.toLocaleDateString(),
                 words: session ? session.words : 0,
-                goal: dailyGoal // Simplification: on suppose l'objectif constant ou actuel pour l'historique
+                goal: dailyGoal
             });
         }
         return history;
@@ -209,46 +213,81 @@ const StatsViewModel = {
 
     /**
      * Suit la session d'écriture actuelle.
-     * 
-     * Logique :
-     * - Si une session du jour existe déjà : on calcule les mots nets écrits
-     *   depuis le début de la session (totalWords - startWords).
-     * - Si aucune session n'existe : on initialise avec startWords = totalWords ACTUEL.
-     *   IMPORTANT : on soustrait 1 unité de "frappe" car scene.content a déjà été
-     *   mis à jour avant cet appel. On utilise scene.wordCount comme baseline plus fiable
-     *   si disponible, sinon on continue avec totalWords.
+     *
+     * FIX CRITIQUE #1 : On vérifie que initTodaySession a bien tourné avant de compter.
+     * Si ce n'est pas le cas, on l'appelle maintenant (rattrapage) et on sort,
+     * car on ne peut pas compter sans un baseline fiable.
+     *
+     * FIX #2 : En cas de suppression de texte, on ajuste startWords proprement
+     * en une seule opération saveSession pour éviter les doubles écritures.
      */
     trackWritingSession() {
+        // --- Garde : initTodaySession doit avoir tourné ---
+        if (!window._todaySessionInitialized) {
+            console.warn('[Stats] trackWritingSession called before initTodaySession — initializing now and skipping this tick');
+            if (typeof window.initTodaySession === 'function') {
+                window.initTodaySession();
+            }
+            return; // On sort : le baseline vient d'être posé, on comptera au prochain appel
+        }
+
         const { totalWords } = this.getProjectStats();
-        const today = new Date().toDateString();
+        const todayStr = this._getDateKey(new Date());
         const stats = StatsRepository.getStats();
+
         if (!Array.isArray(stats.writingSessions)) stats.writingSessions = [];
-        const session = stats.writingSessions.find(s => new Date(s.date).toDateString() === today);
+        const session = stats.writingSessions.find(s => this._getDateKey(s.date) === todayStr);
+
+        console.log(`[Stats] Tracking Session - Total: ${totalWords}, HasSession: ${!!session}, WordsRecorded: ${session ? session.words : 'N/A'}, StartWords: ${session ? session.startWords : 'N/A'}`);
 
         if (session) {
-            // Session existante : calculer les mots nets depuis le début de la journée
+            // S'assurer que startWords est défini
             let startWords = session.startWords;
-            // Si startWords n'a jamais été défini (ancienne session), on l'initialise maintenant
             if (startWords === undefined || startWords === null) {
+                // Cas de rattrapage : la session existe mais n'a pas de baseline
+                console.log(`[Stats] Initializing missing startWords to ${totalWords}`);
                 StatsRepository.saveSession({ startWords: totalWords, words: 0 });
                 return;
             }
 
             let newWords = totalWords - startWords;
 
-            // Si totalWords chute (ex: l'utilisateur supprime du texte, ou le navigateur reformate le code HTML)
-            // On ajuste le baseline pour ne pas détruire le progrès accompli ('mots écrits' ne diminue pas).
-            if (newWords < (session.words || 0)) {
-                startWords = totalWords - (session.words || 0);
-                StatsRepository.saveSession({ startWords: startWords });
-                newWords = session.words || 0;
+            if (newWords < 0) {
+                // L'utilisateur a supprimé plus que ce qu'il a écrit depuis le début de session.
+                // On ajuste startWords pour que le compteur ne soit pas négatif,
+                // tout en préservant le score déjà enregistré si possible.
+                const currentRecorded = session.words || 0;
+
+                if (currentRecorded > 0) {
+                    // On ajuste startWords pour maintenir le score positif acquis
+                    const adjustedStartWords = totalWords - currentRecorded;
+                    console.log(`[Stats] Negative newWords (${newWords}), adjusting startWords from ${startWords} to ${adjustedStartWords}`);
+                    StatsRepository.saveSession({ startWords: adjustedStartWords, words: currentRecorded });
+                } else {
+                    // Score était déjà à 0, on recale juste le baseline
+                    console.log(`[Stats] Negative newWords (${newWords}) with 0 recorded, recalibrating startWords to ${totalWords}`);
+                    StatsRepository.saveSession({ startWords: totalWords, words: 0 });
+                }
+                return;
             }
 
+            // FIX #2 : Si newWords < mots déjà enregistrés (suppression partielle en cours de session)
+            // On ne diminue pas le compteur — les mots écrits dans la session sont acquis.
+            // On ajuste startWords en une seule opération pour éviter la double écriture.
+            if (newWords < (session.words || 0)) {
+                const adjustedStartWords = totalWords - (session.words || 0);
+                console.log(`[Stats] Deletion detected: keeping recorded ${session.words} words, adjusting startWords to ${adjustedStartWords}`);
+                StatsRepository.saveSession({ startWords: adjustedStartWords });
+                return; // On sort : le score reste inchangé
+            }
+
+            // Cas normal : on enregistre la progression
             StatsRepository.saveSession({ words: newWords });
+
         } else {
-            // Première écriture de la journée :
-            // startWords = total actuel (déjà mis à jour avec le contenu courant)
-            // On initialise words à 0, le prochain passage calculera correctement.
+            // Pas de session pour aujourd'hui — normalement initTodaySession aurait dû la créer.
+            // On la crée maintenant en rattrapage.
+            console.log(`[Stats] Creating new session for today starting at ${totalWords} (rattrapage)`);
             StatsRepository.saveSession({
                 words: 0,
                 startWords: totalWords

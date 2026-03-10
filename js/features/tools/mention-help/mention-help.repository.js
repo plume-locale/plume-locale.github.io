@@ -52,10 +52,11 @@ const MentionHelpRepository = {
         const lowerQuery = query.toLowerCase();
 
         entities.forEach(item => {
-            const name = (item.name || item.title || '').toLowerCase();
+            const name = (item.fields && item.fields.nom) ? item.fields.nom : (item.name || item.title || '');
+            const lowerName = name.toLowerCase();
 
             // Recherche simple pour commencer (peut être améliorée avec Fuse.js si disponible)
-            if (name.includes(lowerQuery)) {
+            if (lowerName.includes(lowerQuery)) {
                 const score = MentionHelpModel.calculateContextScore(item, context);
                 results.push(MentionHelpModel.createSuggestion(item, trigger, score));
             }
@@ -88,13 +89,21 @@ const MentionHelpRepository = {
                 break;
             case 'world':
                 if (typeof WorldModel !== 'undefined' && typeof WorldRepository !== 'undefined') {
-                    newItem = WorldModel.create({ name: name, type: 'Brouillon' });
+                    // Nouveau système Atlas : on met le nom dans fields.nom
+                    newItem = WorldModel.create({
+                        fields: { nom: name },
+                        category: 'Géographie' // Catégorie par défaut
+                    });
                     WorldRepository.add(newItem);
                 }
                 break;
             case 'codex':
                 if (typeof CodexModel !== 'undefined' && typeof CodexRepository !== 'undefined') {
-                    newItem = CodexModel.create({ title: name, category: 'Autre' });
+                    // Nouveau système Atlas : on met le nom dans fields.nom
+                    newItem = CodexModel.create({
+                        fields: { nom: name },
+                        category: 'Magie & Pouvoirs' // Catégorie par défaut
+                    });
                     CodexRepository.add(newItem);
                 }
                 break;

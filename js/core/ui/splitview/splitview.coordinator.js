@@ -121,6 +121,7 @@ function renderViewInSplitPanel(view, container, state, panel) {
                     <div class="empty-state">
                         <div class="empty-state-icon"><i data-lucide="globe" style="width:48px;height:48px;stroke-width:1.5;"></i></div>
                         <div class="empty-state-title">${Localization.t('split.empty_state_world')}</div>
+                        <div class="empty-state-text" style="max-width: 400px; margin: 1rem auto; line-height: 1.5;">${Localization.t('split.empty_state_world_desc')}</div>
                         <div class="empty-state-text">${Localization.t('split.empty_state_select_element')}</div>
                     </div>
                 `;
@@ -184,53 +185,16 @@ function renderViewInSplitPanel(view, container, state, panel) {
             if (state.codexId) {
                 const entry = project.codex?.find(c => c.id == state.codexId);
                 if (entry) {
-                    const codexCatIcon = typeof getCodexCategoryIcon === 'function' ? getCodexCategoryIcon(entry.category) : 'book';
-                    const codexCategories = typeof getCodexCategories === 'function' ? getCodexCategories() : ['Culture', 'Histoire', 'Technologie', 'Géographie', 'Politique', 'Magie/Pouvoir', 'Religion', 'Société', 'Autre'];
-                    const codexCatOptions = codexCategories.map(cat =>
-                        `<option value="${cat}" ${entry.category === cat ? 'selected' : ''}>${Localization.t('codex.category.' + cat)}</option>`
-                    ).join('');
-
-                    tempContainer.innerHTML = `
-                        <div class="detail-view" style="height:100%; overflow-y:auto;">
-                            <div class="detail-header" style="position:sticky; top:0; background:var(--bg-primary); z-index:10; padding:1rem; border-bottom:1px solid var(--border-color); display:flex; align-items:center; gap:0.75rem;">
-                                <div style="width:36px; height:36px; border-radius:8px; background:var(--accent-gold); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
-                                    <i data-lucide="${codexCatIcon}" style="width:18px;height:18px;color:var(--bg-primary);"></i>
-                                </div>
-                                <input type="text" class="form-input" value="${entry.title}"
-                                       style="font-size: 1.3rem; font-weight: 600; font-family: 'Noto Serif JP', serif; flex:1; border:none; background:transparent; padding:0.3rem;"
-                                       onchange="typeof updateCodexField === 'function' ? updateCodexField(${entry.id}, 'title', this.value) : null"
-                                       placeholder="${Localization.t('split.codex_title_placeholder')}">
-                                <span style="font-size: 0.75rem; padding: 0.3rem 0.6rem; background: var(--accent-gold); color: var(--bg-primary); border-radius: 10px; font-weight:600; white-space:nowrap;">${Localization.t('codex.category.' + entry.category)}</span>
-                            </div>
-
-                            <div style="padding:1.5rem;">
-                                <div class="detail-section" style="margin-bottom:1.5rem;">
-                                    <div class="detail-section-title" style="font-size:0.9rem; font-weight:600; color:var(--text-muted); margin-bottom:0.5rem;"><i data-lucide="tag" style="width:14px;height:14px;vertical-align:middle;margin-right:6px;"></i>${Localization.t('split.codex_category')}</div>
-                                    <select class="form-input" onchange="typeof updateCodexField === 'function' ? updateCodexField(${entry.id}, 'category', this.value) : null" style="width:100%;">
-                                        ${codexCatOptions}
-                                    </select>
-                                </div>
-
-                                <div class="detail-section" style="margin-bottom:1.5rem;">
-                                    <div class="detail-section-title" style="font-size:0.9rem; font-weight:600; color:var(--text-muted); margin-bottom:0.5rem;"><i data-lucide="file-text" style="width:14px;height:14px;vertical-align:middle;margin-right:6px;"></i>${Localization.t('split.codex_summary')}</div>
-                                    <textarea class="form-input" rows="4" style="width:100%; resize:vertical; line-height:1.6;"
-                                              oninput="typeof updateCodexField === 'function' ? updateCodexField(${entry.id}, 'summary', this.value) : null">${entry.summary || ''}</textarea>
-                                </div>
-
-                                <div class="detail-section" style="margin-bottom:1.5rem;">
-                                    <div class="detail-section-title" style="font-size:0.9rem; font-weight:600; color:var(--text-muted); margin-bottom:0.5rem;"><i data-lucide="book-open" style="width:14px;height:14px;vertical-align:middle;margin-right:6px;"></i>${Localization.t('split.codex_content')}</div>
-                                    <textarea class="form-input" rows="20" style="width:100%; resize:vertical; line-height:1.7; font-size:1rem;"
-                                              oninput="typeof updateCodexField === 'function' ? updateCodexField(${entry.id}, 'content', this.value) : null">${entry.content || ''}</textarea>
-                                </div>
-                            </div>
-                        </div>
-                    `;
+                    if (typeof renderCodexDetailInContainer === 'function') {
+                        renderCodexDetailInContainer(entry, tempContainer, entry.id);
+                    }
                 }
             } else {
                 tempContainer.innerHTML = `
                     <div class="empty-state">
                         <div class="empty-state-icon"><i data-lucide="book-open" style="width:48px;height:48px;stroke-width:1.5;"></i></div>
                         <div class="empty-state-title">${Localization.t('split.empty_state_codex')}</div>
+                        <div class="empty-state-text" style="max-width: 400px; margin: 1rem auto; line-height: 1.5;">${Localization.t('split.empty_state_codex_desc')}</div>
                         <div class="empty-state-text">${Localization.t('split.empty_state_select_codex')}</div>
                     </div>
                 `;
@@ -382,7 +346,7 @@ function renderViewInSplitPanel(view, container, state, panel) {
 }
 
 /** [View] - Génère le HTML des détails d'un élément de l'univers pour un conteneur */
-function renderWorldDetailInContainer(element, container) {
+function fallbackRenderWorldDetail(element, container) {
     const worldTypeIcon = (typeof WORLD_TYPE_ICONS !== 'undefined') ? (WORLD_TYPE_ICONS[element.type] || 'circle') : 'globe';
     const worldTypeLabel = (typeof WORLD_TYPE_I18N !== 'undefined' && WORLD_TYPE_I18N[element.type])
         ? Localization.t(WORLD_TYPE_I18N[element.type])
@@ -408,7 +372,7 @@ function renderWorldDetailInContainer(element, container) {
 
                     <div class="detail-section" style="margin-bottom:0;">
                         <div class="detail-section-title" style="font-size: 0.9rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.5rem;"><i data-lucide="tag" style="width:14px;height:14px;vertical-align:middle;margin-right:6px;"></i>${Localization.t('modal.world.type')}</div>
-                        <select class="form-input" onchange="typeof updateWorldField === 'function' ? updateWorldField(${element.id}, 'type', this.value) : null" style="width: 100%;">
+                        <select class="form-input" onchange="typeof updateWorldField === 'function' ? updateWorldField(${element.id}, 'category', this.value) : null" style="width: 100%;">
                             <option value="Lieu" ${element.type === 'Lieu' ? 'selected' : ''}>${Localization.t('world.type.place')}</option>
                             <option value="Objet" ${element.type === 'Objet' ? 'selected' : ''}>${Localization.t('world.type.object')}</option>
                             <option value="Concept" ${element.type === 'Concept' ? 'selected' : ''}>${Localization.t('world.type.concept')}</option>

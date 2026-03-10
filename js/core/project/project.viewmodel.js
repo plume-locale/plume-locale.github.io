@@ -26,10 +26,25 @@ const ProjectViewModel = {
             let loadedProjects = await ProjectRepository.getAll();
             console.log('🔍 Projets trouvés en base:', loadedProjects ? loadedProjects.length : 0);
 
-            // Si un seul projet existe et c'est le projet par défaut vide "Mon Roman", 
+            // Nettoyage : si on a de vrais projets ET des projets par défaut vides, on supprime les vides
+            const defaultTitles = ["Mon Roman", "My Novel", "Mein Roman", "Mi Novela", Localization.t('project.model.default_title')];
+            if (loadedProjects && loadedProjects.length > 1) {
+                const emptyDefaults = loadedProjects.filter(p => defaultTitles.includes(p.title) && (!p.acts || p.acts.length === 0));
+                const realProjects = loadedProjects.filter(p => !(defaultTitles.includes(p.title) && (!p.acts || p.acts.length === 0)));
+                
+                if (realProjects.length > 0 && emptyDefaults.length > 0) {
+                    console.log(`🧹 Nettoyage de ${emptyDefaults.length} projet(s) par défaut vide(s)`);
+                    for (const ed of emptyDefaults) {
+                        try { await ProjectRepository.delete(ed.id); } catch(e) {}
+                    }
+                    loadedProjects = realProjects;
+                }
+            }
+
+            // Si un seul projet existe et c'est le projet par défaut vide (ex: "Mon Roman"), 
             // on le considère comme "vide" pour forcer le chargement de la démo si possible.
             const isInitialDefault = loadedProjects && loadedProjects.length === 1 &&
-                loadedProjects[0].title === Localization.t('project.model.default_title') &&
+                defaultTitles.includes(loadedProjects[0].title) &&
                 (!loadedProjects[0].acts || loadedProjects[0].acts.length === 0);
 
             if (loadedProjects && loadedProjects.length > 0 && !isInitialDefault) {
@@ -107,7 +122,12 @@ const ProjectViewModel = {
                 projects = [project];
                 currentProjectId = project.id;
 
-                // On écrase le projet par défaut précédent s'il existait
+                // On supprime le(s) projet(s) par défaut précédent(s) s'ils existaient pour ne pas les dupliquer
+                if (loadedProjects && loadedProjects.length > 0) {
+                    for (const old of loadedProjects) {
+                        try { await ProjectRepository.delete(old.id); } catch(e) {}
+                    }
+                }
                 await ProjectRepository.save(project);
                 await ProjectRepository.saveSetting('currentProjectId', currentProjectId);
             }
@@ -123,9 +143,7 @@ const ProjectViewModel = {
             console.log('✅ Projets chargés:', projects.length);
 
             // Initialiser le baseline de session d'écriture pour le projet chargé
-            setTimeout(() => {
-                if (typeof initTodaySession === 'function') initTodaySession();
-            }, 200);
+            if (typeof window.initTodaySession === 'function') window.initTodaySession();
         } catch (error) {
             console.error('❌ Erreur chargement projets:', error);
             project = ProjectModel.createDefault();
@@ -383,9 +401,7 @@ const ProjectViewModel = {
         if (typeof refreshAllViews === 'function') refreshAllViews();
 
         // Initialiser le baseline de session d'écriture pour ce projet
-        setTimeout(() => {
-            if (typeof initTodaySession === 'function') initTodaySession();
-        }, 200);
+        if (typeof window.initTodaySession === 'function') window.initTodaySession();
 
         await ProjectRepository.saveSetting('currentProjectId', projectId);
         ProjectView.renderSidebarList(projects);

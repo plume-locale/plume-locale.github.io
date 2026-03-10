@@ -13,11 +13,9 @@ const CodexModel = {
 
         return {
             id: id,
-            title: data.title || '',
-            category: data.category || 'Autre',
-            summary: data.summary || '',
-            content: data.content || '',
-            relatedTo: data.relatedTo || [], // IDs of related characters, world elements, etc.
+            category: data.category || 'Magie & Pouvoirs',
+            fields: data.fields || {},
+            relatedTo: data.relatedTo || [], // IDs des éléments liés
             createdAt: data.createdAt || id,
             updatedAt: data.updatedAt || Date.now()
         };
@@ -29,8 +27,31 @@ const CodexModel = {
     migrate(entry) {
         if (!entry) return null;
 
-        // Si déjà migré, on vérifie juste les champs manquants
         const migrated = this.create(entry);
+
+        // Migration depuis l'ancien format (title, summary, content) vers le système `fields` dynamique
+        if (!entry.fields) {
+            migrated.fields = {
+                nom: entry.title || '',
+                resume_court: entry.summary || '',
+                notes_de_l_auteur: entry.content || '',
+            };
+
+            // Mapper les anciennes catégories vers les nouvelles si possible
+            if (entry.category === 'Magie') migrated.category = 'Magie & Pouvoirs';
+            if (entry.category === 'Technologie') migrated.category = 'Sciences & Technologie';
+            if (entry.category === 'Religion') migrated.category = 'Religions & Cultes';
+            if (entry.category === 'Philosophie') migrated.category = 'Philosophies & Idéologies';
+            if (entry.category === 'Mythes') migrated.category = 'Mythes & Légendes';
+            if (entry.category === 'Politique') migrated.category = 'Politique & Géopolitique';
+            if (entry.category === 'Lois') migrated.category = 'Lois & Justice';
+            if (entry.category === 'Économie') migrated.category = 'Économie & Commerce';
+            if (entry.category === 'Société') migrated.category = 'Systèmes Sociaux & Castes';
+            if (entry.category === 'Factions') migrated.category = 'Factions & Organisations';
+            if (entry.category === 'Linguistique') migrated.category = 'Linguistique & Grammaire';
+            if (entry.category === 'Cosmologie') migrated.category = 'Cosmologie & Métaphysique';
+            if (entry.category === 'Glossaire') migrated.category = 'Glossaire & Terminologie';
+        }
 
         return migrated;
     },
@@ -40,72 +61,39 @@ const CodexModel = {
      */
     validate(entry) {
         if (!entry) return false;
-        if (!entry.title || entry.title.trim() === '') return false;
+        // On vérifie que le champ principal (nom) existe
+        const nom = entry.fields && entry.fields.nom;
+        if (!nom || nom.trim() === '') return false;
         return true;
     }
 };
 
 /**
- * Configuration des catégories de codex avec leurs icônes Lucide.
- */
-const CODEX_CATEGORIES = {
-    'Culture': {
-        icon: 'palette',
-        label: 'Culture',
-        description: 'Art, traditions, coutumes'
-    },
-    'Histoire': {
-        icon: 'scroll',
-        label: 'Histoire',
-        description: 'Événements historiques, chronologie'
-    },
-    'Technologie': {
-        icon: 'cpu',
-        label: 'Technologie',
-        description: 'Inventions, sciences, technologies'
-    },
-    'Géographie': {
-        icon: 'globe',
-        label: 'Géographie',
-        description: 'Lieux, territoires, cartes'
-    },
-    'Politique': {
-        icon: 'scale',
-        label: 'Politique',
-        description: 'Systèmes politiques, gouvernements'
-    },
-    'Magie/Pouvoir': {
-        icon: 'sparkles',
-        label: 'Magie/Pouvoir',
-        description: 'Systèmes magiques, pouvoirs surnaturels'
-    },
-    'Religion': {
-        icon: 'book-open',
-        label: 'Religion',
-        description: 'Croyances, cultes, spiritualité'
-    },
-    'Société': {
-        icon: 'users',
-        label: 'Société',
-        description: 'Organisation sociale, classes, groupes'
-    },
-    'Autre': {
-        icon: 'file-text',
-        label: 'Autre',
-        description: 'Autres informations'
-    }
-};
-
-/**
- * Obtient l'icône pour une catégorie donnée.
+ * Obtient l'icône pour une catégorie codex depuis le SCHEMA.
  */
 function getCodexCategoryIcon(category) {
-    return CODEX_CATEGORIES[category]?.icon || 'file-text';
+    if (typeof window !== 'undefined' && window.ATLAS_SCHEMA) {
+        return window.ATLAS_SCHEMA.CODEX.categories[category]?.icon || '📚';
+    }
+    return '📚';
 }
 
 /**
- * Obtient toutes les catégories disponibles.
+ * Obtient toutes les catégories codex disponibles depuis le SCHEMA.
  */
 function getCodexCategories() {
-    return Object.keys(CODEX_CATEGORIES);
+    if (typeof window !== 'undefined' && window.ATLAS_SCHEMA) {
+        return Object.keys(window.ATLAS_SCHEMA.CODEX.categories);
+    }
+    return [];
+}
+
+/**
+ * Obtient la description/couleur pour une catégorie donnée.
+ */
+function getCodexCategoryColor(category) {
+    if (typeof window !== 'undefined' && window.ATLAS_SCHEMA) {
+        return window.ATLAS_SCHEMA.CODEX.categories[category]?.color || '#c77dff';
+    }
+    return '#c77dff';
 }

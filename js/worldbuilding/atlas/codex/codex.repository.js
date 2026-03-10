@@ -84,11 +84,26 @@ const CodexRepository = {
      */
     search(query) {
         const lowerQuery = query.toLowerCase();
-        return this.getAll().filter(entry =>
-            entry.title.toLowerCase().includes(lowerQuery) ||
-            entry.summary.toLowerCase().includes(lowerQuery) ||
-            entry.content.toLowerCase().includes(lowerQuery)
-        );
+        return this.getAll().filter(entry => {
+            // Nouveau système Atlas
+            if (entry.fields) {
+                const nom = (entry.fields.nom || '').toLowerCase();
+                const resume = (entry.fields.resume_court || '').toLowerCase();
+                const notes = (entry.fields.notes_de_l_auteur || '').toLowerCase();
+                if (nom.includes(lowerQuery) || resume.includes(lowerQuery) || notes.includes(lowerQuery)) return true;
+
+                // Recherche dans tous les autres champs de type texte
+                return Object.values(entry.fields).some(val =>
+                    typeof val === 'string' && val.toLowerCase().includes(lowerQuery)
+                );
+            }
+
+            // Legacy / Fallback
+            const title = (entry.title || '').toLowerCase();
+            const summary = (entry.summary || '').toLowerCase();
+            const content = (entry.content || '').toLowerCase();
+            return title.includes(lowerQuery) || summary.includes(lowerQuery) || content.includes(lowerQuery);
+        });
     },
 
     /**
@@ -97,11 +112,12 @@ const CodexRepository = {
     groupByCategory() {
         const groups = {};
         this.getAll().forEach(entry => {
-            const cat = entry.category || 'Autre';
+            const migrated = (typeof CodexModel !== 'undefined' && CodexModel.migrate) ? CodexModel.migrate(entry) : entry;
+            const cat = migrated.category || 'Autre';
             if (!groups[cat]) {
                 groups[cat] = [];
             }
-            groups[cat].push(entry);
+            groups[cat].push(migrated);
         });
         return groups;
     }

@@ -212,7 +212,10 @@ function getTabTitle(view, params) {
     }
     if (view === 'world' && params.worldId) {
         const elem = project?.world?.find(e => e.id == params.worldId);
-        return elem ? elem.name : Localization.t('nav.world');
+        if (elem) {
+            return (elem.fields && elem.fields.nom) ? elem.fields.nom : (elem.name || Localization.t('nav.world'));
+        }
+        return Localization.t('nav.world');
     }
     if (view === 'notes' && params.noteId) {
         const note = (typeof NotesRepository !== 'undefined') ? NotesRepository.getById(params.noteId) : (project?.notes?.find(n => n.id == params.noteId));
@@ -221,6 +224,13 @@ function getTabTitle(view, params) {
     if (view === 'scene_analysis' && params.sceneId) {
         const scene = findSceneById(params.sceneId);
         return scene ? Localization.t('analysis.side_tab_title', [scene.title]) : Localization.t('nav.scene_analysis');
+    }
+    if (view === 'codex' && params.codexId) {
+        const entry = (typeof CodexRepository !== 'undefined') ? CodexRepository.getById(params.codexId) : (project?.codex?.find(c => c.id == params.codexId));
+        if (entry) {
+            return (entry.fields && entry.fields.nom) ? entry.fields.nom : (entry.title || Localization.t('nav.codex'));
+        }
+        return Localization.t('nav.codex');
     }
 
     return viewLabels[view] || view;
@@ -404,5 +414,23 @@ function syncAnalysisTabsWithScene(sceneId) {
     if (changed) {
         // Force refresh only if something changed
         if (typeof renderTabs === 'function') renderTabs();
+    }
+}
+/** [MVVM : ViewModel] - Rafraîchit tous les titres d'onglets (quand une entité est renommée) */
+function refreshTabs() {
+    let changed = false;
+    ['left', 'right'].forEach(paneId => {
+        const pane = tabsState.panes[paneId];
+        pane.tabs.forEach(tab => {
+            const newTitle = getTabTitle(tab.view, tab.params);
+            if (tab.title !== newTitle) {
+                tab.title = newTitle;
+                changed = true;
+            }
+        });
+    });
+
+    if (changed && typeof renderTabs === 'function') {
+        renderTabs();
     }
 }

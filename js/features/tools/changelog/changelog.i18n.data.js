@@ -5,15 +5,34 @@
    ========================================== */
 
 window.CHANGELOG_I18N_DATA = {
+  fr: [
+    {
+      version: "1.1.0",
+      date: "2026-03-10",
+      type: "major",
+      summary: "Amélioration de codex et univers",
+      content: `# Amélioration de codex et univers
 
-    // ── Français (langue source) ──────────────────────────────────────────
-    fr: [
-        {
-            version: "1.0.4",
-            date: "2026-03-03",
-            type: "minor",
-            summary: "Ajout de la gestion des objets par scène dans la fiche personnage et affichage dans les liens en mode écriture.",
-            content: `# Ajout de la gestion des objets par scène dans la fiche personnage et affichage dans les liens en mode écriture.
+**Date :** 10 mars 2026
+
+## ✨ Nouveautés
+
+- Univers et codex : Changement des catégories et ajout de champs spécifiques et dynamiques pour chaque catégorie afin d'aller en profondeur dans le worldbuilding
+- Codex : Magie & Pouvoirs, Sciences & Technologie, Religions & Cultes, Philosophies & Idéologies, Mythes & Légendes, Politique & Géopolitique, Lois & Justice, Économie & Commerce, Systèmes Sociaux & Castes, Factions & Organisations, Linguistique & Grammaire, Cosmologie & Métaphysique, Glossaire & Terminologie
+- Univers : Géographie, Lieux & Bâtiments, Peuples & Ethnies, Cultures & Traditions, Histoire & Chronologie, Faune & Flore, Objets & Artefacts
+- Une infobulle d'aide explique les attendus et ce qu'il faut éviter dans chaque catégorie afin d'aider l'utilisateur dans ses choix !
+
+## 🐛 Corrections
+
+- Les stats devraient enfin fonctionner normalement
+- Correction des fichiers de langues fr, en, de et es`
+    },
+    {
+      version: "1.0.4",
+      date: "2026-03-03",
+      type: "minor",
+      summary: "Ajout de la gestion des objets par scène dans la fiche personnage et affichage dans les liens en mode écriture.",
+      content: `# Ajout de la gestion des objets par scène dans la fiche personnage et affichage dans les liens en mode écriture.
 
 **Date :** 3 mars 2026
 
@@ -26,15 +45,15 @@ window.CHANGELOG_I18N_DATA = {
 
 ## 🐛 Corrections
 
-- Visualisation des fichiers présents dans le Google Drive
-- Correction des fichiers de langues fr, en, de et es`,
-        },
-        {
-            version: "1.0.3",
-            date: "2026-02-27",
-            type: "minor",
-            summary: "Ajout d'un export .zip avec tous les éléments en .md pour pouvoir récupérer dans vos logiciels préférés.",
-            content: `# Ajout d'un export .zip avec tous les éléments en .md pour pouvoir récupérer dans vos logiciels préférés.
+- Visualisation des fichiers présents dans le google drive
+- Correction des fichiers de langues fr, en, de et es`
+    },
+    {
+      version: "1.0.3",
+      date: "2026-02-27",
+      type: "minor",
+      summary: "Ajout d'un export .zip avec tous les éléments en .md pour pouvoir récupérer dans vos logiciels préférés.",
+      content: `# Ajout d'un export .zip avec tous les éléments en .md pour pouvoir récupérer dans vos logiciels préférés.
 
 **Date :** 27 février 2026
 
@@ -54,49 +73,68 @@ window.CHANGELOG_I18N_DATA = {
 - Correction langue par défaut
 - Correction du tour editor
 - Correction mediaqueries <900px
-- Freeze mobile <900px`,
-        },
-    ],
+- Freeze mobile <900px`
+    }
+  ],
+  en: [
+    {
+      version: "1.1.0",
+      date: "2026-03-10",
+      type: "major",
+      summary: "Codex and World enhancements",
+      content: `# Codex and World enhancements
 
-    // ── English ───────────────────────────────────────────────────────────
-    en: [
-        {
-            version: "1.0.4",
-            date: "2026-03-03",
-            type: "minor",
-            summary: "Added per-scene object management in the character sheet and object display in writing mode links.",
-            content: `# Added per-scene object management in the character sheet and object display in writing mode links.
-
-**Date:** March 3, 2026
+**Date :** March 10, 2026
 
 ## ✨ What's New
 
-- Renamed character sheet sections for clearer guidance on expected content
-- Added per-scene object management in the character sheet
-- Objects now displayed in writing mode links
-- Improved past, current and future stakes — now manageable scene by scene
+- World and Codex: Category changes and addition of specific, dynamic fields for each category to deepen worldbuilding
+- Codex: Magic & Powers, Science & Technology, Religions & Cults, Philosophies & Ideologies, Myths & Legends, Politics & Geopolitics, Law & Justice, Economy & Trade, Social Systems & Castes, Factions & Organizations, Linguistics & Grammar, Cosmology & Metaphysics, Glossary & Terminology
+- World: Geography, Places & Buildings, Peoples & Ethnicities, Cultures & Traditions, History & Chronology, Fauna & Flora, Objects & Artifacts
+- A help tooltip explains expectations and pitfalls for each category to guide user choices!
 
 ## 🐛 Bug Fixes
 
-- Fixed display of files stored in Google Drive
-- Fixed language files for fr, en, de and es`,
-        },
-        {
-            version: "1.0.3",
-            date: "2026-02-27",
-            type: "minor",
-            summary: "Added a .zip export of all elements as .md files to use in your favourite apps.",
-            content: `# Added a .zip export of all elements as .md files to use in your favourite apps.
+- Statistics should finally behave normally
+- Fixed language files for fr, en, de, and es`
+    },
+    {
+      version: "1.0.4",
+      date: "2026-03-03",
+      type: "minor",
+      summary: "Added scene-based item management in character sheets and display in writing mode links.",
+      content: `# Added scene-based item management in character sheets and display in writing mode links.
 
-**Date:** February 27, 2026
+**Date :** March 3, 2026
+
+## ✨ What's New
+
+- Renamed sections in character sheets for better clarity on expectations
+- Added scene-by-scene item management in character sheets
+- Displayed items in writing mode links
+- Improved past, present, and future stakes; added scene-by-scene management
+
+## 🐛 Bug Fixes
+
+- Visualization of files in Google Drive
+- Fixed language files for fr, en, de, and es`
+    },
+    {
+      version: "1.0.3",
+      date: "2026-02-27",
+      type: "minor",
+      summary: "Added .zip export with all elements in .md for use in your favorite software.",
+      content: `# Added .zip export with all elements in .md for use in your favorite software.
+
+**Date :** February 27, 2026
 
 ## ✨ What's New
 
 - Added a changelog
-- Added a .zip export of all elements as .md files to use in your favourite apps
+- Added .zip export with all elements in .md for use in your favorite software
 - Added scene preparation
 - New French synonym dictionary
-- Added missing i18n keys
+- Added missing i18n
 
 ## 🐛 Bug Fixes
 
@@ -104,118 +142,155 @@ window.CHANGELOG_I18N_DATA = {
 - Fixed Scrivener i18n
 - Fixed browser language detection for live/index.html
 - Fixed default language
-- Fixed tour editor
-- Fixed mediaqueries <900px
-- Fixed mobile freeze <900px`,
-        },
-    ],
+- Fixed editor tour
+- Fixed media queries <900px
+- Fixed mobile freeze <900px`
+    }
+  ],
+  de: [
+    {
+      version: "1.1.0",
+      date: "2026-03-10",
+      type: "major",
+      summary: "Codex- und Weltverbesserungen",
+      content: `# Codex- und Weltverbesserungen
 
-    // ── Deutsch ───────────────────────────────────────────────────────────
-    de: [
-        {
-            version: "1.0.4",
-            date: "2026-03-03",
-            type: "minor",
-            summary: "Szenenbasierte Objektverwaltung in der Charakterkarte und Anzeige in Schreibmodus-Links hinzugefügt.",
-            content: `# Szenenbasierte Objektverwaltung in der Charakterkarte und Anzeige in Schreibmodus-Links hinzugefügt.
-
-**Datum:** 3. März 2026
+**Date :** 10. März 2026
 
 ## ✨ Neuheiten
 
-- Abschnittsnamen in der Charakterkarte umbenannt für mehr Klarheit
-- Szenenbasierte Objektverwaltung in der Charakterkarte hinzugefügt
-- Objekte werden jetzt in den Schreibmodus-Links angezeigt
-- Verbesserte vergangene, aktuelle und zukünftige Einsätze — jetzt szenenweise verwaltbar
+- Welt und Codex: Kategorieänderungen und Hinzufügung spezifischer, dynamischer Felder für jede Kategorie, um das Worldbuilding zu vertiefen
+- Codex: Magie & Kräfte, Wissenschaft & Technologie, Religionen & Kulte, Philosophien & Ideologien, Mythen & Legenden, Politik & Geopolitik, Recht & Justiz, Wirtschaft & Handel, Sozialsysteme & Kasten, Fraktionen & Organisationen, Linguistik & Grammatik, Kosmologie & Metaphysik, Glossar & Terminologie
+- Welt: Geographie, Orte & Gebäude, Völker & Ethnien, Kulturen & Traditionen, Geschichte & Chronologie, Fauna & Flora, Objekte & Artefakte
+- Ein Hilfe-Tooltip erklärt Erwartungen und Fallstricke für jede Kategorie, um die Auswahl der Benutzer zu unterstützen!
 
 ## 🐛 Fehlerbehebungen
 
-- Anzeige von Dateien in Google Drive korrigiert
-- Sprachdateien für fr, en, de und es korrigiert`,
-        },
-        {
-            version: "1.0.3",
-            date: "2026-02-27",
-            type: "minor",
-            summary: "ZIP-Export aller Elemente als .md-Dateien für die Verwendung in Ihren bevorzugten Programmen hinzugefügt.",
-            content: `# ZIP-Export aller Elemente als .md-Dateien für die Verwendung in Ihren bevorzugten Programmen hinzugefügt.
+- Statistiken sollten endlich normal funktionieren
+- Sprachdateien für fr, en, de und es korrigiert`
+    },
+    {
+      version: "1.0.4",
+      date: "2026-03-03",
+      type: "minor",
+      summary: "Szenenbasierte Objektverwaltung in Charakterbögen und Anzeige in Schreibmodus-Links hinzugefügt.",
+      content: `# Szenenbasierte Objektverwaltung in Charakterbögen und Anzeige in Schreibmodus-Links hinzugefüated.
 
-**Datum:** 27. Februar 2026
+**Date :** 3. März 2026
+
+## ✨ Neuheiten
+
+- Rubriken in Charakterbögen für mehr Klarheit umbenannt
+- Szenenbasierte Objektverwaltung in Charakterbögen hinzugefügt
+- Objekte in Schreibmodus-Links angezeigt
+- Vergangene, aktuelle und zukünftige Herausforderungen verbessert; szenenbasierte Verwaltung hinzugefügt
+
+## 🐛 Fehlerbehebungen
+
+- Visualisierung von Dateien in Google Drive
+- Sprachdateien für fr, en, de und es korrigiert`
+    },
+    {
+      version: "1.0.3",
+      date: "2026-02-27",
+      type: "minor",
+      summary: ".zip-Export mit allen Elementen in .md zur Verwendung in Ihrer bevorzugten Software hinzugefügt.",
+      content: `# .zip-Export mit allen Elementen in .md zur Verwendung in Ihrer bevorzugten Software hinzugefügt.
+
+**Date :** 27. Februar 2026
 
 ## ✨ Neuheiten
 
 - Changelog hinzugefügt
-- ZIP-Export aller Elemente als .md-Dateien für die Verwendung in Ihren bevorzugten Programmen hinzugefügt
+- .zip-Export mit allen Elementen in .md zur Verwendung in Ihrer bevorzugten Software hinzugefügt
 - Szenenvorbereitung hinzugefügt
 - Neues französisches Synonymwörterbuch
-- Fehlende i18n-Schlüssel ergänzt
+- Fehlende i18n hinzugefügt
 
 ## 🐛 Fehlerbehebungen
 
 - Synonyme in 4 Sprachen aktualisiert, Zeichenfunktion in globalnotes korrigiert
 - Scrivener i18n korrigiert
-- Spracherkennung des Browsers für live/index.html korrigiert
+- Browser-Spracherkennung für live/index.html korrigiert
 - Standardsprache korrigiert
-- Tour-Editor korrigiert
-- Mediaqueries <900px korrigiert
-- Mobile-Freeze <900px behoben`,
-        },
-    ],
+- Editor-Tour korrigiert
+- Media Queries <900px korrigiert
+- Mobile Freeze <900px korrigiert`
+    }
+  ],
+  es: [
+    {
+      version: "1.1.0",
+      date: "2026-03-10",
+      type: "major",
+      summary: "Mejoras en el códice y el mundo",
+      content: `# Mejoras en el códice y el mundo
 
-    // ── Español ───────────────────────────────────────────────────────────
-    es: [
-        {
-            version: "1.0.4",
-            date: "2026-03-03",
-            type: "minor",
-            summary: "Gestión de objetos por escena en la ficha de personaje y visualización en los enlaces del modo escritura.",
-            content: `# Gestión de objetos por escena en la ficha de personaje y visualización en los enlaces del modo escritura.
-
-**Fecha:** 3 de marzo de 2026
+**Date :** 10 de marzo de 2026
 
 ## ✨ Novedades
 
-- Cambio de nombres de secciones en la ficha de personaje para mayor claridad
-- Gestión de objetos por escena añadida a la ficha de personaje
-- Los objetos ahora se muestran en los enlaces del modo escritura
-- Mejora de los objetivos pasados, actuales y futuros — ahora gestionables escena por escena
+- Mundo y Códice: Cambios de categorías y adición de campos específicos y dinámicos para cada categoría para profundizar en la creación de mundos
+- Códice: Magia y Poderes, Ciencia y Tecnología, Religiones y Cultos, Filosofías e Ideologías, Mitos y Leyendas, Política y Geopolítica, Ley y Justicia, Economía y Comercio, Sistemas Sociales y Castas, Facciones y Organizaciones, Lingüística y Gramática, Cosmología y Metafísica, Glosario y Terminología
+- Mundo: Geografía, Lugares y Edificios, Pueblos y Etnias, Culturas y Tradiciones, Historia y Cronología, Fauna y Flora, Objetos y Artefactos
+- ¡Una ventana emergente de ayuda explica las expectativas y lo que se debe evitar en cada categoría para guiar las elecciones del usuario!
 
 ## 🐛 Correcciones
 
-- Corrección de la visualización de archivos en Google Drive
-- Corrección de los archivos de idioma fr, en, de y es`,
-        },
-        {
-            version: "1.0.3",
-            date: "2026-02-27",
-            type: "minor",
-            summary: "Exportación .zip de todos los elementos en .md para usarlos en tus aplicaciones favoritas.",
-            content: `# Exportación .zip de todos los elementos en .md para usarlos en tus aplicaciones favoritas.
+- Las estadísticas deberían finalmente funcionar con normalidad
+- Corrección de los archivos de idioma fr, en, de y es`
+    },
+    {
+      version: "1.0.4",
+      date: "2026-03-03",
+      type: "minor",
+      summary: "Gestión de objetos por escena en fichas de personaje y visualización en enlaces del modo escritura.",
+      content: `# Gestión de objetos por escena en fichas de personaje y visualización en enlaces del modo escritura.
 
-**Fecha:** 27 de febrero de 2026
+**Date :** 3 de marzo de 2026
+
+## ✨ Novedades
+
+- Cambiados los nombres de las secciones en las fichas de personaje para mayor claridad
+- Añadida la gestión de objetos por escena en las fichas de personaje
+- Visualización de objetos en los enlaces del modo escritura
+- Mejora de los desafíos pasados, actuales y futuros; añadida la posibilidad de gestionarlos escena por escena
+
+## 🐛 Correcciones
+
+- Visualización de archivos en Google Drive
+- Corrección de los archivos de idioma fr, en, de y es`
+    },
+    {
+      version: "1.0.3",
+      date: "2026-02-27",
+      type: "minor",
+      summary: "Añadida exportación .zip con todos los elementos en .md para su uso en su software favorito.",
+      content: `# Añadida exportación .zip con todos los elementos en .md para su uso en su software favorito.
+
+**Date :** 27 de febrero de 2026
 
 ## ✨ Novedades
 
 - Añadido un changelog
-- Exportación .zip de todos los elementos en .md para usarlos en tus aplicaciones favoritas
-- Añadida la preparación de escena
-- Nuevo diccionario de sinónimos en francés
-- Claves i18n faltantes añadidas
+- Añadida exportación .zip con todos los elementos en .md para su uso en su software favorito
+- Añadida preparación de escena
+- Nuevo diccionario de sinónimos fr
+- Añadidos i18n faltantes
 
 ## 🐛 Correcciones
 
 - Actualización de sinónimos en 4 idiomas, corrección de la función de dibujo en globalnotes
-- Corrección del i18n de Scrivener
+- Corrección de i18n Scrivener
 - Corrección de la detección de idioma del navegador para live/index.html
-- Corrección del idioma predeterminado
-- Corrección del editor de tour
-- Corrección de mediaqueries <900px
-- Solución del bloqueo en móvil <900px`,
-        },
-    ],
-
+- Corrección de idioma por defecto
+- Corrección del tour del editor
+- Corrección de media queries <900px
+- Corrección de freeze en móvil <900px`
+    }
+  ],
 };
 
-/* ── Sélection de la langue courante ──────────────────────────────────────
-   La sélection est faite dynamiquement par ChangelogView via Localization.getLocale().
-   Ce fichier expose uniquement window.CHANGELOG_I18N_DATA. */
+const _clLocale = localStorage.getItem('plume_locale') || 'fr';
+window.CHANGELOG_DATA = window.CHANGELOG_I18N_DATA[_clLocale]
+                     || window.CHANGELOG_I18N_DATA['fr'];
