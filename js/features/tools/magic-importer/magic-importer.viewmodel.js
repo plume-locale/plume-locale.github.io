@@ -13,59 +13,85 @@ const MagicImporterViewModel = {
         }
 
         let data = null;
+        let content = text.trim();
+
+        console.log("MagicImporter: Starting import process...");
+
         try {
-            // Try as JSON
-            const trimmed = text.trim();
-            if (trimmed.startsWith('{') || trimmed.startsWith('[')) {
-                let parsed = JSON.parse(trimmed);
-                
-                // If it's an array, take the first element for now
-                if (Array.isArray(parsed)) parsed = parsed[0];
+            // 1. Pre-process: Strip Markdown Code Blocks
+            content = content.replace(/```(?:json)?\s*([\s\S]*?)\s*```/g, '$1').trim();
 
-                data = { fields: {} };
-                
-                // 1. Detect Category/Entity
-                data.category = parsed.category || parsed.categorie || parsed._meta?.categorie || parsed._meta?.category;
-                
-                const entity = parsed.entity || parsed.entite || parsed._meta?.entite || parsed._meta?.entity;
-                if (entity) data.entity = entity.toUpperCase();
+            const isPossibleJson = content.includes('{') && content.includes('}');
 
-                // 2. Populate fields
-                // Start with explicit fields if they exist
-                if (parsed.fields && typeof parsed.fields === 'object') {
-                    Object.entries(parsed.fields).forEach(([k, v]) => {
-                        data.fields[k] = Array.isArray(v) ? v.join(', ') : v;
-                    });
+            if (isPossibleJson) {
+                try {
+                    const jsonStart = content.indexOf('{');
+                    const jsonEnd = content.lastIndexOf('}');
+                    if (jsonStart !== -1 && jsonEnd !== -1) {
+                        const potentialJson = content.substring(jsonStart, jsonEnd + 1);
+                        let parsed = JSON.parse(potentialJson);
+                        
+                        // If it's an array, take the first element
+                        if (Array.isArray(parsed)) parsed = parsed[0];
+
+                        data = { fields: {} };
+                        
+                        // Detect Category/Entity
+                        data.category = parsed.category || parsed.categorie || parsed._meta?.categorie || parsed._meta?.category;
+                        
+                        const entity = parsed.entity || parsed.entite || parsed._meta?.entite || parsed._meta?.entity;
+                        if (entity) data.entity = entity.toUpperCase();
+
+                        // Populate fields
+                        const rootFields = parsed.fields && typeof parsed.fields === 'object' ? parsed.fields : {};
+                        
+                        // Merge explicit fields and root fields
+                        const allSourceData = { ...parsed, ...rootFields };
+                        
+                        Object.entries(allSourceData).forEach(([key, value]) => {
+                            const lowKey = key.toLowerCase();
+                            if (['fields', '_meta', 'category', 'categorie', 'entity', 'entite'].includes(lowKey)) return;
+                            
+                            // Normalize core field names
+                            let targetKey = key;
+                            if (['nom', 'name', 'titre', 'title'].includes(lowKey)) targetKey = 'nom';
+                            if (['resume_court', 'resume', 'description', 'summary', 'synopsis'].includes(lowKey)) targetKey = 'resume_court';
+                            
+                            // Handle complex values
+                            let finalValue = value;
+                            if (Array.isArray(value)) finalValue = value.join(', ');
+                            else if (typeof value === 'object' && value !== null) {
+                                // For objects, we try to make it readable or just stringify
+                                finalValue = JSON.stringify(value, null, 2);
+                            }
+                            
+                            data.fields[targetKey] = finalValue;
+                        });
+
+                        console.log("MagicImporter: Successfully parsed as JSON", data);
+                    }
+                } catch (jsonErr) {
+                    console.warn("MagicImporter: Failed to parse JSON, will try structured text", jsonErr);
                 }
-                
-                // 3. Collect other root keys (excluding structural ones)
-                Object.entries(parsed).forEach(([key, value]) => {
-                    const lowKey = key.toLowerCase();
-                    if (['fields', '_meta', 'category', 'categorie', 'entity', 'entite'].includes(lowKey)) return;
-                    
-                    // Normalize core field names
-                    let targetKey = key;
-                    if (['nom', 'name', 'titre', 'title'].includes(lowKey)) targetKey = 'nom';
-                    if (['resume_court', 'resume', 'description', 'summary', 'synopsis'].includes(lowKey)) targetKey = 'resume_court';
-                    
-                    // Convert arrays to comma-separated strings for Plume compatibility
-                    const finalValue = Array.isArray(value) ? value.join(', ') : value;
-                    
-                    data.fields[targetKey] = finalValue;
-                });
-            } else {
+            }
+            
+            // 3. Fallback to Structured Text if JSON failed or was not detected
+            if (!data) {
                 data = this.parseStructuredText(text);
+                console.log("MagicImporter: Parsed as structured text", data);
             }
         } catch (e) {
-            console.error("MagicImporter: JSON parse failed, falling back to text parser", e);
+            console.error("MagicImporter: Critical parsing error", e);
             data = this.parseStructuredText(text);
         }
 
         if (!data || (!data.fields?.nom && !data.name)) {
+            console.error("MagicImporter: No name found in data", data);
             return { success: false, error: Localization.t('magic_import.error.no_name') };
         }
 
         const destination = this.detectDestination(data);
+        console.log("MagicImporter: Detected destination", destination);
 
         if (destination === 'world') {
             return this.addToWorld(data);
@@ -83,32 +109,37 @@ const MagicImporterViewModel = {
         const lines = text.split('\n');
         const data = { fields: {} };
         
-        // Step 1: Detect category from header (e.g., "1. UNIVERS 📍 Lieux & Bâtiments : La Cité du Voile")
-        const firstLine = lines[0] || "";
-        if (firstLine.includes('UNIVERS') || firstLine.includes('CODEX')) {
-            const parts = firstLine.split(':');
-            const headerInfo = parts[0];
-            // Extract what's between the emoji/tag and the ":"
-            const catMatch = headerInfo.match(/(?:UNIVERS|CODEX)\s*(?:📍|📌|📝|📖)?\s*([^:]+)/i);
-            if (catMatch && catMatch[1]) {
-                data.category = catMatch[1].trim();
-            }
-        }
-
         // Mapping for core Plume fields
         const coreMapping = {
             'nom': ['nom', 'name', 'titre', 'title'],
             'resume_court': ['résumé court', 'résumé', 'description', 'summary', 'synopsis']
         };
 
-        lines.forEach(line => {
+        lines.forEach((line, index) => {
             line = line.trim();
-            if (!line || line.startsWith('TAB :')) return; // Skip empty and structural lines
+            if (!line || line.startsWith('TAB :')) return; 
+
+            // Detect category from header lines (e.g., "1. UNIVERS 📍 Lieux & Bâtiments : La Cité du Voile")
+            if (index < 3 && (line.toUpperCase().includes('UNIVERS') || line.toUpperCase().includes('CODEX'))) {
+                const parts = line.split(':');
+                const headerInfo = parts[0];
+                const catMatch = headerInfo.match(/(?:UNIVERS|CODEX|WORLD)\s*(?:📍|📌|📝|📖|✨|🐉|⚔️|👥|🎭|📜|⚙️)?\s*([^:]+)/i);
+                if (catMatch && catMatch[1]) {
+                    data.category = catMatch[1].trim();
+                }
+                if (line.toUpperCase().includes('CODEX')) data.entity = 'CODEX';
+                if (line.toUpperCase().includes('UNIVERS') || line.toUpperCase().includes('WORLD')) data.entity = 'WORLD';
+            }
 
             const colonIndex = line.indexOf(':');
             if (colonIndex !== -1) {
-                const rawKey = line.substring(0, colonIndex).trim();
-                const value = line.substring(colonIndex + 1).trim();
+                let rawKey = line.substring(0, colonIndex).trim();
+                // Strip quotes and whitespace for JSON-like structured text
+                rawKey = rawKey.replace(/^["']|["']$/g, '').trim();
+
+                let value = line.substring(colonIndex + 1).trim();
+                value = value.replace(/^["']|["']$/g, '').replace(/,$/, '').trim();
+
                 const cleanKey = rawKey.toLowerCase();
 
                 let isCore = false;
@@ -120,11 +151,9 @@ const MagicImporterViewModel = {
                     }
                 }
 
-                // If not core, and not just the header line, add as dynamic field
-                if (!isCore && !rawKey.includes('UNIVERS') && !rawKey.includes('CODEX')) {
-                    // Convert "Points d'intérêt internes" to "points_d_interet_internes"
+                if (!isCore && !rawKey.toUpperCase().includes('UNIVERS') && !rawKey.toUpperCase().includes('CODEX')) {
                     const slugKey = rawKey.toLowerCase()
-                        .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // remove accents
+                        .normalize("NFD").replace(/[\u0300-\u036f]/g, "") 
                         .replace(/[\s']/g, '_')
                         .replace(/[^a-z0-9_]/g, '');
                     
@@ -140,7 +169,6 @@ const MagicImporterViewModel = {
      * Detects if the item belongs to World or Codex.
      */
     detectDestination(data) {
-        // Explicit entity from JSON
         if (data.entity === 'CODEX') return 'codex';
         if (data.entity === 'WORLD' || data.entity === 'UNIVERS') return 'world';
 
@@ -152,9 +180,8 @@ const MagicImporterViewModel = {
             if (window.ATLAS_SCHEMA.CODEX.categories[category]) return 'codex';
         }
 
-        // Manual fallbacks
-        const worldRegex = /Géo|Lieu|Peuple|Culture|Hist|Faun|Obj/i;
-        const codexRegex = /Magie|Scien|Reli|Phil|Myth|Politi|Lois|Écon|Soci|Fact|Ling|Cosm|Gloss/i;
+        const worldRegex = /Géo|Lieu|Peuple|Culture|Hist|Faun|Obj|Univers/i;
+        const codexRegex = /Magie|Scien|Reli|Phil|Myth|Politi|Lois|Écon|Soci|Fact|Ling|Cosm|Gloss|Codex/i;
 
         if (worldRegex.test(category)) return 'world';
         if (codexRegex.test(category)) return 'codex';
@@ -169,8 +196,7 @@ const MagicImporterViewModel = {
 
         if (typeof addWorldElementViewModel === 'function') {
             const result = addWorldElementViewModel(name, type, description);
-            if (result.success && result.element.id) {
-                // Update all other fields
+            if (result.success && result.element?.id) {
                 Object.keys(data.fields).forEach(key => {
                     if (key !== 'nom' && key !== 'resume_court') {
                         updateWorldFieldViewModel(result.element.id, key, data.fields[key]);
@@ -178,7 +204,7 @@ const MagicImporterViewModel = {
                 });
                 return { success: true, id: result.element.id, destination: 'world' };
             }
-            return result;
+            return { success: false, error: result.error || result.message || "Erreur inconnue dans le module Univers." };
         }
         return { success: false, error: Localization.t('magic_import.error.world_module') };
     },
@@ -190,7 +216,7 @@ const MagicImporterViewModel = {
 
         if (typeof CodexViewModel !== 'undefined' && typeof CodexViewModel.addEntry === 'function') {
             const result = CodexViewModel.addEntry(title, category, summary);
-            if (result.success && result.entry.id) {
+            if (result.success && result.entry?.id) {
                 Object.keys(data.fields).forEach(key => {
                     if (key !== 'nom' && key !== 'resume_court') {
                         CodexViewModel.updateField(result.entry.id, key, data.fields[key]);
@@ -198,7 +224,7 @@ const MagicImporterViewModel = {
                 });
                 return { success: true, id: result.entry.id, destination: 'codex' };
             }
-            return result;
+            return { success: false, error: result.error || result.message || "Erreur inconnue dans le module Codex." };
         }
         return { success: false, error: Localization.t('magic_import.error.codex_module') };
     }
