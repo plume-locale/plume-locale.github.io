@@ -9,23 +9,60 @@ const MagicImporterViewModel = {
      */
     async importContent(text) {
         if (!text || !text.trim()) {
-            return { success: false, error: "Le contenu est vide." };
+            return { success: false, error: Localization.t('magic_import.error.empty') };
         }
 
         let data = null;
         try {
             // Try as JSON
-            if (text.trim().startsWith('{')) {
-                data = JSON.parse(text);
+            const trimmed = text.trim();
+            if (trimmed.startsWith('{') || trimmed.startsWith('[')) {
+                let parsed = JSON.parse(trimmed);
+                
+                // If it's an array, take the first element for now
+                if (Array.isArray(parsed)) parsed = parsed[0];
+
+                data = { fields: {} };
+                
+                // 1. Detect Category/Entity
+                data.category = parsed.category || parsed.categorie || parsed._meta?.categorie || parsed._meta?.category;
+                
+                const entity = parsed.entity || parsed.entite || parsed._meta?.entite || parsed._meta?.entity;
+                if (entity) data.entity = entity.toUpperCase();
+
+                // 2. Populate fields
+                // Start with explicit fields if they exist
+                if (parsed.fields && typeof parsed.fields === 'object') {
+                    Object.entries(parsed.fields).forEach(([k, v]) => {
+                        data.fields[k] = Array.isArray(v) ? v.join(', ') : v;
+                    });
+                }
+                
+                // 3. Collect other root keys (excluding structural ones)
+                Object.entries(parsed).forEach(([key, value]) => {
+                    const lowKey = key.toLowerCase();
+                    if (['fields', '_meta', 'category', 'categorie', 'entity', 'entite'].includes(lowKey)) return;
+                    
+                    // Normalize core field names
+                    let targetKey = key;
+                    if (['nom', 'name', 'titre', 'title'].includes(lowKey)) targetKey = 'nom';
+                    if (['resume_court', 'resume', 'description', 'summary', 'synopsis'].includes(lowKey)) targetKey = 'resume_court';
+                    
+                    // Convert arrays to comma-separated strings for Plume compatibility
+                    const finalValue = Array.isArray(value) ? value.join(', ') : value;
+                    
+                    data.fields[targetKey] = finalValue;
+                });
             } else {
                 data = this.parseStructuredText(text);
             }
         } catch (e) {
+            console.error("MagicImporter: JSON parse failed, falling back to text parser", e);
             data = this.parseStructuredText(text);
         }
 
         if (!data || (!data.fields?.nom && !data.name)) {
-            return { success: false, error: "Impossible de trouver au moins un Nom ou un Titre dans le texte." };
+            return { success: false, error: Localization.t('magic_import.error.no_name') };
         }
 
         const destination = this.detectDestination(data);
@@ -35,7 +72,7 @@ const MagicImporterViewModel = {
         } else if (destination === 'codex') {
             return this.addToCodex(data);
         } else {
-            return { success: false, error: "Catégorie non reconnue. Précisez s'il s'agit d'un élément de l'Univers ou du Codex." };
+            return { success: false, error: Localization.t('magic_import.error.category_not_recognized') || "Catégorie non reconnue. Précisez s'il s'agit d'un élément de l'Univers ou du Codex." };
         }
     },
 
@@ -103,7 +140,11 @@ const MagicImporterViewModel = {
      * Detects if the item belongs to World or Codex.
      */
     detectDestination(data) {
-        const category = data.category || data.fields?.category || "";
+        // Explicit entity from JSON
+        if (data.entity === 'CODEX') return 'codex';
+        if (data.entity === 'WORLD' || data.entity === 'UNIVERS') return 'world';
+
+        const category = data.category || data.fields?.category || data.fields?.categorie || "";
         if (!category) return null;
 
         if (window.ATLAS_SCHEMA) {
@@ -122,8 +163,8 @@ const MagicImporterViewModel = {
     },
 
     addToWorld(data) {
-        const name = data.fields?.nom || "Sans nom";
-        const type = data.category || "Géographie";
+        const name = data.fields?.nom || Localization.t('search.default.unnamed');
+        const type = data.category || Localization.t('world.type.geography');
         const description = data.fields?.resume_court || "";
 
         if (typeof addWorldElementViewModel === 'function') {
@@ -139,12 +180,12 @@ const MagicImporterViewModel = {
             }
             return result;
         }
-        return { success: false, error: "Module Univers non disponible." };
+        return { success: false, error: Localization.t('magic_import.error.world_module') };
     },
 
     addToCodex(data) {
-        const title = data.fields?.nom || "Sans titre";
-        const category = data.category || "Autre";
+        const title = data.fields?.nom || Localization.t('search.default.untitled');
+        const category = data.category || Localization.t('codex.category.Autre');
         const summary = data.fields?.resume_court || "";
 
         if (typeof CodexViewModel !== 'undefined' && typeof CodexViewModel.addEntry === 'function') {
@@ -159,6 +200,6 @@ const MagicImporterViewModel = {
             }
             return result;
         }
-        return { success: false, error: "Module Codex non disponible." };
+        return { success: false, error: Localization.t('magic_import.error.codex_module') };
     }
 };
