@@ -145,7 +145,18 @@ class StorageRepository {
     async saveProject(projectData) {
         try {
             if (!this.db) {
-                console.error('❌ Base de données non initialisée');
+                if (this.useLocalStorage) {
+                    const projects = JSON.parse(localStorage.getItem('plume_projects_backup') || '[]');
+                    const index = projects.findIndex(p => p.id === projectData.id);
+                    projectData.updatedAt = Date.now();
+                    if (index >= 0) projects[index] = projectData;
+                    else projects.push(projectData);
+                    localStorage.setItem('plume_projects_backup', JSON.stringify(projects));
+                    return true;
+                }
+                // Si pas encore de DB et pas de fallback forcé, on attend un peu ou on ignore silencieusement
+                // pour éviter de spammer l'utilisateur au démarrage.
+                console.warn('⚠️ Tentative de sauvegarde avant initialisation DB - Ignorée');
                 return false;
             }
 
@@ -159,7 +170,7 @@ class StorageRepository {
             return true;
         } catch (error) {
             console.error('❌ Erreur sauvegarde IndexedDB:', error);
-            throw error; // La vue gérera l'erreur utilisateur
+            throw error;
         }
     }
 
@@ -205,7 +216,9 @@ class StorageRepository {
     async loadAllProjects() {
         try {
             if (!this.db) {
-                console.error('❌ Base de données non initialisée');
+                if (this.useLocalStorage) {
+                    return JSON.parse(localStorage.getItem('plume_projects_backup') || '[]');
+                }
                 return [];
             }
             const allProjects = await this.db.getAll(StorageModel.STORES.PROJECTS);
@@ -273,7 +286,10 @@ class StorageRepository {
      */
     async saveSetting(key, value) {
         try {
-            if (!this.db) return false;
+            if (!this.db) {
+                localStorage.setItem('plume_setting_' + key, JSON.stringify(value));
+                return true;
+            }
             await this.db.put(StorageModel.STORES.SETTINGS, value, key);
             return true;
         } catch (error) {
@@ -289,7 +305,10 @@ class StorageRepository {
      */
     async loadSetting(key) {
         try {
-            if (!this.db) return null;
+            if (!this.db) {
+                const val = localStorage.getItem('plume_setting_' + key);
+                return val ? JSON.parse(val) : null;
+            }
             return await this.db.get(StorageModel.STORES.SETTINGS, key);
         } catch (error) {
             console.error('❌ Erreur chargement setting:', error);

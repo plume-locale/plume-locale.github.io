@@ -157,7 +157,11 @@ const SearchRepository = {
 
             // Nouveau système Atlas
             if (element.fields) {
-                const fieldValues = Object.values(element.fields).filter(v => typeof v === 'string').join(' ');
+                const validIds = SearchRepository.getValidAtlasFields(element.category, 'UNIVERS');
+                const fieldValues = Object.entries(element.fields)
+                    .filter(([key, value]) => (!validIds || validIds.has(key)) && typeof value === 'string')
+                    .map(([key, value]) => value)
+                    .join(' ');
                 searchText += ' ' + fieldValues;
             }
 
@@ -288,7 +292,11 @@ const SearchRepository = {
 
             // Nouveau système Atlas
             if (entry.fields) {
-                const fieldValues = Object.values(entry.fields).filter(v => typeof v === 'string').join(' ');
+                const validIds = SearchRepository.getValidAtlasFields(entry.category, 'CODEX');
+                const fieldValues = Object.entries(entry.fields)
+                    .filter(([key, value]) => (!validIds || validIds.has(key)) && typeof value === 'string')
+                    .map(([key, value]) => value)
+                    .join(' ');
                 searchText += ' ' + fieldValues;
             }
 
@@ -352,5 +360,34 @@ const SearchRepository = {
         if (end < text.length) preview = preview + '...';
 
         return preview;
+    },
+
+    /**
+     * Obtient les IDs des champs valides pour une catégorie selon le SCHEMA
+     */
+    getValidAtlasFields: (category, schemaRoot) => {
+        if (typeof window === 'undefined' || !window.ATLAS_SCHEMA || !window.ATLAS_SCHEMA[schemaRoot]) return null;
+        
+        const schema = window.ATLAS_SCHEMA[schemaRoot];
+        const catConfig = schema.categories[category];
+        if (!catConfig) return null;
+
+        const validIds = new Set();
+        
+        // Champs communs
+        if (window.ATLAS_COMMON_FIELDS) {
+            window.ATLAS_COMMON_FIELDS.forEach(f => validIds.add(f.id));
+        }
+
+        // Champs spécifiques à la catégorie
+        if (catConfig.tabs) {
+            catConfig.tabs.forEach(tab => {
+                if (tab.fields) {
+                    tab.fields.forEach(f => validIds.add(f.id));
+                }
+            });
+        }
+
+        return validIds;
     }
 };

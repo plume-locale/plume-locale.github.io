@@ -190,6 +190,9 @@ const ImportExportViewModel = {
                 ImportExportView.updateGDriveUI(GoogleDriveService.userInfo, true);
                 ImportExportView.updateGDriveStatus(Localization.t('gdrive.status.connected'), 'success');
                 this.updateGDriveHeaderBadge('connected');
+                
+                // Nouvelle fonctionnalité : Vérifier les conflits au démarrage si connecté
+                this.checkSyncConflict();
             } else if (GoogleDriveService.isSessionLost && GoogleDriveService.isSessionLost()) {
                 // Token était présent mais re-auth silencieuse a échoué
                 // → _onGDriveTokenExpired sera appelé via callback
@@ -207,6 +210,9 @@ const ImportExportViewModel = {
                 // Cacher la bannière d'expiration si elle est visible
                 const banner = document.getElementById('gdriveExpiredBanner');
                 if (banner) banner.style.display = 'none';
+
+                // Nouvelle fonctionnalité : Vérifier les conflits après connexion manuelle
+                this.checkSyncConflict();
             }
         });
     },
@@ -380,34 +386,85 @@ const ImportExportViewModel = {
         }
     },
 
-    restoreFromGDrive: async function () {
+    /**
+     * Vérifie s'il y a un conflit entre le projet local et celui sur Google Drive.
+     * Appelé automatiquement à la connexion.
+     */
+    checkSyncConflict: async function () {
+        if (!window.project || !GoogleDriveService.accessToken) return;
+
+        try {
+            const folderId = await GoogleDriveService.findOrCreateFolder('Plume Backups');
+            if (!folderId) return;
+
+            const filename = `backup_plume_${(window.project.title || Localization.t('export.json.default_filename')).replace(/\s+/g, '_')}.json`;
+            const fileId = await GoogleDriveService.findFile(filename, folderId);
+
+            if (!fileId) {
+                console.log('[Sync] Aucun fichier distant trouvé pour ce projet.');
+                return;
+            }
+
+            // On récupère les métadonnées pour avoir la date de modif distante
+            const response = await gapi.client.drive.files.get({
+                fileId: fileId,
+                fields: 'modifiedTime, size'
+            });
+            
+            const remoteModifiedTime = new Date(response.result.modifiedTime).getTime();
+            const localModifiedTime = window.project.updatedAt || 0;
+
+            // Seuil de 2 secondes pour éviter les micro-différences de save
+            const diff = Math.abs(remoteModifiedTime - localModifiedTime);
+            if (diff < 2000) {
+                console.log('[Sync] Versions synchronisées (diff < 2s).');
+                return;
+            }
+
+            // Si différence notable, on demande
+            const remoteDate = new Date(remoteModifiedTime).toLocaleString();
+            const localDate = new Date(localModifiedTime).toLocaleString();
+
+            const msg = `Différence détectée pour "${window.project.title}" :
+- Version distante (Drive) : ${remoteDate}
+- Version locale (ici) : ${localDate}
+
+Voulez-vous CHARGER la version de Google Drive (écrase le local) ?
+Cliquez sur "Annuler" pour garder votre version locale (et synchroniser vers le Drive plus tard).`;
+
+            if (confirm(msg)) {
+                this.restoreFromGDrive(filename, folderId);
+            }
+        } catch (err) {
+            console.error('[Sync] Erreur lors de la vérification des conflits:', err);
+        }
+    },
+
+    restoreFromGDrive: async function (specificFilename, specificFolderId) {
         if (typeof GoogleDriveService === 'undefined' || !GoogleDriveService.accessToken) {
             alert(Localization.t('gdrive.error.not_connected'));
             return;
         }
 
-        const filename = `backup_plume_${(window.project.title || Localization.t('export.json.default_filename')).replace(/\s+/g, '_')}.json`;
+        const filename = specificFilename || `backup_plume_${(window.project.title || Localization.t('export.json.default_filename')).replace(/\s+/g, '_')}.json`;
 
-        if (!confirm(Localization.t('gdrive.confirm.overwrite', filename))) return;
+        if (!specificFilename && !confirm(Localization.t('gdrive.confirm.overwrite', filename))) return;
 
         ImportExportView.updateGDriveStatus(Localization.t('gdrive.status.downloading'), 'sync');
 
         try {
-            const folderId = await GoogleDriveService.findOrCreateFolder('Plume Backups');
+            const folderId = specificFolderId || await GoogleDriveService.findOrCreateFolder('Plume Backups');
             const result = await GoogleDriveService.loadFile(filename, folderId);
-            // Result is likely the JSON object already if using gapi client properly with alt=media
-            // But gapi client get returns a response obj.
-
+            
             let importedData;
             if (typeof result === 'string') {
                 importedData = JSON.parse(result);
             } else if (result.body) {
                 importedData = JSON.parse(result.body);
             } else {
-                importedData = result; // Assuming it parsed it or it's the object
+                importedData = result;
             }
 
-            // Validation & Merge reuse handleFileImport logic concept
             if (!importedData.acts) throw new Error(Localization.t('gdrive.error.invalid_format'));
 
             window.project = importedData;

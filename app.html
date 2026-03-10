@@ -1346,6 +1346,10 @@
                             <i data-lucide="download"></i>
                             <span data-i18n="header.import">Importer un texte</span>
                         </button>
+                        <button class="extra-menu-item" onclick="openMagicImportModal()" id="headerMagicImportBtn">
+                            <i data-lucide="sparkles"></i>
+                            <span data-i18n="header.magic_import">Import Codex ou Univers</span>
+                        </button>
                         <!-- Backup / GDrive -->
                         <button class="extra-menu-item" onclick="ImportExportViewModel.showBackupMenu()"
                             id="headerBackupBtn">
@@ -3232,7 +3236,7 @@
                                     <div style="margin-top: 1rem; display: flex; justify-content: flex-end;">
                                         <button class="btn btn-primary"
                                             onclick="ImportExportViewModel.importSelectedFromGDrive()">
-                                            <i data-lucide="file-import"></i> <span
+                                            <i data-lucide="file-down"></i> <span
                                                 data-i18n="btn.import_selected">Importer la sélection</span>
                                         </button>
                                     </div>
@@ -4190,6 +4194,48 @@
                 </div>
             </div>
         </div>
+
+        <!-- ========================================
+         MAGIC IMPORT MODAL
+         ======================================== -->
+        <div class="modal" id="magicImportModal">
+            <div class="modal-content" style="max-width: 650px">
+                <div class="modal-header">
+                    <h2>
+                        <i data-lucide="sparkles"></i>
+                        <span data-i18n="modal.magic_import.title">Import Magique</span>
+                    </h2>
+                    <button class="modal-close" onclick="closeModal('magicImportModal')">
+                        <i data-lucide="x"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p style="font-size: 0.9rem; margin-bottom: 1rem; color: var(--text-muted);">
+                        Collez ici le texte généré (JSON structuré ou texte avec labels "Nom:", "Catégorie:", "Résumé
+                        court:").
+                        Plume détectera automatiquement s'il s'agit d'un élément de l'Univers ou du Codex.
+                    </p>
+                    <textarea id="magicImportInput" class="form-input" rows="18"
+                        style="width: 100%; font-family: 'Source Code Pro', monospace; font-size: 0.85rem; background: var(--bg-secondary); border-radius: 8px;"
+                        placeholder='Exemple JSON :
+{
+  "category": "Lieux & Bâtiments",
+  "fields": {
+    "nom": "La Cité d Argent",
+    "resume_court": "Une ville construite sur des mines de métal précieux.",
+    "histoire": "Fondée durant l ère du Silence..."
+  }
+}'></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button class="btn btn-ghost" onclick="closeModal('magicImportModal')">Annuler</button>
+                    <button class="btn btn-primary" onclick="MagicImporterView.executeImport()">
+                        <i data-lucide="zap"></i> Analyser & Importer
+                    </button>
+                </div>
+            </div>
+        </div>
+
     </div> <!-- Fin app-container -->
 </body>
     <!-- Generated JS Scripts -->
@@ -4512,10 +4558,13 @@
 <script src="./js/features/editor/narrative-overview/narrative-overview.view.js"></script>
 <script src="./js/features/editor/narrative-overview/narrative-overview.handlers.js"></script>
 <script src="./js/features/editor/narrative-overview/narrative-overview.main.js"></script>
+<script src="./js/features/tools/magic-importer/magic-importer.viewmodel.js"></script>
+<script src="./js/features/tools/magic-importer/magic-importer.view.js"></script>
+<script src="./js/features/tools/magic-importer/magic-importer.main.js"></script>
 <script src="./js/features/tools/changelog/changelog.i18n.data.js"></script>
 <script src="./js/features/tools/changelog/changelog.view.js"></script>
-<script src="./js/worldbuilding/atlas/atlas.schema.js"></script>
 <script src="./js/features/tools/import-export/import-export.structured-export.js"></script>
+<script src="./js/worldbuilding/atlas/atlas.schema.js"></script>
 
     </body>
 </html>
