@@ -29,8 +29,12 @@ const ProjectViewModel = {
             // Nettoyage : si on a de vrais projets ET des projets par défaut vides, on supprime les vides
             const defaultTitles = ["Mon Roman", "My Novel", "Mein Roman", "Mi Novela", Localization.t('project.model.default_title')];
             if (loadedProjects && loadedProjects.length > 1) {
-                const emptyDefaults = loadedProjects.filter(p => defaultTitles.includes(p.title) && (!p.acts || p.acts.length === 0));
-                const realProjects = loadedProjects.filter(p => !(defaultTitles.includes(p.title) && (!p.acts || p.acts.length === 0)));
+                const emptyDefaults = loadedProjects.filter(p => {
+                    return defaultTitles.includes(p.title) && ProjectModel.isEmpty(p);
+                });
+                const realProjects = loadedProjects.filter(p => {
+                    return !(defaultTitles.includes(p.title) && ProjectModel.isEmpty(p));
+                });
                 
                 if (realProjects.length > 0 && emptyDefaults.length > 0) {
                     console.log(`🧹 Nettoyage de ${emptyDefaults.length} projet(s) par défaut vide(s)`);
@@ -45,7 +49,7 @@ const ProjectViewModel = {
             // on le considère comme "vide" pour forcer le chargement de la démo si possible.
             const isInitialDefault = loadedProjects && loadedProjects.length === 1 &&
                 defaultTitles.includes(loadedProjects[0].title) &&
-                (!loadedProjects[0].acts || loadedProjects[0].acts.length === 0);
+                ProjectModel.isEmpty(loadedProjects[0]);
 
             if (loadedProjects && loadedProjects.length > 0 && !isInitialDefault) {
                 projects = loadedProjects;

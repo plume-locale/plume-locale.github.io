@@ -130,7 +130,7 @@ function toRoman(num) {
 async function saveProject() {
     try {
         // Sauvegarder dans IndexedDB
-        const success = await saveProjectToDB(project);
+        const success = await saveProjectToDB(window.project || project);
 
         if (!success) {
             throw new Error('Échec de la sauvegarde IndexedDB');

@@ -68,7 +68,7 @@ const ImportExportViewModel = {
 
             // Logic to merge selective data...
             // For this version, let's allow importing only what's in the file
-            window.project = Object.assign(window.project || {}, importedData);
+            project = window.project = Object.assign(window.project || {}, importedData);
 
             if (typeof saveProject === 'function') saveProject();
             if (typeof renderActsList === 'function') renderActsList();
@@ -145,7 +145,7 @@ const ImportExportViewModel = {
             }
 
             // Secure merge/update
-            window.project = Object.assign({
+            project = window.project = Object.assign({
                 title: Localization.t('import.json.default_project_title'),
                 acts: [],
                 characters: [],
@@ -361,9 +361,7 @@ const ImportExportViewModel = {
             // Filtrer le projet par défaut vide (Mon Roman, My Novel, etc.)
             const defaultTitles = ["Mon Roman", "My Novel", "Mein Roman", "Mi Novela", Localization.t('project.model.default_title')];
             const projectsToBackup = allProjects.filter(p => {
-                const isDefaultTitle = defaultTitles.includes(p.title);
-                const isEmpty = !p.acts || p.acts.length === 0;
-                return !(isDefaultTitle && isEmpty);
+                return !(defaultTitles.includes(p.title) && ProjectModel.isEmpty(p));
             });
 
             if (projectsToBackup.length === 0) {
@@ -471,7 +469,7 @@ Cliquez sur "Annuler" pour garder votre version locale (et synchroniser vers le 
 
             if (!importedData.acts) throw new Error(Localization.t('gdrive.error.invalid_format'));
 
-            window.project = importedData;
+            project = window.project = importedData;
             if (typeof saveProject === 'function') saveProject();
             if (typeof renderActsList === 'function') renderActsList();
             if (typeof switchView === 'function') switchView('editor');
@@ -544,7 +542,7 @@ Cliquez sur "Annuler" pour garder votre version locale (et synchroniser vers le 
                     if (typeof window.saveProjectToDB === 'function') {
                         await window.saveProjectToDB(importedData);
                     } else {
-                        window.project = importedData;
+                        project = window.project = importedData;
                         if (typeof saveProject === 'function') saveProject();
                     }
                     successCount++;

@@ -105,7 +105,9 @@ const ImportScrivenerViewModel = {
             }
 
             // Ajouter au projet Plume
-            if (!window.project) window.project = { acts: [] };
+            if (!window.project) {
+                project = window.project = { acts: [] };
+            }
             if (!window.project.acts) window.project.acts = [];
 
             for (const act of acts) {

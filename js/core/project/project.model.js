@@ -219,5 +219,44 @@ const ProjectModel = {
             narrative: narrativePercent,
             dialogCount: dialogs.length
         };
+    },
+
+    /**
+     * Vérifie si un projet est réellement vide (aucune donnée saisie).
+     * @param {Object} project 
+     * @returns {boolean}
+     */
+    isEmpty(project) {
+        if (!project) return true;
+
+        // Vérification des collections simples
+        const collections = [
+            'acts', 'characters', 'world', 'timeline', 'notes', 
+            'codex', 'mindmaps', 'versions', 'relationships',
+            'thrillerElements'
+        ];
+        
+        for (const col of collections) {
+            if (project[col] && project[col].length > 0) return false;
+        }
+
+        // Vérification des structures complexes
+        if (project.investigationBoard) {
+            const ib = project.investigationBoard;
+            if ((ib.cases && ib.cases.length > 0) || 
+                (ib.facts && ib.facts.length > 0) || 
+                (ib.knowledge && ib.knowledge.length > 0)) return false;
+        }
+
+        if (project.globalnotes) {
+            const gn = project.globalnotes;
+            if ((gn.boards && gn.boards.length > 0) || 
+                (gn.items && gn.items.length > 0)) return false;
+        }
+
+        // Si on a au moins une description ou un genre, on pourrait considérer 
+        // que ce n'est pas vide, mais le user parle d'"entrées" (data records).
+        
+        return true;
     }
 };
