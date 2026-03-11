@@ -7,36 +7,42 @@ window.getAtlasRelationOptions = function (target) {
     let options = [];
     if (!target) return options;
 
-    if (target === 'Personnage' || target === 'Personnages') {
-        const chars = (window.project && window.project.characters) ? window.project.characters : [];
-        options = chars.map(c => ({ id: c.id, label: c.name }));
-    } else if (target === 'Scène' || target === 'Scènes') {
-        if (window.project && window.project.acts) {
-            window.project.acts.forEach(act => {
-                (act.chapters || []).forEach(chap => {
-                    (chap.scenes || []).forEach(sc => {
-                        options.push({ id: sc.id, label: sc.title || 'Scène sans titre', sub: `${act.title} > ${chap.title}` });
+    const targets = target.split(',').map(t => t.trim());
+
+    targets.forEach(t => {
+        if (t === 'Personnage' || t === 'Personnages') {
+            const chars = (window.project && window.project.characters) ? window.project.characters : [];
+            options = options.concat(chars.map(c => ({ id: c.id, label: c.name })));
+        } else if (t === 'Scène' || t === 'Scènes') {
+            if (window.project && window.project.acts) {
+                window.project.acts.forEach(act => {
+                    (act.chapters || []).forEach(chap => {
+                        (chap.scenes || []).forEach(sc => {
+                            options.push({ id: sc.id, label: sc.title || 'Scène sans titre', sub: `${act.title} > ${chap.title}` });
+                        });
                     });
                 });
+            }
+        } else {
+            // Look in world
+            const worldItems = (window.project && window.project.world) ? window.project.world : [];
+            worldItems.forEach(item => {
+                if (item.category === t || item.type === t) {
+                    const label = (item.fields && item.fields.nom) ? item.fields.nom : (item.name || 'Sans titre');
+                    options.push({ id: item.id, label: label, sub: item.category });
+                }
+            });
+
+            // Look in codex
+            const codexItems = (window.project && window.project.codex) ? window.project.codex : [];
+            codexItems.forEach(item => {
+                if (item.category === t) {
+                    const label = (item.fields && item.fields.nom) ? item.fields.nom : (item.title || 'Sans titre');
+                    options.push({ id: item.id, label: label, sub: item.category });
+                }
             });
         }
-    } else {
-        // Look in world
-        const worldItems = (window.project && window.project.world) ? window.project.world : [];
-        worldItems.forEach(item => {
-            if (item.category === target || item.type === target) {
-                options.push({ id: item.id, label: (item.fields && item.fields.nom) ? item.fields.nom : item.name });
-            }
-        });
-
-        // Look in codex
-        const codexItems = (window.project && window.project.codex) ? window.project.codex : [];
-        codexItems.forEach(item => {
-            if (item.category === target) {
-                options.push({ id: item.id, label: (item.fields && item.fields.nom) ? item.fields.nom : item.title });
-            }
-        });
-    }
+    });
 
     // Sort alphabetically
     return options.sort((a, b) => (a.label || '').localeCompare(b.label || '', 'fr'));

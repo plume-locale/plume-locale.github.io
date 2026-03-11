@@ -84,7 +84,7 @@ const SCHEMA = {
               { name: "Statut", id: "statut", type: "select", options: ["Actif", "Abandonné", "En ruine", "Mythique / Légendaire", "Détruit"] },
               { name: "Fondation", id: "fondation", type: "text", note: "Date ou époque de construction" },
               { name: "Fondateur(s)", id: "fondateur_s", type: "relation-multi", target: "Personnage" },
-              { name: "Situé dans", id: "situe_dans", type: "relation", target: "Géographie" },
+              { name: "Situé dans", id: "situe_dans", type: "relation", target: "Géographie, Lieux & Bâtiments", note: "Lieu ou zone parente (ex: Taverne → Ville, ou Ville → Région)" },
             ]
           },
           {
