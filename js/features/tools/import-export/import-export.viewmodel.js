@@ -5,6 +5,7 @@
  */
 
 const ImportExportViewModel = {
+    isSyncChecking: false,
 
     // --- Backup & Restore (JSON) ---
 
@@ -391,7 +392,8 @@ const ImportExportViewModel = {
      * Appelé automatiquement à la connexion.
      */
     checkSyncConflict: async function () {
-        if (!window.project || !GoogleDriveService.accessToken) return;
+        if (this.isSyncChecking || !window.project || !GoogleDriveService.accessToken) return;
+        this.isSyncChecking = true;
 
         try {
             const folderId = await GoogleDriveService.findOrCreateFolder('Plume Backups');
@@ -437,6 +439,8 @@ Cliquez sur "Annuler" pour garder votre version locale (et synchroniser vers le 
             }
         } catch (err) {
             console.error('[Sync] Erreur lors de la vérification des conflits:', err);
+        } finally {
+            this.isSyncChecking = false;
         }
     },
 

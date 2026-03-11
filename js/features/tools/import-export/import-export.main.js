@@ -51,10 +51,10 @@ function initImportExportModule() {
     }
 }
 
-// Auto-init if DOM is ready (or wait for it)
-document.addEventListener('DOMContentLoaded', () => {
+// Auto-init Safely
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initImportExportModule);
+} else {
     initImportExportModule();
-});
+}
 
-// Also run immediately in case we are late loaded
-initImportExportModule();
