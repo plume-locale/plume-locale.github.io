@@ -288,7 +288,9 @@ const GlobalNotesItemView = {
             `;
             case 'heading':
                 return `
-                <div class="item-heading" contenteditable="true" onblur="GlobalNotesViewModel.updateItemData('${item.id}', { text: this.innerText })">
+                <div class="item-heading" contenteditable="true" 
+                     onpaste="GlobalNotesHandlers.onPaste(event)"
+                     onblur="GlobalNotesViewModel.updateItemData('${item.id}', { text: this.innerText })">
                     ${data.text || 'Section Title'}
                 </div>
             `;

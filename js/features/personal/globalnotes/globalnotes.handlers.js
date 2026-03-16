@@ -1571,7 +1571,6 @@ const GlobalNotesHandlers = {
     },
 
     onPaste: function (e) {
-        e.preventDefault();
         const html = e.clipboardData.getData('text/html');
         const text = e.clipboardData.getData('text/plain');
 
@@ -1580,31 +1579,21 @@ const GlobalNotesHandlers = {
         if (html) {
             const parser = new DOMParser();
             const doc = parser.parseFromString(html, 'text/html');
-            
-            // Define what tags we want to keep
             const allowedTags = ['B', 'I', 'EM', 'STRONG', 'U', 'H1', 'H2', 'H3', 'P', 'BR', 'UL', 'OL', 'LI', 'SPAN'];
             
-            // Recursive cleaner
             const cleanNode = (node) => {
                 const frag = document.createDocumentFragment();
-                const children = Array.from(node.childNodes);
-                
-                children.forEach(child => {
+                Array.from(node.childNodes).forEach(child => {
                     if (child.nodeType === 1) { // Element
-                        if (allowedTags.includes(child.tagName)) {
-                            // Strip attributes
-                            while (child.attributes.length > 0) {
-                                child.removeAttribute(child.attributes[0].name);
-                            }
-                            // Clean its children
-                            const cleanedChild = cleanNode(child);
+                        const tagName = child.tagName.toUpperCase();
+                        if (allowedTags.includes(tagName)) {
+                            while (child.attributes.length > 0) child.removeAttribute(child.attributes[0].name);
+                            const cleaned = cleanNode(child);
                             child.innerHTML = '';
-                            child.appendChild(cleanedChild);
-                            frag.appendChild(child);
+                            child.appendChild(cleaned);
+                            frag.appendChild(child.cloneNode(true));
                         } else {
-                            // Unwrap disallowed tag
-                            const unwrapped = cleanNode(child);
-                            frag.appendChild(unwrapped);
+                            frag.appendChild(cleanNode(child));
                         }
                     } else if (child.nodeType === 3) { // Text
                         frag.appendChild(child.cloneNode(true));
@@ -1616,24 +1605,33 @@ const GlobalNotesHandlers = {
             const finalFrag = cleanNode(doc.body);
             const tempDiv = document.createElement('div');
             tempDiv.appendChild(finalFrag);
-            content = tempDiv.innerHTML;
-        } else if (text) {
-            content = text.replace(/\n/g, '<br>');
+            content = tempDiv.innerHTML.trim();
+        }
+
+        // If HTML cleaning resulted in nothing, fallback to plain text
+        if (!content && text) {
+            content = text.trim().replace(/\n/g, '<br>');
         }
 
         if (content) {
-            const selection = window.getSelection();
-            if (!selection.rangeCount) return;
+            e.preventDefault();
             
-            const range = selection.getRangeAt(0);
-            range.deleteFromDocument();
-            
-            const fragment = range.createContextualFragment(content);
-            range.insertNode(fragment);
-            
-            // Move cursor
-            selection.collapseToEnd();
+            if (document.queryCommandSupported('insertHTML')) {
+                document.execCommand('insertHTML', false, content);
+            } else {
+                const selection = window.getSelection();
+                if (selection.rangeCount) {
+                    const range = selection.getRangeAt(0);
+                    range.deleteFromDocument();
+                    range.insertNode(range.createContextualFragment(content));
+                    range.collapse(false);
+                    selection.removeAllRanges();
+                    selection.addRange(range);
+                }
+            }
         }
+        // If content is still empty, we don't call e.preventDefault(), 
+        // allowing the browser's default behavior.
     }
 };
 
