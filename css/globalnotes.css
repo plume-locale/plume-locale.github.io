@@ -133,6 +133,11 @@
     width: 100%;
     height: 100%;
     z-index: 2;
+    pointer-events: none; /* Allow clicks to pass to board background for panning */
+}
+
+.globalnotes-item {
+    pointer-events: auto; /* Re-enable for items */
 }
 
 .connection-line {
@@ -148,41 +153,8 @@
 }
 
 /* globalnotes Toolbar Enhanced */
-.globalnotes-toolbar {
-    position: absolute;
-    left: 20px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-radius: 20px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    display: flex;
-    flex-direction: column;
-    padding: 8px;
-    gap: 4px;
-    z-index: 1000;
-}
+/* Toolbar removed in favor of zoom controls */
 
-/* Toolbar Vertical - Milanote Style */
-.globalnotes-toolbar.vertical {
-    position: absolute;
-    left: 20px;
-    top: 50%;
-    transform: translateY(-50%);
-    display: flex;
-    flex-direction: column;
-    padding: 12px 10px;
-    background: white;
-    border-radius: 16px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
-    width: 68px;
-    height: auto;
-    gap: 8px;
-    z-index: 1000;
-}
 
 .globalnotes-toolbar .tool-item {
     width: 48px;

@@ -885,22 +885,35 @@ const GlobalNotesHandlers = {
     },
 
     onWheel: function (e) {
+        // Zoom only with Ctrl (standard for canvas apps) or if it's a pinch gesture
         if (e.ctrlKey || e.metaKey) {
             e.preventDefault();
-            const zoomSpeed = 0.001;
-            const delta = -e.deltaY;
-            const factor = Math.pow(1.1, delta / 100);
+            
+            // Standardizing delta for different browsers/OS
+            const delta = e.deltaY;
+            const zoomSpeed = 0.0015;
+            const factor = Math.exp(-delta * zoomSpeed);
 
             const oldZoom = GlobalNotesViewModel.state.zoom;
-            const newZoom = oldZoom * factor;
+            let newZoom = oldZoom * factor;
+            
+            // Apply limits
+            newZoom = Math.max(0.1, Math.min(5, newZoom));
 
-            // To zoom towards mouse, we need to adjust panX/panY but for now let's keep it simple
+            // To zoom towards mouse, we'd need to adjust panX/panY. 
+            // For now, let's just update the zoom.
             GlobalNotesViewModel.setZoom(newZoom);
         }
     },
 
     onCanvasMouseDown: function (e) {
-        if (e.target.id === 'globalnotesCanvas' || e.target.id === 'globalnotesBoardContent') {
+        // Allow panning if clicking on the background layers (canvas, board content, or the items layer)
+        const isBackground = e.target.id === 'globalnotesCanvas' || 
+                           e.target.id === 'globalnotesBoardContent' || 
+                           e.target.id === 'globalnotesItemsLayer' ||
+                           e.target.classList.contains('globalnotes-board-view');
+
+        if (isBackground) {
             GlobalNotesViewModel.clearSelection();
 
             const clientX = e.clientX;

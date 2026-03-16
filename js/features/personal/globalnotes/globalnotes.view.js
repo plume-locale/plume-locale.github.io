@@ -38,8 +38,9 @@ const GlobalNotesView = {
         this.container.innerHTML = `
             <div class="globalnotes-container">
                 ${this.renderHeader()}
-                <div class="globalnotes-canvas-wrapper" style="flex: 1; position: relative; overflow: hidden; background: #f8fafc;">
-                    <div id="globalnotesCanvas" class="globalnotes-canvas" style="width:100%; height:100%;">
+                <div class="globalnotes-canvas-wrapper">
+                    ${this.renderZoomControls()}
+                    <div id="globalnotesCanvas" class="globalnotes-canvas">
                         <div id="globalnotesBoardContent" class="globalnotes-board-content">
                             <svg id="globalnotesConnectionsLayer" class="connections-layer"></svg>
                             <div id="globalnotesItemsLayer" class="items-layer"></div>
@@ -82,6 +83,24 @@ const GlobalNotesView = {
                          <i data-lucide="corner-left-up"></i>
                     </div>
                 </div>
+            </div>
+        `;
+    },
+
+    renderZoomControls: function () {
+        const zoom = Math.round(GlobalNotesViewModel.state.zoom * 100);
+        return `
+            <div class="mindmap-zoom-controls">
+                <button class="mindmap-zoom-btn" onclick="GlobalNotesViewModel.setZoom(GlobalNotesViewModel.state.zoom - 0.1)" title="${Localization.t('globalnotes.zoom.out') || 'Zoom Out'}">
+                    <i data-lucide="zoom-out"></i>
+                </button>
+                <span class="mindmap-zoom-level">${zoom}%</span>
+                <button class="mindmap-zoom-btn" onclick="GlobalNotesViewModel.setZoom(GlobalNotesViewModel.state.zoom + 0.1)" title="${Localization.t('globalnotes.zoom.in') || 'Zoom In'}">
+                    <i data-lucide="zoom-in"></i>
+                </button>
+                <button class="mindmap-zoom-btn" onclick="GlobalNotesViewModel.setZoom(1); GlobalNotesViewModel.setPan(0,0);" title="${Localization.t('globalnotes.zoom.reset') || 'Reset View'}">
+                    <i data-lucide="maximize-2"></i>
+                </button>
             </div>
         `;
     },

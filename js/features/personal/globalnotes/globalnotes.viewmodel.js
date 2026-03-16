@@ -281,6 +281,12 @@ const GlobalNotesViewModel = {
         if (boardContent) {
             boardContent.style.transform = `translate(${this.state.panX}px, ${this.state.panY}px) scale(${this.state.zoom})`;
         }
+
+        // Update zoom level display if visible
+        const zoomText = document.querySelector('.mindmap-zoom-level');
+        if (zoomText) {
+            zoomText.innerText = `${Math.round(this.state.zoom * 100)}%`;
+        }
     },
 
     // --- CONNECTIONS ---
