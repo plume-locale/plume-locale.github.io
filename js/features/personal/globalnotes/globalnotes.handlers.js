@@ -1069,13 +1069,17 @@ const GlobalNotesHandlers = {
 
             // Highlight dropzone if dragging a single item
             if (this.dragData.items.length === 1) {
-                document.querySelectorAll('.column-items-dropzone').forEach(dz => {
+                // Clear previous highlights
+                document.querySelectorAll('.column-items-dropzone, .globalnotes-item-board').forEach(dz => {
                     dz.classList.remove('drag-over');
                     const existingPlaceholder = dz.querySelector('.drop-placeholder');
                     if (existingPlaceholder) existingPlaceholder.remove();
                 });
 
-                const dropzone = document.elementFromPoint(clientX, clientY)?.closest('.column-items-dropzone');
+                const targetEl = document.elementFromPoint(clientX, clientY);
+                const dropzone = targetEl?.closest('.column-items-dropzone');
+                const boardDropzone = targetEl?.closest('.globalnotes-item-board');
+
                 if (dropzone) {
                     const columnId = dropzone.getAttribute('data-column-id');
                     const draggedId = this.dragData.targetId;
@@ -1101,6 +1105,8 @@ const GlobalNotesHandlers = {
 
                         this.dragData.dropIndex = index;
                     }
+                } else if (boardDropzone && boardDropzone.getAttribute('data-id') !== this.dragData.targetId) {
+                    boardDropzone.classList.add('drag-over');
                 } else {
                     this.dragData.dropIndex = -1;
                 }
@@ -1131,23 +1137,39 @@ const GlobalNotesHandlers = {
         const clientY = e.clientY;
 
         if (this.dragData.type === 'item') {
-            document.querySelectorAll('.column-items-dropzone').forEach(dz => dz.classList.remove('drag-over'));
+            document.querySelectorAll('.column-items-dropzone, .globalnotes-item-board').forEach(dz => dz.classList.remove('drag-over'));
 
             const targetEl = document.elementFromPoint(clientX, clientY);
             let dropColumnId = null;
+            let dropBoardItemId = null;
+            
             const dropzone = targetEl?.closest('.column-items-dropzone') || targetEl?.closest('.globalnotes-item-column')?.querySelector('.column-items-dropzone');
+            const boardDropzone = targetEl?.closest('.globalnotes-item-board');
 
             if (dropzone) {
                 dropColumnId = dropzone.getAttribute('data-column-id');
+            } else if (boardDropzone) {
+                dropBoardItemId = boardDropzone.getAttribute('data-id');
             }
 
             // Process all dragged items
+            let itemsChangedBoard = false;
+
             this.dragData.items.forEach(dragItem => {
                 dragItem.el.classList.remove('dragging');
                 if (!this.dragData.hasMoved) return;
 
                 const item = GlobalNotesRepository.getItems().find(i => i.id == dragItem.id);
                 if (!item) return;
+
+                if (dropBoardItemId && item.id !== dropBoardItemId) {
+                    const boardItem = GlobalNotesRepository.getItems().find(i => i.id === dropBoardItemId);
+                    if (boardItem && boardItem.type === 'board' && boardItem.data.targetBoardId) {
+                        GlobalNotesViewModel.moveItemToBoard(item.id, boardItem.data.targetBoardId);
+                        itemsChangedBoard = true;
+                        return;
+                    }
+                }
 
                 if (dropColumnId) {
                     // Prevent moving a column into itself or into another column (columns are top-level only in this model)
@@ -1173,7 +1195,7 @@ const GlobalNotesHandlers = {
                 }
             });
 
-            if (this.dragData.hasMoved) {
+            if (this.dragData.hasMoved || itemsChangedBoard) {
                 GlobalNotesView.renderContent();
             }
         }

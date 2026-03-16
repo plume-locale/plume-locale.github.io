@@ -177,6 +177,34 @@ const GlobalNotesViewModel = {
         }
     },
 
+    moveItemToBoard: function (itemId, targetBoardId) {
+        const allItems = GlobalNotesRepository.getItems();
+        const item = allItems.find(i => i.id == itemId);
+
+        if (item && targetBoardId) {
+            // Remove from current column if it was in one
+            if (item.columnId) {
+                const column = allItems.find(i => i.id === item.columnId);
+                if (column && column.data.items) {
+                    column.data.items = column.data.items.filter(id => id !== itemId);
+                    GlobalNotesRepository.saveItem(column);
+                }
+            }
+
+            item.boardId = targetBoardId;
+            item.columnId = null;
+            
+            // Set position to a default or keep relative (here default for simplicity as requested "be inside that board")
+            // Actually, keeping the same x, y might be fine, but if the other board is empty, 100, 100 is safer.
+            item.x = 100;
+            item.y = 100;
+
+            GlobalNotesRepository.saveItem(item);
+            return true;
+        }
+        return false;
+    },
+
     deleteSelectedItem: function () {
         const allItems = GlobalNotesRepository.getItems();
         this.state.selectedItemIds.forEach(id => {
