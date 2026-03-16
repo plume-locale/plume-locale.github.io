@@ -379,7 +379,7 @@ function switchView(view, options = {}) {
 /**
  * Synchronise l'affichage des listes de la sidebar en fonction de la vue active.
  */
-function syncSidebarWithView(view) {
+function syncSidebarWithView(view, force = false) {
     const listContainers = [
         'chaptersList', 'charactersList', 'worldList', 'notesList',
         'codexList', 'arcsList',
@@ -417,9 +417,9 @@ function syncSidebarWithView(view) {
     if (targetListId && targetEl) {
         targetEl.style.display = 'block';
 
-        // On ne rafraîchit le contenu que si la liste n'était pas déjà affichée
+        // On ne rafraîchit le contenu que si la liste n'était pas déjà affichée ou si forcé
         // Cela évite de casser le double-clic dans l'arborescence (re-render sauvage sur le premier clic)
-        if (!listWasVisible) {
+        if (!listWasVisible || force) {
             switch (view) {
                 case 'editor':
                     if (typeof renderActsList === 'function') renderActsList();
@@ -442,7 +442,10 @@ function syncSidebarWithView(view) {
                 case 'globalnotes':
                     if (typeof renderGlobalNotesTree === 'function') {
                         const gnList = document.getElementById('globalnotesList');
-                        if (gnList) gnList.innerHTML = renderGlobalNotesTree();
+                        if (gnList) {
+                            gnList.innerHTML = renderGlobalNotesTree();
+                            if (typeof lucide !== 'undefined') lucide.createIcons({ root: gnList });
+                        }
                     }
                     break;
                 case 'mindmap':

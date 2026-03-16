@@ -67,7 +67,7 @@ const GlobalNotesViewModel = {
         }
 
         if (typeof syncSidebarWithView === 'function') {
-            syncSidebarWithView('globalnotes');
+            syncSidebarWithView('globalnotes', true);
         }
         if (typeof updateSidebarActions === 'function') {
             updateSidebarActions('globalnotes');
@@ -100,7 +100,7 @@ const GlobalNotesViewModel = {
         }
 
         if (typeof syncSidebarWithView === 'function') {
-            syncSidebarWithView('globalnotes');
+            syncSidebarWithView('globalnotes', true);
         }
         if (typeof updateSidebarActions === 'function') {
             updateSidebarActions('globalnotes');
@@ -191,15 +191,29 @@ const GlobalNotesViewModel = {
                 }
             }
 
+            // If moving a board item, we must also update the parentId of the actual board it represents
+            if (item.type === 'board' && item.data.targetBoardId) {
+                const targetBoard = GlobalNotesRepository.getBoards().find(b => b.id === item.data.targetBoardId);
+                if (targetBoard) {
+                    targetBoard.parentId = targetBoardId;
+                    GlobalNotesRepository.saveBoard(targetBoard);
+                }
+            }
+
             item.boardId = targetBoardId;
             item.columnId = null;
             
             // Set position to a default or keep relative (here default for simplicity as requested "be inside that board")
-            // Actually, keeping the same x, y might be fine, but if the other board is empty, 100, 100 is safer.
             item.x = 100;
             item.y = 100;
 
             GlobalNotesRepository.saveItem(item);
+
+            // Sync sidebar as hierarchy might have changed
+            if (typeof syncSidebarWithView === 'function') {
+                syncSidebarWithView('globalnotes', true);
+            }
+
             return true;
         }
         return false;
@@ -252,7 +266,7 @@ const GlobalNotesViewModel = {
         }
 
         if (typeof syncSidebarWithView === 'function') {
-            syncSidebarWithView('globalnotes');
+            syncSidebarWithView('globalnotes', true);
         }
         if (typeof updateSidebarActions === 'function') {
             updateSidebarActions('globalnotes');

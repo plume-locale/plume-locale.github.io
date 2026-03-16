@@ -1568,6 +1568,72 @@ const GlobalNotesHandlers = {
             const dataUrl = canvas.toDataURL();
             GlobalNotesViewModel.updateItemData(itemId, { image: dataUrl });
         }
+    },
+
+    onPaste: function (e) {
+        e.preventDefault();
+        const html = e.clipboardData.getData('text/html');
+        const text = e.clipboardData.getData('text/plain');
+
+        let content = '';
+
+        if (html) {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            
+            // Define what tags we want to keep
+            const allowedTags = ['B', 'I', 'EM', 'STRONG', 'U', 'H1', 'H2', 'H3', 'P', 'BR', 'UL', 'OL', 'LI', 'SPAN'];
+            
+            // Recursive cleaner
+            const cleanNode = (node) => {
+                const frag = document.createDocumentFragment();
+                const children = Array.from(node.childNodes);
+                
+                children.forEach(child => {
+                    if (child.nodeType === 1) { // Element
+                        if (allowedTags.includes(child.tagName)) {
+                            // Strip attributes
+                            while (child.attributes.length > 0) {
+                                child.removeAttribute(child.attributes[0].name);
+                            }
+                            // Clean its children
+                            const cleanedChild = cleanNode(child);
+                            child.innerHTML = '';
+                            child.appendChild(cleanedChild);
+                            frag.appendChild(child);
+                        } else {
+                            // Unwrap disallowed tag
+                            const unwrapped = cleanNode(child);
+                            frag.appendChild(unwrapped);
+                        }
+                    } else if (child.nodeType === 3) { // Text
+                        frag.appendChild(child.cloneNode(true));
+                    }
+                });
+                return frag;
+            };
+
+            const finalFrag = cleanNode(doc.body);
+            const tempDiv = document.createElement('div');
+            tempDiv.appendChild(finalFrag);
+            content = tempDiv.innerHTML;
+        } else if (text) {
+            content = text.replace(/\n/g, '<br>');
+        }
+
+        if (content) {
+            const selection = window.getSelection();
+            if (!selection.rangeCount) return;
+            
+            const range = selection.getRangeAt(0);
+            range.deleteFromDocument();
+            
+            const fragment = range.createContextualFragment(content);
+            range.insertNode(fragment);
+            
+            // Move cursor
+            selection.collapseToEnd();
+        }
     }
 };
 

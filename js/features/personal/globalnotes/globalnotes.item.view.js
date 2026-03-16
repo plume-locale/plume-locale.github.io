@@ -48,6 +48,7 @@ const GlobalNotesItemView = {
             case 'note':
                 return `
                     <div class="item-content" contenteditable="true" 
+                         onpaste="GlobalNotesHandlers.onPaste(event)"
                          onblur="GlobalNotesViewModel.updateItemData('${item.id}', { content: this.innerHTML })">
                         ${data.content || ''}
                     </div>

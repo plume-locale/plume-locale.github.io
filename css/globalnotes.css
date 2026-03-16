@@ -384,6 +384,40 @@
     min-height: 40px;
     color: #334155;
     font-family: inherit;
+    word-break: break-word;
+}
+
+.globalnotes-item-note .item-content h1,
+.globalnotes-item-note .item-content h2,
+.globalnotes-item-note .item-content h3 {
+    margin-top: 0.5em;
+    margin-bottom: 0.3em;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.globalnotes-item-note .item-content h1 { font-size: 1.4em; }
+.globalnotes-item-note .item-content h2 { font-size: 1.2em; }
+.globalnotes-item-note .item-content h3 { font-size: 1.1em; }
+
+.globalnotes-item-note .item-content ul,
+.globalnotes-item-note .item-content ol {
+    padding-left: 20px;
+    margin: 0.5em 0;
+}
+
+.globalnotes-item-note .item-content b, 
+.globalnotes-item-note .item-content strong {
+    font-weight: 700;
+}
+
+.globalnotes-item-note .item-content i, 
+.globalnotes-item-note .item-content em {
+    font-style: italic;
+}
+
+.globalnotes-item-note .item-content p {
+    margin: 0.4em 0;
 }
 
 /* Board Item */
