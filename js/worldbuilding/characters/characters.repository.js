@@ -16,7 +16,14 @@ const CharacterRepository = {
      * Récupère un personnage par son ID.
      */
     getById(id) {
-        return this.getAll().find(c => String(c.id) === String(id));
+        if (!id) return null;
+        const char = this.getAll().find(c => String(c.id) == String(id));
+        if (char && typeof CharacterModel !== 'undefined' && CharacterModel.migrate) {
+            // On s'assure que l'objet en mémoire dispose de tous les champs récents
+            const migrated = CharacterModel.migrate(char);
+            Object.assign(char, migrated);
+        }
+        return char;
     },
 
     /**
@@ -32,7 +39,7 @@ const CharacterRepository = {
      */
     remove(id) {
         if (!project.characters) return;
-        project.characters = project.characters.filter(c => String(c.id) !== String(id));
+        project.characters = project.characters.filter(c => String(c.id) != String(id));
     },
 
     /**

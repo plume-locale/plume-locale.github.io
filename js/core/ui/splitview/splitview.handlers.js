@@ -51,12 +51,3 @@ function updateSplitNoteContent(textarea) {
     }
 }
 
-/** [Mixte/ViewModel] - Met à jour un champ personnage et déclenche rendu/sauvegarde */
-function updateCharacterField(id, field, value) {
-    const character = project.characters.find(c => c.id === id);
-    if (character) {
-        character[field] = value;
-        if (typeof saveProject === 'function') saveProject();
-        if (typeof renderCharactersList === 'function') renderCharactersList();
-    }
-}

@@ -112,8 +112,17 @@ const GlobalNotesHandlers = {
         const itemEl = e.target.closest('.globalnotes-item');
         if (itemEl) {
             const itemId = itemEl.getAttribute('data-id');
-            GlobalNotesViewModel.selectItem(itemId);
+            const selectedIds = GlobalNotesViewModel.state.selectedItemIds || [];
+            
+            // If the item is not already selected, select only this item
+            if (!selectedIds.includes(itemId)) {
+                GlobalNotesViewModel.selectItem(itemId);
+            }
+            
             this.showContextMenu(e.clientX, e.clientY, itemId);
+        } else {
+            // Background click
+            this.showBoardContextMenu(e.clientX, e.clientY);
         }
     },
 
@@ -189,16 +198,61 @@ const GlobalNotesHandlers = {
         if (typeof lucide !== 'undefined') lucide.createIcons({ root: menu });
     },
 
+    showBoardContextMenu: function (x, y) {
+        this.hideContextMenu();
+        const board = GlobalNotesViewModel.getActiveBoard();
+        if (!board) return;
+
+        const menu = document.createElement('div');
+        menu.id = 'globalnotesContextMenu';
+        menu.className = 'globalnotes-context-menu';
+        menu.style.left = x + 'px';
+        menu.style.top = y + 'px';
+
+        const snapEnabled = GlobalNotesViewModel.state.snapToGrid;
+        const gridVisible = board.config.gridVisible;
+
+        menu.innerHTML = `
+            <div class="context-menu-group">
+                <div class="context-menu-item" onclick="GlobalNotesViewModel.toggleSnapToGrid()">
+                    <i data-lucide="${snapEnabled ? 'check-square' : 'square'}"></i> ${Localization.t('globalnotes.menu.snap_to_grid') || 'Magnétisme (Snap to Grid)'}
+                </div>
+                <div class="context-menu-item" onclick="GlobalNotesViewModel.toggleGridVisible()">
+                    <i data-lucide="${gridVisible ? 'eye' : 'eye-off'}"></i> ${Localization.t('globalnotes.menu.show_grid') || 'Afficher la grille'}
+                </div>
+            </div>
+            <div class="context-menu-divider"></div>
+            <div class="context-menu-title">${Localization.t('globalnotes.menu.grid_size') || 'Taille de la grille'}</div>
+            <div class="context-menu-group-inline">
+                ${[10, 20, 30, 40, 50].map(size => `
+                    <div class="context-menu-item-small ${GlobalNotesViewModel.state.gridSize === size ? 'active' : ''}" 
+                         onclick="GlobalNotesViewModel.setGridSize(${size})">
+                        ${size}
+                    </div>
+                `).join('')}
+            </div>
+        `;
+
+        document.body.appendChild(menu);
+        
+        // Reposition if menu overflows
+        const menuRect = menu.getBoundingClientRect();
+        if (menuRect.right > window.innerWidth) menu.style.left = (x - menuRect.width) + 'px';
+        if (menuRect.bottom > window.innerHeight) menu.style.top = (y - menuRect.height) + 'px';
+
+        if (typeof lucide !== 'undefined') lucide.createIcons({ root: menu });
+    },
+
     getTypeSpecificActions: function (item) {
         const id = item.id;
         switch (item.type) {
             case 'note':
                 return `
                     <div class="context-menu-item" onclick="GlobalNotesHandlers.autofitWidth('${id}')">
-                        <i data-lucide="expand"></i> ${Localization.t('globalnotes.menu.autofit_width') || 'Auto-fit width'}
+                        <i data-lucide="maximize-2"></i> ${Localization.t('globalnotes.menu.autofit_width') || 'Auto-fit largeur'}
                     </div>
                     <div class="context-menu-item" onclick="GlobalNotesHandlers.autofitHeight('${id}')">
-                        <i data-lucide="expand-vertical"></i> ${Localization.t('globalnotes.menu.autofit_height') || 'Auto-fit height'}
+                        <i data-lucide="minimize-2"></i> ${Localization.t('globalnotes.menu.autofit_height') || 'Auto-fit longueur'}
                     </div>
                     <div class="context-menu-divider"></div>
                     <div class="context-menu-item" onclick="GlobalNotesHandlers.convertItemTo('${id}', 'checklist')">
@@ -210,12 +264,26 @@ const GlobalNotesHandlers = {
                 `;
             case 'heading':
                 return `
+                    <div class="context-menu-item" onclick="GlobalNotesHandlers.autofitWidth('${id}')">
+                        <i data-lucide="maximize-2"></i> ${Localization.t('globalnotes.menu.autofit_width') || 'Auto-fit largeur'}
+                    </div>
+                    <div class="context-menu-item" onclick="GlobalNotesHandlers.autofitHeight('${id}')">
+                        <i data-lucide="minimize-2"></i> ${Localization.t('globalnotes.menu.autofit_height') || 'Auto-fit longueur'}
+                    </div>
+                    <div class="context-menu-divider"></div>
                     <div class="context-menu-item" onclick="GlobalNotesHandlers.convertItemTo('${id}', 'note')">
                         <i data-lucide="sticky-note"></i> ${Localization.t('globalnotes.menu.to_note') || 'Convert to Note'}
                     </div>
                 `;
             case 'checklist':
                 return `
+                    <div class="context-menu-item" onclick="GlobalNotesHandlers.autofitWidth('${id}')">
+                        <i data-lucide="maximize-2"></i> ${Localization.t('globalnotes.menu.autofit_width') || 'Auto-fit largeur'}
+                    </div>
+                    <div class="context-menu-item" onclick="GlobalNotesHandlers.autofitHeight('${id}')">
+                        <i data-lucide="minimize-2"></i> ${Localization.t('globalnotes.menu.autofit_height') || 'Auto-fit longueur'}
+                    </div>
+                    <div class="context-menu-divider"></div>
                     <div class="context-menu-item" onclick="GlobalNotesHandlers.sortChecklist('${id}')">
                         <i data-lucide="arrow-down-narrow-wide"></i> ${Localization.t('globalnotes.menu.sort_checked') || 'Sort Checked to Bottom'}
                     </div>
@@ -963,6 +1031,16 @@ const GlobalNotesHandlers = {
     },
 
     onItemMouseDown: function (e, itemId) {
+        // If right-clicked and item is already selected, don't change selection
+        // This preserves multi-selection for the context menu
+        if (e.button === 2) {
+            const selectedIds = GlobalNotesViewModel.state.selectedItemIds || [];
+            if (selectedIds.includes(itemId)) {
+                e.stopPropagation();
+                return;
+            }
+        }
+
         // Handle Connection Mode
         if (GlobalNotesViewModel.state.isConnectionMode) {
             e.stopPropagation(); // Restored to allow nested items to be selected as sources
@@ -1079,9 +1157,20 @@ const GlobalNotesHandlers = {
 
         if (this.dragData.type === 'item') {
             const zoom = GlobalNotesViewModel.state.zoom;
+            const snap = GlobalNotesViewModel.state.snapToGrid;
+            const gridSize = GlobalNotesViewModel.state.gridSize;
+
             this.dragData.items.forEach(dragItem => {
-                dragItem.el.style.left = (dragItem.initialX + dx / zoom) + 'px';
-                dragItem.el.style.top = (dragItem.initialY + dy / zoom) + 'px';
+                let nextX = dragItem.initialX + dx / zoom;
+                let nextY = dragItem.initialY + dy / zoom;
+
+                if (snap) {
+                    nextX = Math.round(nextX / gridSize) * gridSize;
+                    nextY = Math.round(nextY / gridSize) * gridSize;
+                }
+
+                dragItem.el.style.left = nextX + 'px';
+                dragItem.el.style.top = nextY + 'px';
             });
 
             // Highlight dropzone if dragging a single item
@@ -1139,8 +1228,17 @@ const GlobalNotesHandlers = {
             const el = document.querySelector(`.globalnotes-item[data-id="${this.dragData.targetId}"]`);
             if (el) {
                 const zoom = GlobalNotesViewModel.state.zoom;
-                const newWidth = Math.max(50, this.dragData.initialWidth + dx / zoom);
-                const newHeight = Math.max(30, this.dragData.initialHeight + dy / zoom);
+                const snap = GlobalNotesViewModel.state.snapToGrid;
+                const gridSize = GlobalNotesViewModel.state.gridSize;
+
+                let newWidth = Math.max(50, this.dragData.initialWidth + dx / zoom);
+                let newHeight = Math.max(30, this.dragData.initialHeight + dy / zoom);
+
+                if (snap) {
+                    newWidth = Math.round(newWidth / gridSize) * gridSize;
+                    newHeight = Math.round(newHeight / gridSize) * gridSize;
+                }
+
                 el.style.width = newWidth + 'px';
                 el.style.height = newHeight + 'px';
             }
@@ -1654,7 +1752,7 @@ const GlobalNotesHandlers = {
     autofitWidth: function (itemId) {
         const itemEl = document.querySelector(`.globalnotes-item[data-id="${itemId}"]`);
         if (!itemEl) return;
-        const noteContent = itemEl.querySelector('.item-content');
+        const noteContent = itemEl.querySelector('.item-content, .item-heading, .checklist-container, .item-inner');
         if (!noteContent) return;
 
         // Measures the scrollWidth of a clone without constraints

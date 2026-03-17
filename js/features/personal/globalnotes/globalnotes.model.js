@@ -18,6 +18,8 @@ const GlobalNotesModel = {
             config: {
                 backgroundColor: data.config?.backgroundColor || '#f8f9fa',
                 gridVisible: data.config?.gridVisible !== undefined ? data.config.gridVisible : true,
+                snapToGrid: data.config?.snapToGrid !== undefined ? data.config.snapToGrid : true,
+                gridSize: data.config?.gridSize || 20,
                 zoom: data.config?.zoom || 1,
                 scrollX: data.config?.scrollX || 0,
                 scrollY: data.config?.scrollY || 0

@@ -147,6 +147,8 @@ function updateCharacterFieldViewModel(id, field, value) {
     const char = CharacterRepository.getById(id);
     if (!char) return { success: false };
 
+    const migrated = CharacterModel.migrate(char);
+
     // Logique spéciale pour le nom complet -> split
     if (field === 'name') {
         const parts = (value || '').trim().split(' ');
@@ -155,14 +157,25 @@ function updateCharacterFieldViewModel(id, field, value) {
     }
     // Logique spéciale pour les composants du nom -> join
     else if (field === 'firstName' || field === 'lastName') {
-        const fName = field === 'firstName' ? value : char.firstName;
-        const lName = field === 'lastName' ? value : char.lastName;
+        const fName = field === 'firstName' ? value : migrated.firstName;
+        const lName = field === 'lastName' ? value : migrated.lastName;
         updates.name = `${fName || ''} ${lName || ''}`.trim() || Localization.t('char.list.no_name');
+    }
+
+    // Logique spéciale pour les nombres
+    if (field === 'height' || field === 'weight') {
+        if (value === '') {
+            updates[field] = '';
+        } else {
+            const num = parseFloat(value);
+            if (!isNaN(num)) updates[field] = num;
+        }
     }
 
     const nextValue = CharacterRepository.update(id, updates);
     return {
         success: !!nextValue,
+        data: nextValue,
         sideEffects: {
             shouldSave: true,
             shouldRefreshList: (field === 'firstName' || field === 'lastName' || field === 'race' || field === 'group' || field === 'name')
@@ -400,8 +413,12 @@ function updateAvatarViewModel(id, choice) {
         updates.avatarImage = '';
     }
 
-    CharacterRepository.update(id, updates);
-    return { success: true, sideEffects: { shouldSave: true } };
+    const nextValue = CharacterRepository.update(id, updates);
+    return { 
+        success: !!nextValue, 
+        data: nextValue,
+        sideEffects: { shouldSave: true } 
+    };
 }
 
 /**

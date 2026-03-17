@@ -14,7 +14,9 @@ const GlobalNotesViewModel = {
         isDragging: false,
         dragType: null, // 'item', 'canvas', 'selection'
         isConnectionMode: false,
-        connectionStartId: null
+        connectionStartId: null,
+        snapToGrid: true,
+        gridSize: 20
     },
 
     init: function () {
@@ -71,6 +73,42 @@ const GlobalNotesViewModel = {
         }
         if (typeof updateSidebarActions === 'function') {
             updateSidebarActions('globalnotes');
+        }
+
+        // Apply grid settings from the board config
+        const board = this.getActiveBoard();
+        if (board && board.config) {
+            this.state.snapToGrid = board.config.snapToGrid !== undefined ? board.config.snapToGrid : true;
+            this.state.gridSize = board.config.gridSize || 20;
+        }
+    },
+
+    toggleSnapToGrid: function () {
+        const board = this.getActiveBoard();
+        if (board) {
+            board.config.snapToGrid = !board.config.snapToGrid;
+            this.state.snapToGrid = board.config.snapToGrid;
+            GlobalNotesRepository.saveBoard(board);
+            if (window.GlobalNotesView) window.GlobalNotesView.render();
+        }
+    },
+
+    toggleGridVisible: function () {
+        const board = this.getActiveBoard();
+        if (board) {
+            board.config.gridVisible = !board.config.gridVisible;
+            GlobalNotesRepository.saveBoard(board);
+            if (window.GlobalNotesView) window.GlobalNotesView.render();
+        }
+    },
+
+    setGridSize: function (size) {
+        const board = this.getActiveBoard();
+        if (board) {
+            board.config.gridSize = parseInt(size) || 20;
+            this.state.gridSize = board.config.gridSize;
+            GlobalNotesRepository.saveBoard(board);
+            if (window.GlobalNotesView) window.GlobalNotesView.render();
         }
     },
 

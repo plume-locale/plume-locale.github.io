@@ -115,6 +115,15 @@ const GlobalNotesView = {
 
         GlobalNotesViewModel.applyTransform();
 
+        // Sync grid variables
+        const canvas = document.getElementById('globalnotesCanvas');
+        if (canvas) {
+            const gridSize = GlobalNotesViewModel.state.gridSize || 20;
+            const gridVisible = GlobalNotesViewModel.getActiveBoard()?.config.gridVisible !== false;
+            canvas.style.setProperty('--grid-size', `${gridSize}px`);
+            canvas.style.setProperty('--grid-color', gridVisible ? 'rgba(0, 0, 0, 0.05)' : 'transparent');
+        }
+
         const items = GlobalNotesViewModel.getItemsInActiveBoard();
         const itemsLayer = document.getElementById('globalnotesItemsLayer');
 

@@ -11,6 +11,9 @@
     --globalnotes-note-blue: #e3f2fd;
     --globalnotes-note-green: #e8f5e9;
     --globalnotes-note-pink: #fce4ec;
+    --grid-size: 20px;
+    --grid-color: rgba(0, 0, 0, 0.05);
+    --grid-secondary-color: rgba(0, 0, 0, 0.02);
 }
 
 .globalnotes-container {
@@ -92,12 +95,16 @@
     position: relative;
     overflow: hidden;
     /* Use custom panning instead of scroll */
-    background-image: radial-gradient(var(--globalnotes-grid) 1px, transparent 0);
-    background-size: 20px 20px;
+    background-image: 
+        linear-gradient(var(--grid-color) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+    background-size: var(--grid-size) var(--grid-size);
+    background-position: -1px -1px;
     cursor: grab;
     transform-origin: 0 0;
     width: 100%;
     height: 100%;
+    transition: background-size 0.2s ease;
     user-select: none;
 }
 
@@ -1118,11 +1125,7 @@
     padding: 4px 10px;
 }
 
-/* Grid background */
-.globalnotes-canvas {
-    background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
-    background-size: 20px 20px;
-}
+
 
 .context-menu-group {
     padding: 4px 0;
@@ -1162,6 +1165,40 @@
     text-transform: uppercase;
     font-weight: 700;
     color: #94a3b8;
+    letter-spacing: 0.5px;
+}
+
+.context-menu-group-inline {
+    display: flex;
+    padding: 4px 8px;
+    gap: 4px;
+    justify-content: space-between;
+}
+
+.context-menu-item-small {
+    flex: 1;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: #f8fafc;
+    color: #64748b;
+    border: 1px solid transparent;
+}
+
+.context-menu-item-small:hover {
+    background: #f1f5f9;
+    color: var(--primary-color);
+}
+
+.context-menu-item-small.active {
+    background: var(--primary-color);
+    color: white;
 }
 
 .context-color-grid {

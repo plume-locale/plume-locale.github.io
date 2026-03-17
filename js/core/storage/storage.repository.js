@@ -147,7 +147,7 @@ class StorageRepository {
             if (!this.db) {
                 if (this.useLocalStorage) {
                     const projects = JSON.parse(localStorage.getItem('plume_projects_backup') || '[]');
-                    const index = projects.findIndex(p => p.id === projectData.id);
+                    const index = projects.findIndex(p => String(p.id) == String(projectData.id));
                     projectData.updatedAt = Date.now();
                     if (index >= 0) projects[index] = projectData;
                     else projects.push(projectData);

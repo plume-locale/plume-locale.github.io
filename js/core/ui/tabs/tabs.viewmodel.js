@@ -207,7 +207,7 @@ function getTabTitle(view, params) {
         return Localization.t('nav.ecriture');
     }
     if (view === 'characters' && params.characterId) {
-        const char = project.characters.find(c => c.id === params.characterId);
+        const char = project.characters.find(c => String(c.id) == String(params.characterId));
         return char ? (char.name || char.firstName) : Localization.t('nav.characters');
     }
     if (view === 'world' && params.worldId) {

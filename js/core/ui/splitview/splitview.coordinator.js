@@ -85,9 +85,9 @@ function renderViewInSplitPanel(view, container, state, panel) {
                 if (typeof getCharacterDetailViewModel === 'function') {
                     const data = getCharacterDetailViewModel(state.characterId);
                     if (data) {
-                        const { character, races, linkedScenes } = data;
+                        const { character, races, groups, linkedScenes } = data;
                         if (typeof renderCharacterSheet === 'function') {
-                            tempContainer.innerHTML = renderCharacterSheet(character, races, linkedScenes);
+                            tempContainer.innerHTML = renderCharacterSheet(character, races, groups, linkedScenes);
                             setTimeout(() => {
                                 if (typeof initCharacterRadar === 'function') initCharacterRadar(character);
                                 if (typeof lucide !== 'undefined') lucide.createIcons();
@@ -616,8 +616,8 @@ function renderRelationsInSplitPanel(container) {
     let relationsHTML = '';
     if (relationships.length > 0) {
         relationsHTML = relationships.map(rel => {
-            const char1 = characters.find(c => c.id === rel.character1Id);
-            const char2 = characters.find(c => c.id === rel.character2Id);
+            const char1 = characters.find(c => c.id == rel.character1Id);
+            const char2 = characters.find(c => c.id == rel.character2Id);
             if (!char1 || !char2) return '';
 
             return `
