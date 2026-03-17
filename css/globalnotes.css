@@ -375,6 +375,8 @@
 /* Note Item */
 .globalnotes-item-note .item-inner {
     padding-top: 24px;
+    overflow-y: auto; /* Add scrollbar */
+    overflow-x: hidden;
 }
 
 .globalnotes-item-note .item-content {
@@ -434,6 +436,7 @@
     justify-content: center;
     gap: 12px;
     padding: 24px;
+    overflow: hidden;
 }
 
 .globalnotes-item-board.drag-over {

@@ -170,6 +170,16 @@ const GlobalNotesViewModel = {
         }
     },
 
+    updateItemSize: function (itemId, width, height) {
+        const item = GlobalNotesRepository.getItems().find(i => i.id == itemId);
+        if (item) {
+            const update = { ...item };
+            if (width !== undefined) update.width = width;
+            if (height !== undefined) update.height = height;
+            GlobalNotesRepository.saveItem(update);
+        }
+    },
+
     updateItemData: function (itemId, newData) {
         const item = GlobalNotesRepository.getItems().find(i => i.id == itemId);
         if (item) {
@@ -378,6 +388,29 @@ const GlobalNotesViewModel = {
                     window.GlobalNotesView.renderContent();
                 }
             }
+        }
+    },
+
+    applySameDimension: function () {
+        if (this.state.selectedItemIds.length < 2) return;
+        const allItems = GlobalNotesRepository.getItems();
+        const firstId = this.state.selectedItemIds[0];
+        const referenceItem = allItems.find(i => i.id == firstId);
+        if (!referenceItem) return;
+
+        const { width, height } = referenceItem;
+
+        this.state.selectedItemIds.forEach(id => {
+            const item = allItems.find(i => i.id == id);
+            if (item && item.id !== firstId) {
+                item.width = width;
+                item.height = height;
+                GlobalNotesRepository.saveItem(item);
+            }
+        });
+
+        if (window.GlobalNotesView) {
+            window.GlobalNotesView.renderContent();
         }
     }
 };

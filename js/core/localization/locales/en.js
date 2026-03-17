@@ -2874,6 +2874,9 @@ window.LOCALE_EN = {
     "globalnotes.action.add_column": "Add Column",
 
     "globalnotes.menu.duplicate": "Duplicate",
+    "globalnotes.menu.autofit_width": "Auto-fit width",
+    "globalnotes.menu.autofit_height": "Auto-fit height",
+    "globalnotes.menu.same_dimension": "Same dimensions",
     "globalnotes.menu.lock": "Lock",
     "globalnotes.menu.unlock": "Unlock",
     "globalnotes.menu.delete": "Delete",

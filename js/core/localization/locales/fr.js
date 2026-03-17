@@ -2621,6 +2621,9 @@ window.LOCALE_FR = {
     "globalnotes.action.add_column": "Ajouter Colonne",
 
     "globalnotes.menu.duplicate": "Dupliquer",
+    "globalnotes.menu.autofit_width": "Auto-fit largeur",
+    "globalnotes.menu.autofit_height": "Auto-fit longueur",
+    "globalnotes.menu.same_dimension": "Mettre à la même dimension",
     "globalnotes.menu.lock": "Verrouiller",
     "globalnotes.menu.unlock": "Déverrouiller",
     "globalnotes.menu.delete": "Supprimer",

@@ -2813,6 +2813,9 @@ window.LOCALE_DE = {
     "globalnotes.action.add_column": "Spalte hinzufügen",
 
     "globalnotes.menu.duplicate": "Duplizieren",
+    "globalnotes.menu.autofit_width": "Auto-fit Breite",
+    "globalnotes.menu.autofit_height": "Auto-fit Länge",
+    "globalnotes.menu.same_dimension": "Gleiche Abmessungen",
     "globalnotes.menu.lock": "Sperren",
     "globalnotes.menu.unlock": "Entsperren",
     "globalnotes.menu.delete": "Löschen",

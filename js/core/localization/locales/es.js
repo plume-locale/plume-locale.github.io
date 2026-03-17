@@ -2802,6 +2802,9 @@ window.LOCALE_ES = {
     "globalnotes.action.add_column": "Añadir columna",
 
     "globalnotes.menu.duplicate": "Duplicar",
+    "globalnotes.menu.autofit_width": "Ajuste automático de ancho",
+    "globalnotes.menu.autofit_height": "Ajuste automático de longitud",
+    "globalnotes.menu.same_dimension": "Poner en la misma dimensión",
     "globalnotes.menu.lock": "Bloquear",
     "globalnotes.menu.unlock": "Desbloquear",
     "globalnotes.menu.delete": "Eliminar",

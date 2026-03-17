@@ -130,8 +130,18 @@ const GlobalNotesHandlers = {
 
         const typeActions = this.getTypeSpecificActions(item);
         const isInColumn = !!item.columnId;
+        const selectedIds = GlobalNotesViewModel.state.selectedItemIds || [];
+        const isMultiSelected = selectedIds.length > 1 && selectedIds.includes(itemId);
 
         menu.innerHTML = `
+            ${isMultiSelected ? `
+                <div class="context-menu-group">
+                    <div class="context-menu-item" onclick="GlobalNotesHandlers.applySameDimension()">
+                        <i data-lucide="layers"></i> ${Localization.t('globalnotes.menu.same_dimension') || 'Same Dimensions'}
+                    </div>
+                </div>
+                <div class="context-menu-divider"></div>
+            ` : ''}
             ${typeActions ? `<div class="context-menu-group">${typeActions}</div><div class="context-menu-divider"></div>` : ''}
             <div class="context-menu-group">
                 <div class="context-menu-item" onclick="GlobalNotesHandlers.duplicateItem('${itemId}')">
@@ -184,6 +194,13 @@ const GlobalNotesHandlers = {
         switch (item.type) {
             case 'note':
                 return `
+                    <div class="context-menu-item" onclick="GlobalNotesHandlers.autofitWidth('${id}')">
+                        <i data-lucide="expand"></i> ${Localization.t('globalnotes.menu.autofit_width') || 'Auto-fit width'}
+                    </div>
+                    <div class="context-menu-item" onclick="GlobalNotesHandlers.autofitHeight('${id}')">
+                        <i data-lucide="expand-vertical"></i> ${Localization.t('globalnotes.menu.autofit_height') || 'Auto-fit height'}
+                    </div>
+                    <div class="context-menu-divider"></div>
                     <div class="context-menu-item" onclick="GlobalNotesHandlers.convertItemTo('${id}', 'checklist')">
                         <i data-lucide="list-checks"></i> ${Localization.t('globalnotes.menu.to_checklist') || 'Convert to Checklist'}
                     </div>
@@ -1632,6 +1649,56 @@ const GlobalNotesHandlers = {
         }
         // If content is still empty, we don't call e.preventDefault(), 
         // allowing the browser's default behavior.
+    },
+
+    autofitWidth: function (itemId) {
+        const itemEl = document.querySelector(`.globalnotes-item[data-id="${itemId}"]`);
+        if (!itemEl) return;
+        const noteContent = itemEl.querySelector('.item-content');
+        if (!noteContent) return;
+
+        // Measures the scrollWidth of a clone without constraints
+        const clone = noteContent.cloneNode(true);
+        clone.style.width = 'max-content';
+        clone.style.minWidth = '0';
+        clone.style.position = 'fixed';
+        clone.style.top = '-9999px';
+        clone.style.left = '-9999px';
+        clone.style.visibility = 'hidden';
+        clone.style.display = 'inline-block';
+        clone.style.padding = window.getComputedStyle(noteContent).padding;
+        
+        document.body.appendChild(clone);
+        const width = Math.max(150, Math.min(1000, clone.scrollWidth + 40));
+        document.body.removeChild(clone);
+
+        GlobalNotesViewModel.updateItemSize(itemId, width);
+        GlobalNotesView.renderContent();
+        this.hideContextMenu();
+    },
+
+    autofitHeight: function (itemId) {
+        const itemEl = document.querySelector(`.globalnotes-item[data-id="${itemId}"]`);
+        if (!itemEl) return;
+        const inner = itemEl.querySelector('.item-inner');
+        if (!inner) return;
+
+        // Reset height temporarily to get true scrollHeight
+        const oldHeight = itemEl.style.height;
+        itemEl.style.height = 'auto';
+        
+        const height = Math.max(80, Math.min(1200, inner.scrollHeight + 10));
+        
+        itemEl.style.height = oldHeight; // Restore
+
+        GlobalNotesViewModel.updateItemSize(itemId, undefined, height);
+        GlobalNotesView.renderContent();
+        this.hideContextMenu();
+    },
+
+    applySameDimension: function () {
+        GlobalNotesViewModel.applySameDimension();
+        this.hideContextMenu();
     }
 };
 
