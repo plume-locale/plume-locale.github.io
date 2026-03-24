@@ -27,7 +27,7 @@ function viewSupportsTabs(view) {
     const supportedViews = [
         'projects', 'editor', 'corkboard', 'characters', 'world', 'notes', 'codex',
         'stats', 'analysis', 'plot', 'plotgrid', 'mindmap', 'relations', 'arcs', 'versions',
-        'map', 'timelineviz', 'investigation', 'globalnotes', 'front_matter'
+        'map', 'timelineviz', 'timelinepro', 'investigation', 'globalnotes', 'front_matter'
     ];
     return supportedViews.includes(view);
 }

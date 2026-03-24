@@ -22,6 +22,7 @@ const viewLabels = {
     get investigation() { return Localization.t('nav.investigation'); },
     get globalnotes() { return Localization.t('nav.globalnotes'); },
     get front_matter() { return Localization.t('nav.front_matter'); },
+    get timelinepro() { return Localization.t('nav.timeline_pro'); },
     get changelog() { return Localization.t('nav.changelog') || 'Changelog'; }
 };
 
@@ -45,5 +46,6 @@ const viewIcons = {
     'investigation': 'search',
     'globalnotes': 'layout',
     'front_matter': 'book-open-check',
+    'timelinepro': 'gantt-chart',
     'changelog': 'scroll'
 };

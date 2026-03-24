@@ -1,0 +1,66 @@
+/* ─── Timeline Pro ────────────────────────────────────────────────────────── */
+
+#tlp-shell {
+    color: var(--text-primary);
+}
+
+/* Toolbar */
+#tlp-toolbar {
+    background: var(--bg-primary);
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* Toolbar buttons — hover visible sur fond clair et sombre */
+#tlp-toolbar .btn {
+    border-radius: 6px;
+    font-size: .82rem;
+    background: transparent;
+    border: 1px solid transparent;
+    color: var(--text-secondary);
+    transition: background .15s, border-color .15s, color .15s;
+}
+#tlp-toolbar .btn:hover {
+    background: rgba(0, 0, 0, 0.06);
+    border-color: var(--border-color);
+    color: var(--text-primary);
+}
+#tlp-toolbar .btn.btn-primary {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+    color: #fff;
+}
+#tlp-toolbar .btn.btn-primary:hover {
+    background: var(--primary-hover);
+    border-color: var(--primary-hover);
+    color: #fff;
+}
+
+/* Canvas */
+#tlp-canvas {
+    cursor: default;
+    user-select: none;
+}
+
+/* Side panel slide-in */
+#tlp-panel {
+    animation: tlpPanelIn .18s ease;
+}
+@keyframes tlpPanelIn {
+    from { opacity: 0; transform: translateX(16px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+
+/* Form inputs dans le panel */
+#tlp-panel input:focus,
+#tlp-panel select:focus,
+#tlp-panel textarea:focus {
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 0 0 3px rgba(var(--primary-color-rgb, 255,140,66), .15);
+}
+
+/* Sur thème sombre, inverser le hover */
+@media (prefers-color-scheme: dark) {
+    #tlp-toolbar .btn:hover {
+        background: rgba(255, 255, 255, 0.08);
+    }
+}

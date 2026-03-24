@@ -86,7 +86,8 @@ const NAVIGATION_GROUPS = [
             { id: 'mindmap', icon: 'git-branch', label: 'nav.mindmap' },
             { id: 'relations', icon: 'link', label: 'nav.relations' },
             { id: 'map', icon: 'map', label: 'nav.map' },
-            { id: 'timelineviz', icon: 'clock', label: 'nav.timeline' }
+            { id: 'timelineviz', icon: 'clock', label: 'nav.timeline' },
+            { id: 'timelinepro', icon: 'gantt-chart', label: 'nav.timeline_pro' }
         ]
     },
     {
@@ -583,6 +584,13 @@ function updateSidebarActions(view) {
                 </div>
             `;
             break;
+        case 'timelinepro':
+            html = `
+                <button class="btn btn-primary" onclick="TimelineProViewModel.addNewEvent()">
+                    <i data-lucide="plus"></i> ${Localization.t('timeline.pro.btn.add')}
+                </button>
+            `;
+            break;
     }
 
     sidebarActions.innerHTML = html;
@@ -951,6 +959,7 @@ function renderViewContent(view, containerId) {
         case 'relations': if (typeof renderRelationsView === 'function') renderRelationsView(); break;
         case 'map': if (typeof renderMapView === 'function') renderMapView(); break;
         case 'timelineviz': if (typeof renderTimelineVizView === 'function') renderTimelineVizView(); break;
+        case 'timelinepro': if (typeof TimelineProView !== 'undefined' && typeof TimelineProView.renderMainView === 'function') TimelineProView.renderMainView(containerId); break;
         case 'arcs':
             if (typeof ArcBoardViewModel !== 'undefined' && typeof ArcBoardViewModel.render === 'function') {
                 ArcBoardViewModel.render();
@@ -1039,6 +1048,7 @@ function refreshAllViews() {
             case 'relations': if (typeof renderRelationsView === 'function') renderRelationsView(); break;
             case 'map': if (typeof renderMapView === 'function') renderMapView(); break;
             case 'timelineviz': if (typeof renderTimelineVizView === 'function') renderTimelineVizView(); break;
+            case 'timelinepro': if (typeof TimelineProView !== 'undefined' && typeof TimelineProView.renderMainView === 'function') TimelineProView.renderMainView('editorView'); break;
             case 'arcs': if (typeof renderArcsList === 'function') renderArcsList(); break;
             case 'investigation': if (typeof renderInvestigationBoard === 'function') renderInvestigationBoard(); break;
             case 'globalnotes': if (typeof renderGlobalNotes === 'function') renderGlobalNotes(); break;

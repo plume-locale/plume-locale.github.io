@@ -113,11 +113,12 @@ function updateSidebarForSplitPanel(panel) {
         'codex': 'codexList',
         'arcs': 'arcsList',
         'mindmap': 'mindmapList',
-        'timelineviz': 'timelineVizList'
+        'timelineviz': 'timelineVizList',
+        'timelinepro': 'timelineProList'
     };
 
     // Views that don't use sidebar (full-screen views)
-    const noSidebarViews = ['stats', 'analysis', 'versions', 'todos', 'timeline', 'corkboard', 'plot', 'relations', 'map'];
+    const noSidebarViews = ['stats', 'analysis', 'versions', 'todos', 'timeline', 'corkboard', 'plot', 'relations', 'map', 'timelinepro'];
 
     // Labels for views without sidebar
     const viewLabelsNoSidebar = {
@@ -129,7 +130,8 @@ function updateSidebarForSplitPanel(panel) {
         'corkboard': Localization.t('nav.corkboard'),
         'plot': Localization.t('nav.plot'),
         'relations': Localization.t('nav.relations'),
-        'map': Localization.t('nav.map')
+        'map': Localization.t('nav.map'),
+        'timelinepro': Localization.t('nav.timeline_pro')
     };
 
     // Hide all sidebar lists including noSidebarMessage
@@ -205,7 +207,8 @@ function updateSidebarForSplitPanel(panel) {
         world: `<button class="btn btn-primary" onclick="openAddWorldModal()">${Localization.t('btn.add_world')}</button>`,
         notes: `<button class="btn btn-primary" onclick="openAddNoteModal()">${Localization.t('btn.add_note')}</button>`,
         codex: `<button class="btn btn-primary" onclick="openAddCodexModal()">${Localization.t('btn.add_codex')}</button>`,
-        arcs: `<button class="btn btn-primary" onclick="createNewArc()">${Localization.t('btn.add_arc')}</button>`
+        arcs: `<button class="btn btn-primary" onclick="createNewArc()">${Localization.t('btn.add_arc')}</button>`,
+        timelinepro: `<button class="btn btn-primary" onclick="TimelineProViewModel.addNewEvent()"><i data-lucide="plus"></i> ${Localization.t('timeline.pro.btn.add')}</button>`
     };
     const sidebarActions = document.getElementById('sidebarActions');
     if (sidebarActions) {
@@ -461,6 +464,7 @@ function openSplitViewSelector(panel) {
         { id: 'relations', label: Localization.t('split.view_relations_label'), icon: 'heart-handshake', desc: Localization.t('split.view_relations_desc') },
         { id: 'map', label: Localization.t('split.view_map_label'), icon: 'map', desc: Localization.t('split.view_map_desc') },
         { id: 'timelineviz', label: Localization.t('split.view_timelineviz_label'), icon: 'train-track', desc: Localization.t('split.view_timelineviz_desc') },
+        { id: 'timelinepro', label: Localization.t('nav.timeline_pro'), icon: 'gantt-chart', desc: 'Chronologie interactive avancée' },
         { id: 'timeline', label: Localization.t('split.view_timeline_label'), icon: 'calendar-range', desc: Localization.t('split.view_timeline_desc') },
         { id: 'stats', label: Localization.t('split.view_stats_label'), icon: 'bar-chart-3', desc: Localization.t('split.view_stats_desc') },
         { id: 'analysis', label: Localization.t('split.view_analysis_label'), icon: 'trending-up', desc: Localization.t('split.view_analysis_desc') },

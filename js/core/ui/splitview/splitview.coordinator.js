@@ -268,6 +268,14 @@ function renderViewInSplitPanel(view, container, state, panel) {
             }
             break;
 
+        case 'timelinepro':
+            if (typeof TimelineProView !== 'undefined' && typeof TimelineProView.renderMainView === 'function') {
+                TimelineProView.renderMainView(tempContainer.id);
+                restoreEditorView();
+                return;
+            }
+            break;
+
         case 'versions':
             if (typeof renderVersionsList === 'function') {
                 renderVersionsList();
