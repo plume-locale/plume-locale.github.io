@@ -11,6 +11,7 @@ class TimelineProRepository {
         if (!project.timelinePro) {
             project.timelinePro = {
                 events: [],
+                links: [],
                 tracks: [
                     { id: 'default', title: Localization.t('timeline.pro.default_track'), order: 0 }
                 ],
@@ -21,6 +22,8 @@ class TimelineProRepository {
                 }
             };
         }
+        // Compat : anciennes sauvegardes sans `links`
+        if (!project.timelinePro.links) project.timelinePro.links = [];
         return (project.timelinePro.events || []).map(data => new TimelineProModel(data));
     }
 
@@ -126,5 +129,58 @@ class TimelineProRepository {
     static getConfig() {
         if (!project.timelinePro) this.getAll();
         return project.timelinePro.config || { zoom: 1, offsetX: 0 };
+    }
+
+    /**
+     * Récupère toutes les liaisons.
+     * @returns {TimelineProLink[]}
+     */
+    static getLinks() {
+        if (!project.timelinePro) this.getAll();
+        return (project.timelinePro.links || []).map(data => new TimelineProLink(data));
+    }
+
+    /**
+     * Récupère une liaison par son ID.
+     * @param {string} id
+     * @returns {TimelineProLink|null}
+     */
+    static getLinkById(id) {
+        const data = (project.timelinePro?.links || []).find(l => l.id === id);
+        return data ? new TimelineProLink(data) : null;
+    }
+
+    /**
+     * Sauvegarde une liaison (création ou mise à jour).
+     * @param {TimelineProLink} link
+     */
+    static saveLink(link) {
+        if (!project.timelinePro) this.getAll();
+        const idx = project.timelinePro.links.findIndex(l => l.id === link.id);
+        if (idx !== -1) {
+            project.timelinePro.links[idx] = { ...link };
+        } else {
+            project.timelinePro.links.push({ ...link });
+        }
+    }
+
+    /**
+     * Supprime une liaison par son ID.
+     * @param {string} id
+     */
+    static deleteLink(id) {
+        if (!project.timelinePro) return;
+        project.timelinePro.links = project.timelinePro.links.filter(l => l.id !== id);
+    }
+
+    /**
+     * Supprime toutes les liaisons qui pointent vers un événement supprimé.
+     * @param {string} eventId
+     */
+    static deleteLinksForEvent(eventId) {
+        if (!project.timelinePro) return;
+        project.timelinePro.links = project.timelinePro.links.filter(
+            l => l.fromId !== eventId && l.toId !== eventId
+        );
     }
 }

@@ -74,6 +74,15 @@ const ProjectModel = {
             items: [],
             activeBoardId: null
         };
+        if (!project.timelinePro) {
+            project.timelinePro = {
+                events: [],
+                tracks: [
+                    { id: 'default', title: 'Piste par défaut', order: 0 }
+                ],
+                config: { zoom: 1, offsetX: 0, showRuler: true }
+            };
+        }
         return project;
     },
 
@@ -252,6 +261,10 @@ const ProjectModel = {
             const gn = project.globalnotes;
             if ((gn.boards && gn.boards.length > 0) || 
                 (gn.items && gn.items.length > 0)) return false;
+        }
+
+        if (project.timelinePro && project.timelinePro.events && project.timelinePro.events.length > 0) {
+            return false;
         }
 
         // Si on a au moins une description ou un genre, on pourrait considérer 

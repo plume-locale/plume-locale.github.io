@@ -51,6 +51,28 @@ class TimelineProModel {
 }
 
 /**
+ * @class TimelineProLink
+ * @description Modèle pour une liaison Bézier entre deux événements.
+ */
+class TimelineProLink {
+    constructor(data = {}) {
+        this.id        = data.id        || 'lnk_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
+        this.fromId    = data.fromId    || null;   // ID de l'événement source
+        this.toId      = data.toId      || null;   // ID de l'événement cible
+        this.color     = data.color     || '#d4af37';
+        // Motif du trait : 'solid' | 'dashed' | 'dotted'
+        this.pattern   = data.pattern   || 'solid';
+        // Extrémités : 'none' | 'arrow' | 'circle' | 'diamond'
+        this.capStart  = data.capStart  || 'none';
+        this.capEnd    = data.capEnd    || 'arrow';
+        // Courbure : 0 = droite, valeurs + grandes = courbe plus prononcée (en px relatifs à la hauteur)
+        this.curvature = data.curvature !== undefined ? data.curvature : 80;
+        this.label     = data.label     || '';
+        this.width     = data.width     || 2;
+    }
+}
+
+/**
  * @class TimelineProTrack
  * @description Modèle pour une piste (lane) de la chronologie.
  */

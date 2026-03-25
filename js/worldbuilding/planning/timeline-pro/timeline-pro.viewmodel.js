@@ -44,7 +44,9 @@ class TimelineProViewModel {
 
     static deleteEvent(id) {
         TimelineProRepository.delete(id);
-        TimelineProView.state.selectedId = null;
+        TimelineProRepository.deleteLinksForEvent(id);   // nettoyer les liens orphelins
+        TimelineProView.state.selectedId     = null;
+        TimelineProView.state.selectedLinkId = null;
         this.closePanel();
         TimelineProView.draw();
         if (typeof saveProject === 'function') saveProject();
@@ -550,5 +552,244 @@ class TimelineProViewModel {
     }
     static _esc(s = '') {
         return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    //  CRUD LIAISONS
+    // ═══════════════════════════════════════════════════════════════════════════
+
+    static createLink(fromId, toId) {
+        // Éviter les doublons
+        const existing = TimelineProRepository.getLinks().find(
+            l => (l.fromId === fromId && l.toId === toId) ||
+                 (l.fromId === toId   && l.toId === fromId)
+        );
+        if (existing) { alert('Une liaison entre ces deux événements existe déjà.'); return; }
+        const lnk = new TimelineProLink({ fromId, toId });
+        TimelineProRepository.saveLink(lnk);
+        if (typeof saveProject === 'function') saveProject();
+        TimelineProView.draw();
+        this.openLinkPanel(lnk.id);
+        TimelineProView.state.selectedLinkId = lnk.id;
+    }
+
+    static deleteLink(id) {
+        TimelineProRepository.deleteLink(id);
+        TimelineProView.state.selectedLinkId = null;
+        this.closePanel();
+        TimelineProView.draw();
+        if (typeof saveProject === 'function') saveProject();
+    }
+
+    static _applyLinkField(id, field, value) {
+        const lnk = TimelineProRepository.getLinkById(id);
+        if (!lnk) return;
+        lnk[field] = value;
+        TimelineProRepository.saveLink(lnk);
+        TimelineProView.draw();
+        if (typeof saveProject === 'function') saveProject();
+    }
+
+    static openLinkPanel(id) {
+        const lnk   = TimelineProRepository.getLinkById(id);
+        const panel = this._panel();
+        if (!lnk || !panel) return;
+
+        const events = TimelineProRepository.getAll();
+        const fromEv = events.find(e => e.id === lnk.fromId);
+        const toEv   = events.find(e => e.id === lnk.toId);
+        const color  = lnk.color?.startsWith('#') ? lnk.color : '#d4af37';
+
+        const CapBtn = (capField, val, label, svgContent) => `
+            <button data-cap="${capField}" data-val="${val}" title="${label}" style="
+                display:flex;flex-direction:column;align-items:center;gap:.25rem;
+                padding:.5rem .35rem;border-radius:6px;border:2px solid ${lnk[capField]===val?'var(--primary-color)':'var(--border-color)'};
+                background:${lnk[capField]===val?'rgba(var(--primary-color-rgb,255,140,66),.08)':'var(--bg-secondary)'};
+                cursor:pointer;transition:border-color .15s;font-size:.7rem;color:var(--text-secondary);flex:1;">
+                <svg width="28" height="14" viewBox="0 0 28 14" fill="none" stroke="${color}" stroke-width="1.5">${svgContent}</svg>
+                ${label}
+            </button>`;
+
+        const PatBtn = (val, label, dash) => `
+            <button data-pattern="${val}" title="${label}" style="
+                display:flex;flex-direction:column;align-items:center;gap:.25rem;
+                padding:.5rem .35rem;border-radius:6px;border:2px solid ${lnk.pattern===val?'var(--primary-color)':'var(--border-color)'};
+                background:${lnk.pattern===val?'rgba(var(--primary-color-rgb,255,140,66),.08)':'var(--bg-secondary)'};
+                cursor:pointer;transition:border-color .15s;font-size:.7rem;color:var(--text-secondary);flex:1;">
+                <svg width="36" height="6" viewBox="0 0 36 6">
+                    <line x1="0" y1="3" x2="36" y2="3" stroke="${color}" stroke-width="2" stroke-dasharray="${dash}" stroke-linecap="round"/>
+                </svg>
+                ${label}
+            </button>`;
+
+        panel.style.display = 'flex';
+        panel.innerHTML = `
+<div style="padding:1.25rem 1.25rem 0;display:flex;flex-direction:column;gap:0;height:100%;">
+
+  <!-- Header -->
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;">
+    <div style="display:flex;align-items:center;gap:.55rem;">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="2">
+        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+      </svg>
+      <span style="font-weight:700;font-size:.95rem;color:var(--text-primary);">Liaison</span>
+    </div>
+    <button id="tlp-lp-close" style="background:none;border:none;cursor:pointer;color:var(--text-muted);font-size:1.4rem;line-height:1;padding:.1rem .35rem;border-radius:4px;">&times;</button>
+  </div>
+
+  <!-- From / To -->
+  <div style="display:grid;grid-template-columns:1fr 24px 1fr;align-items:center;gap:.4rem;margin-bottom:1rem;">
+    <div style="background:var(--bg-secondary);border-radius:8px;padding:.5rem .65rem;font-size:.8rem;font-weight:600;color:var(--text-primary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"
+         title="${this._esc(fromEv?.title||'')}">
+      ${this._esc(fromEv?.title || '?')}
+    </div>
+    <svg width="24" height="12" viewBox="0 0 24 12" fill="none" style="flex-shrink:0;">
+      <line x1="0" y1="6" x2="20" y2="6" stroke="${color}" stroke-width="1.5"/>
+      <polyline points="14,2 20,6 14,10" stroke="${color}" stroke-width="1.5" fill="none"/>
+    </svg>
+    <div style="background:var(--bg-secondary);border-radius:8px;padding:.5rem .65rem;font-size:.8rem;font-weight:600;color:var(--text-primary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"
+         title="${this._esc(toEv?.title||'')}">
+      ${this._esc(toEv?.title || '?')}
+    </div>
+  </div>
+
+  <!-- Scroll area -->
+  <div style="flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:1rem;padding-bottom:1rem;">
+
+    <!-- Couleur -->
+    <div>
+      <label style="${this._labelStyle()}">Couleur</label>
+      <div style="display:flex;align-items:center;gap:.5rem;">
+        <input id="tlp-lp-color" type="color" value="${color}"
+               style="width:36px;height:32px;border:2px solid var(--border-color);border-radius:6px;cursor:pointer;background:none;padding:1px;flex-shrink:0;">
+        <div style="display:flex;gap:.3rem;flex-wrap:wrap;">
+          ${['#e74c3c','#e67e22','#f1c40f','#2ecc71','#3498db','#9b59b6','#d4af37','#1abc9c','#ffffff','#888899']
+            .map(c => `<div onclick="document.getElementById('tlp-lp-color').value='${c}';TimelineProViewModel._applyLinkField('${id}','color','${c}')"
+                style="width:16px;height:16px;border-radius:50%;background:${c};cursor:pointer;border:2px solid ${c===color?'var(--text-primary)':'rgba(0,0,0,.1)'};transition:transform .12s;"
+                onmouseenter="this.style.transform='scale(1.25)'" onmouseleave="this.style.transform=''"></div>`).join('')}
+        </div>
+      </div>
+    </div>
+
+    <!-- Motif -->
+    <div>
+      <label style="${this._labelStyle()}">Motif du trait</label>
+      <div style="display:flex;gap:.4rem;" id="tlp-lp-pattern-grid">
+        ${PatBtn('solid',  'Plein',  '0')}
+        ${PatBtn('dashed', 'Tirets', '8,4')}
+        ${PatBtn('dotted', 'Points', '2,4')}
+      </div>
+    </div>
+
+    <!-- Extrémité gauche -->
+    <div>
+      <label style="${this._labelStyle()}">Extrémité gauche</label>
+      <div style="display:flex;gap:.4rem;" id="tlp-lp-capstart-grid">
+        ${CapBtn('capStart','none',   'Aucune',  '<line x1="0" y1="7" x2="28" y2="7"/>')}
+        ${CapBtn('capStart','arrow',  'Flèche',  '<line x1="6" y1="7" x2="28" y2="7"/><polyline points="6,3 0,7 6,11" fill="none"/>')}
+        ${CapBtn('capStart','circle', 'Cercle',  '<line x1="7" y1="7" x2="28" y2="7"/><circle cx="3.5" cy="7" r="3.5" fill="${color}"/>')}
+        ${CapBtn('capStart','diamond','Losange', '<line x1="9" y1="7" x2="28" y2="7"/><polygon points="0,7 4.5,3.5 9,7 4.5,10.5" fill="${color}"/>')}
+      </div>
+    </div>
+
+    <!-- Extrémité droite -->
+    <div>
+      <label style="${this._labelStyle()}">Extrémité droite</label>
+      <div style="display:flex;gap:.4rem;" id="tlp-lp-capend-grid">
+        ${CapBtn('capEnd','none',   'Aucune',  '<line x1="0" y1="7" x2="28" y2="7"/>')}
+        ${CapBtn('capEnd','arrow',  'Flèche',  '<line x1="0" y1="7" x2="22" y2="7"/><polyline points="22,3 28,7 22,11" fill="none"/>')}
+        ${CapBtn('capEnd','circle', 'Cercle',  '<line x1="0" y1="7" x2="21" y2="7"/><circle cx="24.5" cy="7" r="3.5" fill="${color}"/>')}
+        ${CapBtn('capEnd','diamond','Losange', '<line x1="0" y1="7" x2="19" y2="7"/><polygon points="28,7 23.5,3.5 19,7 23.5,10.5" fill="${color}"/>')}
+      </div>
+    </div>
+
+    <!-- Épaisseur -->
+    <div>
+      <label style="${this._labelStyle()}">Épaisseur <span id="tlp-lp-width-val">${lnk.width||2}</span> px</label>
+      <input id="tlp-lp-width" type="range" min="1" max="8" value="${lnk.width||2}" step="0.5"
+             style="width:100%;accent-color:var(--primary-color);">
+    </div>
+
+    <!-- Courbure -->
+    <div>
+      <label style="${this._labelStyle()}">Courbure <span id="tlp-lp-curv-val">${lnk.curvature||80}</span></label>
+      <input id="tlp-lp-curv" type="range" min="0" max="300" value="${lnk.curvature||80}"
+             style="width:100%;accent-color:var(--primary-color);">
+    </div>
+
+    <!-- Label -->
+    <div>
+      <label style="${this._labelStyle()}">Libellé (optionnel)</label>
+      <input id="tlp-lp-label" type="text" value="${this._esc(lnk.label||'')}" placeholder="Ex : cause, suite…"
+             style="${this._inputStyle()}">
+    </div>
+
+  </div><!-- /scroll -->
+
+  <!-- Footer -->
+  <div style="padding:1rem 0;border-top:1px solid var(--border-color);">
+    <button id="tlp-lp-delete" style="
+        width:100%;padding:.55rem;border-radius:6px;
+        border:1px solid var(--accent-red,#e74c3c);color:var(--accent-red,#e74c3c);background:transparent;
+        cursor:pointer;font-size:.82rem;font-weight:600;display:flex;align-items:center;justify-content:center;gap:.4rem;">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+      Supprimer cette liaison
+    </button>
+  </div>
+
+</div>`;
+
+        // ── Bindings ──
+        document.getElementById('tlp-lp-color')?.addEventListener('input', e => {
+            this._applyLinkField(id, 'color', e.target.value);
+        });
+        document.getElementById('tlp-lp-label')?.addEventListener('input', e => {
+            this._applyLinkField(id, 'label', e.target.value);
+        });
+        document.getElementById('tlp-lp-width')?.addEventListener('input', e => {
+            const v = parseFloat(e.target.value);
+            const span = document.getElementById('tlp-lp-width-val');
+            if (span) span.textContent = v;
+            this._applyLinkField(id, 'width', v);
+        });
+        document.getElementById('tlp-lp-curv')?.addEventListener('input', e => {
+            const v = parseFloat(e.target.value);
+            const span = document.getElementById('tlp-lp-curv-val');
+            if (span) span.textContent = Math.round(v);
+            this._applyLinkField(id, 'curvature', v);
+        });
+
+        // Motif
+        document.getElementById('tlp-lp-pattern-grid')?.querySelectorAll('button[data-pattern]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                this._applyLinkField(id, 'pattern', btn.dataset.pattern);
+                this.openLinkPanel(id);
+            });
+        });
+        // CapStart
+        document.getElementById('tlp-lp-capstart-grid')?.querySelectorAll('button[data-cap="capStart"]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                this._applyLinkField(id, 'capStart', btn.dataset.val);
+                this.openLinkPanel(id);
+            });
+        });
+        // CapEnd
+        document.getElementById('tlp-lp-capend-grid')?.querySelectorAll('button[data-cap="capEnd"]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                this._applyLinkField(id, 'capEnd', btn.dataset.val);
+                this.openLinkPanel(id);
+            });
+        });
+
+        document.getElementById('tlp-lp-close')?.addEventListener('click', () => {
+            TimelineProView.state.selectedLinkId = null;
+            this.closePanel();
+            TimelineProView.draw();
+        });
+        const dBtn = document.getElementById('tlp-lp-delete');
+        dBtn?.addEventListener('click', () => this.deleteLink(id));
+        dBtn?.addEventListener('mouseenter', () => { dBtn.style.background = 'rgba(231,76,60,.08)'; });
+        dBtn?.addEventListener('mouseleave', () => { dBtn.style.background = 'transparent'; });
     }
 }

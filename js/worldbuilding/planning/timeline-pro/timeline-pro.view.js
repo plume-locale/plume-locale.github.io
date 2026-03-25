@@ -23,6 +23,12 @@ class TimelineProView {
         dragEventId: null, dragEventOffsetX: 0,
         // État UI
         hoveredId: null, selectedId: null,
+        // Liaisons Bézier
+        linkMode: false,       // true = attente du 2e clic pour créer un lien
+        linkFromId: null,      // événement source du lien en cours
+        hoveredLinkId: null,   // lien survolé
+        selectedLinkId: null,  // lien sélectionné
+        mouseX: 0, mouseY: 0, // Coordonnées souris courantes (canvas)
         // Mode de date : 'numeric' (valeurs brutes) ou 'calendar' (jours depuis époque)
         dateMode: 'numeric',
         // Resize observer
@@ -35,8 +41,13 @@ class TimelineProView {
         if (!host) return;
 
         // Reset state proprement
-        this.state.selectedId = null;
-        this.state.hoveredId  = null;
+        this.state.selectedId    = null;
+        this.state.hoveredId     = null;
+        this.state.linkMode      = false;
+        this.state.linkFromId    = null;
+        this.state.hoveredLinkId = null;
+        this.state.selectedLinkId= null;
+        this._hideTooltip();
         if (this.state.ro) { this.state.ro.disconnect(); this.state.ro = null; }
         window.removeEventListener('mousemove', this._onMouseMove);
         window.removeEventListener('mouseup',   this._onMouseUp);
@@ -84,6 +95,17 @@ class TimelineProView {
       <span id="tlp-date-label">Numérique</span>
     </button>
 
+    <div style="width:1px;height:22px;background:var(--border-color);margin:0 .25rem;"></div>
+
+    <button id="tlp-link-mode" class="btn" title="Mode liaison : Shift+clic sur un événement pour relier"
+            style="gap:.35rem;display:flex;align-items:center;padding:.45rem .8rem;font-size:.8rem;border-radius:6px;transition:background .15s,color .15s;">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+      </svg>
+      Relier
+    </button>
+
     <div style="flex:1;"></div>
     <div id="tlp-hint" style="font-size:.75rem;color:var(--text-muted);opacity:.7;">
       Double-clic sur une piste pour créer un événement
@@ -107,7 +129,79 @@ class TimelineProView {
     </div>
 
   </div>
+
+  <!-- ── Tooltip de survol ── -->
+  <div id="tlp-tooltip" style="
+      position:fixed; z-index:99998; pointer-events:none;
+      display:none; max-width:420px; min-width:200px;
+      background:var(--bg-card,#fff);
+      border:1px solid var(--border-color,#e0e0e0);
+      border-radius:12px;
+      box-shadow:0 12px 40px rgba(0,0,0,.18), 0 2px 8px rgba(0,0,0,.08);
+      padding:0;
+      overflow:hidden;
+      font-family:'Inter',system-ui,sans-serif;
+      animation:tlpTipIn .15s ease;
+  "></div>
 </div>`;
+
+        // Injecter les styles tooltip une seule fois
+        if (!document.getElementById('tlp-tooltip-style')) {
+            const s = document.createElement('style');
+            s.id = 'tlp-tooltip-style';
+            s.textContent = `
+                @keyframes tlpTipIn {
+                    from { opacity:0; transform: translateY(6px) scale(.97); }
+                    to   { opacity:1; transform: none; }
+                }
+                #tlp-tooltip .tlp-tip-header {
+                    display:flex; align-items:center; gap:.6rem;
+                    padding:.75rem 1rem .6rem;
+                    border-bottom:1px solid var(--border-color,#e8e8e8);
+                }
+                #tlp-tooltip .tlp-tip-color-dot {
+                    width:10px; height:10px; border-radius:50%; flex-shrink:0;
+                }
+                #tlp-tooltip .tlp-tip-title {
+                    font-size:.9rem; font-weight:700;
+                    color:var(--text-primary,#1a1a1a);
+                    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+                    max-width:260px;
+                }
+                #tlp-tooltip .tlp-tip-body {
+                    padding:.65rem 1rem .75rem;
+                    display:flex; flex-direction:column; gap:.45rem;
+                }
+                #tlp-tooltip .tlp-tip-dates {
+                    display:flex; align-items:center; gap:.4rem;
+                    font-size:.78rem; color:var(--text-muted,#888);
+                    font-weight:500;
+                }
+                #tlp-tooltip .tlp-tip-dates svg {
+                    opacity:.55; flex-shrink:0;
+                }
+                #tlp-tooltip .tlp-tip-desc {
+                    font-size:.82rem; color:var(--text-secondary,#555);
+                    line-height:1.6;
+                    white-space:pre-wrap; word-break:break-word;
+                }
+                #tlp-tooltip .tlp-tip-tags {
+                    display:flex; flex-wrap:wrap; gap:.3rem; margin-top:.15rem;
+                }
+                #tlp-tooltip .tlp-tip-tag {
+                    font-size:.72rem; font-weight:600; border-radius:20px;
+                    padding:.18em .65em;
+                    background:var(--bg-secondary,#f0f0f0);
+                    color:var(--text-muted,#666);
+                }
+                #tlp-tooltip .tlp-tip-hint {
+                    font-size:.72rem; color:var(--text-muted,#aaa);
+                    text-align:center; padding:.3rem 1rem .6rem;
+                    font-style:italic;
+                }
+            `;
+            document.head.appendChild(s);
+        }
 
         requestAnimationFrame(() => {
             this._initCanvas();
@@ -177,7 +271,7 @@ class TimelineProView {
         canvas.addEventListener('mousedown',  e => this._handleMouseDown(e));
         canvas.addEventListener('dblclick',   e => this._handleDblClick(e));
         canvas.addEventListener('mousemove',  e => this._handleMouseMoveCanvas(e));
-        canvas.addEventListener('mouseleave', () => { this.state.hoveredId = null; this.draw(); });
+        canvas.addEventListener('mouseleave', () => { this.state.hoveredId = null; this.state.hoveredLinkId = null; this._hideTooltip(); this.draw(); });
         canvas.addEventListener('wheel',      e => this._handleWheel(e), { passive: false });
         window.addEventListener('mousemove',  this._onMouseMove);
         window.addEventListener('mouseup',    this._onMouseUp);
@@ -197,6 +291,10 @@ class TimelineProView {
             this.draw();
         });
 
+        // Bouton mode liaison
+        const linkBtn = document.getElementById('tlp-link-mode');
+        linkBtn?.addEventListener('click', () => this._toggleLinkMode());
+
         // Context menu sur clic droit dans les en-têtes
         this.state.canvas.addEventListener('contextmenu', e => {
             e.preventDefault();
@@ -212,24 +310,75 @@ class TimelineProView {
     static _handleMouseDown(e) {
         const { lx, ly } = this._local(e);
 
+        // Shortcut Shift+Clic sur un événement → activer le mode liaison direct
+        if (e.shiftKey) {
+            const hit = this._hitTest(lx, ly);
+            if (hit && !this.state.linkMode) {
+                this._toggleLinkMode();
+                this.state.linkFromId = hit.id;
+                this._updateLinkHint("Cliquer sur l'événement cible pour créer la liaison");
+                this.draw();
+                e.preventDefault();
+                return;
+            }
+        }
+
+        // ── Mode liaison : tout clic est intercepté ──
+        if (this.state.linkMode) {
+            const hit = this._hitTest(lx, ly);
+            if (hit) {
+                if (!this.state.linkFromId) {
+                    this.state.linkFromId = hit.id;
+                    this._updateLinkHint("Cliquer sur l'\u00e9v\u00e9nement cible pour cr\u00e9er la liaison");
+                } else if (hit.id !== this.state.linkFromId) {
+                    TimelineProViewModel.createLink(this.state.linkFromId, hit.id);
+                    this.state.linkFromId = null;
+                    this._toggleLinkMode();
+                }
+            } else {
+                this.state.linkFromId = null;
+                this._updateLinkHint('Cliquer sur un \u00e9v\u00e9nement source pour commencer une liaison');
+                this.draw();
+            }
+            e.preventDefault();
+            return;
+        }
+
         // Clic dans l'en-tête de piste → ne rien faire
         if (lx <= this.HEADER_W && ly >= this.RULER_H) return;
 
-        const hit = this._hitTest(lx, ly);
+        // ── Clic sur un lien ? ──
+        const linkHit = this._hitTestLink(lx, ly);
+        if (linkHit) {
+            this.state.selectedLinkId = linkHit.id;
+            this.state.selectedId     = null;
+            TimelineProViewModel.closePanel();
+            TimelineProViewModel.openLinkPanel(linkHit.id);
+            this.draw();
+            e.preventDefault();
+            return;
+        }
 
+        const hit = this._hitTest(lx, ly);
         this.state.isDragging   = true;
         this.state.lastMouseX   = e.clientX;
         this.state.lastMouseY   = e.clientY;
 
         if (hit) {
-            this.state.dragMode        = 'event';
-            this.state.dragEventId     = hit.id;
+            this.state.dragMode         = 'event';
+            this.state.dragEventId      = hit.id;
             this.state.dragEventOffsetX = lx - this._worldToScreen(hit.startDate);
             this._selectEvent(hit.id);
+            this.state.selectedLinkId   = null;
         } else {
-            this.state.dragMode  = 'pan';
+            this.state.dragMode    = 'pan';
             this.state.dragEventId = null;
-            if (lx > this.HEADER_W) this._selectEvent(null);
+            if (lx > this.HEADER_W) {
+                this._selectEvent(null);
+                this.state.selectedLinkId = null;
+                TimelineProViewModel.closePanel();
+                this.draw();
+            }
         }
         e.preventDefault();
     }
@@ -251,12 +400,45 @@ class TimelineProView {
     static _handleMouseMoveCanvas(e) {
         if (this.state.isDragging) return;
         const { lx, ly } = this._local(e);
+        this.state.mouseX = lx;
+        this.state.mouseY = ly;
+
+        // Curseur en mode liaison
+        if (this.state.linkMode) {
+            const hit = this._hitTest(lx, ly);
+            const newHover = hit ? hit.id : null;
+            if (newHover !== this.state.hoveredId) {
+                this.state.hoveredId = newHover;
+                this.state.canvas.style.cursor = hit ? 'crosshair' : 'crosshair';
+                this.draw();
+            } else if (this.state.linkFromId) {
+                // Forcer le redraw pour que la ligne élastique suive la souris
+                this.draw();
+            }
+            return;
+        }
+
         const hit = this._hitTest(lx, ly);
         const newHover = hit ? hit.id : null;
         if (newHover !== this.state.hoveredId) {
             this.state.hoveredId = newHover;
             this.state.canvas.style.cursor = hit ? 'grab' : (lx > this.HEADER_W ? 'default' : 'default');
             this.draw();
+        }
+
+        // Hover sur les liens
+        const linkHit = !hit ? this._hitTestLink(lx, ly) : null;
+        const newLinkHover = linkHit ? linkHit.id : null;
+        if (newLinkHover !== this.state.hoveredLinkId) {
+            this.state.hoveredLinkId = newLinkHover;
+            if (linkHit) this.state.canvas.style.cursor = 'pointer';
+            this.draw();
+        }
+
+        if (hit) {
+            this._showTooltip(hit, e.clientX, e.clientY);
+        } else {
+            this._hideTooltip();
         }
     }
 
@@ -402,7 +584,9 @@ class TimelineProView {
         this._drawGrid(ctx, W, H);
         this._drawRuler(ctx, W);
         this._drawTrackHeaders(ctx, H);
+        this._drawLinks(ctx, H);        // ── liaisons Bezier
         this._drawEvents(ctx, H);
+        this._drawLinkPreview(ctx, H);  // ── prévisualisation en cours
         this._drawCurrentTimeLine(ctx, H);
         this._clipHeader(ctx, W, H);
         this._drawBandLabels(ctx, W);    // libellés dans la règle — toujours au-dessus
@@ -1238,4 +1422,348 @@ class TimelineProView {
 
     // ─── Public: refresh after external data change ────────────────────────────
     static refresh() { this.draw(); }
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    //  LIAISONS BÉZIER
+    // ═══════════════════════════════════════════════════════════════════════════
+
+    /** Active / désactive le mode liaison */
+    static _toggleLinkMode() {
+        this.state.linkMode   = !this.state.linkMode;
+        this.state.linkFromId = null;
+        const btn = document.getElementById('tlp-link-mode');
+        if (btn) {
+            const on = this.state.linkMode;
+            btn.style.background = on ? 'var(--primary-color,#ff8c42)' : '';
+            btn.style.color      = on ? '#fff' : '';
+        }
+        this._updateLinkHint(
+            this.state.linkMode
+                ? 'Cliquer sur un \u00e9v\u00e9nement source pour commencer une liaison'
+                : 'Double-clic sur une piste pour cr\u00e9er un \u00e9v\u00e9nement'
+        );
+        this.state.canvas.style.cursor = this.state.linkMode ? 'crosshair' : 'default';
+        this.draw();
+    }
+
+    static _updateLinkHint(text) {
+        const h = document.getElementById('tlp-hint');
+        if (h) h.textContent = text;
+    }
+
+    /**
+     * Retourne le point d'attache central d'un événement (barre ou point) en px canvas.
+     * @returns {{x:number, y:number}|null}
+     */
+    static _eventCenter(ev) {
+        const tracks = TimelineProRepository.getTracks();
+        const tIdx   = tracks.findIndex(t => t.id === ev.trackId);
+        if (tIdx < 0) return null;
+        const ty = this.RULER_H + tIdx * this.TRACK_H - this.state.scrollY;
+        const cy = ty + this.TRACK_H / 2;
+        const sx = this._worldToScreen(ev.startDate);
+        if (ev.endDate != null && ev.endDate !== ev.startDate) {
+            const ex = this._worldToScreen(ev.endDate);
+            return { x: (sx + ex) / 2, y: cy };
+        }
+        return { x: sx, y: cy };
+    }
+
+    /**
+     * Hit-test d'un lien : renvoie le lien si le point (px, py) est proche de la courbe.
+     * Utilise un échantillonnage de la courbe de Bézier.
+     */
+    static _hitTestLink(px, py) {
+        const links  = TimelineProRepository.getLinks();
+        const events = TimelineProRepository.getAll();
+        const THRESH = 8;
+
+        for (let i = links.length - 1; i >= 0; i--) {
+            const lnk = links[i];
+            const from = events.find(e => e.id === lnk.fromId);
+            const to   = events.find(e => e.id === lnk.toId);
+            if (!from || !to) continue;
+            const p1 = this._eventCenter(from);
+            const p2 = this._eventCenter(to);
+            if (!p1 || !p2) continue;
+
+            const curv = lnk.curvature ?? 80;
+            const cp1x = p1.x + (p2.x - p1.x) / 3;
+            const cp1y = p1.y - curv;
+            const cp2x = p1.x + 2 * (p2.x - p1.x) / 3;
+            const cp2y = p2.y - curv;
+
+            // Échantillonner 30 points
+            for (let t = 0; t <= 1; t += 1 / 30) {
+                const mt = 1 - t;
+                const bx = mt*mt*mt*p1.x + 3*mt*mt*t*cp1x + 3*mt*t*t*cp2x + t*t*t*p2.x;
+                const by = mt*mt*mt*p1.y + 3*mt*mt*t*cp1y + 3*mt*t*t*cp2y + t*t*t*p2.y;
+                if (Math.hypot(bx - px, by - py) <= THRESH) return lnk;
+            }
+        }
+        return null;
+    }
+
+    /** Dessine toutes les liaisons */
+    static _drawLinks(ctx, H) {
+        const links  = TimelineProRepository.getLinks();
+        const events = TimelineProRepository.getAll();
+
+        links.forEach(lnk => {
+            const from = events.find(e => e.id === lnk.fromId);
+            const to   = events.find(e => e.id === lnk.toId);
+            if (!from || !to) return;
+            const p1 = this._eventCenter(from);
+            const p2 = this._eventCenter(to);
+            if (!p1 || !p2) return;
+
+            const isSel = this.state.selectedLinkId === lnk.id;
+            const isHov = this.state.hoveredLinkId  === lnk.id;
+            this._drawBezierLink(ctx, lnk, p1, p2, isSel, isHov);
+        });
+    }
+
+    /** Prévisualisation du lien en cours de création */
+    static _drawLinkPreview(ctx, H) {
+        if (!this.state.linkMode || !this.state.linkFromId) return;
+        const events = TimelineProRepository.getAll();
+        const from   = events.find(e => e.id === this.state.linkFromId);
+        if (!from) return;
+        const p1 = this._eventCenter(from);
+        if (!p1) return;
+
+        // Pulsation : cercle autour de la source
+        const color = from.color?.startsWith('#') ? from.color : '#d4af37';
+        ctx.save();
+        ctx.strokeStyle = color;
+        ctx.lineWidth   = 2;
+        ctx.setLineDash([4, 4]);
+        ctx.globalAlpha = 0.8;
+        ctx.beginPath();
+        ctx.arc(p1.x, p1.y, 16, 0, Math.PI * 2);
+        ctx.stroke();
+
+        // Ligne élastique vers la souris
+        const p2 = { x: this.state.mouseX, y: this.state.mouseY };
+        const curv = 80;
+        const cp1x = p1.x + (p2.x - p1.x) / 3;
+        const cp1y = p1.y - curv;
+        const cp2x = p1.x + 2 * (p2.x - p1.x) / 3;
+        const cp2y = p2.y - curv;
+
+        ctx.beginPath();
+        ctx.moveTo(p1.x, p1.y);
+        ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, p2.x, p2.y);
+        ctx.stroke();
+
+        ctx.setLineDash([]);
+        ctx.restore();
+    }
+
+    /** Dessine une seule courbe de Bézier entre p1 et p2 */
+    static _drawBezierLink(ctx, lnk, p1, p2, isSel, isHov) {
+        const color  = lnk.color?.startsWith('#') ? lnk.color : '#d4af37';
+        const width  = (lnk.width || 2) * (isSel ? 1.5 : 1);
+        const curv   = lnk.curvature ?? 80;
+
+        const cp1x = p1.x + (p2.x - p1.x) / 3;
+        const cp1y = p1.y - curv;
+        const cp2x = p1.x + 2 * (p2.x - p1.x) / 3;
+        const cp2y = p2.y - curv;
+
+        // Motif
+        const dash = lnk.pattern === 'dashed' ? [10, 6]
+                   : lnk.pattern === 'dotted' ? [2, 5]
+                   : [];
+
+        ctx.save();
+
+        // Glow si sélectionné / survolé
+        if (isSel || isHov) {
+            ctx.shadowColor  = color + 'aa';
+            ctx.shadowBlur   = isSel ? 14 : 7;
+        }
+
+        ctx.strokeStyle = color;
+        ctx.lineWidth   = width;
+        ctx.lineCap     = 'round';
+        ctx.setLineDash(dash);
+        ctx.globalAlpha = isSel ? 1 : (isHov ? 0.9 : 0.75);
+
+        ctx.beginPath();
+        ctx.moveTo(p1.x, p1.y);
+        ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, p2.x, p2.y);
+        ctx.stroke();
+
+        ctx.setLineDash([]);
+        ctx.shadowBlur = 0;
+
+        // Extrémité START
+        if (lnk.capStart && lnk.capStart !== 'none') {
+            // Direction tangente en t=0 (vers cp1)
+            const dx = cp1x - p1.x, dy = cp1y - p1.y;
+            const angle = Math.atan2(dy, dx);
+            this._drawLinkCap(ctx, lnk.capStart, p1.x, p1.y, angle + Math.PI, color, width);
+        }
+        // Extrémité END
+        if (lnk.capEnd && lnk.capEnd !== 'none') {
+            // Direction tangente en t=1 (depuis cp2)
+            const dx = p2.x - cp2x, dy = p2.y - cp2y;
+            const angle = Math.atan2(dy, dx);
+            this._drawLinkCap(ctx, lnk.capEnd, p2.x, p2.y, angle, color, width);
+        }
+
+        // Label
+        if (lnk.label) this._drawLinkLabel(ctx, lnk, cp1x, cp1y, cp2x, cp2y);
+
+        ctx.restore();
+    }
+
+    /**
+     * Dessine une extrémité sur la courbe.
+     * @param {'arrow'|'circle'|'diamond'} type
+     * @param {number} x  point d'attache
+     * @param {number} y
+     * @param {number} angle  direction de la pointe (rad)
+     */
+    static _drawLinkCap(ctx, type, x, y, angle, color, lw) {
+        const sz = Math.max(12, lw * 5.5);
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.rotate(angle);
+        ctx.fillStyle   = color;
+        ctx.strokeStyle = 'rgba(0,0,0,0.4)';
+        ctx.lineWidth   = 1;
+        ctx.setLineDash([]);
+        ctx.globalAlpha = 1; 
+        
+        // Petite ombre pour le contraste
+        ctx.shadowColor = 'rgba(0,0,0,0.15)';
+        ctx.shadowBlur  = 3;
+        ctx.shadowOffsetY = 1;
+
+        ctx.beginPath();
+        if (type === 'arrow') {
+            ctx.moveTo(0, 0);
+            ctx.lineTo(-sz, -sz * 0.45);
+            ctx.lineTo(-sz * 0.65, 0);
+            ctx.lineTo(-sz, sz * 0.45);
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+        } else if (type === 'circle') {
+            ctx.arc(-sz * 0.4, 0, sz * 0.4, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
+        } else if (type === 'diamond') {
+            ctx.moveTo(0, 0);
+            ctx.lineTo(-sz * 0.55, -sz * 0.4);
+            ctx.lineTo(-sz, 0);
+            ctx.lineTo(-sz * 0.55, sz * 0.4);
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+        }
+        ctx.restore();
+    }
+
+    static _drawLinkLabel(ctx, lnk, cp1x, cp1y, cp2x, cp2y) {
+        const mx = (cp1x + cp2x) / 2;
+        const my = (cp1y + cp2y) / 2 - 8;
+        ctx.save();
+        ctx.font      = '500 11px Inter,system-ui,sans-serif';
+        ctx.fillStyle = lnk.color?.startsWith('#') ? lnk.color : '#d4af37';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.shadowColor = 'var(--bg-primary,#fff)';
+        ctx.shadowBlur  = 4;
+        ctx.fillText(lnk.label, mx, my);
+        ctx.restore();
+    }
+
+    // ─── TOOLTIP ─────────────────────────────────────────────────────────────────
+    static _showTooltip(ev, mouseX, mouseY) {
+        const tip = document.getElementById('tlp-tooltip');
+        if (!tip) return;
+
+        const color = ev.color?.startsWith('#') ? ev.color : '#d4af37';
+        const hasDesc = ev.description && ev.description.trim().length > 0;
+        const hasTags = ev.tags?.length > 0;
+
+        // ── Dates formatées ──
+        let dateStr = '';
+        if (ev.startDate != null) {
+            dateStr = this._fmtDate(ev.startDate);
+            if (ev.endDate != null && ev.endDate !== ev.startDate) {
+                dateStr += ' → ' + this._fmtDate(ev.endDate);
+            }
+        }
+
+        // ── Tags HTML ──
+        const hex2rgb = h => [parseInt(h.slice(1,3),16), parseInt(h.slice(3,5),16), parseInt(h.slice(5,7),16)];
+        const [r,g,b] = hex2rgb(color);
+        const tagsHtml = hasTags
+            ? `<div class="tlp-tip-tags">${ev.tags.map(t =>
+                `<span class="tlp-tip-tag" style="background:rgba(${r},${g},${b},.15);color:${color}">${t}</span>`
+              ).join('')}</div>`
+            : '';
+
+        // ── Description ──
+        const descHtml = hasDesc
+            ? `<div class="tlp-tip-desc">${ev.description.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>`
+            : '';
+
+        // ── Indicateur de verrouillage ──
+        const lockIcon = ev.isLocked
+            ? `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="opacity:.5;margin-left:.3rem"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`
+            : '';
+
+        tip.innerHTML = `
+            <div class="tlp-tip-header">
+                <div class="tlp-tip-color-dot" style="background:${color};box-shadow:0 0 0 3px rgba(${r},${g},${b},.2)"></div>
+                <div class="tlp-tip-title">${(ev.title || '').replace(/</g,'&lt;')}</div>
+                ${lockIcon}
+            </div>
+            <div class="tlp-tip-body">
+                ${dateStr ? `<div class="tlp-tip-dates">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                    ${dateStr}
+                </div>` : ''}
+                ${descHtml}
+                ${tagsHtml}
+                ${!hasDesc ? '<div class="tlp-tip-hint">Cliquer pour voir & éditer</div>' : '<div class="tlp-tip-hint">Cliquer pour éditer</div>'}
+            </div>
+        `;
+
+        tip.style.display = 'block';
+
+        // ── Positionnement intelligent ──
+        // On lit la taille après injection du contenu
+        requestAnimationFrame(() => {
+            const tw = tip.offsetWidth  || 320;
+            const th = tip.offsetHeight || 100;
+            const gap = 18;
+            let left = mouseX + gap;
+            let top  = mouseY - th / 2;
+
+            // Débordement droite → coller à gauche du curseur
+            if (left + tw > window.innerWidth - 8) {
+                left = mouseX - tw - gap;
+            }
+            // Débordement bas
+            if (top + th > window.innerHeight - 8) {
+                top = window.innerHeight - th - 8;
+            }
+            // Débordement haut
+            if (top < 8) top = 8;
+
+            tip.style.left = left + 'px';
+            tip.style.top  = top  + 'px';
+        });
+    }
+
+    static _hideTooltip() {
+        const tip = document.getElementById('tlp-tooltip');
+        if (tip) tip.style.display = 'none';
+    }
 }
