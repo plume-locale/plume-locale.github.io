@@ -982,7 +982,7 @@ class TimelineProView {
                     ctx.textBaseline = 'middle';
                     ctx.shadowColor  = 'rgba(0,0,0,.4)';
                     ctx.shadowBlur   = 3;
-                    ctx.fillText(this._truncate(ctx, ev.title, bw - 20), sx + 10, by + bh / 2);
+                    this._fillTextMultiline(ctx, ev.title, sx + 10, by + bh / 2, bw - 20, 14);
                     ctx.shadowBlur = 0;
                 }
 
@@ -1024,14 +1024,39 @@ class TimelineProView {
                 ctx.arc(sx, cy, isSel ? 4.5 : 3.5, 0, Math.PI * 2);
                 ctx.fill();
 
-                // Label above
-                ctx.fillStyle    = isSel ? color : p.headerTitle;
+                // Label above (ou dessous si pas de place sous la règle)
+                // On temporairement désactive le clip pour que le texte puisse dépasser de la piste
+                ctx.restore(); ctx.save();
+                ctx.globalAlpha = isDrag ? 0.65 : 1;
+
+                // Clip global zone temporelle (pour ne pas déborder sur les en-têtes ou la règle)
+                ctx.beginPath();
+                ctx.rect(this.HEADER_W, this.RULER_H, W - this.HEADER_W, H - this.RULER_H);
+                ctx.clip();
+
+                const lines = String(ev.title).split('\n');
+                const lh    = 12; // hauteur de ligne
+                const th    = lines.length * lh;
+                const dist  = R + 5;
+                const roomAbove = (cy - dist) - this.RULER_H;
+                
+                let labelY   = cy - dist;
+                let baseline = 'bottom';
+                
+                // Si pas de place au-dessus (> règle), on met en-dessous
+                if (roomAbove < th) {
+                    labelY   = cy + dist;
+                    baseline = 'top';
+                }
+
+                ctx.fillStyle    = color;
                 ctx.font         = `${isSel ? 700 : 500} 11px Inter,system-ui,sans-serif`;
                 ctx.textAlign    = 'center';
-                ctx.textBaseline = 'bottom';
+                ctx.textBaseline = baseline;
                 ctx.shadowColor  = 'rgba(0,0,0,.3)';
                 ctx.shadowBlur   = 4;
-                ctx.fillText(this._truncate(ctx, ev.title, 150), sx, cy - R - 5);
+
+                this._fillTextMultiline(ctx, ev.title, sx, labelY, 150, lh);
                 ctx.shadowBlur = 0;
 
                 // Tags: tiny colored dots below label
@@ -1477,6 +1502,35 @@ class TimelineProView {
         return t + '…';
     }
 
+    /** 
+     * Dessine un texte sur plusieurs lignes si celui-ci contient des \n.
+     * Gère l'alignement vertical selon textBaseline.
+     */
+    static _fillTextMultiline(ctx, text, x, y, maxW, lineHeight = 13) {
+        if (!text) return;
+        const lines = String(text).split('\n');
+        const count = lines.length;
+        if (count === 1) {
+            ctx.fillText(this._truncate(ctx, lines[0], maxW), x, y);
+            return;
+        }
+
+        const oldBaseline = ctx.textBaseline;
+        ctx.textBaseline = 'top';
+
+        let startY = y;
+        if (oldBaseline === 'bottom') {
+            startY = y - count * lineHeight;
+        } else if (oldBaseline === 'middle') {
+            startY = y - (count * lineHeight) / 2;
+        }
+
+        lines.forEach((line, i) => {
+            ctx.fillText(this._truncate(ctx, line, maxW), x, startY + i * lineHeight);
+        });
+        ctx.textBaseline = oldBaseline;
+    }
+
     // ─── Public: refresh after external data change ────────────────────────────
     static refresh() { this.draw(); }
 
@@ -1740,7 +1794,7 @@ class TimelineProView {
         ctx.textBaseline = 'middle';
         ctx.shadowColor = 'var(--bg-primary,#fff)';
         ctx.shadowBlur  = 4;
-        ctx.fillText(lnk.label, mx, my);
+        this._fillTextMultiline(ctx, lnk.label, mx, my, 200, 13);
         ctx.restore();
     }
 

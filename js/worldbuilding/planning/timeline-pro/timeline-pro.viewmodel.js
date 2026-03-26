@@ -126,7 +126,7 @@ class TimelineProViewModel {
     <!-- Title -->
     <div>
       <label style="${this._labelStyle()}">Titre</label>
-      <input id="tlp-p-title" type="text" value="${this._esc(ev.title)}" style="${this._inputStyle()}" placeholder="Nom de l'événement">
+      <textarea id="tlp-p-title" style="${this._inputStyle()}height:44px;resize:vertical;" placeholder="Nom de l'événement">${this._esc(ev.title)}</textarea>
     </div>
 
     <!-- Start / End -->
