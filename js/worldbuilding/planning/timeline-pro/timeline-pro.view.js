@@ -347,6 +347,21 @@ class TimelineProView {
         // Clic dans l'en-tête de piste → ne rien faire
         if (lx <= this.HEADER_W && ly >= this.RULER_H) return;
 
+        // ── Clic sur un événement ? ──
+        const hit = this._hitTest(lx, ly);
+        if (hit) {
+            this.state.isDragging       = true;
+            this.state.lastMouseX       = e.clientX;
+            this.state.lastMouseY       = e.clientY;
+            this.state.dragMode         = 'event';
+            this.state.dragEventId      = hit.id;
+            this.state.dragEventOffsetX = lx - this._worldToScreen(hit.startDate);
+            this._selectEvent(hit.id);
+            this.state.selectedLinkId   = null;
+            e.preventDefault();
+            return;
+        }
+
         // ── Clic sur un lien ? ──
         const linkHit = this._hitTestLink(lx, ly);
         if (linkHit) {
@@ -359,26 +374,17 @@ class TimelineProView {
             return;
         }
 
-        const hit = this._hitTest(lx, ly);
+        // Clic dans le vide -> Pan
         this.state.isDragging   = true;
         this.state.lastMouseX   = e.clientX;
         this.state.lastMouseY   = e.clientY;
-
-        if (hit) {
-            this.state.dragMode         = 'event';
-            this.state.dragEventId      = hit.id;
-            this.state.dragEventOffsetX = lx - this._worldToScreen(hit.startDate);
-            this._selectEvent(hit.id);
-            this.state.selectedLinkId   = null;
-        } else {
-            this.state.dragMode    = 'pan';
-            this.state.dragEventId = null;
-            if (lx > this.HEADER_W) {
-                this._selectEvent(null);
-                this.state.selectedLinkId = null;
-                TimelineProViewModel.closePanel();
-                this.draw();
-            }
+        this.state.dragMode     = 'pan';
+        this.state.dragEventId  = null;
+        if (lx > this.HEADER_W) {
+            this._selectEvent(null);
+            this.state.selectedLinkId = null;
+            TimelineProViewModel.closePanel();
+            this.draw();
         }
         e.preventDefault();
     }
@@ -543,6 +549,7 @@ class TimelineProView {
         if (lx <= this.HEADER_W || ly < this.RULER_H) return null;
         const events = TimelineProRepository.getAll();
         const tracks = TimelineProRepository.getTracks();
+        const layout = this._getPackedLayout();
 
         for (let i = events.length - 1; i >= 0; i--) {
             const ev  = events[i];
@@ -552,19 +559,59 @@ class TimelineProView {
             const ty = this.RULER_H + tIdx * this.TRACK_H - this.state.scrollY;
             if (ty > this.state.height || ty + this.TRACK_H < 0) continue;
 
-            const sx = this._worldToScreen(ev.startDate);
-            const innerY  = ty + this.GUARD;
-            const innerH  = this.TRACK_H - this.GUARD * 2;
+            // Calcul de la sous-ligne
+            const row    = layout.get(ev.id) || 0;
+            const maxRow = layout.trackMaxRows.get(ev.trackId) || 1;
+            const subH   = (this.TRACK_H - this.GUARD * 2) / maxRow;
+            const iy     = ty + this.GUARD + row * subH;
 
-            if (ev.endDate != null) {
+            const sx = this._worldToScreen(ev.startDate);
+
+            if (ev.endDate != null && ev.endDate !== ev.startDate) {
                 const sw = Math.max(8, this._worldToScreen(ev.endDate) - sx);
-                if (lx >= sx && lx <= sx + sw && ly >= innerY && ly <= innerY + innerH) return ev;
+                if (lx >= sx && lx <= sx + sw && ly >= iy && ly <= iy + subH) return ev;
             } else {
-                if (Math.hypot(lx - sx, ly - (innerY + innerH / 2)) <= 14) return ev;
+                if (Math.hypot(lx - sx, ly - (iy + subH / 2)) <= 14) return ev;
             }
         }
         return null;
     }
+
+    /**
+     * Calcule la répartition des événements en sous-lignes pour chaque piste.
+     * @returns {Map<string, number> & {trackMaxRows: Map<string, number>}}
+     */
+    static _getPackedLayout() {
+        const events = TimelineProRepository.getAll();
+        const tracks = TimelineProRepository.getTracks();
+        const layout = new Map();
+        layout.trackMaxRows = new Map();
+
+        tracks.forEach(tr => {
+            const trackEvents = events
+                .filter(e => e.trackId === tr.id)
+                .sort((a, b) => a.startDate - b.startDate);
+
+            const rowEnds = []; // Temps de fin pour chaque sous-ligne
+            trackEvents.forEach(ev => {
+                const start = ev.startDate;
+                const end   = ev.endDate ?? ev.startDate;
+                const buffer = 8 / (this.state.zoom || 0.05);
+
+                let r = rowEnds.findIndex(lastEnd => start >= lastEnd + buffer);
+                if (r === -1) {
+                    r = rowEnds.length;
+                    rowEnds.push(end);
+                } else {
+                    rowEnds[r] = Math.max(rowEnds[r], end);
+                }
+                layout.set(ev.id, r);
+            });
+            layout.trackMaxRows.set(tr.id, Math.max(1, rowEnds.length));
+        });
+        return layout;
+    }
+
 
     // ═══════════════════════════════════════════════════════════════════════════
     //  DRAW
@@ -573,6 +620,9 @@ class TimelineProView {
         const ctx = this.state.ctx;
         if (!ctx) return;
         const { width: W, height: H } = this.state;
+
+        // Calcul du layout une seule fois pour tout le cycle de rendu
+        const layout = this._getPackedLayout();
 
         // Background
         const p = this._p();
@@ -584,9 +634,9 @@ class TimelineProView {
         this._drawGrid(ctx, W, H);
         this._drawRuler(ctx, W);
         this._drawTrackHeaders(ctx, H);
-        this._drawLinks(ctx, H);        // ── liaisons Bezier
-        this._drawEvents(ctx, H);
-        this._drawLinkPreview(ctx, H);  // ── prévisualisation en cours
+        this._drawLinks(ctx, H, layout);        // ── liaisons Bezier
+        this._drawEvents(ctx, H, layout);
+        this._drawLinkPreview(ctx, H, layout);  // ── prévisualisation en cours
         this._drawCurrentTimeLine(ctx, H);
         this._clipHeader(ctx, W, H);
         this._drawBandLabels(ctx, W);    // libellés dans la règle — toujours au-dessus
@@ -856,10 +906,11 @@ class TimelineProView {
     }
 
     // ─── EVENTS ───────────────────────────────────────────────────────────────
-    static _drawEvents(ctx, H) {
+    static _drawEvents(ctx, H, layout = null) {
         const events = TimelineProRepository.getAll();
         const tracks = TimelineProRepository.getTracks();
         const W = this.state.width;
+        if (!layout) layout = this._getPackedLayout();
 
         events.forEach(ev => {
             const tIdx = tracks.findIndex(t => t.id === ev.trackId);
@@ -868,8 +919,14 @@ class TimelineProView {
             const ty   = this.RULER_H + tIdx * this.TRACK_H - this.state.scrollY;
             if (ty + this.TRACK_H < this.RULER_H || ty > H) return;
 
+            // Calcul de la sous-ligne
+            const row    = layout.get(ev.id) || 0;
+            const maxRow = layout.trackMaxRows.get(ev.trackId) || 1;
+            const subH   = (this.TRACK_H - this.GUARD * 2) / maxRow;
+            const iy     = ty + this.GUARD + row * subH;
+
             const sx    = this._worldToScreen(ev.startDate);
-            const cy    = ty + this.TRACK_H / 2;
+            const cy    = iy + subH / 2;
             const isSel = this.state.selectedId === ev.id;
             const isHov = this.state.hoveredId  === ev.id;
             const isDrag= this.state.dragEventId === ev.id;
@@ -893,8 +950,8 @@ class TimelineProView {
                 // ── PERIOD BAR ──────────────────────────────────────────────
                 const ex = this._worldToScreen(ev.endDate);
                 const bw = Math.max(6, ex - sx);
-                const bh = this.TRACK_H - this.GUARD * 2;
-                const by = ty + this.GUARD;
+                const bh = subH - 2; // -2 pour un petit espace entre lignes
+                const by = iy + 1;
 
                 // Selection glow
                 if (isSel || isHov) {
@@ -1455,12 +1512,18 @@ class TimelineProView {
      * Retourne le point d'attache central d'un événement (barre ou point) en px canvas.
      * @returns {{x:number, y:number}|null}
      */
-    static _eventCenter(ev) {
+    static _eventCenter(ev, layout = null) {
         const tracks = TimelineProRepository.getTracks();
         const tIdx   = tracks.findIndex(t => t.id === ev.trackId);
         if (tIdx < 0) return null;
+
+        if (!layout) layout = this._getPackedLayout();
+        const row    = layout.get(ev.id) || 0;
+        const maxRow = layout.trackMaxRows.get(ev.trackId) || 1;
+        const subH   = (this.TRACK_H - this.GUARD * 2) / maxRow;
+
         const ty = this.RULER_H + tIdx * this.TRACK_H - this.state.scrollY;
-        const cy = ty + this.TRACK_H / 2;
+        const cy = ty + this.GUARD + (row + 0.5) * subH;
         const sx = this._worldToScreen(ev.startDate);
         if (ev.endDate != null && ev.endDate !== ev.startDate) {
             const ex = this._worldToScreen(ev.endDate);
@@ -1483,8 +1546,8 @@ class TimelineProView {
             const from = events.find(e => e.id === lnk.fromId);
             const to   = events.find(e => e.id === lnk.toId);
             if (!from || !to) continue;
-            const p1 = this._eventCenter(from);
-            const p2 = this._eventCenter(to);
+            const p1 = this._eventCenter(from, layout);
+            const p2 = this._eventCenter(to, layout);
             if (!p1 || !p2) continue;
 
             const curv = lnk.curvature ?? 80;
@@ -1505,7 +1568,7 @@ class TimelineProView {
     }
 
     /** Dessine toutes les liaisons */
-    static _drawLinks(ctx, H) {
+    static _drawLinks(ctx, H, layout = null) {
         const links  = TimelineProRepository.getLinks();
         const events = TimelineProRepository.getAll();
 
@@ -1513,8 +1576,8 @@ class TimelineProView {
             const from = events.find(e => e.id === lnk.fromId);
             const to   = events.find(e => e.id === lnk.toId);
             if (!from || !to) return;
-            const p1 = this._eventCenter(from);
-            const p2 = this._eventCenter(to);
+            const p1 = this._eventCenter(from, layout);
+            const p2 = this._eventCenter(to, layout);
             if (!p1 || !p2) return;
 
             const isSel = this.state.selectedLinkId === lnk.id;
@@ -1524,12 +1587,12 @@ class TimelineProView {
     }
 
     /** Prévisualisation du lien en cours de création */
-    static _drawLinkPreview(ctx, H) {
+    static _drawLinkPreview(ctx, H, layout = null) {
         if (!this.state.linkMode || !this.state.linkFromId) return;
         const events = TimelineProRepository.getAll();
         const from   = events.find(e => e.id === this.state.linkFromId);
         if (!from) return;
-        const p1 = this._eventCenter(from);
+        const p1 = this._eventCenter(from, layout);
         if (!p1) return;
 
         // Pulsation : cercle autour de la source
