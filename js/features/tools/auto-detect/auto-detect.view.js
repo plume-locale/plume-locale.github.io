@@ -413,12 +413,17 @@ const AutoDetectView = {
      * Utilitaire de formatage de texte (utilisé par la toolbar).
      */
     formatText(command, value = null) {
-        let selector = '.editor-textarea';
-        if (typeof currentSceneId !== 'undefined' && currentSceneId) {
-            selector = `.editor-textarea[data-scene-id="${currentSceneId}"]`;
+        let editor = document.activeElement;
+        
+        // If the active element is not an editor, look for one via selector
+        if (!editor || !editor.classList.contains('editor-textarea')) {
+            let selector = '.editor-textarea';
+            if (typeof currentSceneId !== 'undefined' && currentSceneId) {
+                selector = `.editor-textarea[data-scene-id="${currentSceneId}"]`;
+            }
+            editor = document.querySelector(selector);
         }
 
-        const editor = document.querySelector(selector);
         if (editor) {
             // Restore selection if we have a saved one for this editor
             if (editor._lastRange) {

@@ -47,10 +47,14 @@ const GlobalNotesItemView = {
         switch (item.type) {
             case 'note':
                 return `
-                    <div class="item-content" contenteditable="true" 
-                         onpaste="GlobalNotesHandlers.onPaste(event)"
-                         onblur="GlobalNotesViewModel.updateItemData('${item.id}', { content: this.innerHTML })">
-                        ${data.content || ''}
+                    <div class="note-editor-wrapper">
+                        <div class="note-toolbar" style="display:none;">
+                            ${typeof getEditorToolbarHTML === 'function' ? getEditorToolbarHTML(null, true) : ''}
+                        </div>
+                        <div class="item-content editor-textarea" contenteditable="true" 
+                             onpaste="GlobalNotesHandlers.onPaste(event)"
+                             onfocus="if(typeof lucide !== 'undefined') lucide.createIcons({root: this.parentElement}); if(typeof initializeColorPickers === 'function') initializeColorPickers();"
+                             onblur="GlobalNotesViewModel.updateItemData('${item.id}', { content: this.innerHTML })">${data.content || ''}</div>
                     </div>
                 `;
             case 'board':
@@ -61,9 +65,7 @@ const GlobalNotesItemView = {
                         </div>
                         <div class="board-name" contenteditable="true" 
                              onpointerdown="event.stopPropagation()"
-                             onblur="GlobalNotesHandlers.renameBoard('${item.id}', this.innerText, event)">
-                            ${data.title || 'Untitled Board'}
-                        </div>
+                             onblur="GlobalNotesHandlers.renameBoard('${item.id}', this.innerText, event)">${data.title || 'Untitled Board'}</div>
                     </div>
                 `;
             case 'image':
@@ -83,9 +85,7 @@ const GlobalNotesItemView = {
                             </div>
                         `}
                         <div class="item-caption" contenteditable="true" 
-                             onblur="GlobalNotesViewModel.updateItemData('${item.id}', { caption: this.innerText })">
-                            ${data.caption || 'Add caption...'}
-                        </div>
+                             onblur="GlobalNotesViewModel.updateItemData('${item.id}', { caption: this.innerText })">${data.caption || 'Add caption...'}</div>
                     </div>
                 `;
             case 'link':
@@ -115,9 +115,7 @@ const GlobalNotesItemView = {
                     <div class="column-container">
                         <div class="column-header">
                             <div class="column-title" contenteditable="true" 
-                                 onblur="GlobalNotesViewModel.updateItemData('${item.id}', { title: this.innerText })">
-                                ${data.title || 'Column'}
-                            </div>
+                                 onblur="GlobalNotesViewModel.updateItemData('${item.id}', { title: this.innerText })">${data.title || 'Column'}</div>
                             <i data-lucide="more-horizontal" class="column-more"></i>
                         </div>
                         <div class="column-items-dropzone" data-column-id="${item.id}">
@@ -128,9 +126,7 @@ const GlobalNotesItemView = {
             case 'checklist':
                 return `
                     <div class="checklist-container">
-                        <div class="checklist-header" contenteditable="true" onblur="GlobalNotesViewModel.updateItemData('${item.id}', { title: this.innerText })">
-                            ${data.title || 'Checklist'}
-                        </div>
+                        <div class="checklist-header" contenteditable="true" onblur="GlobalNotesViewModel.updateItemData('${item.id}', { title: this.innerText })">${data.title || 'Checklist'}</div>
                         <div class="checklist-items">
                             ${(data.items || []).map((li, idx) => `
                                 <div class="checklist-row">
@@ -173,9 +169,7 @@ const GlobalNotesItemView = {
                                 <span>Add Video URL</span>
                             </div>
                         `}
-                        <div class="video-title" contenteditable="true" onblur="GlobalNotesViewModel.updateItemData('${item.id}', { title: this.innerText })">
-                            ${data.title || 'Video'}
-                        </div>
+                        <div class="video-title" contenteditable="true" onblur="GlobalNotesViewModel.updateItemData('${item.id}', { title: this.innerText })">${data.title || 'Video'}</div>
                     </div>
                 `;
             case 'file':
@@ -207,9 +201,7 @@ const GlobalNotesItemView = {
                             <div class="color-label" contenteditable="true" 
                                  style="color: ${textColor} !important;"
                                  onpointerdown="event.stopPropagation()"
-                                 onblur="GlobalNotesViewModel.updateItemData('${item.id}', { label: this.innerText })">
-                                 ${data.label || 'Primary'}
-                            </div>
+                                 onblur="GlobalNotesViewModel.updateItemData('${item.id}', { label: this.innerText })">${data.label || 'Primary'}</div>
                             <div class="color-hex-badge">
                                 <span>${item.config.color || '#4361ee'}</span>
                             </div>
@@ -231,9 +223,7 @@ const GlobalNotesItemView = {
                                     ${(data.headers || []).map((h, c) => `
                                         <th>
                                             <div class="table-header-cell">
-                                                <div class="header-content" contenteditable="true" onblur="GlobalNotesHandlers.updateTableHeader('${item.id}', ${c}, this.innerText)">
-                                                    ${h || ''}
-                                                </div>
+                                                <div class="header-content" contenteditable="true" onblur="GlobalNotesHandlers.updateTableHeader('${item.id}', ${c}, this.innerText)">${h || ''}</div>
                                                 <button class="btn-delete-col" onclick="GlobalNotesHandlers.deleteTableColumn('${item.id}', ${c})" title="${Localization.t('globalnotes.action.delete_column') || 'Delete Column'}">
                                                     <i data-lucide="x"></i>
                                                 </button>
@@ -246,10 +236,8 @@ const GlobalNotesItemView = {
                             <tbody>
                                 ${Array.from({ length: data.rows }).map((_, r) => `
                                     <tr>
-                                        ${Array.from({ length: data.cols }).map((_, c) => `
-                                            <td contenteditable="true" onblur="GlobalNotesHandlers.updateTableData('${item.id}', ${r}, ${c}, this.innerText)">
-                                                ${(data.data[r] && data.data[r][c]) || ''}
-                                            </td>
+                                         ${Array.from({ length: data.cols }).map((_, c) => `
+                                            <td contenteditable="true" onblur="GlobalNotesHandlers.updateTableData('${item.id}', ${r}, ${c}, this.innerText)">${(data.data[r] && data.data[r][c]) || ''}</td>
                                         `).join('')}
                                         <td class="table-action-cell">
                                             <button class="btn-delete-row" onclick="GlobalNotesHandlers.deleteTableRow('${item.id}', ${r})" title="${Localization.t('globalnotes.action.delete_row') || 'Delete Row'}">
@@ -290,9 +278,7 @@ const GlobalNotesItemView = {
                 return `
                 <div class="item-heading" contenteditable="true" 
                      onpaste="GlobalNotesHandlers.onPaste(event)"
-                     onblur="GlobalNotesViewModel.updateItemData('${item.id}', { text: this.innerText })">
-                    ${data.text || 'Section Title'}
-                </div>
+                     onblur="GlobalNotesViewModel.updateItemData('${item.id}', { text: this.innerText })">${data.text || 'Section Title'}</div>
             `;
             case 'sketch':
                 return `

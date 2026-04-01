@@ -1694,7 +1694,7 @@ const GlobalNotesHandlers = {
         if (html) {
             const parser = new DOMParser();
             const doc = parser.parseFromString(html, 'text/html');
-            const allowedTags = ['B', 'I', 'EM', 'STRONG', 'U', 'H1', 'H2', 'H3', 'P', 'BR', 'UL', 'OL', 'LI', 'SPAN'];
+            const allowedTags = ['B', 'I', 'EM', 'STRONG', 'U', 'H1', 'H2', 'H3', 'P', 'BR', 'UL', 'OL', 'LI', 'SPAN', 'HR', 'BLOCKQUOTE'];
             
             const cleanNode = (node) => {
                 const frag = document.createDocumentFragment();

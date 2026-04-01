@@ -18,25 +18,11 @@ const MentionHelpRepository = {
                 return project.characters || [];
             case 'world':
                 return project.world || [];
-            case 'globalnote':
-                if (typeof GlobalNotesRepository !== 'undefined') {
-                    const items = GlobalNotesRepository.getItems();
-                    const boards = GlobalNotesRepository.getBoards();
-                    return [
-                        ...boards.map(b => ({ ...b, name: b.title, type: 'board', mentionType: 'globalnote' })),
-                        ...items.map(i => {
-                            let title = i.data?.title || i.data?.name || '';
-                            if (!title && i.type === 'note' && i.data?.content) {
-                                title = i.data.content.substring(0, 40).replace(/<[^>]*>/g, '').trim();
-                                if (title.length >= 40) title += '...';
-                            }
-                            return { ...i, name: title || `[${i.type}]`, mentionType: 'globalnote' };
-                        })
-                    ];
-                }
-                return [];
+            case 'note':
+                // Notes de projet : title, category, content — propres et cherchables
+                return project.notes || [];
             case 'codex':
-                return [...(project.codex || []), ...(project.notes || [])];
+                return project.codex || [];
             default:
                 return [];
         }
@@ -52,13 +38,28 @@ const MentionHelpRepository = {
         const lowerQuery = query.toLowerCase();
 
         entities.forEach(item => {
-            const name = (item.fields && item.fields.nom) ? item.fields.nom : (item.name || item.title || '');
+            const suggestion = MentionHelpModel.createSuggestion(item, trigger, 0);
+            if (!suggestion) return;
+
+            const name = suggestion.name || '';
             const lowerName = name.toLowerCase();
 
-            // Recherche simple pour commencer (peut être améliorée avec Fuse.js si disponible)
-            if (lowerName.includes(lowerQuery)) {
-                const score = MentionHelpModel.calculateContextScore(item, context);
-                results.push(MentionHelpModel.createSuggestion(item, trigger, score));
+            // Pour les notes : chercher aussi dans le contenu et les tags
+            let searchText = lowerName;
+            if (suggestion.type === 'note') {
+                const rawContent = (item.content || '').replace(/<[^>]*>/g, ' ').toLowerCase();
+                const tags = Array.isArray(item.tags) ? item.tags.join(' ').toLowerCase() : '';
+                const category = (item.category || '').toLowerCase();
+                searchText = [lowerName, rawContent, tags, category].join(' ');
+            }
+
+            if (searchText.includes(lowerQuery)) {
+                suggestion.score = MentionHelpModel.calculateContextScore(item, context);
+                // Montrer la catégorie comme description plutôt que rien
+                if (suggestion.type === 'note' && !suggestion.description && item.category) {
+                    suggestion.description = item.category;
+                }
+                results.push(suggestion);
             }
         });
 
@@ -89,20 +90,23 @@ const MentionHelpRepository = {
                 break;
             case 'world':
                 if (typeof WorldModel !== 'undefined' && typeof WorldRepository !== 'undefined') {
-                    // Nouveau système Atlas : on met le nom dans fields.nom
                     newItem = WorldModel.create({
                         fields: { nom: name },
-                        category: 'Géographie' // Catégorie par défaut
+                        category: 'Géographie'
                     });
                     WorldRepository.add(newItem);
                 }
                 break;
+            case 'note':
+                if (typeof NotesRepository !== 'undefined') {
+                    newItem = NotesRepository.add({ title: name, category: 'Idée' });
+                }
+                break;
             case 'codex':
                 if (typeof CodexModel !== 'undefined' && typeof CodexRepository !== 'undefined') {
-                    // Nouveau système Atlas : on met le nom dans fields.nom
                     newItem = CodexModel.create({
                         fields: { nom: name },
-                        category: 'Magie & Pouvoirs' // Catégorie par défaut
+                        category: 'Magie & Pouvoirs'
                     });
                     CodexRepository.add(newItem);
                 }

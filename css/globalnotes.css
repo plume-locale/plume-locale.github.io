@@ -381,19 +381,95 @@
 
 /* Note Item */
 .globalnotes-item-note .item-inner {
-    padding-top: 24px;
-    overflow-y: auto; /* Add scrollbar */
+    padding-top: 0;
+    overflow-y: auto;
     overflow-x: hidden;
 }
 
+.note-editor-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+}
+
+.note-toolbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: var(--bg-primary);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 4px;
+    gap: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+/* Hide scrollbar for toolbar but keep functionality */
+.note-toolbar::-webkit-scrollbar {
+    height: 3px;
+}
+.note-toolbar::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 3px;
+}
+
+.note-editor-wrapper:focus-within .note-toolbar {
+    display: flex !important;
+}
+
+.note-toolbar .toolbar-group {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    padding-right: 4px;
+    border-right: 1px solid var(--border-color);
+}
+
+.note-toolbar .toolbar-group:last-child {
+    border-right: none;
+}
+
+.note-toolbar .toolbar-btn {
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    color: var(--text-secondary);
+}
+
+.note-toolbar .toolbar-btn:hover {
+    background: var(--bg-secondary);
+    color: var(--primary-color);
+}
+
+.note-toolbar select {
+    max-width: 80px;
+    font-size: 11px;
+    padding: 2px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 3px;
+}
+
 .globalnotes-item-note .item-content {
+    padding: 12px;
     font-size: 15px;
     line-height: 1.6;
     outline: none;
-    min-height: 40px;
+    min-height: 100px !important;
     color: #334155;
     font-family: inherit;
     word-break: break-word;
+    flex: 1;
 }
 
 .globalnotes-item-note .item-content h1,

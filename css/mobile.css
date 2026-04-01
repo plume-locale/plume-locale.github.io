@@ -1880,12 +1880,9 @@ body.force-mobile-nav .split-mode-toggle {
 /* DESKTOP (> 1024px) */
 @media (min-width: 1025px) {
 
-    /* Masquer les éléments mobile */
     .mobile-nav-toggle-btn,
     .mobile-nav-dropdown,
     .toolbar-mobile-toggle,
-    #floatingEditorToggle,
-    #floatingEditorMenu,
     .mobile-menu-handle,
     .sidebar-overlay,
     .mobile-bottom-nav,

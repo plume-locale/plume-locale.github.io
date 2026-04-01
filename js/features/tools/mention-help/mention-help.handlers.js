@@ -19,8 +19,10 @@ const MentionHelpHandlers = {
         }, true);
 
         // Fermer sur scroll pour éviter que la popup ne reste orpheline
-        window.addEventListener('scroll', () => {
+        window.addEventListener('scroll', (e) => {
             if (MentionHelpViewModel.state.active) {
+                const popup = document.getElementById('mentionHelpPopup');
+                if (popup && popup.contains(e.target)) return;
                 MentionHelpViewModel.close();
             }
         }, true);
@@ -64,69 +66,114 @@ const MentionHelpHandlers = {
     },
 
     /**
-     * Ouvre le panneau de détails correspondant à l'entité.
-     * Si le mode split n'est pas actif, il l'active et ouvre l'entité à droite.
+     * Ouvre le panneau de détails correspondant à l'entité dans le panneau droit.
+     * Utilise le système d'onglets moderne (tabsState) pour garantir la compatibilité.
      */
     openMentionDetails(type, id) {
         const isNumeric = /^\d+$/.test(id);
         const numericId = isNumeric ? parseInt(id) : id;
+
+        // ── Système d'onglets (actif) ──────────────────────────────────────────
+        if (typeof tabsState !== 'undefined' && typeof openTab === 'function') {
+            // Activer le split si pas déjà actif
+            if (!tabsState.isSplit) {
+                tabsState.isSplit = true;
+                // renderTabs sera appelé par openTab
+            }
+
+            // Forcer le panneau actif sur la droite
+            tabsState.activePane = 'right';
+
+            const opts = { paneId: 'right' };
+
+            switch (type) {
+                case 'character':
+                    openTab('characters', { characterId: numericId }, opts);
+                    break;
+                case 'world':
+                    openTab('world', { worldId: numericId }, opts);
+                    break;
+                case 'note':
+                    openTab('notes', { noteId: numericId }, opts);
+                    break;
+                case 'codex':
+                    openTab('codex', { codexId: numericId }, opts);
+                    break;
+                case 'notes':
+                    openTab('notes', { noteId: numericId }, opts);
+                    break;
+                case 'globalnote':
+                    // Les globalnotes n'ont pas d'onglet dédié : ouvrir via leur ViewModel
+                    this._openGlobalNoteInSplit(id);
+                    break;
+                default:
+                    console.warn('MentionHelp: type de mention inconnu :', type);
+            }
+            return;
+        }
+
+        // ── Fallback : système splitview legacy ────────────────────────────────
         const targetView = this.getViewFromMentionType(type);
 
-        // Si le mode split n'est pas actif, on l'active d'abord
         if (typeof splitViewActive !== 'undefined' && !splitViewActive) {
             if (typeof activateSplitView === 'function') activateSplitView();
         }
 
-        // On force le panneau de droite à afficher la bonne vue
         if (typeof switchSplitPanelView === 'function') {
             switchSplitPanelView('right', targetView);
             if (typeof setActiveSplitPanel === 'function') setActiveSplitPanel('right');
         }
 
-        // Maintenant on ouvre les détails spécifiquement dans le panneau de droite
-        switch (type) {
-            case 'character':
-                if (typeof openCharacterDetail === 'function') openCharacterDetail(numericId);
-                break;
-            case 'world':
-                if (typeof openWorldDetail === 'function') openWorldDetail(numericId);
-                break;
-            case 'arc':
-                if (typeof openArc === 'function') openArc(numericId);
-                break;
-            case 'globalnote':
-                if (typeof GlobalNotesViewModel !== 'undefined') {
-                    // Si c'est un board, on l'ouvre directement
-                    if (id.startsWith('board_')) {
-                        GlobalNotesViewModel.setActiveBoard(id);
-                    } else {
-                        // Si c'est un item, on cherche son board
-                        const item = GlobalNotesRepository.getItems().find(i => i.id === id);
-                        if (item && item.boardId) {
-                            GlobalNotesViewModel.setActiveBoard(item.boardId);
-                            // On attend un peu que le rendu soit fait
-                            setTimeout(() => {
-                                if (typeof GlobalNotesViewModel.selectItem === 'function') {
-                                    GlobalNotesViewModel.selectItem(id);
-                                }
-                            }, 300);
-                        }
+        // Petit délai pour laisser le panneau se rendre avant d'injecter le contenu
+        setTimeout(() => {
+            switch (type) {
+                case 'character':
+                    if (typeof openCharacterDetail === 'function') openCharacterDetail(numericId);
+                    break;
+                case 'world':
+                    if (typeof openWorldDetail === 'function') openWorldDetail(numericId);
+                    break;
+                case 'codex':
+                    if (typeof openCodexDetail === 'function') openCodexDetail(numericId);
+                    break;
+                case 'globalnote':
+                    this._openGlobalNoteInSplit(id);
+                    break;
+            }
+        }, 50);
+    },
+
+    /**
+     * Ouvre un élément de Global Notes dans le panneau droit.
+     */
+    _openGlobalNoteInSplit(id) {
+        if (typeof GlobalNotesViewModel === 'undefined') return;
+        if (id.startsWith('board_')) {
+            GlobalNotesViewModel.setActiveBoard(id);
+        } else {
+            const item = (typeof GlobalNotesRepository !== 'undefined')
+                ? GlobalNotesRepository.getItems().find(i => i.id === id)
+                : null;
+            if (item && item.boardId) {
+                GlobalNotesViewModel.setActiveBoard(item.boardId);
+                setTimeout(() => {
+                    if (typeof GlobalNotesViewModel.selectItem === 'function') {
+                        GlobalNotesViewModel.selectItem(id);
                     }
-                }
-                break;
-            case 'codex':
-                if (typeof openCodexEntry === 'function') openCodexEntry(numericId);
-                break;
+                }, 300);
+            }
         }
     },
+
 
     getViewFromMentionType(type) {
         const map = {
             'character': 'characters',
-            'world': 'world',
-            'arc': 'arcs',
-            'globalnote': 'globalnotes',
-            'codex': 'codex'
+            'world':     'world',
+            'note':      'notes',
+            'arc':       'arcs',
+            'globalnote':'globalnotes',
+            'codex':     'codex'
         };
         return map[type] || 'editor';
     },

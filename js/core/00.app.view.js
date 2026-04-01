@@ -1744,6 +1744,7 @@ function getEditorToolbarHTML(panel = null, hideExtraTools = false) {
             <button class="toolbar-btn" onmousedown="event.preventDefault()" onclick="${fnName}(${fnPrefix}'subscript')" title="${Localization.t('toolbar.subscript')}"><i data-lucide="subscript" style="width:14px;height:14px;"></i></button>
         </div>
         
+        ${!hideExtraTools ? `
         <!-- Synonyms -->
         <div class="toolbar-group" id="toolSynonymsBtn">
             <button class="toolbar-btn" onmousedown="event.preventDefault()" onclick="if(typeof SynonymsView !== 'undefined') SynonymsView.toggle()" title="${Localization.t('toolbar.synonyms')}">
@@ -1757,6 +1758,7 @@ function getEditorToolbarHTML(panel = null, hideExtraTools = false) {
                 <i data-lucide="at-sign" style="width:14px;height:14px;"></i>
             </button>
         </div>
+        ` : ''}
 
         <!-- Other formatting -->
         <div class="toolbar-group">
@@ -1764,6 +1766,7 @@ function getEditorToolbarHTML(panel = null, hideExtraTools = false) {
             <button class="toolbar-btn" onmousedown="event.preventDefault()" onclick="${fnName}(${fnPrefix}'removeFormat')" title="${Localization.t('toolbar.remove_format')}"><i data-lucide="eraser" style="width:14px;height:14px;"></i></button>
         </div>
 
+        ${!hideExtraTools ? `
         <!-- Special Tools Group (Highlighted) -->
         <div class="toolbar-group toolbar-group-featured">
             <button class="toolbar-btn featured-btn" id="toolStructureBlockBtn" onmousedown="event.preventDefault()" onclick="StructureBlockUI.wrapSelection()" title="${Localization.t('toolbar.structure_block')}">
@@ -1773,6 +1776,7 @@ function getEditorToolbarHTML(panel = null, hideExtraTools = false) {
                 <i data-lucide="book-open" style="width:16px;height:16px;"></i>
             </button>
         </div>
+        ` : ''}
 
         ${!hideExtraTools ? `
         <!-- Revision mode button -->

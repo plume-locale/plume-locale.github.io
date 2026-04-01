@@ -104,7 +104,7 @@ const FloatingEditorViewModel = {
         }
 
         // Maintain focus on editor
-        const editor = document.querySelector('.editor-textarea');
+        const editor = FloatingEditorView.elements.editor;
         if (editor) editor.focus();
     },
 

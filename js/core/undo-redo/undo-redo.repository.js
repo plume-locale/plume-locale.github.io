@@ -205,6 +205,10 @@ const UndoRedoRepository = {
         integrate(window.GlobalNotesRepository, 'GlobalNotes', {
             immediate: ['saveBoard', 'saveItem', 'deleteBoard', 'deleteItem', 'moveToColumn', 'reorderInColumn', 'removeFromColumn']
         });
+        integrate(window.TimelineProRepository, 'TimelinePro', {
+            immediate: ['delete', 'saveTrack', 'deleteTrack', 'saveLink', 'deleteLink', 'reorderTracks'],
+            debounced: ['save']
+        });
 
         console.log('[UndoRedo] Integration avec tous les repositories effectuee');
     }

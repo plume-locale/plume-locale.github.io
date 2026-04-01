@@ -12,7 +12,11 @@ const FloatingEditorView = {
         get toggle() { return document.getElementById('floatingEditorToggle'); },
         get advancedBar() { return document.getElementById('advancedMenuBar'); },
         get advancedBtn() { return document.getElementById('advancedMenuBtn'); },
-        get editor() { return document.querySelector('.editor-textarea'); }
+        get editor() { 
+            const active = document.activeElement;
+            if (active && active.classList.contains('editor-textarea')) return active;
+            return document.querySelector('.editor-textarea'); 
+        }
     },
 
     /**
