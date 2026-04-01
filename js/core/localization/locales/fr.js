@@ -13,6 +13,7 @@ window.LOCALE_FR = {
 
     // --- Mentions ---
     "mention.type.character": "Personnage",
+    "mention.alias.title": "Options d'insertion",
     "mention.type.world": "Élément d'univers",
     "mention.type.globalnote": "Note globale",
     "mention.type.note": "Note de projet",

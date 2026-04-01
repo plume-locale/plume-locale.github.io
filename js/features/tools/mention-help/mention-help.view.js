@@ -92,6 +92,58 @@ const MentionHelpView = {
     },
 
     /**
+     * Affiche la liste des alias pour un personnage.
+     */
+    renderAliases(aliases, selectedIndex, activeElement, suggestion) {
+        let list = document.getElementById(this.containerId);
+        if (!list) return;
+
+        const rect = activeElement.getBoundingClientRect();
+        const popupHeight = Math.min(aliases.length * 45 + 40, 250);
+
+        let top = rect.top - popupHeight - 10;
+        if (top < 0) {
+            top = rect.bottom + 10;
+        }
+
+        list.style.left = `${rect.left}px`;
+        list.style.top = `${top}px`;
+        list.style.display = 'block';
+
+        const titleText = typeof Localization !== 'undefined' && Localization.t ? Localization.t('mention.alias.title') : 'Options d\'insertion';
+
+        list.innerHTML = `
+            <div style="padding: 8px 12px; font-size: 0.75rem; font-weight: bold; color: var(--text-secondary); border-bottom: 1px solid var(--border-color, #e0e0e0); display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.02); margin-bottom: 4px;">
+                <span>${titleText}</span>
+                <span style="font-size: 0.65rem; opacity: 0.6;"><i data-lucide="corner-down-left" style="width:10px;height:10px;display:inline-block;margin-right:2px;vertical-align:middle;"></i> Retour (Backspace)</span>
+            </div>
+        ` + aliases.map((a, index) => {
+            const activeClass = index === selectedIndex ? 'active' : '';
+            return `
+            <div class="mention-help-item ${activeClass}" 
+                 onmousedown="MentionHelpViewModel.selectAlias(MentionHelpViewModel.state.aliases[${index}]); event.preventDefault();">
+                <div class="mention-help-icon">
+                    <i data-lucide="${a.icon || 'user'}"></i>
+                </div>
+                <div class="mention-help-info">
+                    <div class="mention-help-name">${a.value}</div>
+                    <div class="mention-help-desc">${a.label}</div>
+                </div>
+            </div>
+        `;
+        }).join('');
+
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+    },
+
+    /**
+     * Met à jour l'alias sélectionné visuellement.
+     */
+    updateAliasSelection(selectedIndex) {
+        this.updateSelection(selectedIndex);
+    },
+
+    /**
      * Met à jour l'élément sélectionné visuellement.
      */
     updateSelection(selectedIndex) {

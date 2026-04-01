@@ -3102,6 +3102,7 @@ window.LOCALE_DE = {
     "mention.quick_create.title": "Create '{0}'",
     "mention.score.present": "Present in this scene",
     "mention.type.character": "Character",
+    "mention.alias.title": "Einfügeoptionen",
     "mention.type.codex": "Codex",
     "mention.type.globalnote": "Global Note",
     "mention.type.note": "Projektnotiz",

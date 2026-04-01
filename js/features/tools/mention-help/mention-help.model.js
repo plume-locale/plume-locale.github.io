@@ -58,6 +58,43 @@ const MentionHelpModel = {
     },
 
     /**
+     * Retourne les alias disponibles pour un personnage.
+     * @param {Object} character - L'objet personnage.
+     * @returns {Array<{label, value}>} - Liste des alias disponibles.
+     */
+    getCharacterAliases(character) {
+        if (!character) return [];
+        const aliases = [];
+
+        const firstName = character.firstName || '';
+        const lastName  = character.lastName  || '';
+        const nickname  = character.nickname  || '';
+        const fullName  = character.name || `${firstName} ${lastName}`.trim();
+
+        // Prénom uniquement
+        if (firstName) {
+            aliases.push({ label: 'Prénom',     value: firstName,  icon: 'user'    });
+        }
+
+        // Nom complet (seulement si différent du prénom)
+        if (fullName && fullName !== firstName) {
+            aliases.push({ label: 'Nom complet', value: fullName,  icon: 'id-card' });
+        }
+
+        // Surnom (seulement s'il existe et diffère du reste)
+        if (nickname && nickname !== firstName && nickname !== fullName) {
+            aliases.push({ label: 'Surnom',      value: nickname,  icon: 'star'    });
+        }
+
+        // Fallback minimal
+        if (aliases.length === 0 && fullName) {
+            aliases.push({ label: 'Nom',         value: fullName,  icon: 'user'    });
+        }
+
+        return aliases;
+    },
+
+    /**
      * Calcule un score de pertinence contextuelle.
      * @param {Object} item - L'entité à scorer.
      * @param {Object} context - { sceneId, recentlyMentionedIds, etc. }

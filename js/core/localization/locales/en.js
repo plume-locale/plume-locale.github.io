@@ -13,6 +13,7 @@ window.LOCALE_EN = {
 
     // --- Mentions ---
     "mention.type.character": "Character",
+    "mention.alias.title": "Insertion options",
     "mention.type.world": "World Element",
     "mention.type.globalnote": "Global Note",
     "mention.type.note": "Project Note",

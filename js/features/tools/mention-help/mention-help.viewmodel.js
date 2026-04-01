@@ -13,7 +13,10 @@ const MentionHelpViewModel = {
         activeElement: null,
         cursorPos: 0,
         triggerPos: 0,
-        savedRange: null
+        savedRange: null,
+        mode: 'suggestions',
+        activeSuggestionForAlias: null,
+        aliases: []
     },
 
     /**
@@ -129,30 +132,61 @@ const MentionHelpViewModel = {
     handleKeyDown(e) {
         if (!this.state.active) return false;
 
+        const list = this.state.mode === 'aliases' ? this.state.aliases : this.state.suggestions;
+
         switch (e.key) {
             case 'ArrowDown':
                 e.preventDefault();
-                this.state.selectedIndex = (this.state.selectedIndex + 1) % this.state.suggestions.length;
-                MentionHelpView.updateSelection(this.state.selectedIndex);
+                this.state.selectedIndex = (this.state.selectedIndex + 1) % list.length;
+                if (this.state.mode === 'aliases') {
+                    MentionHelpView.updateAliasSelection(this.state.selectedIndex);
+                } else {
+                    MentionHelpView.updateSelection(this.state.selectedIndex);
+                }
                 return true;
             case 'ArrowUp':
                 e.preventDefault();
-                this.state.selectedIndex = (this.state.selectedIndex - 1 + this.state.suggestions.length) % this.state.suggestions.length;
-                MentionHelpView.updateSelection(this.state.selectedIndex);
+                this.state.selectedIndex = (this.state.selectedIndex - 1 + list.length) % list.length;
+                if (this.state.mode === 'aliases') {
+                    MentionHelpView.updateAliasSelection(this.state.selectedIndex);
+                } else {
+                    MentionHelpView.updateSelection(this.state.selectedIndex);
+                }
                 return true;
             case 'Enter':
             case 'Tab':
                 e.preventDefault();
-                if (this.state.suggestions[this.state.selectedIndex]) {
-                    this.selectSuggestion(this.state.suggestions[this.state.selectedIndex]);
-                } else if (this.state.query.length > 2) {
-                    this.performQuickCreate();
+                if (this.state.mode === 'aliases') {
+                    if (this.state.aliases[this.state.selectedIndex]) {
+                        this.selectAlias(this.state.aliases[this.state.selectedIndex]);
+                    }
+                } else {
+                    if (this.state.suggestions[this.state.selectedIndex]) {
+                        this.selectSuggestion(this.state.suggestions[this.state.selectedIndex]);
+                    } else if (this.state.query.length > 2) {
+                        this.performQuickCreate();
+                    }
                 }
                 return true;
             case 'Escape':
                 e.preventDefault();
-                this.close();
+                if (this.state.mode === 'aliases') {
+                    this.state.mode = 'suggestions';
+                    this.state.selectedIndex = 0;
+                    MentionHelpView.render(this.state.suggestions, this.state.selectedIndex, this.state.activeElement);
+                } else {
+                    this.close();
+                }
                 return true;
+            case 'Backspace':
+                if (this.state.mode === 'aliases') {
+                    e.preventDefault();
+                    this.state.mode = 'suggestions';
+                    this.state.selectedIndex = 0;
+                    MentionHelpView.render(this.state.suggestions, this.state.selectedIndex, this.state.activeElement);
+                    return true;
+                }
+                return false;
         }
         return false;
     },
@@ -172,7 +206,42 @@ const MentionHelpViewModel = {
 
         const el = this.state.activeElement;
         if (!el) return;
+
+        // Choix de l'alias si personnage avec plusieurs alias
+        if (suggestion.type === 'character' && suggestion.originalItem) {
+            const aliases = MentionHelpModel.getCharacterAliases(suggestion.originalItem);
+            if (aliases && aliases.length > 1) {
+                this.state.mode = 'aliases';
+                this.state.activeSuggestionForAlias = suggestion;
+                this.state.aliases = aliases;
+                this.state.selectedIndex = 0;
+                MentionHelpView.renderAliases(aliases, this.state.selectedIndex, el, suggestion);
+                return;
+            }
+        }
+
         const name = suggestion.name;
+
+        if (el.isContentEditable) {
+            this.insertIntoContentEditable(el, name, suggestion);
+        } else {
+            this.insertIntoInput(el, name, suggestion);
+        }
+
+        this.close();
+    },
+
+    /**
+     * Sélectionne un alias spécifique pour un personnage.
+     */
+    selectAlias(alias) {
+        const suggestion = this.state.activeSuggestionForAlias;
+        if (!suggestion) return;
+
+        const el = this.state.activeElement;
+        if (!el) return;
+
+        const name = alias.value;
 
         if (el.isContentEditable) {
             this.insertIntoContentEditable(el, name, suggestion);
@@ -306,6 +375,9 @@ const MentionHelpViewModel = {
     close() {
         this.state.active = false;
         this.state.suggestions = [];
+        this.state.mode = 'suggestions';
+        this.state.activeSuggestionForAlias = null;
+        this.state.aliases = [];
         MentionHelpView.hide();
     },
 
