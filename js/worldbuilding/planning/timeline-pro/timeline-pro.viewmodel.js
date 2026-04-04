@@ -206,8 +206,8 @@ class TimelineProViewModel {
         <div style="display:grid; grid-template-columns: repeat(7, 1fr); gap:.4rem;">
           ${[
             {id:'pin', icon:'map-pin', label: Localization.t('timeline.pro.icon.pin')},
-            {id:'baby', icon:'baby', label: Localization.t('timeline.pro.icon.birth')},
-            {id:'skull', icon:'skull', label: Localization.t('timeline.pro.icon.death')},
+            {id:'birth', icon:'baby', label: Localization.t('timeline.pro.icon.birth')},
+            {id:'death', icon:'skull', label: Localization.t('timeline.pro.icon.death')},
             {id:'battle', icon:'swords', label: Localization.t('timeline.pro.icon.battle')},
             {id:'crown', icon:'crown', label: Localization.t('timeline.pro.icon.crown')},
             {id:'feather', icon:'feather', label: Localization.t('timeline.pro.icon.feather')},

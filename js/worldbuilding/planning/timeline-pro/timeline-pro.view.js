@@ -1602,9 +1602,12 @@ class TimelineProView {
                 ctx.shadowBlur = 0;
                 
                 // Content of point: Lucide Icon or Dot
+                // Rétrocompatibilité : anciens ids 'baby'→'birth', 'skull'→'death'
+                const ICON_ALIAS = { baby: 'birth', skull: 'death', circle: null, dot: null };
+                const resolvedIcon = ev.icon ? (ICON_ALIAS.hasOwnProperty(ev.icon) ? ICON_ALIAS[ev.icon] : ev.icon) : null;
                 ctx.fillStyle = isSel ? '#fff' : color;
-                if (ev.icon && ev.icon !== 'dot' && TimelineProView.ICON_PATHS[ev.icon]) {
-                    this._drawIcon(ctx, ev.icon, sx, cy, isSel ? 14 : 12, isSel ? '#fff' : color);
+                if (resolvedIcon && TimelineProView.ICON_PATHS[resolvedIcon]) {
+                    this._drawIcon(ctx, resolvedIcon, sx, cy, isSel ? 14 : 12, isSel ? '#fff' : color);
                 } else {
                     ctx.beginPath(); ctx.arc(sx, cy, isSel ? 4.5 : 3.5, 0, Math.PI * 2); ctx.fill();
                 }
