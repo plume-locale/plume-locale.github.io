@@ -33,6 +33,12 @@ class NarrativeOverviewView {
         const passagesByAct = this.viewModel.getPassagesByAct();
         const stats = this.viewModel.getStatistics();
 
+        // Sauvegarder le focus de la barre de recherche
+        const activeElement = document.activeElement;
+        const isSearchFocused = activeElement && activeElement.id === 'narrativeOverviewSearchInput';
+        const selectionStart = isSearchFocused ? activeElement.selectionStart : 0;
+        const selectionEnd = isSearchFocused ? activeElement.selectionEnd : 0;
+
         let html = `
             <div class="narrative-overview-header">
                 <div class="narrative-overview-title-row">
@@ -54,11 +60,20 @@ class NarrativeOverviewView {
                         </button>
                     </div>
                 </div>
-                <div class="narrative-overview-stats">
+                <div class="narrative-overview-stats" style="margin-bottom: 0.75rem;">
                     ${stats.total} passage${stats.total > 1 ? 's' : ''}
                     (${stats.structureBlocks} structuré${stats.structureBlocks > 1 ? 's' : ''})
                 </div>
+                
+                <div class="narrative-overview-search">
+                    <input type="text" id="narrativeOverviewSearchInput" 
+                           class="narrative-search-input"
+                           placeholder="Rechercher (texte, titre, beat)..." 
+                           value="${this.escapeHtml(this.viewModel.searchQuery || '')}" 
+                           oninput="NarrativeOverviewHandlers.onSearch(this.value)">
+                </div>
             </div>
+            
             <div class="narrative-overview-content">
         `;
 
@@ -83,6 +98,15 @@ class NarrativeOverviewView {
 
         html += `</div>`;
         container.innerHTML = html;
+
+        // Restaurer le focus si nécessaire
+        if (isSearchFocused) {
+            const newSearchInput = document.getElementById('narrativeOverviewSearchInput');
+            if (newSearchInput) {
+                newSearchInput.focus();
+                newSearchInput.setSelectionRange(selectionStart, selectionEnd);
+            }
+        }
 
         // Initialiser les icônes Lucide
         if (typeof lucide !== 'undefined') {

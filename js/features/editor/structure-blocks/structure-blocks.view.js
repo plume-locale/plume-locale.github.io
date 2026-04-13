@@ -3,6 +3,9 @@
  * StructureBlocksUI
  * Allows wrapping selected text in a customizable styled block with a label.
  * Full CRUD: Create, Read (Render), Update (Edit label/color), Delete (Remove/Unwrap).
+ *
+ * v2 — Narrative Frameworks: dynamic presets per narrative methodology
+ *       (3 Acts, Save the Cat, Story Circle, Hero's Journey, Free)
  */
 const StructureBlockUI = {
     lastRange: null,
@@ -10,13 +13,120 @@ const StructureBlockUI = {
 
     // Configuration
     STORAGE_KEY: 'plume_structure_recent_colors',
-    PRESET_LABELS: [
-        'BEAT', 'INCIDENT', 'DÉCLENCHEUR', 'PONT 1', 'PONT 2',
-        'POINT MÉDIAN', 'BASCULE', 'CRISE', 'CLIMAX',
-        'RÉSOLUTION', 'FLASHBACK', 'PROLOGUE', 'ÉPILOGUE'
-    ],
+    FRAMEWORK_KEY: 'plume_structure_framework',
     DEFAULT_COLORS: ['#ff8c42', '#ff6b6b', '#ffd93d', '#51cf66', '#4a9eff', '#a78bfa'],
     recentColors: [],
+    currentFramework: 'free',
+    _beatHintTimer: null,
+
+    // ---------------------------------------------------------------------------
+    // NARRATIVE FRAMEWORKS
+    // ---------------------------------------------------------------------------
+    NARRATIVE_FRAMEWORKS: {
+        free: {
+            id: 'free',
+            icon: 'pencil',
+            labelKey: 'modal.structure_block.framework.free',
+            labelFallback: 'Free',
+            beats: [
+                { textKey: 'narrative_fw.free.beat.0', color: '#ff8c42' },
+                { textKey: 'narrative_fw.free.beat.1', color: '#ffd93d' },
+                { textKey: 'narrative_fw.free.beat.2', color: '#ffd93d' },
+                { textKey: 'narrative_fw.free.beat.3', color: '#ff8c42' },
+                { textKey: 'narrative_fw.free.beat.4', color: '#ff8c42' },
+                { textKey: 'narrative_fw.free.beat.5', color: '#ff6b6b' },
+                { textKey: 'narrative_fw.free.beat.6', color: '#ff6b6b' },
+                { textKey: 'narrative_fw.free.beat.7', color: '#a78bfa' },
+                { textKey: 'narrative_fw.free.beat.8', color: '#ff6b6b' },
+                { textKey: 'narrative_fw.free.beat.9', color: '#51cf66' },
+                { textKey: 'narrative_fw.free.beat.10', color: '#4a9eff' },
+                { textKey: 'narrative_fw.free.beat.11', color: '#4a9eff' },
+                { textKey: 'narrative_fw.free.beat.12', color: '#51cf66' },
+            ]
+        },
+
+        acts3: {
+            id: 'acts3',
+            icon: 'layout-template',
+            labelKey: 'modal.structure_block.framework.acts3',
+            labelFallback: '3 Acts',
+            beats: [
+                { textKey: 'narrative_fw.acts3.beat.0', color: '#4a9eff', descKey: 'narrative_fw.acts3.beat.0.desc' },
+                { textKey: 'narrative_fw.acts3.beat.1', color: '#ffd93d', descKey: 'narrative_fw.acts3.beat.1.desc' },
+                { textKey: 'narrative_fw.acts3.beat.2', color: '#ff8c42', descKey: 'narrative_fw.acts3.beat.2.desc' },
+                { textKey: 'narrative_fw.acts3.beat.3', color: '#ff6b6b', descKey: 'narrative_fw.acts3.beat.3.desc' },
+                { textKey: 'narrative_fw.acts3.beat.4', color: '#a78bfa', descKey: 'narrative_fw.acts3.beat.4.desc' },
+                { textKey: 'narrative_fw.acts3.beat.5', color: '#ff6b6b', descKey: 'narrative_fw.acts3.beat.5.desc' },
+                { textKey: 'narrative_fw.acts3.beat.6', color: '#51cf66', descKey: 'narrative_fw.acts3.beat.6.desc' },
+            ]
+        },
+
+        save_the_cat: {
+            id: 'save_the_cat',
+            icon: 'cat',
+            labelKey: 'modal.structure_block.framework.stc',
+            labelFallback: 'Save the Cat',
+            beats: [
+                { textKey: 'narrative_fw.stc.beat.0',  color: '#4a9eff', descKey: 'narrative_fw.stc.beat.0.desc' },
+                { textKey: 'narrative_fw.stc.beat.1',  color: '#4a9eff', descKey: 'narrative_fw.stc.beat.1.desc' },
+                { textKey: 'narrative_fw.stc.beat.2',  color: '#4a9eff', descKey: 'narrative_fw.stc.beat.2.desc' },
+                { textKey: 'narrative_fw.stc.beat.3',  color: '#ffd93d', descKey: 'narrative_fw.stc.beat.3.desc' },
+                { textKey: 'narrative_fw.stc.beat.4',  color: '#ffd93d', descKey: 'narrative_fw.stc.beat.4.desc' },
+                { textKey: 'narrative_fw.stc.beat.5',  color: '#ff8c42', descKey: 'narrative_fw.stc.beat.5.desc' },
+                { textKey: 'narrative_fw.stc.beat.6',  color: '#51cf66', descKey: 'narrative_fw.stc.beat.6.desc' },
+                { textKey: 'narrative_fw.stc.beat.7',  color: '#51cf66', descKey: 'narrative_fw.stc.beat.7.desc' },
+                { textKey: 'narrative_fw.stc.beat.8',  color: '#ffd93d', descKey: 'narrative_fw.stc.beat.8.desc' },
+                { textKey: 'narrative_fw.stc.beat.9',  color: '#ff6b6b', descKey: 'narrative_fw.stc.beat.9.desc' },
+                { textKey: 'narrative_fw.stc.beat.10', color: '#ff6b6b', descKey: 'narrative_fw.stc.beat.10.desc' },
+                { textKey: 'narrative_fw.stc.beat.11', color: '#a78bfa', descKey: 'narrative_fw.stc.beat.11.desc' },
+                { textKey: 'narrative_fw.stc.beat.12', color: '#a78bfa', descKey: 'narrative_fw.stc.beat.12.desc' },
+                { textKey: 'narrative_fw.stc.beat.13', color: '#ff8c42', descKey: 'narrative_fw.stc.beat.13.desc' },
+                { textKey: 'narrative_fw.stc.beat.14', color: '#4a9eff', descKey: 'narrative_fw.stc.beat.14.desc' },
+            ]
+        },
+
+        story_circle: {
+            id: 'story_circle',
+            icon: 'circle',
+            labelKey: 'modal.structure_block.framework.circle',
+            labelFallback: 'Story Circle',
+            beats: [
+                { textKey: 'narrative_fw.circle.beat.0', color: '#4a9eff', descKey: 'narrative_fw.circle.beat.0.desc' },
+                { textKey: 'narrative_fw.circle.beat.1', color: '#ffd93d', descKey: 'narrative_fw.circle.beat.1.desc' },
+                { textKey: 'narrative_fw.circle.beat.2', color: '#ff8c42', descKey: 'narrative_fw.circle.beat.2.desc' },
+                { textKey: 'narrative_fw.circle.beat.3', color: '#ff8c42', descKey: 'narrative_fw.circle.beat.3.desc' },
+                { textKey: 'narrative_fw.circle.beat.4', color: '#51cf66', descKey: 'narrative_fw.circle.beat.4.desc' },
+                { textKey: 'narrative_fw.circle.beat.5', color: '#ff6b6b', descKey: 'narrative_fw.circle.beat.5.desc' },
+                { textKey: 'narrative_fw.circle.beat.6', color: '#a78bfa', descKey: 'narrative_fw.circle.beat.6.desc' },
+                { textKey: 'narrative_fw.circle.beat.7', color: '#51cf66', descKey: 'narrative_fw.circle.beat.7.desc' },
+            ]
+        },
+
+        hero_journey: {
+            id: 'hero_journey',
+            icon: 'sword',
+            labelKey: 'modal.structure_block.framework.hero',
+            labelFallback: "Hero's Journey",
+            beats: [
+                { textKey: 'narrative_fw.hero.beat.0',  color: '#4a9eff', descKey: 'narrative_fw.hero.beat.0.desc' },
+                { textKey: 'narrative_fw.hero.beat.1',  color: '#ffd93d', descKey: 'narrative_fw.hero.beat.1.desc' },
+                { textKey: 'narrative_fw.hero.beat.2',  color: '#ff8c42', descKey: 'narrative_fw.hero.beat.2.desc' },
+                { textKey: 'narrative_fw.hero.beat.3',  color: '#51cf66', descKey: 'narrative_fw.hero.beat.3.desc' },
+                { textKey: 'narrative_fw.hero.beat.4',  color: '#ff8c42', descKey: 'narrative_fw.hero.beat.4.desc' },
+                { textKey: 'narrative_fw.hero.beat.5',  color: '#ff8c42', descKey: 'narrative_fw.hero.beat.5.desc' },
+                { textKey: 'narrative_fw.hero.beat.6',  color: '#ffd93d', descKey: 'narrative_fw.hero.beat.6.desc' },
+                { textKey: 'narrative_fw.hero.beat.7',  color: '#ff6b6b', descKey: 'narrative_fw.hero.beat.7.desc' },
+                { textKey: 'narrative_fw.hero.beat.8',  color: '#51cf66', descKey: 'narrative_fw.hero.beat.8.desc' },
+                { textKey: 'narrative_fw.hero.beat.9',  color: '#a78bfa', descKey: 'narrative_fw.hero.beat.9.desc' },
+                { textKey: 'narrative_fw.hero.beat.10', color: '#ff6b6b', descKey: 'narrative_fw.hero.beat.10.desc' },
+                { textKey: 'narrative_fw.hero.beat.11', color: '#51cf66', descKey: 'narrative_fw.hero.beat.11.desc' },
+            ]
+        }
+    },
+
+    // ---------------------------------------------------------------------------
+    // ENTRY POINTS
+    // ---------------------------------------------------------------------------
 
     /**
      * Entry point: Wrap selected text
@@ -50,6 +160,10 @@ const StructureBlockUI = {
         this.openModal(label, color);
     },
 
+    // ---------------------------------------------------------------------------
+    // MODAL LIFECYCLE
+    // ---------------------------------------------------------------------------
+
     /**
      * Open the configuration modal
      */
@@ -61,7 +175,12 @@ const StructureBlockUI = {
             if (modal) modal.classList.add('active');
         }
 
+        // Load persisted state
         this.loadRecentColors();
+        this.loadFramework();
+
+        // Render all dynamic sections
+        this.renderFrameworks();
         this.renderPresets();
 
         const inputLabel = document.getElementById('structureBlockLabel');
@@ -78,6 +197,9 @@ const StructureBlockUI = {
             this.setColor(color);
         }
 
+        // Hide beat hint on open
+        this.hideBeatHint();
+
         // Update modal title depending on mode
         const titleEl = document.querySelector('#structureBlockModal h2 [data-i18n]');
         if (titleEl) {
@@ -87,36 +209,137 @@ const StructureBlockUI = {
         }
     },
 
+    closeModal() {
+        if (typeof closeModal === 'function') {
+            closeModal('structureBlockModal');
+        } else {
+            const modal = document.getElementById('structureBlockModal');
+            if (modal) modal.classList.remove('active');
+        }
+        this.editingBlock = null;
+        this.hideBeatHint();
+    },
+
+    // ---------------------------------------------------------------------------
+    // FRAMEWORK SELECTOR
+    // ---------------------------------------------------------------------------
+
     /**
-     * Hydrates the presets in the modal
+     * Render the framework pill buttons
+     */
+    renderFrameworks() {
+        const container = document.getElementById('structureBlockFrameworks');
+        if (!container) return;
+
+        container.innerHTML = '';
+
+        Object.values(this.NARRATIVE_FRAMEWORKS).forEach(fw => {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'framework-pill' + (this.currentFramework === fw.id ? ' active' : '');
+            btn.dataset.frameworkId = fw.id;
+            btn.title = Localization.t(fw.labelKey) || fw.labelFallback;
+
+            const icon = document.createElement('i');
+            icon.setAttribute('data-lucide', fw.icon);
+            icon.style.cssText = 'width:13px;height:13px;flex-shrink:0;';
+
+            const span = document.createElement('span');
+            span.textContent = Localization.t(fw.labelKey) || fw.labelFallback;
+
+            btn.appendChild(icon);
+            btn.appendChild(span);
+            btn.onclick = () => this.selectFramework(fw.id);
+            container.appendChild(btn);
+        });
+
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+    },
+
+    /**
+     * Select a narrative framework — updates presets & persists choice
+     */
+    selectFramework(id) {
+        if (!this.NARRATIVE_FRAMEWORKS[id]) return;
+        this.currentFramework = id;
+        localStorage.setItem(this.FRAMEWORK_KEY, id);
+
+        // Update pill active states
+        document.querySelectorAll('.framework-pill').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.frameworkId === id);
+        });
+
+        this.renderPresets();
+        this.hideBeatHint();
+    },
+
+    loadFramework() {
+        const saved = localStorage.getItem(this.FRAMEWORK_KEY);
+        this.currentFramework = saved && this.NARRATIVE_FRAMEWORKS[saved] ? saved : 'free';
+    },
+
+    // ---------------------------------------------------------------------------
+    // PRESETS (Labels + Colors)
+    // ---------------------------------------------------------------------------
+
+    /**
+     * Render label presets and color presets for the current framework
      */
     renderPresets() {
-        // Render Labels
+        const fw = this.NARRATIVE_FRAMEWORKS[this.currentFramework] || this.NARRATIVE_FRAMEWORKS.free;
         const labelContainer = document.getElementById('structureBlockLabelPresets');
+
+        // --- Labels ---
         if (labelContainer) {
             labelContainer.innerHTML = '';
-            this.PRESET_LABELS.forEach(text => {
+            fw.beats.forEach(beat => {
+                const label = Localization.t(beat.textKey) || beat.textKey;
+                const desc  = beat.descKey ? Localization.t(beat.descKey) : null;
+
                 const btn = document.createElement('button');
                 btn.type = 'button';
                 btn.className = 'preset-btn';
-                btn.textContent = text;
+                btn.textContent = label;
+                // Color dot if beat has a specific color
+                if (beat.color && this.currentFramework !== 'free') {
+                    btn.style.setProperty('--preset-dot', beat.color);
+                    btn.classList.add('has-color-dot');
+                }
                 btn.onclick = () => {
                     const input = document.getElementById('structureBlockLabel');
-                    if (input) input.value = text;
+                    if (input) input.value = label;
+                    // Auto-apply suggested color for structured frameworks
+                    if (beat.color && this.currentFramework !== 'free') {
+                        this.setColor(beat.color);
+                    }
+                    // Show description
+                    if (desc) {
+                        this.showBeatHint(desc);
+                    } else {
+                        this.hideBeatHint();
+                    }
                 };
                 labelContainer.appendChild(btn);
             });
         }
 
-        // Render Colors (Standard + Recent)
+        // --- Colors ---
         const colorContainer = document.getElementById('structureBlockColorPresets');
         if (colorContainer) {
             colorContainer.innerHTML = '';
-            // Only show unique colors, with recent ones first excluding standard ones
-            const uniqueRecent = this.recentColors.filter(c => !this.DEFAULT_COLORS.includes(c.toLowerCase()));
-            const allToDisplay = [...this.DEFAULT_COLORS, ...uniqueRecent].slice(0, 12); // Max 12 swatches
 
-            allToDisplay.forEach(c => {
+            let colorsToShow;
+            if (this.currentFramework !== 'free') {
+                // Show unique colors from the framework beats
+                const fwColors = [...new Set(fw.beats.map(b => b.color).filter(Boolean))];
+                const uniqueRecent = this.recentColors.filter(c => !fwColors.includes(c.toLowerCase()));
+                colorsToShow = [...fwColors, ...uniqueRecent].slice(0, 12);
+            } else {
+                const uniqueRecent = this.recentColors.filter(c => !this.DEFAULT_COLORS.includes(c.toLowerCase()));
+                colorsToShow = [...this.DEFAULT_COLORS, ...uniqueRecent].slice(0, 12);
+            }
+
+            colorsToShow.forEach(c => {
                 const swatch = document.createElement('div');
                 swatch.className = 'color-swatch';
                 swatch.style.backgroundColor = c;
@@ -125,6 +348,34 @@ const StructureBlockUI = {
             });
         }
     },
+
+    // ---------------------------------------------------------------------------
+    // BEAT HINT
+    // ---------------------------------------------------------------------------
+
+    showBeatHint(text) {
+        const hint = document.getElementById('structureBlockBeatHint');
+        if (!hint) return;
+        hint.textContent = text;
+        hint.style.display = 'block';
+
+        // Clear previous timer
+        if (this._beatHintTimer) clearTimeout(this._beatHintTimer);
+        this._beatHintTimer = setTimeout(() => this.hideBeatHint(), 8000);
+    },
+
+    hideBeatHint() {
+        const hint = document.getElementById('structureBlockBeatHint');
+        if (hint) hint.style.display = 'none';
+        if (this._beatHintTimer) {
+            clearTimeout(this._beatHintTimer);
+            this._beatHintTimer = null;
+        }
+    },
+
+    // ---------------------------------------------------------------------------
+    // COLOR HELPERS
+    // ---------------------------------------------------------------------------
 
     loadRecentColors() {
         try {
@@ -163,6 +414,10 @@ const StructureBlockUI = {
         });
     },
 
+    // ---------------------------------------------------------------------------
+    // CONFIRM / APPLY
+    // ---------------------------------------------------------------------------
+
     /**
      * Confirms modal action
      */
@@ -181,15 +436,9 @@ const StructureBlockUI = {
         this.closeModal();
     },
 
-    closeModal() {
-        if (typeof closeModal === 'function') {
-            closeModal('structureBlockModal');
-        } else {
-            const modal = document.getElementById('structureBlockModal');
-            if (modal) modal.classList.remove('active');
-        }
-        this.editingBlock = null;
-    },
+    // ---------------------------------------------------------------------------
+    // CRUD
+    // ---------------------------------------------------------------------------
 
     /**
      * Create a new block
@@ -242,16 +491,100 @@ const StructureBlockUI = {
      * Deletes the block
      */
     removeBlock(block, unwrap = true) {
+        const parent = block.parentNode;
+        const nextSibling = block.nextSibling;
+        
+        let movedNodes = [];
+        const content = block.querySelector('.structure-block-content');
+        
         if (unwrap) {
-            const content = block.querySelector('.structure-block-content');
             if (content) {
                 while (content.firstChild) {
-                    block.parentNode.insertBefore(content.firstChild, block);
+                    const child = content.firstChild;
+                    movedNodes.push(child);
+                    parent.insertBefore(child, block);
                 }
             }
         }
+        
         block.remove();
         this.onChanged();
+        
+        const msg = unwrap 
+            ? (Localization.t('toast.structure_block.unwrapped') || 'Bloc retiré') 
+            : (Localization.t('toast.structure_block.deleted') || 'Bloc supprimé');
+
+        this.showUndoToast(msg, () => {
+            if (unwrap && content) {
+                // Remettre les nœuds dans le content
+                movedNodes.forEach(node => content.appendChild(node));
+            }
+            // Remettre le bloc à sa place
+            parent.insertBefore(block, nextSibling);
+            this.onChanged();
+        });
+    },
+
+    showUndoToast(message, undoAction) {
+        // Supprimer l'ancien toast s'il existe
+        const existingToast = document.querySelector('.sb-undo-toast');
+        if (existingToast) {
+            existingToast.remove();
+        }
+
+        const toast = document.createElement('div');
+        toast.className = 'sb-undo-toast';
+        toast.innerHTML = `
+            <span>${message}</span>
+            <button class="sb-toast-undo-btn">${Localization.t('btn.undo') || 'Annuler'}</button>
+        `;
+        document.body.appendChild(toast);
+
+        // Styling inline custom
+        Object.assign(toast.style, {
+            position: 'fixed',
+            bottom: '40px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            background: 'var(--bg-secondary, #2d2d2d)',
+            color: 'var(--text-primary, #ffffff)',
+            border: '1px solid var(--border-color)',
+            padding: '12px 24px',
+            borderRadius: '8px',
+            boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '16px',
+            zIndex: '9999',
+            fontFamily: 'system-ui, sans-serif',
+            fontSize: '14px',
+            animation: 'sbToastSlideUp 0.3s ease forwards'
+        });
+
+        // Add keyframe if not exists
+        if (!document.getElementById('sbToastStyles')) {
+            const style = document.createElement('style');
+            style.id = 'sbToastStyles';
+            style.textContent = `
+                @keyframes sbToastSlideUp { from { transform: translate(-50%, 100%); opacity: 0; } to { transform: translate(-50%, 0); opacity: 1; } }
+                @keyframes sbToastFadeOut { from { opacity: 1; transform: translate(-50%, 0); } to { opacity: 0; transform: translate(-50%, 10px); } }
+                .sb-toast-undo-btn { background: none; border: none; color: var(--accent-gold, #ffb703); font-weight: bold; cursor: pointer; padding: 0; font-size: 14px; }
+                .sb-toast-undo-btn:hover { text-decoration: underline; }
+            `;
+            document.head.appendChild(style);
+        }
+
+        let timeout = setTimeout(() => {
+            toast.style.animation = 'sbToastFadeOut 0.3s ease forwards';
+            setTimeout(() => toast.remove(), 300);
+        }, 5000);
+
+        toast.querySelector('.sb-toast-undo-btn').addEventListener('click', () => {
+            clearTimeout(timeout);
+            toast.style.animation = 'sbToastFadeOut 0.2s ease forwards';
+            setTimeout(() => toast.remove(), 200);
+            if (undoAction) undoAction();
+        });
     },
 
     upgradeLegacyBlocks() {
@@ -283,7 +616,7 @@ const StructureBlockUI = {
         header.contentEditable = 'false';
 
         const icon = document.createElement('i');
-        icon.setAttribute('data-lucide', 'layers');
+        icon.setAttribute('data-lucide', this._getIconForLabel(labelText));
         icon.style.width = '14px';
         icon.style.height = '14px';
 
@@ -329,6 +662,31 @@ const StructureBlockUI = {
     },
 
     /**
+     * Returns the appropriate Lucide icon name for a given label text
+     */
+    _getIconForLabel(label) {
+        if (!label) return 'layers';
+        const upper = label.toUpperCase();
+        if (upper.includes('CLIMAX'))       return 'flame';
+        if (upper.includes('BEAT'))         return 'zap';
+        if (upper.includes('FLASHBACK'))    return 'rewind';
+        if (upper.includes('PROLOGUE'))     return 'book-open';
+        if (upper.includes('ÉPILOGUE') || upper.includes('EPILOGUE')) return 'book-open';
+        if (upper.includes('RÉSOLUTION') || upper.includes('RESOLUTION')) return 'sunset';
+        if (upper.includes('INCIDENT'))     return 'alert-circle';
+        if (upper.includes('MENTOR'))       return 'user-check';
+        if (upper.includes('CRISE') || upper.includes('CRISIS')) return 'alert-triangle';
+        if (upper.includes('RETOUR') || upper.includes('RETURN')) return 'corner-up-left';
+        if (upper.includes('SEUIL') || upper.includes('PASSAGE')) return 'door-open';
+        if (upper.includes('HÉROS') || upper.includes('HEROS'))  return 'sword';
+        return 'layers';
+    },
+
+    // ---------------------------------------------------------------------------
+    // INIT & EVENT DELEGATION
+    // ---------------------------------------------------------------------------
+
+    /**
      * Initialize event delegation
      */
     init() {
@@ -345,13 +703,9 @@ const StructureBlockUI = {
             if (btn.classList.contains('action-edit')) {
                 this.editBlock(block);
             } else if (btn.classList.contains('action-unwrap')) {
-                if (confirm(Localization.t('modal.structure_block.confirm_unwrap') || 'Retirer le bloc ?')) {
-                    this.removeBlock(block, true);
-                }
+                this.removeBlock(block, true);
             } else if (btn.classList.contains('action-delete')) {
-                if (confirm(Localization.t('modal.structure_block.confirm_delete') || 'Supprimer le bloc ET son contenu ?')) {
-                    this.removeBlock(block, false);
-                }
+                this.removeBlock(block, false);
             } else if (btn.classList.contains('action-toggle')) {
                 block.classList.toggle('collapsed');
                 const isCollapsed = block.classList.contains('collapsed');
@@ -377,7 +731,7 @@ const StructureBlockUI = {
     },
 
     /**
-     * Prevent merging content outside of structure blocks or deleting them 
+     * Prevent merging content outside of structure blocks or deleting them
      * in a way that breaks the UI (merging with previous paragraph).
      */
     handleGlobalKeyDown(e) {

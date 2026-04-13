@@ -21,6 +21,7 @@ class NarrativeOverviewViewModel {
         this.collapsedActs = new Set();     // IDs des actes repliés
         this.activePassageId = null;        // ID du passage actuellement actif
         this.compactMode = false;           // Mode compact (bandelettes label + mots)
+        this.searchQuery = '';              // Requête de filtre
     }
 
     /**
@@ -61,11 +62,13 @@ class NarrativeOverviewViewModel {
             });
         }
 
-        this.passages.forEach(passage => {
+        const passagesToProcess = this.searchQuery ? this.searchPassages(this.searchQuery) : this.passages;
+
+        passagesToProcess.forEach(passage => {
             if (!byAct.has(passage.actId)) {
                 byAct.set(passage.actId, {
                     actId: passage.actId,
-                    actTitle: passage.actTitle,
+                    actTitle: passage.actTitle || `Acte ${passage.actId}`,
                     passages: []
                 });
             }
@@ -73,7 +76,14 @@ class NarrativeOverviewViewModel {
         });
 
         // Retourner sous forme de tableau, ordre d'insertion préservé par Map
-        return Array.from(byAct.values());
+        let result = Array.from(byAct.values());
+        
+        // Si on fait une recherche, on ne garde que les actes qui ont des résultats
+        if (this.searchQuery) {
+            result = result.filter(group => group.passages.length > 0);
+        }
+        
+        return result;
     }
 
     /**

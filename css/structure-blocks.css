@@ -112,7 +112,59 @@
     letter-spacing: 0.05em;
     transition: all 0.2s ease;
     font-family: 'Source Code Pro', monospace;
+    position: relative;
 }
+
+/* Color dot for framework presets */
+.preset-btn.has-color-dot::before {
+    content: '';
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background-color: var(--preset-dot, var(--accent-gold));
+    margin-right: 5px;
+    vertical-align: middle;
+    flex-shrink: 0;
+}
+
+/* --- Framework Pills --- */
+.framework-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.75rem;
+    border-radius: 20px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-primary);
+    color: var(--text-muted);
+    font-size: 0.72rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    letter-spacing: 0.02em;
+}
+
+.framework-pill:hover {
+    border-color: var(--accent-gold);
+    color: var(--text-primary);
+    background: rgba(255, 217, 61, 0.05);
+    transform: translateY(-1px);
+}
+
+.framework-pill.active {
+    background: rgba(255, 217, 61, 0.12);
+    border-color: var(--accent-gold);
+    color: var(--accent-gold);
+    box-shadow: 0 0 0 2px rgba(255, 217, 61, 0.15);
+}
+
+.framework-pill svg,
+.framework-pill [data-lucide] {
+    opacity: 0.85;
+}
+
 
 .preset-btn:hover {
     border-color: var(--accent-gold);

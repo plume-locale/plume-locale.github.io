@@ -11,6 +11,21 @@
 const NarrativeOverviewHandlers = {
 
     /**
+     * Filtre les passages de l'aperçu par texte
+     * 
+     * @param {string} query - Texte de recherche
+     */
+    onSearch(query) {
+        const viewModel = window.narrativeOverviewViewModel;
+        const view = window.narrativeOverviewView;
+
+        if (!viewModel || !view) return;
+
+        viewModel.searchQuery = query;
+        view.render();
+    },
+
+    /**
      * Toggle le mode compact/détaillé
      */
     toggleCompactMode() {
