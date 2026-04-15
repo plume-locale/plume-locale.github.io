@@ -333,6 +333,40 @@ const ImportExportViewModel = {
         }
     },
 
+    /**
+     * Met à jour la durée de session Google Drive.
+     * Met à jour le service et rafraîchit le session_expires_at du token stocké
+     * sans forcer une reconnexion.
+     * @param {string|number} seconds - Duration in seconds
+     */
+    setGDriveSessionDuration: function (seconds) {
+        if (typeof GoogleDriveService === 'undefined') return;
+        const secs = parseInt(seconds, 10);
+        if (isNaN(secs) || secs <= 0) return;
+
+        GoogleDriveService.setSessionDuration(secs);
+
+        // Rafraîchir session_expires_at dans le token stocké si l'utilisateur est connecté
+        if (GoogleDriveService.accessToken) {
+            try {
+                const stored = localStorage.getItem('gd_token');
+                if (stored) {
+                    const tokenData = JSON.parse(stored);
+                    tokenData.session_expires_at = Date.now() + (secs * 1000);
+                    localStorage.setItem('gd_token', JSON.stringify(tokenData));
+                }
+            } catch (e) {}
+        }
+
+        // Feedback visuel
+        const hours = secs >= 86400
+            ? Math.round(secs / 86400) + (typeof Localization !== 'undefined' ? ' ' + (Localization.t('gdrive.session.unit_days') || 'j') : 'j')
+            : Math.round(secs / 3600) + (typeof Localization !== 'undefined' ? ' ' + (Localization.t('gdrive.session.unit_hours') || 'h') : 'h');
+        ImportExportView.showNotification(
+            (typeof Localization !== 'undefined' ? Localization.t('gdrive.session.duration_saved', hours) : `Durée de session mise à jour : ${hours}`)
+        );
+    },
+
     syncNowWithGDrive: async function () {
         if (typeof GoogleDriveService === 'undefined' || !GoogleDriveService.accessToken) {
             alert(Localization.t('gdrive.error.not_connected'));

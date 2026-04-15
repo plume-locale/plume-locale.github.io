@@ -323,6 +323,14 @@ const ImportExportView = {
                 avatarEl.innerHTML = `<img src="${user.picture}" style="width:100%;height:100%;object-fit:cover;">`;
             }
 
+            // Synchroniser le sélecteur de durée de session
+            if (typeof GoogleDriveService !== 'undefined') {
+                const durationSelect = document.getElementById('hub-gdrive-session-duration');
+                if (durationSelect) {
+                    durationSelect.value = String(GoogleDriveService.getSessionDuration());
+                }
+            }
+
             // Sync the list of backups
             ImportExportViewModel.refreshBackupsList();
         } else {

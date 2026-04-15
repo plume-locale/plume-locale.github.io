@@ -3835,5 +3835,16 @@ window.LOCALE_ES = {
     "gdrive.status.restored": "Restaurado",
     "gdrive.status.downloading": "Descargando...",
     "gdrive.warning.session_expired": "⚠️ Tu sesión de Google Drive ha caducado. Plume ya no guarda automáticamente. Por favor, vuelve a conectarte.",
-    "gdrive.warning.reconnect_btn": "Reconectarse"
+    "gdrive.warning.reconnect_btn": "Reconectarse",
+    "gdrive.session.duration_label": "Duración de sesión",
+    "gdrive.session.duration_hint": "Cuánto tiempo Plume mantiene activa tu conexión de Google Drive entre recargas de página.",
+    "gdrive.session.duration.1h": "1 hora",
+    "gdrive.session.duration.4h": "4 horas",
+    "gdrive.session.duration.8h": "8 horas",
+    "gdrive.session.duration.24h": "24 horas (recomendado)",
+    "gdrive.session.duration.7d": "7 días",
+    "gdrive.session.duration.30d": "30 días",
+    "gdrive.session.duration_saved": "✓ Sesión de Google Drive: {0}",
+    "gdrive.session.unit_hours": "h",
+    "gdrive.session.unit_days": "d"
 };

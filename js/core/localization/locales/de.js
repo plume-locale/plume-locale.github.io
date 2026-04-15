@@ -3845,5 +3845,16 @@ window.LOCALE_DE = {
     "gdrive.status.restored": "Wiederhergestellt",
     "gdrive.status.downloading": "Herunterladen...",
     "gdrive.warning.session_expired": "⚠️ Ihre Google Drive-Sitzung ist abgelaufen. Plume sichert nicht mehr automatisch. Bitte erneut anmelden.",
-    "gdrive.warning.reconnect_btn": "Erneut anmelden"
+    "gdrive.warning.reconnect_btn": "Erneut anmelden",
+    "gdrive.session.duration_label": "Sitzungsdauer",
+    "gdrive.session.duration_hint": "Wie lange Plume Ihre Google Drive-Verbindung zwischen Seitenladevorgängen aktiv hält.",
+    "gdrive.session.duration.1h": "1 Stunde",
+    "gdrive.session.duration.4h": "4 Stunden",
+    "gdrive.session.duration.8h": "8 Stunden",
+    "gdrive.session.duration.24h": "24 Stunden (empfohlen)",
+    "gdrive.session.duration.7d": "7 Tage",
+    "gdrive.session.duration.30d": "30 Tage",
+    "gdrive.session.duration_saved": "✓ Google Drive Sitzung: {0}",
+    "gdrive.session.unit_hours": "Std",
+    "gdrive.session.unit_days": "T"
 };

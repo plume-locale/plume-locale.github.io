@@ -28,6 +28,36 @@ const GoogleDriveService = {
     onTokenExpired: null, // Callback appelé quand le token GDrive expire sans re-auth possible
     _hadStoredToken: false, // Vrai si un token était persisted au démarrage
 
+    // Clé de stockage LocalStorage pour la durée de session
+    SESSION_DURATION_KEY: 'gd_session_duration',
+
+    /**
+     * Retourne la durée de session configurée par l'utilisateur, en secondes.
+     * Défaut : 86400 (24 heures).
+     */
+    getSessionDuration: function () {
+        try {
+            const stored = localStorage.getItem(this.SESSION_DURATION_KEY);
+            if (stored) {
+                const parsed = parseInt(stored, 10);
+                if (!isNaN(parsed) && parsed > 0) return parsed;
+            }
+        } catch (e) {}
+        return 86400; // 24h par défaut
+    },
+
+    /**
+     * Enregistre la durée de session choisie par l'utilisateur.
+     * @param {number} seconds - Durée en secondes
+     */
+    setSessionDuration: function (seconds) {
+        try {
+            localStorage.setItem(this.SESSION_DURATION_KEY, String(seconds));
+        } catch (e) {
+            console.warn('[GDrive] Impossible de sauvegarder la durée de session:', e);
+        }
+    },
+
     init: function (onInitCallback) {
         if (this.gapiInited && this.gisInited) {
             if (onInitCallback) onInitCallback(true);
@@ -121,8 +151,20 @@ const GoogleDriveService = {
             if (stored) {
                 try {
                     const tokenData = JSON.parse(stored);
+
+                    // Durée de session choisie par l'utilisateur (rétrocompat : session_expires_at || expires_at)
+                    const sessionExpiresAt = tokenData.session_expires_at || tokenData.expires_at;
+
+                    if (sessionExpiresAt <= Date.now()) {
+                        // La durée de session configurée est dépassée → on efface et on ne tente pas de re-auth
+                        console.log('[GDrive] Durée de session dépassée, nettoyage du token.');
+                        localStorage.removeItem('gd_token');
+                        if (callback) callback(true);
+                        return;
+                    }
+
                     if (tokenData.expires_at > Date.now()) {
-                        // Token still valid: restore it directly without any popup
+                        // Token encore valide : restauration directe sans popup
                         gapi.client.setToken({ access_token: tokenData.access_token });
                         this.accessToken = tokenData.access_token;
                         this.fetchUserInfo().then(() => {
@@ -130,12 +172,12 @@ const GoogleDriveService = {
                         });
                         return;
                     } else {
-                        // Token expired: attempt a silent re-auth (no popup if consent was already granted)
-                        this._hadStoredToken = true; // On avait un token, il a expiré
+                        // Token expiré mais session encore valide → re-auth silencieuse
+                        this._hadStoredToken = true;
                         localStorage.removeItem('gd_token');
                         this.tokenClient.callback = async (resp) => {
                             if (resp.error !== undefined) {
-                                // Silent re-auth failed — notifier l'UI
+                                // Re-auth silencieuse échouée
                                 console.warn('[GDrive] Re-auth silencieuse échouée, token expiré.');
                                 if (typeof this.onTokenExpired === 'function') {
                                     this.onTokenExpired();
@@ -202,16 +244,23 @@ const GoogleDriveService = {
     },
 
     /**
-     * Saves the OAuth token response to localStorage with its expiry timestamp.
+     * Saves the OAuth token response to localStorage.
+     * Stores two expiry timestamps:
+     *   - expires_at         : real Google token expiry (typ. 1h)
+     *   - session_expires_at : user-configured session duration (default 24h)
      * @param {Object} resp - Token response from Google (contains access_token and expires_in)
      */
     _saveTokenToSession: function (resp) {
         try {
-            const expiresAt = Date.now() + ((resp.expires_in || 3600) * 1000);
+            const tokenExpiresAt = Date.now() + ((resp.expires_in || 3600) * 1000);
+            const sessionDuration = this.getSessionDuration(); // en secondes
+            const sessionExpiresAt = Date.now() + (sessionDuration * 1000);
             localStorage.setItem('gd_token', JSON.stringify({
                 access_token: resp.access_token,
-                expires_at: expiresAt
+                expires_at: tokenExpiresAt,
+                session_expires_at: sessionExpiresAt
             }));
+            console.log(`[GDrive] Session sauvegardée. Token valide ${Math.round((resp.expires_in || 3600) / 60)} min, session valide ${Math.round(sessionDuration / 3600)} h.`);
         } catch (e) {
             console.warn('Could not save Google Drive token to localStorage:', e);
         }
