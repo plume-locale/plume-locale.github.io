@@ -3210,26 +3210,29 @@
                                             <span data-i18n="modal.hub.cloud_autosave_label">Sauvegarde automatique à
                                                 chaque enregistrement</span>
                                         </label>
-
-                                        <div style="margin-top: 1rem; border-top: 1px solid var(--border-color); padding-top: 1rem;">
-                                            <label style="font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); display: block; margin-bottom: 0.4rem;"
-                                                data-i18n="gdrive.session.duration_label">Durée de session</label>
-                                            <select id="hub-gdrive-session-duration" class="hub-select"
-                                                onchange="ImportExportViewModel.setGDriveSessionDuration(this.value)">
-                                                <option value="3600" data-i18n="gdrive.session.duration.1h">1 heure</option>
-                                                <option value="14400" data-i18n="gdrive.session.duration.4h">4 heures</option>
-                                                <option value="28800" data-i18n="gdrive.session.duration.8h">8 heures</option>
-                                                <option value="86400" selected data-i18n="gdrive.session.duration.24h">24 heures (recommandé)</option>
-                                                <option value="604800" data-i18n="gdrive.session.duration.7d">7 jours</option>
-                                                <option value="2592000" data-i18n="gdrive.session.duration.30d">30 jours</option>
-                                            </select>
-                                            <p class="hub-muted" style="margin-top: 0.35rem; font-size: 0.78rem; line-height: 1.4;"
-                                                data-i18n="gdrive.session.duration_hint">Durée pendant laquelle Plume conserve votre session connectée au rechargement.</p>
-                                        </div>
-
                                         <p class="hub-muted" style="margin-top: 0.5rem;"
                                             data-i18n="modal.hub.cloud_secure_info">Vos données sont stockées de
                                             manière sécurisée sur votre propre Google Drive.</p>
+                                    </div>
+                                </div>
+
+                                <!-- Session Duration -->   
+                                <div class="hub-card" style="margin-top: 1.5rem;">
+                                    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+                                        <div>
+                                            <h4 style="margin: 0;" data-i18n="gdrive.session.duration_label">Durée de session</h4>
+                                            <p class="hub-muted" style="margin: 0.4rem 0 0 0; font-size: 0.85rem;" data-i18n="gdrive.session.duration_hint">Durée pendant laquelle Plume conserve votre connexion Google Drive entre les rechargements de page.</p>
+                                        </div>
+                                        <select id="hub-gdrive-session-duration" class="hub-select"
+                                            style="width: auto; min-width: 220px; flex-shrink: 0;"
+                                            onchange="ImportExportViewModel.setGDriveSessionDuration(this.value)">
+                                            <option value="3600" data-i18n="gdrive.session.duration.1h">1 heure</option>
+                                            <option value="14400" data-i18n="gdrive.session.duration.4h">4 heures</option>
+                                            <option value="28800" data-i18n="gdrive.session.duration.8h">8 heures</option>
+                                            <option value="86400" selected data-i18n="gdrive.session.duration.24h">24 heures (recommandé)</option>
+                                            <option value="604800" data-i18n="gdrive.session.duration.7d">7 jours</option>
+                                            <option value="2592000" data-i18n="gdrive.session.duration.30d">30 jours</option>
+                                        </select>
                                     </div>
                                 </div>
 

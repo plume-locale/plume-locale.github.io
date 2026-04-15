@@ -62,9 +62,9 @@ const ImportExportView = {
             if (exportView) exportView.style.display = 'none';
         }
         if (tabId === 'cloud') {
-            if (typeof GoogleDriveService !== 'undefined' && GoogleDriveService.userInfo) {
-                this.updateGDriveUI(GoogleDriveService.userInfo, true);
-            }
+            const isGDriveLoaded = typeof GoogleDriveService !== 'undefined';
+            const userInfo = isGDriveLoaded ? GoogleDriveService.userInfo : null;
+            this.updateGDriveUI(userInfo, !!userInfo);
         }
 
         if (window.lucide) window.lucide.createIcons();
@@ -336,6 +336,11 @@ const ImportExportView = {
         } else {
             if (loggedOutDiv) loggedOutDiv.style.display = 'block';
             if (loggedInDiv) loggedInDiv.style.display = 'none';
+        }
+
+        // Force translation of the hub content to ensure all data-i18n elements are localized
+        if (typeof Localization !== 'undefined' && typeof Localization.handleLocaleChange === 'function') {
+            Localization.handleLocaleChange(Localization.getLocale());
         }
     },
 
