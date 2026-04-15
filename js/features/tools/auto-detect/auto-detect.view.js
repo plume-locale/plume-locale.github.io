@@ -47,9 +47,9 @@ const AutoDetectView = {
         const suggestedIds = scene.suggestedCharacters || [];
         const absentIds = scene.confirmedAbsentCharacters || [];
 
-        const presentList = allCharacters.filter(c => confirmedIds.includes(c.id));
-        const suggestedList = allCharacters.filter(c => suggestedIds.includes(c.id));
-        const absentList = allCharacters.filter(c => absentIds.includes(c.id));
+        const presentList = allCharacters.filter(c => AutoDetectModel.includesId(confirmedIds, c.id));
+        const suggestedList = allCharacters.filter(c => AutoDetectModel.includesId(suggestedIds, c.id));
+        const absentList = allCharacters.filter(c => AutoDetectModel.includesId(absentIds, c.id));
 
         let html = '';
 
@@ -225,9 +225,9 @@ const AutoDetectView = {
         const suggestedIds = scene.suggestedCharacters || [];
         const absentIds = scene.confirmedAbsentCharacters || [];
 
-        const presentList = allCharacters.filter(c => confirmedIds.includes(c.id));
-        const suggestedList = allCharacters.filter(c => suggestedIds.includes(c.id));
-        const absentList = allCharacters.filter(c => absentIds.includes(c.id));
+        const presentList = allCharacters.filter(c => AutoDetectModel.includesId(confirmedIds, c.id));
+        const suggestedList = allCharacters.filter(c => AutoDetectModel.includesId(suggestedIds, c.id));
+        const absentList = allCharacters.filter(c => AutoDetectModel.includesId(absentIds, c.id));
 
         // Confirmés
         html += `<h4 style="margin: 0 0 8px 0; font-size: 0.8rem; opacity: 0.8;"><i data-lucide="check-circle" style="width: 14px; height: 14px; vertical-align: -2px; margin-right: 4px;"></i> ${Localization.t('autodetect.chars.confirmed_present')}</h4>`;
