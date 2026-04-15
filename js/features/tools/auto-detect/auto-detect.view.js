@@ -62,7 +62,7 @@ const AutoDetectView = {
                         ${this.getAvatarHTML(char)}
                         <span>${char.name}</span>
                     </div>
-                    <button onclick="AutoDetectViewModel.confirmAbsence(${char.id})" title="${Localization.t('autodetect.chars.remove_title')}" class="btn-icon">
+                    <button onclick="AutoDetectViewModel.confirmAbsence('${char.id}')" title="${Localization.t('autodetect.chars.remove_title')}" class="btn-icon">
                         <i data-lucide="x" style="width: 16px; height: 16px;"></i>
                     </button>
                 </div>
@@ -81,10 +81,10 @@ const AutoDetectView = {
                         <span>${char.name}</span>
                     </div>
                     <div style="display: flex; gap: 4px;">
-                        <button onclick="AutoDetectViewModel.confirmAbsence(${char.id})" title="${Localization.t('autodetect.chars.ignore_title')}" class="btn-icon">
+                        <button onclick="AutoDetectViewModel.confirmAbsence('${char.id}')" title="${Localization.t('autodetect.chars.ignore_title')}" class="btn-icon">
                             <i data-lucide="x" style="width: 16px; height: 16px;"></i>
                         </button>
-                        <button onclick="AutoDetectViewModel.confirmPresence(${char.id})" title="${Localization.t('autodetect.chars.validate_title')}" class="btn-icon">
+                        <button onclick="AutoDetectViewModel.confirmPresence('${char.id}')" title="${Localization.t('autodetect.chars.validate_title')}" class="btn-icon">
                             <i data-lucide="check" style="width: 16px; height: 16px;"></i>
                         </button>
                     </div>
@@ -103,7 +103,7 @@ const AutoDetectView = {
                         ${this.getAvatarHTML(char)}
                         <span style="text-decoration: line-through;">${char.name}</span>
                     </div>
-                    <button onclick="AutoDetectViewModel.confirmPresence(${char.id})" title="${Localization.t('autodetect.chars.restore_title')}" class="btn-icon">
+                    <button onclick="AutoDetectViewModel.confirmPresence('${char.id}')" title="${Localization.t('autodetect.chars.restore_title')}" class="btn-icon">
                         <i data-lucide="rotate-ccw" style="width: 16px; height: 16px;"></i>
                     </button>
                 </div>
@@ -238,7 +238,7 @@ const AutoDetectView = {
                         ${this.getAvatarHTML(char)}
                         <span>${char.name}</span>
                     </div>
-                    <button onclick="AutoDetectViewModel.confirmAbsence(${char.id})" title="${Localization.t('autodetect.chars.remove_title')}" class="btn-icon">
+                    <button onclick="AutoDetectViewModel.confirmAbsence('${char.id}')" title="${Localization.t('autodetect.chars.remove_title')}" class="btn-icon">
                         <i data-lucide="x" style="width: 16px; height: 16px;"></i>
                     </button>
                 </div>
@@ -257,10 +257,10 @@ const AutoDetectView = {
                         <span>${char.name}</span>
                     </div>
                     <div style="display: flex; gap: 4px;">
-                        <button onclick="AutoDetectViewModel.confirmAbsence(${char.id})" title="${Localization.t('autodetect.chars.ignore_title')}" class="btn-icon">
+                        <button onclick="AutoDetectViewModel.confirmAbsence('${char.id}')" title="${Localization.t('autodetect.chars.ignore_title')}" class="btn-icon">
                             <i data-lucide="x" style="width: 16px; height: 16px;"></i>
                         </button>
-                        <button onclick="AutoDetectViewModel.confirmPresence(${char.id})" title="${Localization.t('autodetect.chars.validate_title')}" class="btn-icon">
+                        <button onclick="AutoDetectViewModel.confirmPresence('${char.id}')" title="${Localization.t('autodetect.chars.validate_title')}" class="btn-icon">
                             <i data-lucide="check" style="width: 16px; height: 16px;"></i>
                         </button>
                     </div>
@@ -279,7 +279,7 @@ const AutoDetectView = {
                         ${this.getAvatarHTML(char)}
                         <span style="text-decoration: line-through;">${char.name}</span>
                     </div>
-                    <button onclick="AutoDetectViewModel.confirmPresence(${char.id})" title="${Localization.t('autodetect.chars.restore_title')}" class="btn-icon">
+                    <button onclick="AutoDetectViewModel.confirmPresence('${char.id}')" title="${Localization.t('autodetect.chars.restore_title')}" class="btn-icon">
                         <i data-lucide="rotate-ccw" style="width: 16px; height: 16px;"></i>
                     </button>
                 </div>

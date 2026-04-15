@@ -25,15 +25,28 @@ const AutoDetectModel = {
     },
 
     /**
-     * Modifie un tableau en place pour retirer un ID
+     * Modifie un tableau en place pour retirer un ID.
+     * Utilise == (comparaison lâche) pour gérer les cas où l'ID
+     * est stocké comme string dans le JSON mais passé comme number depuis le DOM.
      */
     removeIdfromArray(arr, id) {
         if (!arr) return false;
-        const index = arr.indexOf(id);
+        // eslint-disable-next-line eqeqeq
+        const index = arr.findIndex(item => item == id);
         if (index > -1) {
             arr.splice(index, 1);
             return true;
         }
         return false;
+    },
+
+    /**
+     * Vérifie si un tableau contient un ID (comparaison lâche).
+     * Nécessaire pour les mêmes raisons que removeIdfromArray.
+     */
+    includesId(arr, id) {
+        if (!arr) return false;
+        // eslint-disable-next-line eqeqeq
+        return arr.some(item => item == id);
     }
 };

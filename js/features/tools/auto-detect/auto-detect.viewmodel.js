@@ -83,9 +83,9 @@ const AutoDetectViewModel = {
                 }
             }
 
-            const isConfirmedPresent = scene.confirmedPresentCharacters.includes(char.id);
-            const isSuggested = scene.suggestedCharacters.includes(char.id);
-            const isConfirmedAbsent = scene.confirmedAbsentCharacters.includes(char.id);
+            const isConfirmedPresent = AutoDetectModel.includesId(scene.confirmedPresentCharacters, char.id);
+            const isSuggested = AutoDetectModel.includesId(scene.suggestedCharacters, char.id);
+            const isConfirmedAbsent = AutoDetectModel.includesId(scene.confirmedAbsentCharacters, char.id);
 
             if (isInText) {
                 if (!isConfirmedPresent && !isConfirmedAbsent && !isSuggested) {
@@ -133,7 +133,7 @@ const AutoDetectViewModel = {
                 }
             }
 
-            const isLinked = scene.linkedElements.includes(elem.id);
+            const isLinked = AutoDetectModel.includesId(scene.linkedElements, elem.id);
 
             if (isInText && !isLinked) {
                 scene.linkedElements.push(elem.id);
@@ -179,7 +179,7 @@ const AutoDetectViewModel = {
         AutoDetectModel.removeIdfromArray(scene.suggestedCharacters, charId);
         AutoDetectModel.removeIdfromArray(scene.confirmedAbsentCharacters, charId);
 
-        if (!scene.confirmedPresentCharacters.includes(charId)) {
+        if (!AutoDetectModel.includesId(scene.confirmedPresentCharacters, charId)) {
             scene.confirmedPresentCharacters.push(charId);
         }
 
@@ -200,7 +200,7 @@ const AutoDetectViewModel = {
         AutoDetectModel.removeIdfromArray(scene.suggestedCharacters, charId);
         AutoDetectModel.removeIdfromArray(scene.confirmedPresentCharacters, charId);
 
-        if (!scene.confirmedAbsentCharacters.includes(charId)) {
+        if (!AutoDetectModel.includesId(scene.confirmedAbsentCharacters, charId)) {
             scene.confirmedAbsentCharacters.push(charId);
         }
 
@@ -218,7 +218,7 @@ const AutoDetectViewModel = {
         const scene = AutoDetectRepository.getCurrentScene();
         if (!scene) return;
 
-        const isConfirmedPresent = scene.confirmedPresentCharacters.includes(charId);
+        const isConfirmedPresent = AutoDetectModel.includesId(scene.confirmedPresentCharacters, charId);
 
         if (isConfirmedPresent) {
             AutoDetectModel.removeIdfromArray(scene.confirmedPresentCharacters, charId);
