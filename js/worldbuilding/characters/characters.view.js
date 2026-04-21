@@ -186,6 +186,7 @@ function getPluralSuffix(count) {
  * Template de la fiche personnage complet (Fidèle à l'original).
  */
 function renderCharacterSheet(character, racesList, groupsList, linkedScenes) {
+    const isPortrait = character.layout === 'portrait';
     const metaInfo = [];
     if (character.age) metaInfo.push(`${character.age}${character.birthPlace ? `, ${Localization.t('char.meta.born_at')} ` + character.birthPlace : ''}`);
     if (character.residence) metaInfo.push(character.residence);
@@ -198,14 +199,27 @@ function renderCharacterSheet(character, racesList, groupsList, linkedScenes) {
         `<option value="${g}" ${character.group === g ? 'selected' : ''}>${g}</option>`
     ).join('');
 
-    return `
-        <div class="character-sheet" data-character-id="${character.id}">
-            <!-- Header -->
+    // Préparation de l'avatar (commun aux deux layouts)
+    const pos = character.avatarPosition || { x: 50, y: 50 };
+    const zoom = character.avatarZoom || 100;
+    const avatarContent = character.avatarImage
+        ? `<img src="${character.avatarImage}" alt="${character.name}" style="width: 100%; height: 100%; object-fit: cover; transform: scale(${zoom/100}) translate(${pos.x - 50}%, ${pos.y - 50}%); pointer-events: none; transition: none;">`
+        : (character.avatarEmoji && character.avatarEmoji !== '👤' 
+            ? `<div class="emoji-avatar" style="font-size: ${isPortrait ? '120px' : '80px'}; line-height: 160px; text-align: center; pointer-events: none;">${character.avatarEmoji}</div>` 
+            : `<i data-lucide="user" style="width:${isPortrait ? '120px' : '100px'};height:${isPortrait ? '120px' : '100px'}; pointer-events: none;"></i>`);
+
+    let headerHtml = '';
+    let portraitAvatarSectionHtml = '';
+
+    if (!isPortrait) {
+        // Layout STANDARD
+        headerHtml = `
             <div class="character-sheet-header">
-                <div class="character-avatar" onclick="changeCharacterAvatar('${character.id}', '${character.avatarEmoji || ''}', '${character.avatarImage || ''}')" title="${Localization.t('char.action.change_avatar')}">
-                    ${character.avatarImage
-            ? `<img src="${character.avatarImage}" alt="${character.name}">`
-            : (character.avatarEmoji && character.avatarEmoji !== '👤' ? `<div class="emoji-avatar" style="font-size: 40px; line-height: 80px; text-align: center;">${character.avatarEmoji}</div>` : `<i data-lucide="user" style="width:80px;height:80px;"></i>`)}
+                <div class="character-avatar" 
+                     onmousedown="handleAvatarSheetDragStart(event, '${character.id}')" 
+                     onwheel="handleAvatarSheetWheel(event, '${character.id}')"
+                     title="${Localization.t('char.action.change_avatar')}">
+                    ${avatarContent}
                 </div>
                 <div class="character-header-info">
                     <h2 contenteditable="true" onblur="updateCharacterName('${character.id}', this.textContent)">${character.firstName}${character.lastName ? ' ' + character.lastName : ''}</h2>
@@ -213,14 +227,52 @@ function renderCharacterSheet(character, racesList, groupsList, linkedScenes) {
                         ${metaInfo.map(m => `<li>${m}</li>`).join('')}
                     </ul>
                 </div>
-                <button class="character-close-btn" onclick="switchView('editor')" title="${Localization.t('char.action.close')}"><i data-lucide="x" style="width:20px;height:20px;"></i></button>
             </div>
-            
+        `;
+    } else {
+        // Layout PORTRAIT (Grande Image + Nom au dessus) - Format standard "character-section"
+        portraitAvatarSectionHtml = `
+            <div class="character-section avatar-section">
+                <div class="character-section-header">
+                    <div class="character-section-title" contenteditable="true" onblur="updateCharacterName('${character.id}', this.textContent)" style="text-transform: none; font-size: 1.1rem; color: var(--text-primary); letter-spacing: normal;">
+                        ${character.firstName}${character.lastName ? ' ' + character.lastName : ''}
+                    </div>
+                </div>
+                <div class="character-section-content" style="padding: 1.5rem; text-align: center; background: var(--bg-primary);">
+                    <div class="avatar-large-wrapper" 
+                         onmousedown="handleAvatarSheetDragStart(event, '${character.id}')" 
+                         onwheel="handleAvatarSheetWheel(event, '${character.id}')"
+                         style="width: 100%; max-width: 320px; margin: 0 auto; aspect-ratio: 1; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 20px rgba(0,0,0,0.25); border: 4px solid var(--bg-secondary); cursor: pointer; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; position: relative;">
+                        ${avatarContent}
+                        <div style="position: absolute; bottom: 0; left: 0; right: 0; padding: 12px; background: rgba(0,0,0,0.7); color: white; opacity: 0; transition: opacity 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px;" class="avatar-hover-hint">
+                            <i data-lucide="camera" style="width: 16px; height: 16px;"></i>
+                            <span style="font-size: 0.8rem; font-weight: 500;">${Localization.t('char.action.change_avatar')}</span>
+                        </div>
+                    </div>
+                    <ul class="character-meta" style="margin-top: 1.2rem; display: flex; flex-direction: column; align-items: center; gap: 6px; list-style: none; padding: 0; font-size: 0.9rem; color: var(--text-secondary);">
+                        ${metaInfo.map(m => `<li>${m}</li>`).join('')}
+                    </ul>
+                </div>
+            </div>
+        `;
+    }
 
+    return `
+        <div class="character-sheet ${isPortrait ? 'portrait-layout' : ''}" data-character-id="${character.id}">
+            <!-- Bouton de bascule de layout -->
+            <button class="layout-toggle-btn" onclick="toggleCharacterLayout('${character.id}')" title="${Localization.t('char.action.toggle_layout')}">
+                <i data-lucide="${isPortrait ? 'layout' : 'image'}"></i>
+            </button>
+
+            <!-- Header (uniquement en standard) -->
+            ${headerHtml}
+            
             <!-- Grille des sections -->
             <div class="character-sections-grid">
-            
-            ${renderCharacterLinkedScenes(linkedScenes)}
+                <!-- Section Avatar (uniquement en portrait) -->
+                ${portraitAvatarSectionHtml}
+                
+                ${renderCharacterLinkedScenes(linkedScenes)}
 
             <!-- État Civil -->
             <div class="character-section" id="section-etat-civil">
@@ -963,13 +1015,226 @@ function refreshTraitsDisplay(character) {
 }
 
 function changeCharacterAvatar(id, currentEmoji, currentImage) {
-    const defaultValue = currentImage || currentEmoji || '';
-    const choice = prompt(Localization.t('char.prompt.avatar'), defaultValue);
-    if (choice === null) return;
+    const modal = document.getElementById('avatarModal');
+    if (modal) {
+        const charIdInput = document.getElementById('avatarModalCharId');
+        const fileInput = document.getElementById('avatarModalFileInput');
+        const urlInput = document.getElementById('avatarModalUrlInput');
+        const posXInput = document.getElementById('avatarPosX');
+        const posYInput = document.getElementById('avatarPosY');
+        const zoomInput = document.getElementById('avatarZoom');
+        const posXVal = document.getElementById('avatarPosXVal');
+        const posYVal = document.getElementById('avatarPosYVal');
+        const zoomVal = document.getElementById('avatarZoomVal');
 
-    const result = updateAvatarViewModel(id, choice);
-    processCharacterSideEffects(result);
+        if (charIdInput) charIdInput.value = id;
+        if (fileInput) fileInput.value = '';
+        
+        // Récupérer la position actuelle depuis le repository
+        const character = CharacterRepository.getById(id);
+        const position = (character && character.avatarPosition) ? character.avatarPosition : { x: 50, y: 50 };
+        const zoom = (character && character.avatarZoom) ? character.avatarZoom : 100;
+
+        if (posXInput) {
+            posXInput.value = position.x;
+            if (posXVal) posXVal.textContent = position.x;
+        }
+        if (posYInput) {
+            posYInput.value = position.y;
+            if (posYVal) posYVal.textContent = position.y;
+        }
+        if (zoomInput) {
+            zoomInput.value = zoom;
+            if (zoomVal) zoomVal.textContent = zoom;
+        }
+
+        const val = currentImage || currentEmoji || '';
+        if (urlInput) {
+            if (val.startsWith('data:image')) {
+                urlInput.value = '';
+                urlInput.placeholder = '(Image locale actuelle)';
+            } else {
+                urlInput.value = val;
+                urlInput.placeholder = 'https://... ou 🧙‍♂️';
+            }
+        }
+
+        modal.classList.add('active');
+    }
 }
+
+function handleAvatarFileSelect(input) {
+    if (input.files && input.files[0]) {
+        // Optionnel : on pourrait rafraîchir l'avatar sur la fiche en direct ici
+    }
+}
+
+
+// --- SHEET AVATAR DRAG HANDLING ---
+let isDraggingSheetAvatar = false;
+let sheetDragCharId = null;
+let sheetDragStartX, sheetDragStartY;
+let sheetDragStartPosX, sheetDragStartPosY;
+let sheetDragMoved = false;
+
+function handleAvatarSheetDragStart(e, id) {
+    if (e.button !== 0) return; // Clic gauche uniquement
+    
+    const character = CharacterRepository.getById(id);
+    if (!character) return;
+    
+    isDraggingSheetAvatar = true;
+    sheetDragCharId = id;
+    sheetDragStartX = e.clientX;
+    sheetDragStartY = e.clientY;
+    
+    const pos = character.avatarPosition || { x: 50, y: 50 };
+    sheetDragStartPosX = pos.x;
+    sheetDragStartPosY = pos.y;
+    sheetDragMoved = false;
+    
+    window.addEventListener('mousemove', handleAvatarSheetMouseMove);
+    window.addEventListener('mouseup', handleAvatarSheetMouseUp);
+}
+
+function handleAvatarSheetMouseMove(e) {
+    if (!isDraggingSheetAvatar) return;
+    
+    const deltaX = e.clientX - sheetDragStartX;
+    const deltaY = e.clientY - sheetDragStartY;
+    
+    if (Math.abs(deltaX) > 2 || Math.abs(deltaY) > 2) {
+        sheetDragMoved = true;
+    }
+    
+    if (sheetDragMoved) {
+        // Calcul du déplacement en % de la taille du conteneur
+        const containers = document.querySelectorAll(`.character-sheet[data-character-id="${sheetDragCharId}"] .avatar-large-wrapper, .character-sheet[data-character-id="${sheetDragCharId}"] .character-avatar`);
+        const rect = containers[0].getBoundingClientRect();
+        
+        const character = CharacterRepository.getById(sheetDragCharId);
+        const zoom = (character && character.avatarZoom) ? character.avatarZoom : 100;
+        
+        // On divise par le zoom pour que le mouvement de l'image (déjà zoomée) corresponde au curseur
+        const moveX = (deltaX / rect.width) * 100 * (100 / zoom);
+        const moveY = (deltaY / rect.height) * 100 * (100 / zoom);
+        
+        const nextX = sheetDragStartPosX + moveX;
+        const nextY = sheetDragStartPosY + moveY;
+        
+        // Mise à jour visuelle immédiate
+        const imgs = document.querySelectorAll(`.character-sheet[data-character-id="${sheetDragCharId}"] img`);
+        imgs.forEach(img => {
+            img.style.transform = `scale(${zoom/100}) translate(${nextX - 50}%, ${nextY - 50}%)`;
+        });
+    }
+}
+
+function handleAvatarSheetMouseUp(e) {
+    if (!isDraggingSheetAvatar) return;
+    
+    window.removeEventListener('mousemove', handleAvatarSheetMouseMove);
+    window.removeEventListener('mouseup', handleAvatarSheetMouseUp);
+    
+    if (sheetDragMoved) {
+        const deltaX = e.clientX - sheetDragStartX;
+        const deltaY = e.clientY - sheetDragStartY;
+        
+        const rect = document.querySelector(`.character-sheet[data-character-id="${sheetDragCharId}"] .avatar-large-wrapper, .character-sheet[data-character-id="${sheetDragCharId}"] .character-avatar`).getBoundingClientRect();
+        
+        const character = CharacterRepository.getById(sheetDragCharId);
+        const zoom = (character && character.avatarZoom) ? character.avatarZoom : 100;
+        
+        const moveX = (deltaX / rect.width) * 100 * (100 / zoom);
+        const moveY = (deltaY / rect.height) * 100 * (100 / zoom);
+        
+        const nextX = sheetDragStartPosX + moveX;
+        const nextY = sheetDragStartPosY + moveY;
+        
+        updateAvatarViewModel(sheetDragCharId, undefined, { x: nextX, y: nextY });
+    } else {
+        // C'était un clic simple -> ouvrir la modale
+        const char = CharacterRepository.getById(sheetDragCharId);
+        if (char) {
+            changeCharacterAvatar(char.id, char.avatarEmoji, char.avatarImage);
+        }
+    }
+    
+    isDraggingSheetAvatar = false;
+    sheetDragCharId = null;
+}
+
+function handleAvatarSheetWheel(e, id) {
+    const character = CharacterRepository.getById(id);
+    if (!character || !character.avatarImage) return;
+
+    e.preventDefault();
+    e.stopPropagation();
+
+    const oldZoom = character.avatarZoom || 100;
+    const delta = e.deltaY > 0 ? -15 : 15;
+    const newZoom = Math.max(100, Math.min(1000, oldZoom + delta));
+
+    if (newZoom !== oldZoom) {
+        const pos = character.avatarPosition || { x: 50, y: 50 };
+
+        // Mise à jour visuelle immédiate
+        const imgs = document.querySelectorAll(`.character-sheet[data-character-id="${id}"] img`);
+        imgs.forEach(img => {
+            img.style.transform = `scale(${newZoom/100}) translate(${pos.x - 50}%, ${pos.y - 50}%)`;
+        });
+
+        // Mise à jour du modèle
+        updateAvatarViewModel(id, undefined, undefined, newZoom);
+    }
+}
+
+function saveAvatarChange() {
+    const charIdInput = document.getElementById('avatarModalCharId');
+    const fileInput = document.getElementById('avatarModalFileInput');
+    const urlInput = document.getElementById('avatarModalUrlInput');
+    const posXInput = document.getElementById('avatarPosX');
+    const posYInput = document.getElementById('avatarPosY');
+    const zoomInput = document.getElementById('avatarZoom');
+
+    if (!charIdInput) return;
+    const id = charIdInput.value;
+    
+    // Positionnement
+    const position = {
+        x: posXInput ? parseInt(posXInput.value) : 50,
+        y: posYInput ? parseInt(posYInput.value) : 50
+    };
+    const zoom = zoomInput ? parseInt(zoomInput.value) : 100;
+
+    if (fileInput && fileInput.files && fileInput.files[0]) {
+        const file = fileInput.files[0];
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const result = updateAvatarViewModel(id, e.target.result, position, zoom);
+            processCharacterSideEffects(result);
+            closeModal('avatarModal');
+        };
+        reader.readAsDataURL(file);
+    } else {
+        const choice = urlInput ? urlInput.value.trim() : '';
+        const result = updateAvatarViewModel(id, choice, position, zoom);
+        processCharacterSideEffects(result);
+        closeModal('avatarModal');
+    }
+}
+
+function deleteAvatar() {
+    const charIdInput = document.getElementById('avatarModalCharId');
+    if (!charIdInput) return;
+    const id = charIdInput.value;
+    
+    // updateAvatarViewModel with '' clears both image and emoji
+    const result = updateAvatarViewModel(id, '');
+    processCharacterSideEffects(result);
+    closeModal('avatarModal');
+}
+
 
 // --- EVOLUTION TIMELINE RENDERERS ---
 
@@ -1075,4 +1340,28 @@ function renderCharacterLinkedScenes(linkedScenes) {
             </div>
         </div>
     `;
+}
+
+/**
+ * [MVVM : View]
+ * Action utilisateur : Basculer la disposition de la fiche personnage.
+ */
+function toggleCharacterLayout(id) {
+    const character = CharacterRepository.getById(id);
+    if (!character) return;
+
+    const currentLayout = character.layout || 'standard';
+    const nextLayout = currentLayout === 'standard' ? 'portrait' : 'standard';
+
+    const result = updateCharacterFieldViewModel(id, 'layout', nextLayout);
+    
+    if (result.success) {
+        // Rafraîchir la vue du détail
+        openCharacterDetail(id, { replaceCurrent: true });
+        
+        // Notification
+        if (typeof Notifications !== 'undefined' && Notifications.show) {
+            Notifications.show(Localization.t('repetition.notify.pref_updated'), 'success');
+        }
+    }
 }

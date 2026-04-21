@@ -60,6 +60,11 @@ const NarrativeOverviewMain = {
         // Charger et rendre les données
         this.refresh();
 
+        // Initialiser la timeline visuelle (horizontal)
+        // if (typeof NarrativeOverviewTimeline !== 'undefined') {
+        //     NarrativeOverviewTimeline.init();
+        // }
+
         // Configurer les écouteurs d'événements
         this.setupEventListeners();
 
@@ -168,8 +173,13 @@ const NarrativeOverviewMain = {
             // Recharger les données
             viewModel.loadData();
 
-            // Re-render
+            // Re-render la vue principale (sidebar)
             view.render();
+
+            // Rafraîchir la timeline visuelle (horizontal)
+            // if (typeof NarrativeOverviewTimeline !== 'undefined') {
+            //     NarrativeOverviewTimeline.refresh();
+            // }
 
             console.log(`[NarrativeOverviewMain] Refreshed with ${viewModel.passages.length} passages`);
         } catch (error) {

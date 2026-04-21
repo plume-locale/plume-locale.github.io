@@ -668,6 +668,14 @@ window.LOCALE_EN = {
     "modal.character.role": "Role",
     "modal.character.desc": "Short Description",
 
+    "modal.avatar.title": "Edit Avatar",
+    "modal.avatar.file": "Local image",
+    "modal.avatar.or": "- OR -",
+    "modal.avatar.url": "Internet link (URL) or Emoji",
+    "modal.avatar.placeholder_url": "https://... or 🧙‍♂️",
+    "modal.avatar.current_local": "(Current local image)",
+    "modal.avatar.delete_btn": "Delete Avatar",
+
     "modal.world.title": "New World Element",
     "modal.world.name": "Name",
     "modal.world.placeholder_name": "City of Veils",
@@ -1576,6 +1584,7 @@ window.LOCALE_EN = {
     "char.list.no_race": "Uncategorized race",
     "char.action.delete": "Delete",
     "char.action.change_avatar": "Change avatar",
+    "char.action.toggle_layout": "Toggle layout",
     "char.action.close": "Close",
 
     "char.section.civil": "Civil Status",

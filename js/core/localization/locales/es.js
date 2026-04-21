@@ -633,6 +633,14 @@ window.LOCALE_ES = {
     "modal.character.role": "Rol",
     "modal.character.desc": "Descripción Corta",
 
+    "modal.avatar.title": "Cambiar Avatar",
+    "modal.avatar.file": "Imagen local",
+    "modal.avatar.or": "- O -",
+    "modal.avatar.url": "Enlace de internet (URL) o Emoji",
+    "modal.avatar.placeholder_url": "https://... o 🧙‍♂️",
+    "modal.avatar.current_local": "(Imagen local actual)",
+    "modal.avatar.delete_btn": "Eliminar Avatar",
+
     "modal.world.title": "Nuevo Elemento de Mundo",
     "modal.world.name": "Nombre",
     "modal.world.placeholder_name": "Ciudad de los Velos",
@@ -1462,6 +1470,7 @@ window.LOCALE_ES = {
     "char.list.no_race": "Raza no categorizada",
     "char.action.delete": "Eliminar",
     "char.action.change_avatar": "Cambiar avatar",
+    "char.action.toggle_layout": "Cambiar disposición",
     "char.action.close": "Cerrar",
 
     "char.section.civil": "Estado Civil",

@@ -667,6 +667,14 @@ window.LOCALE_FR = {
     "modal.character.placeholder_desc": "Description du personnage...",
     "modal.character.role": "Rôle",
     "modal.character.desc": "Description rapide",
+    
+    "modal.avatar.title": "Modifier l'avatar",
+    "modal.avatar.file": "Image locale",
+    "modal.avatar.or": "- OU -",
+    "modal.avatar.url": "Lien internet (URL) ou Emoji",
+    "modal.avatar.placeholder_url": "https://... ou 🧙‍♂️",
+    "modal.avatar.current_local": "(Image locale actuelle)",
+    "modal.avatar.delete_btn": "Supprimer l'avatar",
 
     "modal.world.title": "Nouvel élément d'Univers",
     "modal.world.name": "Nom",
@@ -1540,6 +1548,7 @@ window.LOCALE_FR = {
     "char.list.no_race": "Race non classée",
     "char.action.delete": "Supprimer",
     "char.action.change_avatar": "Changer l'avatar",
+    "char.action.toggle_layout": "Changer la disposition",
     "char.action.close": "Fermer",
 
     "char.section.civil": "État Civil",

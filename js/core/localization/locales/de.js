@@ -634,6 +634,14 @@ window.LOCALE_DE = {
     "modal.character.role": "Rolle",
     "modal.character.desc": "Kurzbeschreibung",
 
+    "modal.avatar.title": "Avatar bearbeiten",
+    "modal.avatar.file": "Lokales Bild",
+    "modal.avatar.or": "- ODER -",
+    "modal.avatar.url": "Internet-Link (URL) oder Emoji",
+    "modal.avatar.placeholder_url": "https://... oder 🧙‍♂️",
+    "modal.avatar.current_local": "(Aktuelles lokales Bild)",
+    "modal.avatar.delete_btn": "Avatar löschen",
+
     "modal.world.title": "Neues Weltelement",
     "modal.world.name": "Name",
     "modal.world.placeholder_name": "Stadt der Schleier",
@@ -1463,6 +1471,7 @@ window.LOCALE_DE = {
     "char.list.no_race": "Nicht kategorisierte Rasse",
     "char.action.delete": "Löschen",
     "char.action.change_avatar": "Avatar ändern",
+    "char.action.toggle_layout": "Layout umschalten",
     "char.action.close": "Schließen",
 
     "char.section.civil": "Zivilstand",

@@ -374,3 +374,246 @@
         display: none;
     }
 }
+
+/* === HORIZONTAL VISUAL TIMELINE === */
+.narrative-visual-timeline-wrapper {
+    width: 100%;
+    background: var(--bg-secondary);
+    border-bottom: 2px solid var(--border-color);
+    position: relative;
+    z-index: 800;
+    transition: all 0.3s ease;
+    margin: 0;
+}
+.narrative-visual-timeline-wrapper.collapsed .narrative-visual-timeline {
+    height: 0;
+    padding: 0;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.timeline-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.timeline-title {
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: var(--primary-color);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.timeline-title-icon {
+    width: 16px;
+    height: 16px;
+}
+
+.timeline-stats {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-weight: 600;
+    background: var(--bg-secondary);
+    padding: 2px 8px;
+    border-radius: 10px;
+}
+
+.narrative-visual-timeline {
+    padding: 15px 20px 10px 20px;
+    height: 160px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 10px;
+    overflow: hidden;
+    transition: height 0.3s ease, padding 0.3s ease, opacity 0.2s ease;
+}
+
+.timeline-visual-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+}
+
+/* Row 1: Acts */
+.timeline-acts-row {
+    width: 100%;
+    height: 45px;
+    display: flex;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+    background: var(--bg-tertiary);
+}
+
+.timeline-act-segment {
+    height: 100%;
+    position: relative;
+    border-right: 1px solid rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: width 0.3s ease;
+}
+
+.timeline-act-segment:last-child {
+    border-right: none;
+}
+
+.timeline-act-label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    text-transform: capitalize;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 0 10px;
+    z-index: 2;
+}
+
+/* Row 2: Beats Track */
+.timeline-beats-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 0 5px;
+}
+
+.timeline-percent-indicator {
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    flex-shrink: 0;
+    width: 30px;
+}
+
+.timeline-percent-indicator.end {
+    text-align: right;
+}
+
+.timeline-beats-track {
+    flex: 1;
+    height: 30px;
+    background: #f8f9fa;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    position: relative;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.timeline-chapter-marker {
+    position: absolute;
+    top: 0;
+    width: 1px;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.05);
+    z-index: 1;
+}
+
+.timeline-beat-marker {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 15px;
+    height: 15px;
+    background: var(--marker-color, #e0e0e0);
+    border: 2px solid white;
+    transform: translate(-50%, -50%) rotate(45deg);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    z-index: 10;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.timeline-beat-marker:hover {
+    transform: translate(-50%, -50%) rotate(45deg) scale(1.3);
+    z-index: 20;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.timeline-beat-label {
+    position: absolute;
+    bottom: -18px;
+    left: 50%;
+    transform: translateX(-50%) rotate(-45deg);
+    font-size: 0.55rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    white-space: nowrap;
+}
+
+/* Legend */
+.timeline-legend {
+    text-align: center;
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    font-style: italic;
+    margin-top: 5px;
+}
+
+
+.narrative-timeline-toggle {
+    position: absolute;
+    bottom: -14px;
+    left: 50%;
+    margin-left: -20px; /* Centrage stable sans transform */
+    width: 40px;
+    height: 14px;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-top: none;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--text-muted);
+    z-index: 9999; /* Toujours au-dessus de tout */
+    transition: color 0.2s ease, background 0.2s ease, bottom 0.3s ease;
+    padding-bottom: 2px;
+}
+
+.narrative-timeline-toggle:hover {
+    color: var(--text-primary);
+    background: var(--bg-secondary);
+}
+
+.narrative-timeline-toggle i {
+    width: 12px;
+    height: 12px;
+    transition: transform 0.3s ease;
+}
+
+.narrative-visual-timeline-wrapper.collapsed .narrative-timeline-toggle i {
+    transform: rotate(180deg);
+}
+
+/* Tooltip for beats */
+.timeline-beat-marker[title]:hover::after {
+    content: attr(title);
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%) rotate(-45deg);
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    white-space: nowrap;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    pointer-events: none;
+    z-index: 1000;
+}
+

@@ -83,6 +83,9 @@ const CharacterModel = {
             possessions: data.possessions || [],
             // Autres
             notes: data.notes || '',
+            layout: data.layout || 'standard',
+            avatarPosition: data.avatarPosition || { x: 50, y: 50 },
+            avatarZoom: data.avatarZoom || 100,
             // Legacy / metadata
             updatedAt: data.updatedAt || Date.now(),
             createdAt: data.createdAt || id

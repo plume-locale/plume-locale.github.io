@@ -1430,6 +1430,16 @@
                 </div>
             </div>
         </div>
+        
+        <!-- Narrative Visual Timeline (Horizontal Map) -->
+        <div id="narrativeVisualTimelineWrapper" class="narrative-visual-timeline-wrapper" style="display: none;">
+            <div id="narrativeVisualTimeline" class="narrative-visual-timeline">
+                <!-- Content generated dynamically by narrative-overview.timeline.js -->
+            </div>
+            <button class="narrative-timeline-toggle" onclick="NarrativeOverviewTimeline.toggle()" title="Afficher/masquer la structure">
+                <i data-lucide="chevron-up" id="narrativeTimelineToggleIcon"></i>
+            </button>
+        </div>
         <!-- Pomodoro Popup -->
         <div class="pomodoro-popup" id="pomodoroPopup">
             <div class="pomodoro-popup-header">
@@ -2160,6 +2170,40 @@
                     <button class="btn" onclick="closeModal('addCharacterModal')"
                         data-i18n="btn.cancel">Annuler</button>
                     <button class="btn btn-primary" onclick="addCharacter()" data-i18n="btn.create">Créer</button>
+                </div>
+            </div>
+        </div>
+        <!-- Avatar Modal -->
+        <div class="modal" id="avatarModal">
+            <div class="modal-content" style="max-width: 400px">
+                <div class="modal-title" data-i18n="modal.avatar.title">Modifier l'avatar</div>
+                <input type="hidden" id="avatarModalCharId" />
+
+                <div class="form-group">
+                    <label class="form-label" data-i18n="modal.avatar.file">Image locale</label>
+                    <input type="file" id="avatarModalFileInput" class="form-input" accept="image/*" style="padding: 8px;" onchange="handleAvatarFileSelect(this)" />
+                </div>
+                
+                <div style="text-align: center; margin: 10px 0; color: var(--text-muted); font-size: 0.9rem;" data-i18n="modal.avatar.or">- OU -</div>
+                
+                <div class="form-group">
+                    <label class="form-label" data-i18n="modal.avatar.url">Lien internet (URL) ou Emoji</label>
+                    <input type="text" class="form-input" id="avatarModalUrlInput" placeholder="https://... ou 🧙‍♂️" data-i18n-placeholder="modal.avatar.placeholder_url" />
+                </div>
+
+                <p style="font-size: 0.75rem; color: var(--text-muted); font-style: italic; margin-top: 15px; border-top: 1px solid var(--border-color); padding-top: 15px;">
+                    Astuce : Centrer avec le <b>clic glissé</b> et zoomer avec la <b>molette</b> directement sur la fiche personnage.
+                </p>
+
+                <!-- Hidden inputs to keep compatibility with legacy logic if needed -->
+                <input type="hidden" id="avatarPosX" value="50">
+                <input type="hidden" id="avatarPosY" value="50">
+                <input type="hidden" id="avatarZoom" value="100">
+
+                <div class="modal-actions" style="display: flex; gap: 10px;">
+                    <button class="btn btn-danger" style="flex: 1; padding: 8px 4px; white-space: normal; line-height: 1.2;" onclick="deleteAvatar()" data-i18n="modal.avatar.delete_btn">Supprimer l'avatar</button>
+                    <button class="btn" style="flex: 1;" onclick="closeModal('avatarModal')" data-i18n="btn.cancel">Annuler</button>
+                    <button class="btn btn-primary" style="flex: 1;" onclick="saveAvatarChange()" data-i18n="btn.save">Enregistrer</button>
                 </div>
             </div>
         </div>
@@ -4596,6 +4640,7 @@
 <script src="./js/features/editor/narrative-overview/narrative-overview.repository.js"></script>
 <script src="./js/features/editor/narrative-overview/narrative-overview.viewmodel.js"></script>
 <script src="./js/features/editor/narrative-overview/narrative-overview.view.js"></script>
+<script src="./js/features/editor/narrative-overview/narrative-overview.timeline.js"></script>
 <script src="./js/features/editor/narrative-overview/narrative-overview.handlers.js"></script>
 <script src="./js/features/editor/narrative-overview/narrative-overview.main.js"></script>
 <script src="./js/features/tools/magic-importer/magic-importer.viewmodel.js"></script>

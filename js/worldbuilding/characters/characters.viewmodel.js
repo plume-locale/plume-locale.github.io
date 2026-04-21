@@ -403,21 +403,38 @@ function updatePersonalityStatViewModel(id, stat, value) {
 /**
  * Mise à jour de l'avatar.
  */
-function updateAvatarViewModel(id, choice) {
+function updateAvatarViewModel(id, choice, position, zoom) {
     const updates = {};
-    if (choice.startsWith('http')) {
-        updates.avatarImage = choice;
-        updates.avatarEmoji = '';
-    } else {
-        updates.avatarEmoji = choice;
-        updates.avatarImage = '';
+    
+    // Si choice est fourni, on met à jour l'image/emoji
+    if (choice !== undefined) {
+        if (choice && (choice.startsWith('http') || choice.startsWith('data:image'))) {
+            updates.avatarImage = choice;
+            updates.avatarEmoji = '';
+        } else if (choice === '') {
+            updates.avatarImage = '';
+            updates.avatarEmoji = '';
+        } else if (choice) {
+            updates.avatarEmoji = choice;
+            updates.avatarImage = '';
+        }
+    }
+
+    // Mise à jour de la position sil fournie
+    if (position) {
+        updates.avatarPosition = position;
+    }
+
+    // Mise à jour du zoom si fourni
+    if (zoom !== undefined) {
+        updates.avatarZoom = zoom;
     }
 
     const nextValue = CharacterRepository.update(id, updates);
     return { 
         success: !!nextValue, 
         data: nextValue,
-        sideEffects: { shouldSave: true } 
+        sideEffects: { shouldSave: true, shouldRefreshAll: true } 
     };
 }
 
