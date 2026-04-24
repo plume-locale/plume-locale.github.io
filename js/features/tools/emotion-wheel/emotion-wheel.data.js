@@ -32,8 +32,8 @@ const EmotionWheelData = {
         const bodyLanguage = this.bodyDefs.map((b, i) => ({
             icon:     b.icon,
             category: t(`emotion.body.${i}.category`),
-            signals:  this._parseList(t(`emotion.body.${i}.signals`))
-        }));
+            signals:  this._parseList(t(`emotion.body.${i}.signals`)).sort((a, b) => a.localeCompare(b))
+        })).sort((a, b) => a.category.localeCompare(b.category));
 
         return { wedges, bodyLanguage };
     },
@@ -105,6 +105,13 @@ const EmotionWheelData = {
         { icon: 'award'          }, // 38
         { icon: 'search'         }, // 39
         { icon: 'brain'          }, // 40
-        { icon: 'trophy'         }  // 41
+        { icon: 'trophy'         }, // 41
+        { icon: 'snowflake'      }, // 42
+        { icon: 'thermometer-sun'}, // 43
+        { icon: 'thermometer'    }, // 44
+        { icon: 'search-code'    }, // 45
+        { icon: 'fist'           }, // 46
+        { icon: 'check'          }, // 47
+        { icon: 'ghost'          }  // 48
     ]
 };

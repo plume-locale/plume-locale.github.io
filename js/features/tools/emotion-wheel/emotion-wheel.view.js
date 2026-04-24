@@ -408,9 +408,9 @@ const EmotionWheelView = {
             // Pour le corps, on liste toutes les catégories du tableau
             nav.innerHTML = data.bodyLanguage.map((item, i) => `
                 <button class="nav-item ${this.currentCategory === item.category ? 'active' : ''}" 
-                        onclick="EmotionWheelView.setCategory('${item.category}')"
+                        onclick="EmotionWheelView.setCategory('${item.category.replace(/'/g, "\\'")}')"
                         style="--accent-color: #f9812a">
-                    <i data-lucide="${this.getIconForBodyLanguage(item.category)}"></i>
+                    <i data-lucide="${item.icon}"></i>
                     <span>${item.category}</span>
                 </button>
             `).join('');
@@ -540,7 +540,7 @@ const EmotionWheelView = {
 
         grid.innerHTML = data.map(item => `
             <div class="body-language-card" style="border-color: #f9812a">
-                <h3 style="color: #f9812a"><i data-lucide="${this.getIconForBodyLanguage(item.category)}"></i> ${item.category}</h3>
+                <h3 style="color: #f9812a"><i data-lucide="${item.icon}"></i> ${item.category}</h3>
                 <div class="signal-list">
                     ${item.signals.map(signal => `
                         <div class="signal-item" onclick="EmotionWheelView.onSelectWord('${signal}')">
@@ -591,15 +591,6 @@ const EmotionWheelView = {
         return icons[id] || 'circle';
     },
 
-    getIconForBodyLanguage(categoryName) {
-        // Retrouver l'icône en cherchant la position de la catégorie dans les données courantes
-        const data = EmotionWheelData.getData();
-        const idx = data.bodyLanguage.findIndex(b => b.category === categoryName);
-        if (idx >= 0 && EmotionWheelData.bodyDefs[idx]) {
-            return EmotionWheelData.bodyDefs[idx].icon;
-        }
-        return 'accessibility';
-    }
 };
 
 // Styles pour le toast
