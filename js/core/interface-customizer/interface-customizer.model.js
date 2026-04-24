@@ -55,7 +55,8 @@ const InterfaceCustomizerModel = {
         { id: 'toolLinksPanelBtn', icon: 'link', label: 'tools.links', category: 'tools' },
         { id: 'toolRevisionBtn', icon: 'refresh-cw', label: 'module.writing.revision', category: 'tools' },
         { id: 'toolStructureBlockBtn', icon: 'box', label: 'module.writing.blocks', category: 'tools' },
-        { id: 'toolNarrativeOverviewBtn', icon: 'book-open', label: 'module.writing.overview', category: 'tools' }
+        { id: 'toolNarrativeOverviewBtn', icon: 'book-open', label: 'module.writing.overview', category: 'tools' },
+        { id: 'toolEmotionWheelBtn', icon: 'heart', label: 'tools.emotion_wheel', category: 'tools' }
     ],
 
     // Liste exhaustive des modules (chaque dossier du projet)
@@ -285,6 +286,13 @@ const InterfaceCustomizerModel = {
             category: 'analysis',
             components: ['toolRepetitionBtn']
         },
+        {
+            id: 'emotion-wheel',
+            label: 'tools.emotion_wheel',
+            icon: 'heart',
+            category: 'analysis',
+            components: ['toolEmotionWheelBtn']
+        },
 
         // --- TOOLS ---
         {
@@ -348,7 +356,7 @@ const InterfaceCustomizerModel = {
                 'editor', 'focusMode', 'structure-blocks', 'narrative-overview', 'revision_feedback', 'front-matter',
                 'corkboard', 'plot', 'plotgrid', 'timeline-metro', 'arc-board', 'thriller-board', 'investigation-board', 'mindmap', 'map', 'tension', 'relation-map',
                 'characters', 'world', 'codex',
-                'stats', 'synonyms', 'word-repetition',
+                'stats', 'synonyms', 'word-repetition', 'emotion-wheel',
                 'search', 'import-export', 'import-chapter', 'colorpalette',
                 'globalnotes'
             ],

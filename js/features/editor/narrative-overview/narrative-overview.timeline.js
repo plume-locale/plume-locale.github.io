@@ -1,4 +1,4 @@
-class="character-section"/**
+/**
  * Narrative Overview - Horizontal Visual Timeline
  * 
  * Visualizes the story structure (Acts and Beats) proportionally 

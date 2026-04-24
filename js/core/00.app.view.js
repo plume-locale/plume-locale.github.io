@@ -764,6 +764,10 @@ function updateEditorToolsSidebar() {
             title="${Localization.t('tools.repetition') || 'Analyseur de répétitions'}">
             <i data-lucide="repeat"></i>
         </button>
+        <button class="tool-btn" onclick="openEmotionWheel()" id="toolEmotionWheelBtn"
+            title="${Localization.t('tools.emotion_wheel') || 'Roue des émotions'}">
+            <i data-lucide="heart"></i>
+        </button>
     `;
 
     if (typeof lucide !== 'undefined') lucide.createIcons({ root: toolsSidebar });
@@ -1745,13 +1749,7 @@ function getEditorToolbarHTML(panel = null, hideExtraTools = false) {
         </div>
         
         ${!hideExtraTools ? `
-        <!-- Synonyms -->
-        <div class="toolbar-group" id="toolSynonymsBtn">
-            <button class="toolbar-btn" onmousedown="event.preventDefault()" onclick="if(typeof SynonymsView !== 'undefined') SynonymsView.toggle()" title="${Localization.t('toolbar.synonyms')}">
-                <i data-lucide="book-a" style="width:14px;height:14px;"></i>
-            </button>
-        </div>
-        
+
         <!-- Mentions -->
         <div class="toolbar-group" id="toolMentionsBtn">
             <button class="toolbar-btn" onmousedown="event.preventDefault()" onclick="MentionHelp.showGuide()" title="${Localization.t('mention.toolbar.title')}">
@@ -1774,6 +1772,15 @@ function getEditorToolbarHTML(panel = null, hideExtraTools = false) {
             </button>
             <button class="toolbar-btn featured-btn" id="toolNarrativeOverviewBtn" onmousedown="event.preventDefault()" onclick="NarrativeOverviewMain.toggleVisibility()" title="Aperçu narratif chronologique">
                 <i data-lucide="book-open" style="width:16px;height:16px;"></i>
+            </button>
+        </div>
+
+        <div class="toolbar-group toolbar-group-featured">
+            <button class="toolbar-btn featured-btn" id="toolSynonymsBtn" onmousedown="event.preventDefault()" onclick="if(typeof SynonymsView !== 'undefined') SynonymsView.toggle()" title="${Localization.t('toolbar.synonyms')}">
+                <i data-lucide="book-a" style="width:16px;height:16px;"></i>
+            </button>
+            <button class="toolbar-btn featured-btn" id="toolEmotionWheelBtn" onmousedown="event.preventDefault()" onclick="openEmotionWheel()" title="${Localization.t('tools.emotion_wheel') || 'Roue des émotions'}">
+                <i data-lucide="heart" style="width:16px;height:16px;"></i>
             </button>
         </div>
         ` : ''}

@@ -267,8 +267,8 @@ const InterfaceCustomizerViewModel = {
         allComponentIds.forEach(id => {
             if (id === 'headerInterfaceBtn' || id === 'sidebarCustomizeBtn') return;
 
-            const el = document.getElementById(id);
-            if (!el) return;
+            const elements = document.querySelectorAll(`#${id}`);
+            if (elements.length === 0) return;
 
             // Un composant est visible si :
             // 1. Son module parent est actif (ou s'il n'en a pas)
@@ -277,15 +277,17 @@ const InterfaceCustomizerViewModel = {
             const isIndividualVisible = settings[id] !== false;
             const shouldShow = isModuleActive && isIndividualVisible;
 
-            if (isEditing) {
-                el.style.display = '';
-                el.classList.toggle('interface-hidden-preview', !shouldShow);
-            } else {
-                // IMPORTANT: On utilise !shouldShow ? 'none' : ''
-                // On s'assure que si shouldShow est false, display est strict 'none'
-                el.style.display = shouldShow ? '' : 'none';
-                el.classList.remove('interface-hidden-preview');
-            }
+            elements.forEach(el => {
+                if (isEditing) {
+                    el.style.display = '';
+                    el.classList.toggle('interface-hidden-preview', !shouldShow);
+                } else {
+                    // IMPORTANT: On utilise !shouldShow ? 'none' : ''
+                    // On s'assure que si shouldShow est false, display est strict 'none'
+                    el.style.display = shouldShow ? '' : 'none';
+                    el.classList.remove('interface-hidden-preview');
+                }
+            });
         });
 
         // 3. Appliquer aux éléments du menu mobile
