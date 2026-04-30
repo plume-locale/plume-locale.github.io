@@ -22,6 +22,14 @@ const InterfaceCustomizerViewModel = {
         if (!settings.shortcuts) settings.shortcuts = defaults.shortcuts;
         if (settings.currentPresetId === undefined) settings.currentPresetId = defaults.currentPresetId || null;
 
+        // Migration : activer par défaut tout nouveau module absent des réglages sauvegardés
+        const knownModuleIds = InterfaceCustomizerModel.modules.map(m => m.id);
+        const newModules = knownModuleIds.filter(id => !settings.activeModules.includes(id));
+        if (newModules.length > 0) {
+            settings.activeModules = [...settings.activeModules, ...newModules];
+            InterfaceCustomizerRepository.saveSettings(settings);
+        }
+
         InterfaceCustomizerViewModel.state.settings = settings;
         InterfaceCustomizerViewModel.applySettings();
     },
