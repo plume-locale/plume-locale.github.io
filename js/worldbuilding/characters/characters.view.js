@@ -398,6 +398,41 @@ function renderCharacterSheet(character, racesList, groupsList, linkedScenes) {
                                    oninput="updateCharacterField('${character.id}', 'occupation', this.value)">
                         </div>
                     </div>
+                    <div class="character-field-row">
+                        <div class="character-field">
+                            <label class="character-field-label">${Localization.t('char.field.narrative_role')}</label>
+                            ${(() => {
+                                const knownRoles = ['protagonist','antagonist','deuteragonist','mentor','ally','rival','foil','love_interest','trickster','guardian','secondary_antagonist','neutral','background'];
+                                const isCustom = character.narrativeRole && !knownRoles.includes(character.narrativeRole);
+                                const selectValue = isCustom ? '__custom__' : (character.narrativeRole || '');
+                                return `
+                            <select data-field="narrativeRole"
+                                    onchange="(function(el){ const charId='${character.id}'; if(el.value==='__custom__'){ const inp=el.parentElement.querySelector('.narrative-role-custom'); if(inp){ inp.style.display='block'; inp.focus(); } }else{ const inp=el.parentElement.querySelector('.narrative-role-custom'); if(inp) inp.style.display='none'; updateCharacterField(charId,'narrativeRole',el.value); } })(this)"
+                                    style="width:100%">
+                                <option value="">${Localization.t('char.field.narrative_role.none')}</option>
+                                <option value="protagonist" ${selectValue === 'protagonist' ? 'selected' : ''}>${Localization.t('char.field.narrative_role.protagonist')}</option>
+                                <option value="antagonist" ${selectValue === 'antagonist' ? 'selected' : ''}>${Localization.t('char.field.narrative_role.antagonist')}</option>
+                                <option value="deuteragonist" ${selectValue === 'deuteragonist' ? 'selected' : ''}>${Localization.t('char.field.narrative_role.deuteragonist')}</option>
+                                <option value="mentor" ${selectValue === 'mentor' ? 'selected' : ''}>${Localization.t('char.field.narrative_role.mentor')}</option>
+                                <option value="ally" ${selectValue === 'ally' ? 'selected' : ''}>${Localization.t('char.field.narrative_role.ally')}</option>
+                                <option value="rival" ${selectValue === 'rival' ? 'selected' : ''}>${Localization.t('char.field.narrative_role.rival')}</option>
+                                <option value="foil" ${selectValue === 'foil' ? 'selected' : ''}>${Localization.t('char.field.narrative_role.foil')}</option>
+                                <option value="love_interest" ${selectValue === 'love_interest' ? 'selected' : ''}>${Localization.t('char.field.narrative_role.love_interest')}</option>
+                                <option value="trickster" ${selectValue === 'trickster' ? 'selected' : ''}>${Localization.t('char.field.narrative_role.trickster')}</option>
+                                <option value="guardian" ${selectValue === 'guardian' ? 'selected' : ''}>${Localization.t('char.field.narrative_role.guardian')}</option>
+                                <option value="secondary_antagonist" ${selectValue === 'secondary_antagonist' ? 'selected' : ''}>${Localization.t('char.field.narrative_role.secondary_antagonist')}</option>
+                                <option value="neutral" ${selectValue === 'neutral' ? 'selected' : ''}>${Localization.t('char.field.narrative_role.neutral')}</option>
+                                <option value="background" ${selectValue === 'background' ? 'selected' : ''}>${Localization.t('char.field.narrative_role.background')}</option>
+                                <option value="__custom__" ${isCustom ? 'selected' : ''}>${Localization.t('char.field.narrative_role.custom')}</option>
+                            </select>
+                            <input type="text" class="narrative-role-custom"
+                                   value="${isCustom ? (character.narrativeRole || '') : ''}"
+                                   placeholder="${Localization.t('char.field.narrative_role.custom_placeholder')}"
+                                   style="width:100%; margin-top:6px; display:${isCustom ? 'block' : 'none'};"
+                                   oninput="updateCharacterField('${character.id}', 'narrativeRole', this.value)">`;
+                            })()}
+                        </div>
+                    </div>
                 </div>
             </div>
 

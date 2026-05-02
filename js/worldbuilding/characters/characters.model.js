@@ -29,6 +29,7 @@ const CharacterModel = {
             deathPlace: data.deathPlace || '',
             residence: data.residence || '',
             occupation: data.occupation || '',
+            narrativeRole: data.narrativeRole || '',
             // Header
             name: name || `${data.firstName || ''} ${data.lastName || ''}`.trim(),
             role: data.role || '',
