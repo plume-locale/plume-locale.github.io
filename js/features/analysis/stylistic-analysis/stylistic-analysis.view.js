@@ -124,7 +124,7 @@ const StylisticAnalysisView = {
                     <div style="font-size: 2.5rem; line-height: 1;">${emoji}</div>
                     <div>
                         <div style="font-weight: 600; font-size: 1.1rem; color: ${color};">${labelText}</div>
-                        <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.25rem;">Score global : ${Math.round(sentiment.score * 100)}%</div>
+                        <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.25rem;">${Localization.t('stylistic.sentiment.score_global', [Math.round(sentiment.score * 100)])}</div>
                     </div>
                 </div>
                 
@@ -135,9 +135,9 @@ const StylisticAnalysisView = {
                 </div>
                 
                 <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted);">
-                    <span>${sentiment.positive}% Positif</span>
-                    <span>${sentiment.neutral}% Neutre</span>
-                    <span>${sentiment.negative}% Négatif</span>
+                    <span>${Localization.t('stylistic.sentiment.pos_label', [sentiment.positive])}</span>
+                    <span>${Localization.t('stylistic.sentiment.neu_label', [sentiment.neutral])}</span>
+                    <span>${Localization.t('stylistic.sentiment.neg_label', [sentiment.negative])}</span>
                 </div>
                 
                 ${wordsHtml.length ? `<div style="background: var(--bg-secondary); padding: 0.75rem; border-radius: 6px; margin-top: 1rem;">${wordsHtml.join('')}</div>` : ''}
@@ -190,7 +190,7 @@ const StylisticAnalysisView = {
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem; font-size: 0.85rem;">
                         <span style="display: flex; align-items: center; gap: 0.35rem;">
                             <i data-lucide="${cat.icon}" style="width: 14px; height: 14px; color: ${cat.color};"></i>
-                            ${cat.label} ${statusIcon}
+                            ${Localization.t('stylistic.connector.' + key) || cat.label} ${statusIcon}
                         </span>
                         <span style="font-weight: 600;">${cat.count} <span style="color:var(--text-muted); font-weight:normal; font-size: 0.75rem;">(${cat.percentage}%)</span></span>
                     </div>

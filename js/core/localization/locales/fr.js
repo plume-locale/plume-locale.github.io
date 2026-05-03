@@ -1677,6 +1677,20 @@ window.LOCALE_FR = {
     "stylistic.connectors.repetition": "Répétition : \"{0}\" utilisé {1} fois.",
     "stylistic.connectors.none_found": "Aucun connecteur détecté.",
 
+    "stylistic.connector.addition": "Addition",
+    "stylistic.connector.opposition": "Opposition",
+    "stylistic.connector.cause": "Cause",
+    "stylistic.connector.consequence": "Conséquence",
+    "stylistic.connector.illustration": "Illustration",
+    "stylistic.connector.time": "Temps",
+    "stylistic.connector.concession": "Concession",
+    "stylistic.connector.conclusion": "Conclusion",
+
+    "stylistic.sentiment.pos_label": "{0}% Positif",
+    "stylistic.sentiment.neu_label": "{0}% Neutre",
+    "stylistic.sentiment.neg_label": "{0}% Négatif",
+    "stylistic.sentiment.score_global": "Score global : {0}%",
+
     // --- Map module ---
     "map.empty.title": "Gérez votre univers géographique",
     "map.empty.desc": "Créez des plans pour vos scènes de crime, vos manoirs ou vos mondes fantasy.",
