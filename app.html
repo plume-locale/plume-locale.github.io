@@ -60,6 +60,7 @@
 <link rel="stylesheet" href="./css/import-export-hub.css">
 <link rel="stylesheet" href="./css/stats.css">
 <link rel="stylesheet" href="./css/storygrid.css">
+<link rel="stylesheet" href="./css/stylistic-analysis.css">
 <link rel="stylesheet" href="./css/theme-manager.css">
 <link rel="stylesheet" href="./css/thriller-board.css">
     <script>window.PLUME_DEMO_PROJECT = {
@@ -1741,6 +1742,12 @@
                     <i data-lucide="repeat"></i>
                     <span class="tool-kbd">Alt+R</span>
                 </button>
+                <button class="tool-btn" onclick="toggleStylisticAnalysisPanel()" id="toolStylisticBtn"
+                    title="Analyse Stylistique" data-i18n-title="tools.stylistic" data-tooltip="Style"
+                    data-i18n-tooltip="tools.stylistic" data-shortcut="Alt+S">
+                    <i data-lucide="sparkles"></i>
+                    <span class="tool-kbd">Alt+S</span>
+                </button>
                 <button class="tool-btn" onclick="openEmotionWheel()" id="toolEmotionWheelBtn"
                     title="Roue des émotions" data-i18n-title="tools.emotion_wheel" data-tooltip="Émotions"
                     data-i18n-tooltip="tools.emotion_wheel">
@@ -1875,14 +1882,33 @@
                             <i data-lucide="refresh-cw" style="width: 12px; height: 12px"></i>
                             <span data-i18n="btn.analyze">Analyser</span>
                         </button>
-                        <button class="btn btn-icon btn-small" onclick="WordRepetitionHandlers.onToggleSettings()"
+                        <button class="btn btn-small btn-ghost" onclick="WordRepetitionHandlers.onToggleSettings()"
                             title="Paramètres" data-i18n-title="btn.settings">
                             <i data-lucide="settings" style="width: 14px; height: 14px"></i>
+                            <span data-i18n="btn.settings">Paramètres</span>
                         </button>
                     </div>
                 </div>
                 <div class="word-rep-sidebar-content" id="wordRepetitionContainer">
                     <!-- Word repetition panel will be dynamically inserted here -->
+                </div>
+            </div>
+            <!-- Stylistic Analysis Sidebar (Right Panel) -->
+            <div id="stylisticAnalysisSidebar" class="word-rep-sidebar hidden">
+                <div class="word-rep-sidebar-resize" id="stylisticSidebarResize"></div>
+                <div class="word-rep-sidebar-header">
+                    <div class="word-rep-sidebar-title">
+                        <h3 data-i18n="tools.stylistic_title"><i data-lucide="sparkles"
+                                style="width: 16px; height: 16px; vertical-align: middle; margin-right: 6px; color: var(--accent-gold);"></i>Analyse Stylistique
+                        </h3>
+                        <button class="word-rep-sidebar-close" onclick="toggleStylisticAnalysisPanel()" title="Fermer"
+                            data-i18n-title="btn.close">
+                            <i data-lucide="x" style="width: 14px; height: 14px"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="word-rep-sidebar-content" id="stylisticAnalysisContainer">
+                    <!-- Stylistic analysis panel will be dynamically inserted here -->
                 </div>
             </div>
             <!-- Main Editor -->
@@ -4617,6 +4643,12 @@
 <script src="./js/features/analysis/word-repetition/word-repetition.view.js"></script>
 <script src="./js/features/analysis/word-repetition/word-repetition.handlers.js"></script>
 <script src="./js/features/analysis/word-repetition/word-repetition.main.js"></script>
+<script src="./js/features/analysis/stylistic-analysis/stylistic-analysis.data.js"></script>
+<script src="./js/features/analysis/stylistic-analysis/stylistic-analysis.model.js"></script>
+<script src="./js/features/analysis/stylistic-analysis/stylistic-analysis.viewmodel.js"></script>
+<script src="./js/features/analysis/stylistic-analysis/stylistic-analysis.view.js"></script>
+<script src="./js/features/analysis/stylistic-analysis/stylistic-analysis.handlers.js"></script>
+<script src="./js/features/analysis/stylistic-analysis/stylistic-analysis.main.js"></script>
 <script src="./js/features/tools/product-tour/product-tour.model.js"></script>
 <script src="./js/features/tools/product-tour/product-tour.data.js"></script>
 <script src="./js/features/tools/product-tour/product-tour.repository.js"></script>

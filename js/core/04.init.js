@@ -96,6 +96,11 @@ async function init() {
         MentionHelp.init();
     }
 
+    // Initialize Stylistic Analysis
+    if (typeof StylisticAnalysis !== 'undefined' && StylisticAnalysis.init) {
+        StylisticAnalysis.init();
+    }
+
     // Ensure all icons are rendered
     if (typeof lucide !== 'undefined') {
         lucide.createIcons();

@@ -98,6 +98,9 @@ const SynonymsDictionaryManager = (() => {
         const entry = dict[cleanWord];
 
         if (!entry) {
+            // Recherche partielle désactivée pour les mots très courts (évite 'et' -> 'ethnonyme')
+            if (cleanWord.length < 4) return [];
+
             // Recherche partielle (commence par...)
             const partialMatches = [];
             for (const [key, value] of Object.entries(dict)) {

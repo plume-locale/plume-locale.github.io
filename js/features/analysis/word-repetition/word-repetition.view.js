@@ -75,6 +75,10 @@ const WordRepetitionView = {
     _renderSettingsPanel(prefs) {
         return `
             <div class="word-rep-settings" id="wordRepSettings" style="display: none;">
+                <div class="settings-info" style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1rem; padding: 0.5rem; background: var(--bg-tertiary); border-radius: 4px;">
+                    <i data-lucide="info" style="width: 12px; height: 12px; vertical-align: middle; margin-right: 4px;"></i>
+                    Les mots-outils (le, la, et, de...) sont automatiquement exclus pour une analyse plus pertinente.
+                </div>
                 <div class="settings-row">
                     <label>${Localization.t('repetition.settings.min_length')}</label>
                     <input type="number" id="prefMinWordLength" value="${prefs.minWordLength}" min="2" max="10"
@@ -324,7 +328,7 @@ const WordRepetitionView = {
                 <h4><i data-lucide="lightbulb" style="width: 14px; height: 14px;"></i> ${Localization.t('repetition.detail.suggestions_title')}</h4>
                 <div class="suggestions-list">
                     ${rep.suggestions.map(sug => `
-                        <span class="suggestion-tag" onclick="WordRepetitionHandlers.onCopySuggestion('${sug.suggestion}')" title="${Localization.t('repetition.detail.copy_suggestion')}">
+                        <span class="suggestion-tag" onclick="WordRepetitionHandlers.onApplySuggestion('${rep.word}', '${sug.suggestion}')" title="${Localization.t('repetition.detail.apply_suggestion')}">
                             ${sug.suggestion}
                         </span>
                     `).join('')}

@@ -764,6 +764,10 @@ function updateEditorToolsSidebar() {
             title="${Localization.t('tools.repetition') || 'Analyseur de répétitions'}">
             <i data-lucide="repeat"></i>
         </button>
+        <button class="tool-btn" onclick="toggleStylisticAnalysisPanel()" id="toolStylisticBtn"
+            title="${Localization.t('tools.stylistic') || 'Analyse Stylistique'}">
+            <i data-lucide="sparkles"></i>
+        </button>
         <button class="tool-btn" onclick="openEmotionWheel()" id="toolEmotionWheelBtn"
             title="${Localization.t('tools.emotion_wheel') || 'Roue des émotions'}">
             <i data-lucide="heart"></i>
@@ -1067,8 +1071,14 @@ function refreshAllViews() {
         if (scene) {
             const titleEl = document.getElementById('sceneTitle');
             const contentEl = document.getElementById('sceneContent');
-            if (titleEl) titleEl.value = scene.title;
-            if (contentEl) contentEl.value = scene.content || '';
+            if (titleEl) {
+                if (titleEl.tagName === 'INPUT' || titleEl.tagName === 'TEXTAREA') titleEl.value = scene.title;
+                else titleEl.innerText = scene.title;
+            }
+            if (contentEl) {
+                if (contentEl.tagName === 'INPUT' || contentEl.tagName === 'TEXTAREA') contentEl.value = scene.content || '';
+                else contentEl.innerHTML = scene.content || '';
+            }
             if (typeof updateWordCount === 'function') updateWordCount();
         }
     }
@@ -1821,7 +1831,7 @@ function renderEditor(act, chapter, scene) {
                         <span class="breadcrumb-separator">></span>
                         <span class="breadcrumb-item">${chapter.title}</span>
                         <span class="breadcrumb-separator">></span>
-                        <span class="breadcrumb-item scene-title-item">${scene.title}${finalVersionBadge}</span>
+                        <span class="breadcrumb-item scene-title-item" id="sceneTitle">${scene.title}${finalVersionBadge}</span>
                     </div>
                     
                     <div class="header-right-tools">
@@ -1887,6 +1897,7 @@ function renderEditor(act, chapter, scene) {
         <div class="editor-workspace" style="flex: 1; overflow-y: auto; background: var(--bg-primary); min-height: 0;">
             <div class="editor-content" style="width: 100%; max-width: 900px; margin: 0 auto; padding: 2rem; min-height: 100%;">
                 <div class="editor-textarea" 
+                     id="sceneContent"
                      contenteditable="true" 
                      spellcheck="true" 
                      oninput="updateSceneContent()"

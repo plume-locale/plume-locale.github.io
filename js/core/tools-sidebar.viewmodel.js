@@ -39,6 +39,11 @@ const ToolsSidebarViewModel = {
 
         // 6. Links (Personnages, Univers)
         this.updateLinksBadge(sceneId);
+
+        // 7. Stylistic Analysis Refresh (if open)
+        if (typeof StylisticAnalysis !== 'undefined' && StylisticAnalysis.refreshIfVisible) {
+            StylisticAnalysis.refreshIfVisible();
+        }
     },
 
     /**

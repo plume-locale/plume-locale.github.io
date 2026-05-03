@@ -132,5 +132,10 @@ const KeyboardShortcutsHandlers = {
     toolRepetition: (e) => {
         if (e) e.preventDefault();
         if (typeof toggleWordRepetitionPanel === 'function') toggleWordRepetitionPanel();
+    },
+
+    toolStylistic: (e) => {
+        if (e) e.preventDefault();
+        if (typeof toggleStylisticAnalysisPanel === 'function') toggleStylisticAnalysisPanel();
     }
 };

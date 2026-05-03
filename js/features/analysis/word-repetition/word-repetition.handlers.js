@@ -147,6 +147,181 @@ const WordRepetitionHandlers = {
 
     /**
      * [MVVM : Handlers]
+     * Applique un remplacement par un synonyme
+     * @param {string} word - Mot original
+     * @param {string} replacement - Nouveau mot
+     */
+    onApplySuggestion(word, replacement) {
+        const focused = document.querySelector('.word-rep-highlight-focus');
+        if (focused) {
+            this._applyReplacement(focused, replacement);
+        } else {
+            // Si pas de focus, on propose de sélectionner une occurrence
+            const first = document.querySelector('.word-rep-highlight');
+            if (first) {
+                first.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                first.classList.add('word-rep-highlight-focus');
+                WordRepetitionView.notify(Localization.t('repetition.notify.select_occurrence_first'), 'info');
+            } else {
+                // Pas de highlights? On les recrée peut-être?
+                this._highlightAllOccurrences(word);
+                setTimeout(() => this.onApplySuggestion(word, replacement), 100);
+            }
+        }
+    },
+
+    /**
+     * [MVVM : Handlers]
+     * Logique de remplacement dans le texte
+     * @param {HTMLElement} element - Élément mark à remplacer
+     * @param {string} replacement - Nouveau texte
+     * @private
+     */
+    _applyReplacement(element, replacement) {
+        const original = element.textContent;
+        const parent = element.parentNode;
+        const editor = element.closest('.editor-textarea');
+        
+        // Remplacement effectif
+        const textNode = document.createTextNode(replacement);
+        parent.replaceChild(textNode, element);
+        parent.normalize();
+
+        // Sauvegarder le changement
+        if (editor) {
+            if (typeof updateChapterSceneContent === 'function') {
+                const actId = editor.getAttribute('data-act-id');
+                const chapterId = editor.getAttribute('data-chapter-id');
+                const sceneId = editor.getAttribute('data-scene-id');
+                if (actId && chapterId && sceneId) {
+                    updateChapterSceneContent(actId, chapterId, sceneId);
+                }
+            } else if (typeof updateSceneContent === 'function') {
+                updateSceneContent();
+            }
+        }
+
+        WordRepetitionView.notify(Localization.t('repetition.notify.replaced', original, replacement), 'success');
+        this._closeReplacementMenu();
+
+        // Rafraîchir l'analyse pour mettre à jour les compteurs
+        setTimeout(() => this.onRefresh(), 500);
+    },
+
+    /**
+     * [MVVM : Handlers]
+     * Gère le clic sur un mot surligné dans l'éditeur
+     * @param {HTMLElement} element - Élément cliqué
+     * @param {Event} event - Événement
+     */
+    onHighlightClick(element, event) {
+        if (event) event.stopPropagation();
+        
+        // Focus visuel
+        document.querySelectorAll('.word-rep-highlight-focus').forEach(el => el.classList.remove('word-rep-highlight-focus'));
+        element.classList.add('word-rep-highlight-focus');
+
+        // Récupérer les suggestions
+        const word = element.textContent.trim().toLowerCase();
+        const report = WordRepetitionViewModel.getCurrentReport();
+        const rep = report?.repetitions.find(r => r.word.toLowerCase() === word);
+        
+        if (rep && rep.suggestions.length > 0) {
+            this._showReplacementMenu(element, rep.suggestions);
+        } else {
+            // Chercher dynamiquement si pas dans le rapport actuel
+            WordRepetitionViewModel.getSuggestions(word).then(suggestions => {
+                if (suggestions && suggestions.length > 0) {
+                    this._showReplacementMenu(element, suggestions);
+                }
+            });
+        }
+    },
+
+    /**
+     * [MVVM : Handlers]
+     * Affiche le menu flottant de remplacement
+     * @param {HTMLElement} target - Élément cible (le mark)
+     * @param {Array} suggestions - Liste des suggestions
+     * @private
+     */
+    _showReplacementMenu(target, suggestions) {
+        this._closeReplacementMenu();
+
+        const menu = document.createElement('div');
+        menu.id = 'wordRepReplacementMenu';
+        menu.className = 'word-rep-replacement-menu';
+        
+        let html = `<div class="replacement-menu-header">${Localization.t('repetition.detail.suggestions_title')}</div>`;
+        
+        suggestions.forEach(sug => {
+            html += `
+                <button class="replacement-menu-item" onclick="WordRepetitionHandlers._applyReplacementFromMenu(this, '${sug.suggestion.replace(/'/g, "\\'")}')">
+                    <span>${sug.suggestion}</span>
+                    <i data-lucide="check" style="width: 12px; height: 12px;"></i>
+                </button>
+            `;
+        });
+
+        menu.innerHTML = html;
+        document.body.appendChild(menu);
+        
+        if (typeof lucide !== 'undefined') lucide.createIcons({ root: menu });
+
+        // Positionnement
+        const rect = target.getBoundingClientRect();
+        const menuRect = menu.getBoundingClientRect();
+        
+        let top = rect.bottom + 5;
+        let left = rect.left;
+
+        // Ajuster si déborde en bas
+        if (top + menuRect.height > window.innerHeight) {
+            top = rect.top - menuRect.height - 5;
+        }
+        
+        // Ajuster si déborde à droite
+        if (left + menuRect.width > window.innerWidth) {
+            left = window.innerWidth - menuRect.width - 10;
+        }
+
+        menu.style.top = `${top}px`;
+        menu.style.left = `${left}px`;
+
+        // Fermer au clic ailleurs
+        const closeHandler = (e) => {
+            if (!menu.contains(e.target) && e.target !== target) {
+                this._closeReplacementMenu();
+                document.removeEventListener('mousedown', closeHandler);
+            }
+        };
+        setTimeout(() => document.addEventListener('mousedown', closeHandler), 10);
+    },
+
+    /**
+     * [MVVM : Handlers]
+     * Helper pour le menu (conserve le contexte de l'élément ciblé)
+     * @private
+     */
+    _applyReplacementFromMenu(menuButton, replacement) {
+        const focused = document.querySelector('.word-rep-highlight-focus');
+        if (focused) {
+            this._applyReplacement(focused, replacement);
+        }
+    },
+
+    /**
+     * [MVVM : Handlers]
+     * Ferme le menu de remplacement
+     * @private
+     */
+    _closeReplacementMenu() {
+        const menu = document.getElementById('wordRepReplacementMenu');
+        if (menu) menu.remove();
+    },
+
+    /**
+     * [MVVM : Handlers]
      * Gestionnaire de chargement de plus de suggestions
      * @param {string} word - Mot à rechercher
      */
@@ -248,11 +423,11 @@ const WordRepetitionHandlers = {
             // Scroll vers le highlight trouvé
             bestMatch.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
-            // Ajouter une animation pour attirer l'attention
+            // Nettoyer les autres focus
+            document.querySelectorAll('.word-rep-highlight-focus').forEach(el => el.classList.remove('word-rep-highlight-focus'));
+            
+            // Ajouter le focus
             bestMatch.classList.add('word-rep-highlight-focus');
-            setTimeout(() => {
-                bestMatch.classList.remove('word-rep-highlight-focus');
-            }, 2000);
         }
     },
 
@@ -371,6 +546,7 @@ const WordRepetitionHandlers = {
                     const mark = document.createElement('mark');
                     mark.className = 'word-rep-highlight';
                     mark.textContent = match[0];
+                    mark.onclick = (e) => WordRepetitionHandlers.onHighlightClick(mark, e);
                     fragment.appendChild(mark);
 
                     if (!firstHighlight) {

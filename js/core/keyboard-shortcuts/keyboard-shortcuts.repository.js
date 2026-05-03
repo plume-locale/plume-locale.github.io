@@ -18,7 +18,8 @@ class KeyboardShortcutsRepository {
             { id: 'toolPlot', key: 'p', alt: true, description: Localization.t('nav.plotgrid') },
             { id: 'toolInvestigation', key: 'i', alt: true, description: Localization.t('tools.investigation') },
             { id: 'toolLinks', key: 'l', alt: true, description: Localization.t('tools.links') },
-            { id: 'toolRepetition', key: 'r', alt: true, description: Localization.t('tools.repetition') }
+            { id: 'toolRepetition', key: 'r', alt: true, description: Localization.t('tools.repetition') },
+            { id: 'toolStylistic', key: 's', alt: true, description: Localization.t('tools.stylistic') }
         ].map(s => {
             const kb = new KeyboardShortcut(s.key, s.ctrl, s.meta, s.shift || false, s.alt || false, s.description);
             kb.id = s.id;
