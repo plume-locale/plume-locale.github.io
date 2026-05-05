@@ -77,7 +77,7 @@ const translations = {
                 feature2: "Contrôle total de vos données",
                 feature3: "Sauvegarde manuelle à faire vers l'emplacement de votre choix",
                 feature4: "Aucune dépendance externe",
-                cta: "Télécharger la dernière version sur votre ordinateur"
+                cta: "Télécharger la version {version} sur votre ordinateur"
             },
             note: "Dans les deux cas, vos données sont stockées localement dans votre navigateur. Le mode en ligne offre simplement la synchronisation automatique avec Google Drive pour accéder à vos projets depuis plusieurs appareils."
         },
@@ -253,7 +253,7 @@ const translations = {
                 feature2: "Full control over your data",
                 feature3: "Manual backup to the cloud of your choice",
                 feature4: "No external dependencies",
-                cta: "Download directly the last version on you computer"
+                cta: "Download version {version} on your computer"
             },
             note: "In both cases, your data is stored locally in your browser. The online mode simply offers automatic synchronization with Google Drive to access your projects from multiple devices."
         },
@@ -429,7 +429,7 @@ const translations = {
                 feature2: "Volle Kontrolle über Ihre Daten",
                 feature3: "Manuelle Sicherung in die Cloud Ihrer Wahl",
                 feature4: "Keine externen Abhängigkeiten",
-                cta: "Laden Sie die neueste Version auf Ihren Computer herunter."
+                cta: "Version {version} auf Ihren Computer herunterladen"
             },
             note: "In beiden Fällen werden Ihre Daten lokal in Ihrem Browser gespeichert. Der Online-Modus bietet einfach die automatische Synchronisation mit Google Drive, um von mehreren Geräten auf Ihre Projekte zuzugreifen."
         },
@@ -537,7 +537,7 @@ const translations = {
         nav: {
             features: "Funciones",
             testimonials: "Testimonios",
-            documentation: "Documentación",
+            documentation: "Documentation",
             faq: "FAQ",
             supportKofi: "Apoyar en Ko-fi",
             openApp: "Abrir App"
@@ -568,7 +568,7 @@ const translations = {
         preview: {
             title: "Inserta aquí un GIF o captura de pantalla de la interfaz",
             description: "Muestra el editor principal, el tablero de corcho o una transición entre herramientas. Un simple screencast de 10 segundos transformará esta sección.",
-            tip: "Usa ScreenToGif (gratis) para crear un GIF en 30 minutos"
+            tip: "Usa ScreenToGif (gratis) para crear un GIF en 30 minutes"
         },
         values: {
             title: "Por qué Plume es diferente",
@@ -605,7 +605,7 @@ const translations = {
                 feature2: "Control total sobre tus datos",
                 feature3: "Respaldo manual a la nube de tu elección",
                 feature4: "Sin dependencias externas",
-                cta: "Descargue la última versión a su computadora"
+                cta: "Descargar la versión {version} en su computadora"
             },
             note: "En ambos casos, tus datos se almacenan localmente en tu navegador. El modo en línea simplemente ofrece sincronización automática con Google Drive para acceder a tus proyectos desde múltiples dispositivos."
         },
@@ -621,7 +621,7 @@ const translations = {
                 editor: { name: "Editor de Escenas", desc: "Organiza tu relato en actos, capítulos y escenas. Reorganiza arrastrando y soltando." },
                 corkboard: { name: "Tablero de Corcho", desc: "Visualiza tu estructura como tarjetas. Ideal para planificar y reestructurar." },
                 characters: { name: "Personajes", desc: "Fichas completas con psicología, relaciones y arcos de transformación." },
-                universe: { name: "Universo", desc: "Worldbuilding completo: lugares, culturas, objetos, religiones. Mantén la coherencia." },
+                universe: { name: "Universo", desc: "Worldbuilding completo: lugares, personas, objetos, religiones. Mantén la coherencia." },
                 notes: { name: "Notas Rápidas", desc: "Captura tus ideas antes de que se evaporen. Un bloc de notas siempre accesible." },
                 stats: { name: "Estadísticas", desc: "Sigue tu progreso, objetivos de palabras y tiempo de escritura." }
             },
@@ -631,22 +631,22 @@ const translations = {
                 timeline: { name: "Línea de Tiempo", desc: "Cronología multi-arco para evitar anacronismos e inconsistencias temporales." },
                 plotgrid: { name: "PlotGrid", desc: "Gestiona visualmente los puntos clave de tu narración escena por escena." },
                 map: { name: "Mapa del Mundo", desc: "Cartografía tus lugares para nunca perder el hilo geográfico." },
-                investigation: { name: "Investigación", desc: "Tablero de investigación especial para thrillers y novelas policiacas." }
+                investigation: { name: "Enquête", desc: "Tablero de investigación especial para thrillers y novelas policiacas." }
             },
             analysis: {
                 tension: { name: "Análisis de Tensión", desc: "Visualiza automáticamente la curva de tensión de tus escenas." },
                 text: { name: "Análisis de Texto", desc: "Detecta repeticiones y mejora la legibilidad de tu prosa." },
                 mindmap: { name: "Mapa Mental", desc: "Explora visualmente ideas y conceptos complejos." },
-                codex: { name: "Códice", desc: "Tu enciclopedia personal para mantener una coherencia absoluta." },
+                codex: { name: "Codex", desc: "Tu enciclopedia personal para mantener una coherencia absoluta." },
                 pomodoro: { name: "Pomodoro", desc: "Temporizador integrado para sesiones de escritura hiperproductivas." },
-                snapshots: { name: "Instantáneas", desc: "Guarda versiones de tus escenas para comparar revisiones." }
+                snapshots: { name: "Snapshots", desc: "Guarda versiones de tus escenas para comparar revisiones." }
             }
         },
         testimonials: {
             title: "Lo que dicen los autores",
             subtitle: "Únete a una comunidad de escritores que han recuperado el control de sus textos",
             marie: {
-                quote: "Por fin una herramienta que no me obliga a crear una cuenta y confiar mis manuscritos a un servidor en algún lugar. La tranquilidad de saber que mis textos están solo en casa no tiene precio.",
+                quote: "Por fin una herramienta que no me obliga a crear una cuenta y confiar mis manuscritas a un servidor en algún lugar. La tranquilidad de saber que mis textos están solo en casa no tiene precio.",
                 name: "Marie L.",
                 role: "Autora de fantasía"
             },

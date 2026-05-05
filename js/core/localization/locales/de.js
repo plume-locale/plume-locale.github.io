@@ -511,13 +511,32 @@ window.LOCALE_DE = {
     "stylistic.analyzing": "Wird analysiert...",
     "stylistic.empty": "Wählen Sie eine Szene oder klicken Sie auf Aktualisieren, um die Analyse zu starten.",
     "stylistic.btn_analyze": "Analysieren",
+    "stylistic.btn_clear": "Hervorhebungen löschen",
+    "stylistic.stop_analysis": "Analyse stoppen",
+    "stylistic.stop_on_close": "Analyse beim Schließen beenden",
     "stylistic.no_words": "Nicht genug Text für die Analyse.",
     "stylistic.sentiment.title": "Emotionaler Ton",
     "stylistic.sentiment.very_positive": "Sehr Positiv",
     "stylistic.sentiment.positive": "Positiv",
+    "stylistic.sentiment.slightly_positive": "Leicht Positiv",
     "stylistic.sentiment.neutral": "Neutral",
+    "stylistic.sentiment.slightly_negative": "Leicht Negativ",
     "stylistic.sentiment.negative": "Negativ",
     "stylistic.sentiment.very_negative": "Sehr Negativ",
+
+    "stylistic.sentiment.intensity": "Emotionale Intensität",
+    "stylistic.sentiment.intensity_title": "Hilfe: Emotionale Intensität",
+    "stylistic.sentiment.intensity_help": "Diese Zahl stellt die emotionale Dichte Ihres Textes dar.\n\n• Nicht die Stärke der Emotion: Sie sagt Ihnen nicht, ob die Emotion \"heftig\" oder \"sanft\" ist, sondern ob sie allgegenwärtig oder selten ist.\n\n• Geringe Intensität (< 2%): Sachlicher, beschreibender oder neutraler Text (z.B. eine technische Anleitung).\n• Mittlere Intensität (4% - 8%): Der übliche Bereich für eine ausgewogene Erzählung.\n• Hintere Intensität (> 12%): Sehr geladener Text, fast jeder Satz enthält stark konnotierte Begriffe.",
+
+
+    "stylistic.sentiment.detected_balance": "Erkannte Wortbalance:",
+
+    "stylistic.sentiment.highlight_pos": "Hervorheben (+)",
+    "stylistic.sentiment.highlight_neg": "Hervorheben (-)",
+    "stylistic.sentiment.highlight_both": "Alles hervorheben",
+    "stylistic.btn_stop": "Stopp",
+
+
     "stylistic.connectors.title": "Logische Konnektoren",
     "stylistic.connectors.none_found": "Keine Konnektoren erkannt.",
     "stylistic.connectors.too_few": "Ihrem Text fehlt Struktur (wenige Konnektoren).",
@@ -1546,6 +1565,8 @@ window.LOCALE_DE = {
     "stylistic.analyzing": "Stil wird analysiert...",
     "stylistic.empty": "Keine Analysedaten. Wählen Sie eine Szene aus oder klicken Sie auf Analysieren.",
     "stylistic.btn_analyze": "Szene analysieren",
+    "stylistic.btn_clear": "Hervorhebungen löschen",
+    "stylistic.stop_on_close": "Analyse beim Schließen beenden",
     "stylistic.no_words": "Nicht genügend Text für eine aussagekräftige Analyse.",
     "stylistic.sentiment.title": "Emotionaler Ton",
     "stylistic.sentiment.very_positive": "Sehr Positiv",
@@ -1573,7 +1594,13 @@ window.LOCALE_DE = {
     "stylistic.sentiment.pos_label": "{0}% Positiv",
     "stylistic.sentiment.neu_label": "{0}% Neutral",
     "stylistic.sentiment.neg_label": "{0}% Negativ",
-    "stylistic.sentiment.score_global": "Gesamtpunktzahl: {0}%",
+    "stylistic.sentiment.score_global_label": "Gesamtpunktzahl",
+    "stylistic.sentiment.score_title": "Hilfe: Gesamtpunktzahl",
+    "stylistic.sentiment.score_help": "Die Gesamtpunktzahl wird durch Mittelung der \"emotionalen Stärke\" jedes erkannten Wortes berechnet. Hier sind die genauen Schritte :\n\n1. Punktvergabe pro Wort\nJedes Wort in unserem Lexikon hat einen Basiswert von -5 (sehr negativ) bis +5 (sehr positiv).\nBeispiel : \"Ausgezeichnet\" ist +3, \"Schrecklich\" ist -3.\n\n2. Kontextuelle Anpassung\nDie Engine passt diesen Wert basierend auf den vorangegangenen Wörtern an :\n• Verstärker : Ein Wort wie \"sehr\" multipliziert den Wert des folgenden Wortes mit 1,5 (\"Sehr gut\" geht von +2 auf +3).\n• Verneinungen : Ein \"nicht\" oder \"nie\" kehrt den Wert um und schwächt ihn leicht ab (\"Nicht glücklich\" geht von -2 auf +1,4).\n\n3. Normalisierungsformel\nAlle Einzelwerte werden summiert, um eine Gesamtsumme zu erhalten. Anschließend wird diese Gesamtsumme normalisiert, um in eine Skala von -100% bis +100% zu passen.",
+
+    "stylistic.sentiment.score_global": "{0}%",
+
+
 
     // --- Sidebar View (Mobile) ---
     "sidebar_view.items.single": "Element",

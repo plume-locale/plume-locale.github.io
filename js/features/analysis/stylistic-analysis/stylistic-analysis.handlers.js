@@ -29,6 +29,19 @@ const StylisticAnalysisHandlers = {
         }, 50);
     },
 
+    onStyleChange(styleId) {
+        if (typeof StylisticAnalysisViewModel !== 'undefined') {
+            StylisticAnalysisViewModel.setStyle(styleId);
+            this.onRefresh();
+        }
+    },
+
+    onToggleStopOnClose(value) {
+        if (typeof StylisticAnalysisViewModel !== 'undefined') {
+            StylisticAnalysisViewModel.setStopOnClose(value);
+        }
+    },
+
     /**
      * Surligne un mot dans l'éditeur et scroll vers lui
      * @param {string} word - Mot à surligner
@@ -122,16 +135,96 @@ const StylisticAnalysisHandlers = {
     },
 
     /**
-     * Surligne toutes les occurrences d'un mot
+     * Surligne tous les termes d'un certain sentiment
+     * @param {'positive'|'negative'} type 
+     */
+    onHighlightSentiment(type) {
+        const state = StylisticAnalysisViewModel.getState();
+        const container = document.getElementById('stylisticAnalysisContainer');
+
+        if (state.highlightMode === type) {
+            this._clearAllHighlights();
+            return;
+        }
+
+        this._clearAllHighlights();
+        
+        if (!state || !state.sentiment || !state.sentiment.scoredWords) return;
+
+        const words = state.sentiment.scoredWords
+            .filter(w => type === 'positive' ? w.score > 0 : w.score < 0)
+            .map(w => w.word);
+
+        if (words.length === 0) {
+             StylisticAnalysisViewModel.setHighlightMode(type);
+             if (container) StylisticAnalysisView.renderPanel(container);
+             return;
+        }
+
+        this._highlightWordsList(words, `sentiment-${type}`);
+        StylisticAnalysisViewModel.setHighlightMode(type);
+        if (container) StylisticAnalysisView.renderPanel(container);
+
+        const first = document.querySelector(`.stylistic-highlight.sentiment-${type}`);
+        if (first) {
+            first.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    },
+
+    /**
+     * Surligne tous les termes positifs ET négatifs
+     */
+    onHighlightSentimentBoth() {
+        const state = StylisticAnalysisViewModel.getState();
+        const container = document.getElementById('stylisticAnalysisContainer');
+
+        if (state.highlightMode === 'both') {
+            this._clearAllHighlights();
+            return;
+        }
+
+        this._clearAllHighlights();
+        
+        if (!state || !state.sentiment || !state.sentiment.scoredWords) return;
+
+        const posWords = state.sentiment.scoredWords.filter(w => w.score > 0).map(w => w.word);
+        const negWords = state.sentiment.scoredWords.filter(w => w.score < 0).map(w => w.word);
+
+        if (posWords.length === 0 && negWords.length === 0) {
+            StylisticAnalysisViewModel.setHighlightMode('both');
+            if (container) StylisticAnalysisView.renderPanel(container);
+            return;
+        }
+
+        // On doit le faire en une fois ou gérer les classes multiples
+        // Utilisons une approche qui permet de colorer différemment
+        this._highlightWordsList(posWords, 'sentiment-positive');
+        this._highlightWordsList(negWords, 'sentiment-negative');
+
+        StylisticAnalysisViewModel.setHighlightMode('both');
+        if (container) StylisticAnalysisView.renderPanel(container);
+
+        const first = document.querySelector('.stylistic-highlight.sentiment-positive, .stylistic-highlight.sentiment-negative');
+        if (first) {
+            first.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    },
+
+
+    /**
+     * Surligne toutes les occurrences d'une liste de mots
      * @private
      */
-    _highlightAllOccurrences(word) {
+    _highlightWordsList(words, extraClass = '') {
         const editors = document.querySelectorAll('.editor-textarea[contenteditable="true"]');
         if (editors.length === 0) return;
 
-        const cleanWord = word.trim();
-        const escapedWord = cleanWord.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-        const regex = new RegExp(`(^|[^\\wàâéèêëîïôùûüç])${escapedWord}(?![\\wàâéèêëîïôùûüç])`, 'gi');
+        // Trier par longueur décroissante pour éviter les conflits de n-grams
+        const sortedWords = [...new Set(words)].sort((a, b) => b.length - a.length);
+        
+        // Créer une regex globale pour tous les mots
+        const escapedWords = sortedWords.map(w => w.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+        const regex = new RegExp(`(^|[^\\wàâéèêëîïôùûüç])(${escapedWords.join('|')})(?![\\wàâéèêëîïôùûüç])`, 'gi');
 
         editors.forEach(editor => {
             const walker = document.createTreeWalker(editor, NodeFilter.SHOW_TEXT, null, false);
@@ -148,21 +241,19 @@ const StylisticAnalysisHandlers = {
 
                     regex.lastIndex = 0;
                     while ((match = regex.exec(content)) !== null) {
-                        // match[1] contient le caractère de bordure si existant
                         const prefixLength = match[1].length;
                         const matchIndex = match.index + prefixLength;
+                        const matchedWord = match[2];
 
-                        // Texte avant le match
                         fragment.appendChild(document.createTextNode(content.substring(lastIndex, matchIndex)));
 
-                        // Élément de surlignage
                         const mark = document.createElement('mark');
-                        mark.className = 'stylistic-highlight';
-                        mark.textContent = content.substring(matchIndex, matchIndex + cleanWord.length);
+                        mark.className = `stylistic-highlight ${extraClass}`.trim();
+                        mark.textContent = matchedWord;
                         mark.onclick = (e) => StylisticAnalysisHandlers.onHighlightClick(mark, e);
                         fragment.appendChild(mark);
 
-                        lastIndex = matchIndex + cleanWord.length;
+                        lastIndex = matchIndex + matchedWord.length;
                     }
 
                     fragment.appendChild(document.createTextNode(content.substring(lastIndex)));
@@ -173,18 +264,35 @@ const StylisticAnalysisHandlers = {
     },
 
     /**
+     * Surligne toutes les occurrences d'un mot
+     * @private
+     */
+    _highlightAllOccurrences(word) {
+        this._highlightWordsList([word]);
+    },
+
+    /**
      * Efface tous les surlignages d'analyse stylistique
      */
     _clearAllHighlights() {
         const highlights = document.querySelectorAll('.stylistic-highlight');
         highlights.forEach(h => {
             const parent = h.parentNode;
+            if (!parent) return;
             const textNode = document.createTextNode(h.textContent);
             parent.replaceChild(textNode, h);
             parent.normalize();
         });
         this._closeReplacementMenu();
+        
+        // Reset state
+        if (typeof StylisticAnalysisViewModel !== 'undefined') {
+            StylisticAnalysisViewModel.resetHighlightMode();
+            const container = document.getElementById('stylisticAnalysisContainer');
+            if (container) StylisticAnalysisView.renderPanel(container);
+        }
     },
+
 
     /**
      * Affiche le menu flottant de remplacement
@@ -279,5 +387,38 @@ const StylisticAnalysisHandlers = {
         this._closeReplacementMenu();
 
         setTimeout(() => this.onRefresh(), 500);
+    },
+
+    /**
+     * Ouvre la modale d'aide pour les métriques de sentiment
+     * @param {'score'|'intensity'} type 
+     */
+    openHelpModal(type) {
+        const modal = document.getElementById('infoModal');
+        const titleEl = document.getElementById('infoModalTitle');
+        const bodyEl = document.getElementById('infoModalBody');
+        
+        if (!modal || !titleEl || !bodyEl) return;
+
+        let title = Localization.t('stylistic.help.title') || 'Aide';
+        let content = '';
+
+        if (type === 'score') {
+            title = Localization.t('stylistic.sentiment.score_title') || 'Score Global';
+            content = Localization.t('stylistic.sentiment.score_help');
+        } else if (type === 'intensity') {
+            title = Localization.t('stylistic.sentiment.intensity_title') || 'Force Émotionnelle';
+            content = Localization.t('stylistic.sentiment.intensity_help');
+        }
+
+        titleEl.textContent = title;
+        bodyEl.innerHTML = (content || '').replace(/\n/g, '<br>');
+
+        if (typeof openModal === 'function') {
+            openModal('infoModal');
+        } else {
+            modal.classList.add('active');
+        }
     }
 };
+

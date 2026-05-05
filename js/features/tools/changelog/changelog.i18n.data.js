@@ -7,6 +7,61 @@
 window.CHANGELOG_I18N_DATA = {
   fr: [
     {
+      version: "1.1.5",
+      date: "2026-05-05",
+      type: "minor",
+      summary: "Analyse stylistique et ton émotionnel",
+      content: `# Analyse stylistique et ton émotionnel
+
+**Date :** 05 mai 2026
+
+## 🐛 Corrections
+
+- Ecriture : Ton émotionnel : passage à plus de 2500 mots de vocabulaire dans les 4 langues - Surlignage des mots en rouge et vert dans le texte
+- Ecriture : Connecteurs logiques : Ajout de 3 profils d'écriture qui modifient les critères de représentation des différents familles de connecteurs`
+    },
+    {
+      version: "1.1.4",
+      date: "2026-05-03",
+      type: "major",
+      summary: "Analyse stylistique et ton émotionnel",
+      content: `# Analyse stylistique et ton émotionnel
+
+**Date :** 03 mai 2026
+
+## ✨ Nouveautés
+
+- Ecriture : Ajout du mode d'analyse stylistique du ton émotionnel et des connecteurs logiques dans le module écriture.
+- Fiche personnage : ajout du rôle narratif dans l'état civil (protagoniste, antagoniste, etc...)`
+    },
+    {
+      version: "1.1.3",
+      date: "2026-04-24",
+      type: "major",
+      summary: "Langage corporel et émotions",
+      content: `# Langage corporel et émotions
+
+**Date :** 24 avril 2026
+
+## ✨ Nouveautés
+
+- Ecriture : Ajout des expressions de langage corporel et des émotions`
+    },
+    {
+      version: "1.1.2",
+      date: "2026-04-21",
+      type: "major",
+      summary: "Amélioration de codex et univers",
+      content: `# Amélioration de codex et univers
+
+**Date :** 21 avril 2026
+
+## ✨ Nouveautés
+
+- Ajout du module Timeline Pro
+- Fiche personnage : ajout de la grande image d'avatar et du second mode d'affichage de l'avatar`
+    },
+    {
       version: "1.1.0",
       date: "2026-03-10",
       type: "major",
@@ -19,7 +74,7 @@ window.CHANGELOG_I18N_DATA = {
 
 - Univers et codex : Changement des catégories et ajout de champs spécifiques et dynamiques pour chaque catégorie afin d'aller en profondeur dans le worldbuilding
 - Codex : Magie & Pouvoirs, Sciences & Technologie, Religions & Cultes, Philosophies & Idéologies, Mythes & Légendes, Politique & Géopolitique, Lois & Justice, Économie & Commerce, Systèmes Sociaux & Castes, Factions & Organisations, Linguistique & Grammaire, Cosmologie & Métaphysique, Glossaire & Terminologie
-- Univers : Géographie, Lieux & Bâtiments, Peuples & Ethnies, Cultures & Traditions, Histoire & Chronologie, Faune & Flore, Objets & Artefacts
+- Univers : Géographie, Lieux & Bâtiments, Peuples & Ethnies, Cultures & Traditions, Histoire & Chronologie, Faune & Flora, Objets & Artefacts
 - Une infobulle d'aide explique les attendus et ce qu'il faut éviter dans chaque catégorie afin d'aider l'utilisateur dans ses choix !
 
 ## 🐛 Corrections
@@ -78,6 +133,61 @@ window.CHANGELOG_I18N_DATA = {
   ],
   en: [
     {
+      version: "1.1.5",
+      date: "2026-05-05",
+      type: "minor",
+      summary: "Stylistic analysis and emotional tone",
+      content: `# Stylistic analysis and emotional tone
+
+**Date :** May 05, 2026
+
+## 🐛 Bug Fixes
+
+- Writing: Emotional tone: transition to more than 2500 vocabulary words in 4 languages - Highlighting words in red and green in the text
+- Writing: Logical connectors: Addition of 3 writing profiles that modify the representation criteria of the different connector families`
+    },
+    {
+      version: "1.1.4",
+      date: "2026-05-03",
+      type: "major",
+      summary: "Stylistic analysis and emotional tone",
+      content: `# Stylistic analysis and emotional tone
+
+**Date :** May 03, 2026
+
+## ✨ What's New
+
+- Writing: Added emotional tone and logical connectors stylistic analysis mode in the writing module.
+- Character Sheet: added narrative role in the civil status section (protagonist, antagonist, etc.)`
+    },
+    {
+      version: "1.1.3",
+      date: "2026-04-24",
+      type: "major",
+      summary: "Body language and emotions",
+      content: `# Body language and emotions
+
+**Date :** April 24, 2026
+
+## ✨ What's New
+
+- Writing: Added body language expressions and emotions`
+    },
+    {
+      version: "1.1.2",
+      date: "2026-04-21",
+      type: "major",
+      summary: "Codex and World enhancements",
+      content: `# Codex and World enhancements
+
+**Date :** April 21, 2026
+
+## ✨ What's New
+
+- Added Timeline Pro module
+- Character Sheet: added large avatar image and second avatar display mode`
+    },
+    {
       version: "1.1.0",
       date: "2026-03-10",
       type: "major",
@@ -89,7 +199,7 @@ window.CHANGELOG_I18N_DATA = {
 ## ✨ What's New
 
 - World and Codex: Category changes and addition of specific, dynamic fields for each category to deepen worldbuilding
-- Codex: Magic & Powers, Science & Technology, Religions & Cults, Philosophies & Ideologies, Myths & Legends, Politics & Geopolitics, Law & Justice, Economy & Trade, Social Systems & Castes, Factions & Organizations, Linguistics & Grammar, Cosmology & Metaphysics, Glossary & Terminology
+- Codex: Magic & Powers, Science & Technology, Religions & Cultes, Philosophies & Ideologies, Myths & Legends, Politics & Geopolitics, Law & Justice, Economy & Trade, Social Systems & Castes, Factions & Organizations, Linguistics & Grammar, Cosmology & Metaphysics, Glossary & Terminology
 - World: Geography, Places & Buildings, Peoples & Ethnicities, Cultures & Traditions, History & Chronology, Fauna & Flora, Objects & Artifacts
 - A help tooltip explains expectations and pitfalls for each category to guide user choices!
 
@@ -149,6 +259,61 @@ window.CHANGELOG_I18N_DATA = {
   ],
   de: [
     {
+      version: "1.1.5",
+      date: "2026-05-05",
+      type: "minor",
+      summary: "Stilistische Analyse und emotionaler Ton",
+      content: `# Stilistische Analyse und emotionaler Ton
+
+**Date :** 05. Mai 2026
+
+## 🐛 Fehlerbehebungen
+
+- Schreiben: Emotionaler Ton: Übergang zu mehr als 2500 Vokabelwörtern in 4 Sprachen - Hervorhebung von Wörtern in Rot und Grün im Text
+- Schreiben: Logische Konnektoren: Hinzufügung von 3 Schreibprofilen, die die Darstellungskriterien der verschiedenen Konnektorenfamilien ändern`
+    },
+    {
+      version: "1.1.4",
+      date: "2026-05-03",
+      type: "major",
+      summary: "Stilistische Analyse und emotionaler Ton",
+      content: `# Stilistische Analyse und emotionaler Ton
+
+**Date :** 03. Mai 2026
+
+## ✨ Neuheiten
+
+- Schreiben: Modus für die stilistische Analyse des emotionalen Tons und der logischen Konnektoren im Schreibmodul hinzugefügt.
+- Charakterbogen: Erzählrolle im Personenstand hinzugefügt (Protagonist, Antagonist usw.)`
+    },
+    {
+      version: "1.1.3",
+      date: "2026-04-24",
+      type: "major",
+      summary: "Körpersprache und Emotionen",
+      content: `# Körpersprache und Emotionen
+
+**Date :** 24. April 2026
+
+## ✨ Neuheiten
+
+- Schreiben: Körperausdrücke und Emotionen hinzugefügt`
+    },
+    {
+      version: "1.1.2",
+      date: "2026-04-21",
+      type: "major",
+      summary: "Codex- und Weltverbesserungen",
+      content: `# Codex- und Weltverbesserungen
+
+**Date :** 21. April 2026
+
+## ✨ Neuheiten
+
+- Timeline Pro Modul hinzugefügt
+- Charakterbogen: großes Avatarbild und zweiter Avatar-Anzeigemodus hinzugefügt`
+    },
+    {
       version: "1.1.0",
       date: "2026-03-10",
       type: "major",
@@ -162,7 +327,7 @@ window.CHANGELOG_I18N_DATA = {
 - Welt und Codex: Kategorieänderungen und Hinzufügung spezifischer, dynamischer Felder für jede Kategorie, um das Worldbuilding zu vertiefen
 - Codex: Magie & Kräfte, Wissenschaft & Technologie, Religionen & Kulte, Philosophien & Ideologien, Mythen & Legenden, Politik & Geopolitik, Recht & Justiz, Wirtschaft & Handel, Sozialsysteme & Kasten, Fraktionen & Organisationen, Linguistik & Grammatik, Kosmologie & Metaphysik, Glossar & Terminologie
 - Welt: Geographie, Orte & Gebäude, Völker & Ethnien, Kulturen & Traditionen, Geschichte & Chronologie, Fauna & Flora, Objekte & Artefakte
-- Ein Hilfe-Tooltip erklärt Erwartungen und Fallstricke für jede Kategorie, um die Auswahl der Benutzer zu unterstützen!
+- Ein Hilfe-Tooltip erklärt Erwartungen and Fallstricke für jede Kategorie, um die Auswahl der Benutzer zu unterstützen!
 
 ## 🐛 Fehlerbehebungen
 
@@ -220,6 +385,61 @@ window.CHANGELOG_I18N_DATA = {
   ],
   es: [
     {
+      version: "1.1.5",
+      date: "2026-05-05",
+      type: "minor",
+      summary: "Análisis estilístico y tono emocional",
+      content: `# Análisis estilístico y tono emocional
+
+**Date :** 05 de mayo de 2026
+
+## 🐛 Correcciones
+
+- Escritura: Tono emocional: paso a más de 2500 palabras de vocabulario en los 4 idiomas - Resaltado de palabras en rojo y verde en el texto
+- Escritura: Conectores lógicos: Adición de 3 perfiles de escritura que modifican los criterios de representación de las diferentes familias de conectores`
+    },
+    {
+      version: "1.1.4",
+      date: "2026-05-03",
+      type: "major",
+      summary: "Análisis estilístico y tono emocional",
+      content: `# Análisis estilístico y tono emocional
+
+**Date :** 03 de mayo de 2026
+
+## ✨ Novedades
+
+- Escritura: Añadido modo de análisis estilístico del tono emocional y los conectores lógicos en el módulo de escritura.
+- Ficha de personaje: añadido el rol narrativo en el estado civil (protagonista, antagonista, etc.)`
+    },
+    {
+      version: "1.1.3",
+      date: "2026-04-24",
+      type: "major",
+      summary: "Lenguaje corporal y emociones",
+      content: `# Lenguaje corporal y emociones
+
+**Date :** 24 de abril de 2026
+
+## ✨ Novedades
+
+- Escritura: Añadidas expresiones de lenguaje corporal y emociones`
+    },
+    {
+      version: "1.1.2",
+      date: "2026-04-21",
+      type: "major",
+      summary: "Mejoras en el códice y el mundo",
+      content: `# Mejoras en el códice y el mundo
+
+**Date :** 21 de abril de 2026
+
+## ✨ Novedades
+
+- Añadido el módulo Timeline Pro
+- Ficha de personaje: añadida imagen de avatar grande y segundo modo de visualización de avatar`
+    },
+    {
       version: "1.1.0",
       date: "2026-03-10",
       type: "major",
@@ -230,9 +450,9 @@ window.CHANGELOG_I18N_DATA = {
 
 ## ✨ Novedades
 
-- Mundo y Códice: Cambios de categorías y adición de campos específicos y dinámicos para cada categoría para profundizar en la creación de mundos
-- Códice: Magia y Poderes, Ciencia y Tecnología, Religiones y Cultos, Filosofías e Ideologías, Mitos y Leyendas, Política y Geopolítica, Ley y Justicia, Economía y Comercio, Sistemas Sociales y Castas, Facciones y Organizaciones, Lingüística y Gramática, Cosmología y Metafísica, Glosario y Terminología
-- Mundo: Geografía, Lugares y Edificios, Pueblos y Etnias, Culturas y Tradiciones, Historia y Cronología, Fauna y Flora, Objetos y Artefactos
+- Mundo y Códice: Cambios de categorías y adición de campos específicos et dynamicos para cada categoría para profundizar en la creación de mundos
+- Códice: Magia y Poderes, Ciencia y Tecnología, Religiones y Cultos, Filosofías e Ideologías, Mitos y Leyendas, Política y Geopolitica, Ley y Justicia, Economía y Comercio, Sistemas Sociales y Castas, Facciones y Organizaciones, Lingüística y Gramática, Cosmología y Metafísica, Glosario y Terminología
+- Mundo: Geografía, Lugares y Edificios, Pueblos y Etnias, Culturas y Tradiciones, Historia y Chronología, Fauna y Flora, Objetos y Artefactos
 - ¡Una ventana emergente de ayuda explica las expectativas y lo que se debe evitar en cada categoría para guiar las elecciones del usuario!
 
 ## 🐛 Correcciones
@@ -245,7 +465,7 @@ window.CHANGELOG_I18N_DATA = {
       date: "2026-03-03",
       type: "minor",
       summary: "Gestión de objetos por escena en fichas de personaje y visualización en enlaces del modo escritura.",
-      content: `# Gestión de objetos por escena en fichas de personaje y visualización en enlaces del modo escritura.
+      content: `# Gestión de objetos par escena en fichas de personnage y visualización en enlaces del modo escritura.
 
 **Date :** 3 de marzo de 2026
 
@@ -273,9 +493,9 @@ window.CHANGELOG_I18N_DATA = {
 ## ✨ Novedades
 
 - Añadido un changelog
-- Añadida exportación .zip con todos los elementos en .md para su uso en su software favorito
+- Añadida exportación .zip con todos los éléments en .md para su uso en su software favorito
 - Añadida preparación de escena
-- Nuevo diccionario de sinónimos fr
+- Nouveau dictionnaire de synonymes fr
 - Añadidos i18n faltantes
 
 ## 🐛 Correcciones

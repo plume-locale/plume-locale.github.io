@@ -213,6 +213,7 @@ function closeSidebarAccordion() {
 // Initial Render
 document.addEventListener('DOMContentLoaded', () => {
     setTimeout(renderSidebarAccordion, 100);
+    setTimeout(updateAppVersionDisplay, 200);
 
     // Default to thin mode
     const accordion = document.getElementById('sidebarAccordion');
@@ -374,7 +375,20 @@ function switchView(view, options = {}) {
         if (typeof ToolsSidebarViewModel !== 'undefined' && view === 'editor') {
             ToolsSidebarViewModel.updateAllBadges();
         }
+        // Update version display
+        updateAppVersionDisplay();
     }, 50);
+}
+
+/**
+ * Met à jour l'affichage du numéro de version dans l'interface
+ * à partir des données du changelog.
+ */
+function updateAppVersionDisplay() {
+    const version = window.CHANGELOG_I18N_DATA?.fr?.[0]?.version || '1.1.5';
+    document.querySelectorAll('.app-version-display').forEach(el => {
+        el.textContent = `v${version}`;
+    });
 }
 
 /**
@@ -1482,13 +1496,27 @@ function restoreTreeState() {
 // --- UTILITAIRES UI GLOBAUX ---
 
 function closeModal(modalId) {
-    document.getElementById(modalId)?.classList.remove('active');
+    const modal = document.getElementById(modalId);
+    if (modal) {
+        modal.classList.remove('active');
+        modal.style.display = '';
+    }
 }
 
 function openModal(modalId) {
     const modal = document.getElementById(modalId);
     if (!modal) return;
     modal.classList.add('active');
+
+    // Ajout d'un listener pour fermer si on clique sur le backdrop (le conteneur .modal lui-même)
+    if (!modal.dataset.backdropListener) {
+        modal.addEventListener('click', function (e) {
+            if (e.target === modal) {
+                closeModal(modalId);
+            }
+        });
+        modal.dataset.backdropListener = "true";
+    }
 }
 
 

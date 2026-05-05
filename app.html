@@ -1486,6 +1486,10 @@
                 <!-- Customisation Menu (Rappel: le menu doit pouvoir apparaitre et être lisible) -->
                 <div class="activity-bar-customization-slot" id="activityBarCustomization"></div>
                 <div class="activity-bar-footer">
+                    <div class="activity-bar-version app-version-display" 
+                         onclick="openTab('changelog', {}, { forceNew: false })"
+                         title="Voir les nouveautés"
+                         data-i18n-title="header.changelog"></div>
                     <div class="activity-bar-nav-item" onclick="InterfaceCustomizerViewModel.startEditing()"
                         id="headerInterfaceBtn" title="Personnaliser l'interface" data-tooltip="Personnaliser">
                         <i data-lucide="settings-2"></i>
@@ -1901,6 +1905,13 @@
                         <h3 data-i18n="tools.stylistic_title"><i data-lucide="sparkles"
                                 style="width: 16px; height: 16px; vertical-align: middle; margin-right: 6px; color: var(--accent-gold);"></i>Analyse Stylistique
                         </h3>
+                        <button class="word-rep-sidebar-close stop-analysis-btn" onclick="stopStylisticAnalysis()" title="Effacer les surlignages"
+                            data-i18n-title="stylistic.stop_analysis" style="margin-right: 8px; display: flex; align-items: center; gap: 4px; padding: 2px 6px; background: rgba(248, 113, 113, 0.1); color: var(--accent-red); border: 1px solid rgba(248, 113, 113, 0.2); border-radius: 4px;">
+                            <i data-lucide="stop-circle" style="width: 14px; height: 14px; fill: currentColor;"></i>
+                            <span data-i18n="stylistic.btn_stop" style="font-size: 0.7rem; font-weight: 600; text-transform: uppercase;">Stop</span>
+
+                        </button>
+
                         <button class="word-rep-sidebar-close" onclick="toggleStylisticAnalysisPanel()" title="Fermer"
                             data-i18n-title="btn.close">
                             <i data-lucide="x" style="width: 14px; height: 14px"></i>
@@ -4347,7 +4358,26 @@
             </div>
         </div>
 
+        <!-- Info Modal -->
+        <div class="modal" id="infoModal">
+            <div class="modal-content" style="max-width: 500px">
+                <div class="modal-header">
+                    <h2 id="infoModalTitle">Aide</h2>
+                    <button class="modal-close" onclick="closeModal('infoModal')">
+                        <i data-lucide="x"></i>
+                    </button>
+                </div>
+                <div class="modal-body" id="infoModalBody" style="white-space: pre-wrap; line-height: 1.6; font-size: 0.95rem; color: var(--text-secondary); padding: 1rem 0;">
+                    <!-- Content injected by JS -->
+                </div>
+                <div class="modal-actions">
+                    <button class="btn btn-primary" onclick="closeModal('infoModal')">Fermer</button>
+                </div>
+            </div>
+        </div>
+
     </div> <!-- Fin app-container -->
+
 </body>
     <!-- Generated JS Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/idb@7/build/umd.js"></script>

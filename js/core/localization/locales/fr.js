@@ -538,13 +538,32 @@ window.LOCALE_FR = {
     "stylistic.analyzing": "Analyse en cours...",
     "stylistic.empty": "Sélectionnez une scène ou cliquez sur rafraîchir pour lancer l'analyse.",
     "stylistic.btn_analyze": "Analyser",
+    "stylistic.btn_clear": "Effacer les surlignages",
+    "stylistic.stop_analysis": "Arrêter l'analyse",
+    "stylistic.stop_on_close": "Arrêter l'analyse en fermant la fenêtre",
     "stylistic.no_words": "Pas assez de texte pour l'analyse.",
     "stylistic.sentiment.title": "Ton Émotionnel",
     "stylistic.sentiment.very_positive": "Très Positif",
     "stylistic.sentiment.positive": "Positif",
+    "stylistic.sentiment.slightly_positive": "Légèrement Positif",
     "stylistic.sentiment.neutral": "Neutre",
+    "stylistic.sentiment.slightly_negative": "Légèrement Négatif",
     "stylistic.sentiment.negative": "Négatif",
     "stylistic.sentiment.very_negative": "Très Négatif",
+
+    "stylistic.sentiment.intensity": "Intensité émotionnelle",
+    "stylistic.sentiment.intensity_title": "Aide : Intensité émotionnelle",
+    "stylistic.sentiment.intensity_help": "Ce chiffre représente la densité émotionnelle de votre texte.\n\n• Ce n'est pas la force de l'émotion : il ne dit pas si l'émotion est \"violente\" ou \"douce\", mais si elle est omniprésente ou rare.\n\n• Intensité faible (< 2%) : Le texte est factuel, descriptif, ou très neutre (ex: une notice technique).\n• Intensité moyenne (4% - 8%) : C'est la zone habituelle d'un récit équilibré.\n• Intensité forte (> 12%) : Le texte est très chargé, chaque phrase ou presque contient des termes à forte connotation.",
+
+
+    "stylistic.sentiment.detected_balance": "Équilibre des mots détectés :",
+
+    "stylistic.sentiment.highlight_pos": "Surligner (+)",
+    "stylistic.sentiment.highlight_neg": "Surligner (-)",
+    "stylistic.sentiment.highlight_both": "Tout surligner",
+    "stylistic.btn_stop": "Stop",
+
+
     "stylistic.connectors.title": "Connecteurs Logiques",
     "stylistic.connectors.none_found": "Aucun connecteur détecté.",
     "stylistic.connectors.too_few": "Votre texte manque de structure (peu de connecteurs).",
@@ -1662,6 +1681,8 @@ window.LOCALE_FR = {
     "stylistic.analyzing": "Analyse du style en cours...",
     "stylistic.empty": "Aucune donnée d'analyse. Sélectionnez une scène ou cliquez sur analyser.",
     "stylistic.btn_analyze": "Analyser la scène",
+    "stylistic.btn_clear": "Effacer les surlignages",
+    "stylistic.stop_on_close": "Arrêter l'analyse en fermant la fenêtre",
     "stylistic.no_words": "Pas assez de texte pour une analyse significative.",
     "stylistic.sentiment.title": "Ton Émotionnel",
     "stylistic.sentiment.very_positive": "Très Positif",
@@ -1669,6 +1690,8 @@ window.LOCALE_FR = {
     "stylistic.sentiment.neutral": "Neutre",
     "stylistic.sentiment.negative": "Négatif",
     "stylistic.sentiment.very_negative": "Très Négatif",
+    "stylistic.sentiment.intensity": "Intensité émotionnelle",
+    "stylistic.sentiment.detected_balance": "Équilibre des mots détectés :",
     "stylistic.connectors.title": "Connecteurs Logiques",
     "stylistic.connectors.too_few": "Votre texte manque de structure (peu de connecteurs).",
     "stylistic.connectors.too_many": "Trop de connecteurs détectés, le texte peut sembler mécanique.",
@@ -1689,7 +1712,13 @@ window.LOCALE_FR = {
     "stylistic.sentiment.pos_label": "{0}% Positif",
     "stylistic.sentiment.neu_label": "{0}% Neutre",
     "stylistic.sentiment.neg_label": "{0}% Négatif",
-    "stylistic.sentiment.score_global": "Score global : {0}%",
+    "stylistic.sentiment.score_global_label": "Score global",
+    "stylistic.sentiment.score_title": "Aide : Score Global",
+    "stylistic.sentiment.score_help": "Le Score Global est calculé en faisant la moyenne de la \"force émotionnelle\" de chaque mot détecté. Voici les étapes précises :\n\n1. Attribution des points par mot\nChaque mot de notre lexique possède une valeur de base allant de -5 (très négatif) à +5 (très positif).\nExemple : \"Excellent\" vaut +3, \"Horrible\" vaut -3.\n\n2. Prise en compte du contexte\nLe moteur ajuste ce score selon les mots qui précèdent :\n• Amplificateurs : Un mot comme \"très\" multiplie le score du mot suivant par 1.5 (\"Très bien\" passe de +2 à +3).\n• Négations : Un \"ne... pas\" inverse le score et l'atténue légèrement (\"Pas content\" passe de -2 à +1.4).\n\n3. La Formule de Normalisation\nOn additionne tous ces scores individuels pour obtenir un Total. Ensuite, on normalise ce total pour qu'il tienne dans une échelle de -100% à +100% :",
+
+    "stylistic.sentiment.score_global": "{0}%",
+
+
 
     // --- Map module ---
     "map.empty.title": "Gérez votre univers géographique",

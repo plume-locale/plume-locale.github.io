@@ -31,11 +31,15 @@ const StylisticAnalysisModel = {
      * Tokenise le texte en mots (supprime ponctuation).
      */
     _tokenize(text) {
+        if (!text) return [];
         return text
-            .replace(/['']/g, "'") // Normaliser apostrophes
+            .replace(/['’‘]/g, "'") // Normaliser apostrophes
+            // Insérer un espace après les élisions françaises pour forcer le split
+            // On cible l', d', j', n', s', m', t', c', qu'
+            .replace(/\b(l|d|j|n|s|m|t|c|qu)'/g, "$1' ")
             .split(/[\s\n\r,;:!?«»""()[\]{}<>…]+/)
-            .map(w => w.replace(/[.,!?;:"""''«»()\[\]{}]/g, '').trim())
-            .filter(w => w.length > 1);
+            .map(w => w.replace(/[.,!?;:«»"()[\]{}]/g, '').trim())
+            .filter(w => w.length > 0);
     },
 
     /**
@@ -76,17 +80,24 @@ const StylisticAnalysisModel = {
                 continue;
             }
 
-            // Vérification dans le lexique (mot simple)
-            let score = data.SentimentLexicon[token];
+            // Vérification dans le lexique (n-grams de 4 à 1 mots)
+            let matchedScore = undefined;
+            let matchedLength = 0;
 
-            // Vérification bi-gram (ex: "pas bien")
-            if (score === undefined && i + 1 < tokens.length) {
-                const bigram = token + ' ' + tokens[i + 1];
-                score = data.SentimentLexicon[bigram];
+            for (let n = 4; n >= 1; n--) {
+                if (i + n <= tokens.length) {
+                    const ngram = tokens.slice(i, i + n).join(' ');
+                    const score = data.SentimentLexicon[ngram];
+                    if (score !== undefined) {
+                        matchedScore = score;
+                        matchedLength = n;
+                        break;
+                    }
+                }
             }
 
-            if (score !== undefined) {
-                let finalScore = score;
+            if (matchedScore !== undefined) {
+                let finalScore = matchedScore;
 
                 // Appliquer amplificateur
                 if (amplifierActive) {
@@ -101,12 +112,17 @@ const StylisticAnalysisModel = {
                 }
 
                 totalScore += finalScore;
-                scoredCount++;
+                scoredCount += matchedLength;
 
                 if (finalScore > 0) positiveCount++;
                 else if (finalScore < 0) negativeCount++;
 
-                scoredWords.push({ word: token, score: finalScore });
+                scoredWords.push({ 
+                    word: tokens.slice(i, i + matchedLength).join(' '), 
+                    score: finalScore 
+                });
+                
+                i += (matchedLength - 1); // Sauter les mots suivants car déjà traités
             } else {
                 // Réinitialiser négation après 2 mots non trouvés
                 negationActive = false;
@@ -114,35 +130,52 @@ const StylisticAnalysisModel = {
         }
 
         // Score normalisé [-1, 1]
-        const normalizedScore = scoredCount > 0 ? Math.max(-1, Math.min(1, totalScore / (scoredCount * 3))) : 0;
+        // On divise par scoredCount * 2 au lieu de 3 pour être moins conservateur
+        const normalizedScore = scoredCount > 0 ? Math.max(-1, Math.min(1, totalScore / (scoredCount * 2))) : 0;
 
-        // Répartition en %
-        const total = positiveCount + negativeCount + Math.max(1, wordCount - scoredCount);
+        // Densité sentimentale (proportion de mots émotionnels)
+        const sentimentIntensity = wordCount > 0 ? scoredCount / wordCount : 0;
+
+        // Répartition en % (parmi les mots analysés)
         const positiveRatio = Math.round((positiveCount / Math.max(1, scoredCount)) * 100);
         const negativeRatio = Math.round((negativeCount / Math.max(1, scoredCount)) * 100);
         const neutralRatio = Math.max(0, 100 - positiveRatio - negativeRatio);
 
-        // Label dominant
+        // Label dominant (avec pondération par l'intensité)
+        // Si l'intensité est trop faible (< 0.5%), on considère le ton comme neutre globalement
+        const INTENSITY_THRESHOLD = 0.005; 
+        
         let label, dominantLabel;
-        if (normalizedScore > 0.15) {
-            label = 'positive';
-        } else if (normalizedScore < -0.15) {
-            label = 'negative';
-        } else {
+        if (sentimentIntensity < INTENSITY_THRESHOLD) {
             label = 'neutral';
+            dominantLabel = 'neutral';
+        } else {
+            // Label principal (plus sensible)
+            if (normalizedScore > 0.05) {
+                label = 'positive';
+            } else if (normalizedScore < -0.05) {
+                label = 'negative';
+            } else {
+                label = 'neutral';
+            }
+            
+            // Label détaillé (dominantLabel)
+            // Seuils ajustés pour être plus naturels
+            if (normalizedScore > 0.45) dominantLabel = 'very_positive';
+            else if (normalizedScore > 0.12) dominantLabel = 'positive';
+            else if (normalizedScore > 0.05) dominantLabel = 'slightly_positive';
+            else if (normalizedScore < -0.45) dominantLabel = 'very_negative';
+            else if (normalizedScore < -0.12) dominantLabel = 'negative';
+            else if (normalizedScore < -0.05) dominantLabel = 'slightly_negative';
+            else dominantLabel = 'neutral';
         }
 
-        // Détail plus fin
-        if (normalizedScore > 0.4) dominantLabel = 'very_positive';
-        else if (normalizedScore > 0.15) dominantLabel = 'positive';
-        else if (normalizedScore < -0.4) dominantLabel = 'very_negative';
-        else if (normalizedScore < -0.15) dominantLabel = 'negative';
-        else dominantLabel = 'neutral';
 
         return {
             score: normalizedScore,
             label,
             dominantLabel,
+            intensity: Math.round(sentimentIntensity * 1000) / 10, // en pour mille ou %
             positive: positiveRatio,
             negative: negativeRatio,
             neutral: neutralRatio,
@@ -160,8 +193,10 @@ const StylisticAnalysisModel = {
      * Analyse les connecteurs logiques dans le texte.
      * Retourne un objet { total, categories, density, warnings }
      */
-    analyzeConnectors(htmlOrText) {
+    analyzeConnectors(htmlOrText, styleId = 'hybrid') {
         const data = this._getData();
+        const presets = StylisticAnalysisData.ConnectorPresets;
+        const selectedStyle = presets[styleId] || presets['hybrid'];
         const text = this._extractText(htmlOrText);
         const wordCount = this._tokenize(text).length;
 
@@ -173,11 +208,14 @@ const StylisticAnalysisModel = {
         const foundAll = []; // { category, item, count }
 
         for (const [catKey, catDef] of Object.entries(data.ConnectorsData)) {
+            // Récupérer le seuil idéal selon le style sélectionné
+            const ideal = selectedStyle.thresholds[catKey] || catDef.ideal;
+
             const catResult = {
                 label: catDef.label,
                 icon: catDef.icon,
                 color: catDef.color,
-                ideal: catDef.ideal,
+                ideal: ideal,
                 count: 0,
                 found: {},
                 percentage: 0,
@@ -212,7 +250,7 @@ const StylisticAnalysisModel = {
         const density = wordCount > 0 ? (total / wordCount) * 100 : 0;
 
         // Répétitions : mots utilisés > 3 fois
-        const repetitions = [];
+        let repetitions = [];
         for (const [catKey, cat] of Object.entries(results)) {
             for (const [word, count] of Object.entries(cat.found)) {
                 if (count >= 3) {
@@ -221,17 +259,21 @@ const StylisticAnalysisModel = {
             }
         }
 
+        // Trier par fréquence décroissante pour afficher les répétitions les plus graves en premier
+        repetitions.sort((a, b) => b.count - a.count);
+
         // Génération des warnings
-        const warnings = this._generateConnectorWarnings(results, total, density, wordCount, repetitions);
+        // Génération des warnings
+        const warnings = this._generateConnectorWarnings(results, total, density, wordCount, repetitions, selectedStyle);
 
         // Statuts par catégorie
         for (const [catKey, cat] of Object.entries(results)) {
             const catDef = data.ConnectorsData[catKey];
             if (cat.count === 0) {
                 cat.status = 'missing';
-            } else if (total > 0 && cat.percentage < catDef.ideal.min) {
+            } else if (total > 0 && cat.percentage < cat.ideal.min) {
                 cat.status = 'low';
-            } else if (total > 0 && cat.percentage > catDef.ideal.max) {
+            } else if (total > 0 && cat.percentage > cat.ideal.max) {
                 cat.status = 'high';
             } else {
                 cat.status = 'ok';
@@ -251,7 +293,7 @@ const StylisticAnalysisModel = {
     /**
      * Génère les messages d'avertissement pour les connecteurs.
      */
-    _generateConnectorWarnings(categories, total, density, wordCount, repetitions) {
+    _generateConnectorWarnings(categories, total, density, wordCount, repetitions, selectedStyle) {
         const data = this._getData();
         const warnings = [];
 
@@ -267,8 +309,8 @@ const StylisticAnalysisModel = {
         // Déséquilibre
         if (total >= 5) {
             for (const [catKey, cat] of Object.entries(categories)) {
-                const catDef = data.ConnectorsData[catKey];
-                if (cat.percentage > catDef.ideal.max) {
+                const ideal = selectedStyle.thresholds[catKey] || data.ConnectorsData[catKey].ideal;
+                if (cat.percentage > ideal.max) {
                     warnings.push({
                         type: 'warning',
                         key: 'connectors.warning.imbalanced',

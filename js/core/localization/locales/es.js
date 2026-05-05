@@ -511,13 +511,32 @@ window.LOCALE_ES = {
     "stylistic.analyzing": "Analizando...",
     "stylistic.empty": "Seleccione una escena o haga clic en actualizar para iniciar el análisis.",
     "stylistic.btn_analyze": "Analizar",
+    "stylistic.btn_clear": "Borrar resaltados",
+    "stylistic.stop_analysis": "Detener el análisis",
+    "stylistic.stop_on_close": "Detener análisis al cerrar",
     "stylistic.no_words": "No hay suficiente texto para el análisis.",
     "stylistic.sentiment.title": "Tono Emocional",
     "stylistic.sentiment.very_positive": "Muy Positivo",
     "stylistic.sentiment.positive": "Positivo",
+    "stylistic.sentiment.slightly_positive": "Ligeramente Positivo",
     "stylistic.sentiment.neutral": "Neutral",
+    "stylistic.sentiment.slightly_negative": "Ligeramente Negativo",
     "stylistic.sentiment.negative": "Negativo",
     "stylistic.sentiment.very_negative": "Muy Negativo",
+
+    "stylistic.sentiment.intensity": "Intensidad emocional",
+    "stylistic.sentiment.intensity_title": "Ayuda: Intensidad emocional",
+    "stylistic.sentiment.intensity_help": "Esta cifra representa la densidad emocional de su texto.\n\n• No es la fuerza de la emoción: no le dice si la emoción es \"violenta\" o \"suave\", sino si es omnipresente o rara.\n\n• Intensidad baja (< 2%): Texto factual, descriptivo o muy neutro (ej: un manual técnico).\n• Intensidad media (4% - 8%): El rango habitual para una narrativa equilibrada.\n• Intensidad alta (> 12%): Texto muy cargado, casi cada frase contiene términos con fuerte connotación.",
+
+
+    "stylistic.sentiment.detected_balance": "Equilibrio de palabras detectadas:",
+
+    "stylistic.sentiment.highlight_pos": "Resaltar (+)",
+    "stylistic.sentiment.highlight_neg": "Resaltar (-)",
+    "stylistic.sentiment.highlight_both": "Resaltar todo",
+    "stylistic.btn_stop": "Parar",
+
+
     "stylistic.connectors.title": "Conectores Lógicos",
     "stylistic.connectors.none_found": "No se detectaron conectores.",
     "stylistic.connectors.too_few": "Su texto carece de estructura (pocos conectores).",
@@ -1545,6 +1564,8 @@ window.LOCALE_ES = {
     "stylistic.analyzing": "Analizando estilo...",
     "stylistic.empty": "Sin datos de análisis. Seleccione una escena o haga clic en analizar.",
     "stylistic.btn_analyze": "Analizar escena",
+    "stylistic.btn_clear": "Borrar resaltados",
+    "stylistic.stop_on_close": "Detener análisis al cerrar",
     "stylistic.no_words": "No hay suficiente texto para un análisis significativo.",
     "stylistic.sentiment.title": "Tono Emocional",
     "stylistic.sentiment.very_positive": "Muy Positivo",
@@ -1572,7 +1593,13 @@ window.LOCALE_ES = {
     "stylistic.sentiment.pos_label": "{0}% Positivo",
     "stylistic.sentiment.neu_label": "{0}% Neutro",
     "stylistic.sentiment.neg_label": "{0}% Negativo",
-    "stylistic.sentiment.score_global": "Puntuación global: {0}%",
+    "stylistic.sentiment.score_global_label": "Puntuación global",
+    "stylistic.sentiment.score_title": "Ayuda: Puntuación Global",
+    "stylistic.sentiment.score_help": "La puntuación global se calcula promediando la \"fuerza emocional\" de cada palabra detectada. Estos son los pasos precisos :\n\n1. Asignación de puntos por palabra\nCada palabra en nuestro léxico tiene un valor base que va de -5 (muy negativo) a +5 (muy positivo).\nEjemplo : \"Excelente\" vale +3, \"Horrible\" vale -3.\n\n2. Ajuste contextual\nEl motor ajusta esta puntuación según las palabras precedentes :\n• Amplificadores : Una palabra como \"muy\" multiplica la puntuación de la siguiente por 1.5 (\"Muy bien\" pasa de +2 a +3).\n• Negaciones : Un \"no\" o \"nunca\" invierte la puntuación y la atenúa ligeramente (\"No contento\" pasa de -2 a +1.4).\n\n3. Fórmula de Normalización\nSe suman todas estas puntuaciones individuales para obtener un Total. Luego, este total se normaliza para ajustarse a una escala de -100% a +100%.",
+
+    "stylistic.sentiment.score_global": "{0}%",
+
+
 
     // --- Sidebar View (Mobile) ---
     "sidebar_view.items.single": "elemento",

@@ -3,16 +3,18 @@
  */
 const KeyboardShortcutsHandlers = {
     closeModals: () => {
-        const modals = [
-            'addChapterModal', 'addSceneModal', 'addActModal',
-            'addCharacterModal', 'addWorldModal', 'addTimelineModal',
-            'addNoteModal', 'addCodexModal', 'backupModal',
-            'referencesModal', 'projectsModal', 'newProjectModal',
-            'shortcutsModal'
-        ];
-
-        modals.forEach(id => {
-            if (typeof closeModal === 'function') closeModal(id);
+        // Ferme tous les modaux actifs génériquement
+        document.querySelectorAll('.modal.active, .shortcuts-modal.active').forEach(modal => {
+            if (modal.id) {
+                if (typeof closeModal === 'function') {
+                    closeModal(modal.id);
+                } else {
+                    modal.classList.remove('active');
+                    modal.style.display = '';
+                }
+            } else {
+                modal.classList.remove('active');
+            }
         });
 
         if (typeof closeSearchResults === 'function') closeSearchResults();

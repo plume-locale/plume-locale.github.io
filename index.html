@@ -1624,9 +1624,10 @@
                         <span data-i18n="usage.offline.feature4">Aucune dépendance externe</span>
                     </li>
                 </ul>
-                <a href="https://github.com/plume-locale/plume-locale.github.io/releases/download/v1.1.4/plume-locale-v1.1.4.html"
+                <a href="https://github.com/plume-locale/plume-locale.github.io/releases/download/v1.1.5/plume-locale-v1.1.5.html"
+                    id="download-link"
                     class="btn-secondary mode-cta" target="_blank" rel="noopener"
-                    data-i18n="usage.offline.cta">Télécharger la version 1.1.4 sur votre ordinateur</a>
+                    data-i18n="usage.offline.cta">Télécharger la version 1.1.5 sur votre ordinateur</a>
             </div>
         </div>
 
@@ -2010,6 +2011,7 @@
     <script src="index-translations.js"></script>
 
     <script>
+        const CURRENT_VERSION = '1.1.5';
         let currentLang = 'fr';
 
         // Fonction de traduction
@@ -2030,9 +2032,18 @@
                 }
 
                 if (value) {
+                    if (key === 'usage.offline.cta') {
+                        value = value.replace('{version}', CURRENT_VERSION);
+                    }
                     el.innerHTML = value;
                 }
             });
+
+            // Mettre à jour le lien de téléchargement
+            const downloadLink = document.getElementById('download-link');
+            if (downloadLink) {
+                downloadLink.href = `https://github.com/plume-locale/plume-locale.github.io/releases/download/v${CURRENT_VERSION}/plume-locale-v${CURRENT_VERSION}.html`;
+            }
 
             // Mettre à jour les liens de documentation
             const docPaths = {

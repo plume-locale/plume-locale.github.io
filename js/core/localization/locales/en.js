@@ -529,13 +529,32 @@ window.LOCALE_EN = {
     "stylistic.analyzing": "Analyzing...",
     "stylistic.empty": "Select a scene or click refresh to start the analysis.",
     "stylistic.btn_analyze": "Analyze",
+    "stylistic.btn_clear": "Clear highlights",
+    "stylistic.stop_analysis": "Stop analysis",
+    "stylistic.stop_on_close": "Stop analysis on close",
     "stylistic.no_words": "Not enough text for analysis.",
     "stylistic.sentiment.title": "Emotional Tone",
     "stylistic.sentiment.very_positive": "Very Positive",
     "stylistic.sentiment.positive": "Positive",
+    "stylistic.sentiment.slightly_positive": "Slightly Positive",
     "stylistic.sentiment.neutral": "Neutral",
+    "stylistic.sentiment.slightly_negative": "Slightly Negative",
     "stylistic.sentiment.negative": "Negative",
     "stylistic.sentiment.very_negative": "Very Negative",
+
+    "stylistic.sentiment.intensity": "Emotional Intensity",
+    "stylistic.sentiment.intensity_title": "Help: Emotional Intensity",
+    "stylistic.sentiment.intensity_help": "This figure represents the emotional density of your text.\n\n• Not emotional strength: it doesn't tell you if the emotion is \"violent\" or \"soft\", but if it's ubiquitous or rare.\n\n• Low intensity (< 2%): factual, descriptive, or neutral text (e.g., a technical manual).\n• Medium intensity (4% - 8%): the usual range for a balanced narrative.\n• High intensity (> 12%): highly charged text, almost every sentence contains strongly connoted terms.",
+
+
+    "stylistic.sentiment.detected_balance": "Detected word balance:",
+
+    "stylistic.sentiment.highlight_pos": "Highlight (+)",
+    "stylistic.sentiment.highlight_neg": "Highlight (-)",
+    "stylistic.sentiment.highlight_both": "Highlight All",
+    "stylistic.btn_stop": "Stop",
+
+
     "stylistic.connectors.title": "Logical Connectors",
     "stylistic.connectors.none_found": "No connectors detected.",
     "stylistic.connectors.too_few": "Your text lacks structure (few connectors).",
@@ -1658,6 +1677,8 @@ window.LOCALE_EN = {
     "stylistic.analyzing": "Analyzing style...",
     "stylistic.empty": "No analysis data. Select a scene or click analyze.",
     "stylistic.btn_analyze": "Analyze Scene",
+    "stylistic.btn_clear": "Clear highlights",
+    "stylistic.stop_on_close": "Stop analysis on close",
     "stylistic.no_words": "Not enough text for a meaningful analysis.",
     "stylistic.sentiment.title": "Emotional Tone",
     "stylistic.sentiment.very_positive": "Very Positive",
@@ -1665,6 +1686,8 @@ window.LOCALE_EN = {
     "stylistic.sentiment.neutral": "Neutral",
     "stylistic.sentiment.negative": "Negative",
     "stylistic.sentiment.very_negative": "Very Negative",
+    "stylistic.sentiment.intensity": "Emotional Intensity",
+    "stylistic.sentiment.detected_balance": "Detected word balance:",
     "stylistic.connectors.title": "Logical Connectors",
     "stylistic.connectors.too_few": "Your text lacks structure (few connectors).",
     "stylistic.connectors.too_many": "Too many connectors detected, the text may seem mechanical.",
@@ -1685,7 +1708,13 @@ window.LOCALE_EN = {
     "stylistic.sentiment.pos_label": "{0}% Positive",
     "stylistic.sentiment.neu_label": "{0}% Neutral",
     "stylistic.sentiment.neg_label": "{0}% Negative",
-    "stylistic.sentiment.score_global": "Overall score: {0}%",
+    "stylistic.sentiment.score_global_label": "Overall score",
+    "stylistic.sentiment.score_title": "Help: Overall Score",
+    "stylistic.sentiment.score_help": "The overall score is calculated by averaging the \"emotional strength\" of each detected word. Here are the precise steps:\n\n1. Point allocation per word\nEach word in our lexicon has a base value ranging from -5 (very negative) to +5 (very positive).\nExample: \"Excellent\" is +3, \"Horrible\" is -3.\n\n2. Contextual adjustment\nThe engine adjusts this score based on the preceding words:\n• Amplifiers: A word like \"very\" multiplies the score of the following word by 1.5 (\"Very good\" goes from +2 to +3).\n• Negations: A \"not\" or \"never\" inverts the score and slightly attenuates it (\"Not happy\" goes from -2 to +1.4).\n\n3. Normalization Formula\nAll individual scores are summed to get a Total. Then, this total is normalized to fit a scale of -100% to +100%.",
+
+    "stylistic.sentiment.score_global": "{0}%",
+
+
 
     // --- Sidebar View (Mobile) ---
     "sidebar_view.items.single": "item",

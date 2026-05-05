@@ -6,7 +6,10 @@ const StylisticAnalysisViewModel = {
     state: {
         sentiment: null,
         connectors: null,
-        isAnalyzing: false
+        isAnalyzing: false,
+        currentStyleId: localStorage.getItem('plume_stylistic_style') || 'fiction',
+        highlightMode: null, // 'positive', 'negative', 'both' or null
+        stopOnClose: localStorage.getItem('plume_stylistic_stop_on_close') !== 'false' // default to true
     },
 
     /**
@@ -17,7 +20,7 @@ const StylisticAnalysisViewModel = {
         
         try {
             this.state.sentiment = StylisticAnalysisModel.analyzeSentiment(text);
-            this.state.connectors = StylisticAnalysisModel.analyzeConnectors(text);
+            this.state.connectors = StylisticAnalysisModel.analyzeConnectors(text, this.state.currentStyleId);
         } catch (e) {
             console.error('[StylisticAnalysis] Error during analysis:', e);
         } finally {
@@ -81,10 +84,29 @@ const StylisticAnalysisViewModel = {
     getState() {
         return this.state;
     },
+
+    setStyle(styleId) {
+        this.state.currentStyleId = styleId;
+        localStorage.setItem('plume_stylistic_style', styleId);
+    },
     
     clearState() {
         this.state.sentiment = null;
         this.state.connectors = null;
         this.state.isAnalyzing = false;
+        this.state.highlightMode = null;
+    },
+
+    setStopOnClose(value) {
+        this.state.stopOnClose = value;
+        localStorage.setItem('plume_stylistic_stop_on_close', value);
+    },
+    
+    setHighlightMode(mode) {
+        this.state.highlightMode = mode;
+    },
+
+    resetHighlightMode() {
+        this.state.highlightMode = null;
     }
 };

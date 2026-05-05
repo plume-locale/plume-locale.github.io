@@ -41,6 +41,13 @@ const StylisticAnalysis = {
 
         sidebar.classList.add('hidden');
         if (btn) btn.classList.remove('active');
+
+        // Nettoyer les surlignages si demandé
+        if (typeof StylisticAnalysisViewModel !== 'undefined' && 
+            StylisticAnalysisViewModel.getState().stopOnClose && 
+            typeof StylisticAnalysisHandlers !== 'undefined') {
+            StylisticAnalysisHandlers._clearAllHighlights();
+        }
     },
 
     // S'assurer que l'analyse est rafraîchie si le panneau est ouvert
@@ -97,6 +104,12 @@ const StylisticAnalysis = {
         if (savedWidth) {
             sidebar.style.width = savedWidth + 'px';
         }
+    },
+
+    stopAnalysis() {
+        if (typeof StylisticAnalysisHandlers !== 'undefined') {
+            StylisticAnalysisHandlers._clearAllHighlights();
+        }
     }
 };
 
@@ -105,4 +118,5 @@ window.StylisticAnalysis = StylisticAnalysis;
 window.toggleStylisticAnalysisPanel = function() { StylisticAnalysis.togglePanel(); };
 window.showStylisticAnalysisPanel = function() { StylisticAnalysis.showPanel(); };
 window.hideStylisticAnalysisPanel = function() { StylisticAnalysis.hidePanel(); };
+window.stopStylisticAnalysis = function() { StylisticAnalysis.stopAnalysis(); };
 

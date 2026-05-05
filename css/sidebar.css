@@ -234,6 +234,36 @@
     flex-shrink: 0;
 }
 
+.activity-bar-version {
+    font-size: 0.7rem;
+    color: var(--primary-color);
+    background: rgba(var(--primary-color-rgb), 0.08);
+    opacity: 0.7;
+    text-align: center;
+    margin: 4px 12px;
+    padding: 3px 0;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: var(--font-ui, sans-serif);
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    user-select: none;
+    border: 1px solid transparent;
+}
+
+.activity-bar-version:hover {
+    opacity: 1;
+    background: rgba(var(--primary-color-rgb), 0.15);
+    border-color: rgba(var(--primary-color-rgb), 0.2);
+}
+
+.activity-bar.thin .activity-bar-version {
+    font-size: 0.6rem;
+    margin: 4px 8px;
+    padding: 2px 0;
+}
+
 /* R2 — Context menu (right-click) sur les nav items de l'accordéon */
 .nav-context-menu {
     position: fixed;
