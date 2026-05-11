@@ -42,6 +42,11 @@ class StorageRepository {
                             db.createObjectStore(StorageModel.STORES.SETTINGS);
                             console.log('✅ Object store "settings" créé');
                         }
+                        if (!db.objectStoreNames.contains(StorageModel.STORES.RESERVE)) {
+                            const reserveStore = db.createObjectStore(StorageModel.STORES.RESERVE, { keyPath: 'id' });
+                            reserveStore.createIndex('projectId', 'projectId', { unique: false });
+                            console.log('✅ Object store "reserve" créé');
+                        }
                     }
                 });
 

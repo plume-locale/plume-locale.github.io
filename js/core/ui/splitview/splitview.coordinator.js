@@ -308,6 +308,14 @@ function renderViewInSplitPanel(view, container, state, panel) {
                 window.FrontMatterView.render('editorView');
             }
             break;
+            
+        case 'reserve':
+            if (window.ReserveView) {
+                // Important: pass the element directly because it's an async render
+                // and the ID 'editorView' might be restored before render is finished
+                window.ReserveView.render(tempContainer);
+            }
+            break;
 
         case 'changelog':
             ChangelogView.renderInContainer(tempContainer);

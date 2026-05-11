@@ -1,0 +1,48 @@
+/* 📦 La Réserve - Styles */
+
+.reserve-main-view {
+    animation: fadeIn 0.3s ease-out;
+}
+
+.reserve-card {
+    border: 1px solid var(--border-color);
+    background: var(--bg-secondary);
+    transition: all 0.2s ease;
+}
+
+.reserve-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent-gold);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.reserve-content {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-color) transparent;
+}
+
+.reserve-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.reserve-content::-webkit-scrollbar-thumb {
+    background-color: var(--border-color);
+    border-radius: 3px;
+}
+
+.reserve-sidebar-item:hover {
+    background: var(--bg-tertiary) !important;
+    border-color: var(--accent-gold) !important;
+    transform: translateX(4px);
+}
+
+/* Animation pour l'envoi en réserve */
+@keyframes buryEffect {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.05); opacity: 0.5; }
+    100% { transform: scale(0.9) translateY(20px); opacity: 0; }
+}
+
+.burying {
+    animation: buryEffect 0.5s forwards;
+}

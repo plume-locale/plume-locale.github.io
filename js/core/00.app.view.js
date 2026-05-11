@@ -63,7 +63,8 @@ const NAVIGATION_GROUPS = [
             { id: 'corkboard', icon: 'layout-grid', label: 'nav.corkboard' },
             { id: 'characters', icon: 'users', label: 'nav.characters' },
             { id: 'globalnotes', icon: 'layout', label: 'nav.globalnotes' },
-            { id: 'front_matter', icon: 'book-open-check', label: 'nav.front_matter' }
+            { id: 'front_matter', icon: 'book-open-check', label: 'nav.front_matter' },
+            { id: 'reserve', icon: 'archive', label: 'nav.reserve' }
         ]
     },
     {
@@ -237,6 +238,14 @@ document.addEventListener('DOMContentLoaded', () => {
  * Ferme tous les panneaux du toolsSidebar (versions, annotations, todos, arcs, plot).
  */
 function closeAllToolsSidebarPanels() {
+    // Fermer le panneau de la réserve
+    const sidebarReserve = document.getElementById('sidebarReserve');
+    const toolReserveBtn = document.getElementById('toolReserveBtn');
+    if (sidebarReserve && !sidebarReserve.classList.contains('hidden')) {
+        sidebarReserve.classList.add('hidden');
+        if (toolReserveBtn) toolReserveBtn.classList.remove('active');
+    }
+
     // Fermer le panneau des versions
     const sidebarVersions = document.getElementById('sidebarVersions');
     const toolVersionsBtn = document.getElementById('toolVersionsBtn');
@@ -399,7 +408,7 @@ function syncSidebarWithView(view, force = false) {
         'chaptersList', 'charactersList', 'worldList', 'notesList',
         'codexList', 'arcsList',
         'mindmapList', 'mapList', 'timelineVizList', 'investigationList',
-        'globalnotesList', 'todosList', 'frontMatterList'
+        'globalnotesList', 'todosList', 'frontMatterList', 'reserveList'
     ];
 
     // Identifier la liste correspondante
@@ -418,6 +427,7 @@ function syncSidebarWithView(view, force = false) {
         case 'globalnotes': targetListId = 'globalnotesList'; break;
         case 'todos': targetListId = 'todosList'; break;
         case 'front_matter': targetListId = 'frontMatterList'; break;
+        case 'reserve': targetListId = 'reserveList'; break;
     }
 
     const targetEl = targetListId ? document.getElementById(targetListId) : null;
@@ -471,6 +481,9 @@ function syncSidebarWithView(view, force = false) {
                     break;
                 case 'arcs':
                     if (typeof renderArcsList === 'function') renderArcsList();
+                    break;
+                case 'reserve':
+                    if (window.ReserveView && typeof window.ReserveView.renderSidebar === 'function') window.ReserveView.renderSidebar();
                     break;
             }
         }
@@ -594,6 +607,15 @@ function updateSidebarActions(view) {
                     <button class="btn btn-primary" onclick="FrontMatterView.openAddModal()" style="flex: 1;">+ ${Localization.t('front_matter.add_btn')}</button>
                     <button class="btn btn-secondary" onclick="FrontMatterView.openOrganizeModal()" style="padding: 10px;" title="${Localization.t('tool.tree.organize')}">
                         <i data-lucide="layers"></i>
+                    </button>
+                </div>
+            `;
+            break;
+        case 'reserve':
+            html = `
+                <div style="display: flex; gap: 8px; padding: 10px;">
+                    <button class="btn btn-primary" onclick="ReserveHandlers.onClearAll()" style="flex: 1;">
+                        <i data-lucide="trash-2"></i> ${Localization.t('reserve.btn_clear_all') || 'Vider la réserve'}
                     </button>
                 </div>
             `;
@@ -738,49 +760,64 @@ function updateEditorToolsSidebar() {
     if (!toolsSidebar) return;
 
     toolsSidebar.innerHTML = `
+        <button class="tool-btn" onclick="ReserveHandlers.toggleSidebar()" id="toolReserveBtn" 
+            title="${Localization.t('reserve.title') || 'La Réserve'}" style="color: var(--accent-gold); background: rgba(212, 175, 55, 0.1);">
+            <i data-lucide="inbox"></i>
+            <span class="tool-kbd">Alt+G</span>
+        </button>
+        <div style="width: 100%; height: 1px; background: var(--border-color); margin: 0.5rem 0"></div>
         <button class="tool-btn" onclick="toggleVersionsSidebar()" id="toolVersionsBtn" 
             title="${Localization.t('tools.versions') || 'Versions de scène'}">
             <i data-lucide="git-branch"></i>
             <span class="tool-badge" id="toolVersionsBadge" style="display: none">0</span>
+            <span class="tool-kbd">Alt+V</span>
         </button>
         <button class="tool-btn" onclick="toggleAnnotationsPanel()" id="toolAnnotationsBtn" 
             title="${Localization.t('tools.annotations') || 'Annotations'}">
             <i data-lucide="message-square"></i>
             <span class="tool-badge" id="toolAnnotationsBadge" style="display: none">0</span>
+            <span class="tool-kbd">Alt+A</span>
         </button>
         <button class="tool-btn" onclick="toggleTodosPanel()" id="toolTodosBtn" 
             title="${Localization.t('tools.todos') || 'TODOs'}">
             <i data-lucide="check-square"></i>
             <span class="tool-badge" id="toolTodosBadge" style="display: none">0</span>
+            <span class="tool-kbd">Alt+T</span>
         </button>
         <button class="tool-btn" onclick="toggleArcScenePanel()" id="toolArcsBtn" 
             title="${Localization.t('tools.arcs') || 'Arcs Narratifs'}">
             <i data-lucide="git-commit-horizontal"></i>
             <span class="tool-badge" id="toolArcsBadge" style="display: none">0</span>
+            <span class="tool-kbd">Alt+N</span>
         </button>
         <button class="tool-btn" onclick="PlotGridUI.toggleSidebar()" id="toolPlotBtn" 
             title="${Localization.t('tools.plot') || 'Plot Grid'}">
             <i data-lucide="grid-3x3"></i>
             <span class="tool-badge" id="toolPlotBadge" style="display: none">0</span>
+            <span class="tool-kbd">Alt+P</span>
         </button>
         <button class="tool-btn" onclick="InvestigationSidebarUI.toggleSidebar()" id="toolInvestigationBtn"
             title="${Localization.t('tools.investigation') || 'Enquête'}">
             <i data-lucide="search"></i>
             <span class="tool-badge" id="toolInvestigationBadge" style="display: none">0</span>
+            <span class="tool-kbd">Alt+I</span>
         </button>
         <div style="width: 100%; height: 1px; background: var(--border-color); margin: 0.5rem 0"></div>
         <button class="tool-btn" onclick="toggleLinksPanelVisibility()" id="toolLinksPanelBtn"
             title="${Localization.t('tools.links') || 'Lien (Personnages, Univers, Timeline)'}">
             <i data-lucide="link-2"></i>
             <span class="tool-badge" id="toolLinksBadge" style="display: none">0</span>
+            <span class="tool-kbd">Alt+L</span>
         </button>
         <button class="tool-btn" onclick="toggleWordRepetitionPanel()" id="toolRepetitionBtn"
             title="${Localization.t('tools.repetition') || 'Analyseur de répétitions'}">
             <i data-lucide="repeat"></i>
+            <span class="tool-kbd">Alt+R</span>
         </button>
         <button class="tool-btn" onclick="toggleStylisticAnalysisPanel()" id="toolStylisticBtn"
             title="${Localization.t('tools.stylistic') || 'Analyse Stylistique'}">
             <i data-lucide="sparkles"></i>
+            <span class="tool-kbd">Alt+S</span>
         </button>
         <button class="tool-btn" onclick="openEmotionWheel()" id="toolEmotionWheelBtn"
             title="${Localization.t('tools.emotion_wheel') || 'Roue des émotions'}">
@@ -789,12 +826,17 @@ function updateEditorToolsSidebar() {
     `;
 
     if (typeof lucide !== 'undefined') lucide.createIcons({ root: toolsSidebar });
+    if (window.ReserveView) window.ReserveView.renderSidebar();
 
     const mobileToolsGrid = document.querySelector('.mobile-tools-grid');
     const mobileToolsTitle = document.querySelector('.mobile-tools-sheet-title');
     if (mobileToolsGrid) {
         if (mobileToolsTitle) mobileToolsTitle.innerHTML = Localization.t('mobile.tools.title') || 'Outils de scène';
         mobileToolsGrid.innerHTML = `
+            <button class="mobile-tool-item" onclick="if(typeof ReserveHandlers !== 'undefined') ReserveHandlers.toggleSidebar(); closeMobileToolsSheet();">
+                <i data-lucide="inbox"></i>
+                <span data-i18n="reserve.title">${Localization.t('reserve.title') || 'La Réserve'}</span>
+            </button>
             <button class="mobile-tool-item" onclick="if(typeof toggleVersionsSidebar !== 'undefined') toggleVersionsSidebar(); closeMobileToolsSheet();">
                 <i data-lucide="git-branch"></i>
                 <span data-i18n="tools.versions">${Localization.t('tools.versions') || 'Versions'}</span>
@@ -1000,6 +1042,11 @@ function renderViewContent(view, containerId) {
                 window.FrontMatterView.render(containerId);
             }
             break;
+        case 'reserve':
+            if (window.ReserveView) {
+                window.ReserveView.render(containerId);
+            }
+            break;
         default:
             container.innerHTML = `
                 <div class="empty-state">
@@ -1075,6 +1122,7 @@ function refreshAllViews() {
             case 'investigation': if (typeof renderInvestigationBoard === 'function') renderInvestigationBoard(); break;
             case 'globalnotes': if (typeof renderGlobalNotes === 'function') renderGlobalNotes(); break;
             case 'front_matter': if (window.FrontMatterView) window.FrontMatterView.render(); break;
+            case 'reserve': if (window.ReserveView) window.ReserveView.render(); break;
             case 'projects': if (typeof ProjectView !== 'undefined' && typeof ProjectView.renderLandingPage === 'function') ProjectView.renderLandingPage(projects); break;
         }
     }
@@ -1824,6 +1872,11 @@ function getEditorToolbarHTML(panel = null, hideExtraTools = false) {
         ` : ''}
 
         ${!hideExtraTools ? `
+        <!-- Reserve button -->
+        <div class="toolbar-group">
+            <button class="toolbar-btn" onmousedown="event.preventDefault()" onclick="ReserveHandlers.onBurySelection()" title="${Localization.t('reserve.title.bury')}" style="color: var(--accent-gold); font-weight: 600;"><i data-lucide="archive" style="width:14px;height:14px;vertical-align:middle;margin-right:4px;"></i> ${Localization.t('nav.reserve')}</button>
+        </div>
+
         <!-- Revision mode button -->
         <div class="toolbar-group">
             <button class="toolbar-btn" onmousedown="event.preventDefault()" onclick="toggleRevisionMode()" title="${Localization.t('toolbar.revision_mode')}" style="color: var(--accent-gold); font-weight: 600;"><i data-lucide="pencil" style="width:14px;height:14px;vertical-align:middle;margin-right:4px;"></i> ${Localization.t('toolbar.revision')}</button>

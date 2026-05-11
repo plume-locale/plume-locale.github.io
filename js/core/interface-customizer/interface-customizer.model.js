@@ -27,6 +27,7 @@ const InterfaceCustomizerModel = {
         { id: 'header-tab-analysis', icon: 'scan-search', label: 'nav.analysis', category: 'navigation' },
         { id: 'header-tab-versions', icon: 'history', label: 'nav.snapshots', category: 'navigation' },
         { id: 'header-tab-plotgrid', icon: 'grid', label: 'nav.plotgrid', category: 'navigation' },
+        { id: 'header-tab-reserve', icon: 'archive', label: 'nav.reserve', category: 'navigation' },
 
         // Actions à droite
         { id: 'splitModeToggle', icon: 'columns-2', label: 'header.split', category: 'actions' },
@@ -160,6 +161,13 @@ const InterfaceCustomizerModel = {
             icon: 'book-open-check',
             category: 'writing',
             components: ['header-tab-front_matter', 'nav-item-front_matter']
+        },
+        {
+            id: 'reserve',
+            label: 'nav.reserve',
+            icon: 'archive',
+            category: 'writing',
+            components: ['header-tab-reserve', 'nav-item-reserve']
         },
 
         // --- PLANNING (WORLDBUILDING/PLANNING) ---
@@ -358,7 +366,7 @@ const InterfaceCustomizerModel = {
                 'characters', 'world', 'codex',
                 'stats', 'synonyms', 'word-repetition', 'emotion-wheel',
                 'search', 'import-export', 'import-chapter', 'colorpalette',
-                'globalnotes'
+                'globalnotes', 'reserve'
             ],
             shortcuts: ['project', 'editor', 'corkboard', 'globalnotes', 'characters', 'world']
         }

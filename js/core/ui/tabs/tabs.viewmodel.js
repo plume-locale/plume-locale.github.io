@@ -232,6 +232,9 @@ function getTabTitle(view, params) {
         }
         return Localization.t('nav.codex');
     }
+    if (view === 'reserve') {
+        return Localization.t('reserve.title') || Localization.t('nav.reserve') || 'La Réserve';
+    }
 
     return viewLabels[view] || view;
 }

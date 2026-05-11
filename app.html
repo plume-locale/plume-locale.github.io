@@ -53,6 +53,7 @@
 <link rel="stylesheet" href="./css/structure-blocks.css">
 <link rel="stylesheet" href="./css/narrative-overview.css">
 <link rel="stylesheet" href="./css/import-scrivener.css">
+<link rel="stylesheet" href="./css/reserve.css">
 <link rel="stylesheet" href="./css/synonyms.css">
 <link rel="stylesheet" href="./css/map.css">
 <link rel="stylesheet" href="./css/keyboard-shortcuts.css">
@@ -1620,6 +1621,9 @@
                     <div class="database-list" id="frontMatterList" style="display: none">
                         <!-- Front Matter elements will be dynamically inserted here -->
                     </div>
+                    <div class="database-list" id="reserveList" style="display: none">
+                        <!-- Reserve items will be dynamically inserted here -->
+                    </div>
                     <div class="database-list" id="charactersList" style="display: none">
                         <!-- Characters will be dynamically inserted here -->
                     </div>
@@ -1690,6 +1694,13 @@
             </div>
             <!-- Vertical Tools Sidebar -->
             <div class="tools-sidebar" id="toolsSidebar">
+                <button class="tool-btn" onclick="ReserveHandlers.toggleSidebar()" id="toolReserveBtn"
+                    title="La Réserve" data-tooltip="La Réserve"
+                    data-shortcut="Alt+G" style="color: var(--accent-gold); background: rgba(212, 175, 55, 0.1);">
+                    <i data-lucide="inbox"></i>
+                    <span class="tool-kbd">Alt+G</span>
+                </button>
+                <div class="tool-separator"></div>
                 <button class="tool-btn" onclick="toggleVersionsSidebar()" id="toolVersionsBtn"
                     title="Versions de scène" data-i18n-title="tools.versions" data-tooltip="Versions"
                     data-i18n-tooltip="tools.versions" data-shortcut="Alt+V">
@@ -1829,6 +1840,23 @@
                 </div>
                 <div class="sidebar-plot-list" id="investigationSidebarList">
                     <!-- Investigation cards will be inserted here -->
+                </div>
+            </div>
+            <!-- Sidebar Reserve (Right Side) -->
+            <div class="sidebar-plot hidden" id="sidebarReserve">
+                <div class="sidebar-plot-header">
+                    <div class="sidebar-plot-title">
+                        <h3 data-i18n="reserve.title"><i data-lucide="archive"
+                                style="width: 16px; height: 16px; vertical-align: middle; margin-right: 6px"></i>La Réserve</h3>
+                        <button class="sidebar-plot-toggle" onclick="ReserveHandlers.toggleSidebar()" title="Masquer"
+                            data-i18n-title="btn.hide">
+                            <i data-lucide="x" style="width: 14px; height: 14px"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar-plot-scene" id="reserveSidebarStatus">Prêt à restaurer</div>
+                </div>
+                <div class="sidebar-plot-list" id="reserveSidebarList" style="padding: 10px;">
+                    <!-- Reserve items will be inserted here -->
                 </div>
             </div>
             <!-- Annotations Panel -->
@@ -3728,6 +3756,11 @@
                 <button class="floating-btn-mini" onmousedown="event.preventDefault()"
                     onclick="formatText('insertHorizontalRule')" title="Ligne horizontale"
                     data-i18n-title="floating.title.horizontal_rule" data-i18n="floating.label.line">Ligne</button>
+                <button class="floating-btn-mini" onmousedown="event.preventDefault()"
+                    onclick="ReserveHandlers.onBurySelection()" title="Mettre en réserve"
+                    data-i18n-title="reserve.title.bury">
+                    <i data-lucide="archive" style="width: 16px; height: 16px; color: var(--accent-gold);"></i>
+                </button>
             </div>
         </div>
         <!-- Keyboard Shortcuts Summary Modal -->
@@ -4613,6 +4646,11 @@
 <script src="./js/features/front-matter/front-matter.viewmodel.js"></script>
 <script src="./js/features/front-matter/front-matter.view.js"></script>
 <script src="./js/features/front-matter/front-matter.main.js"></script>
+<script src="./js/features/tools/reserve/reserve.model.js"></script>
+<script src="./js/features/tools/reserve/reserve.repository.js"></script>
+<script src="./js/features/tools/reserve/reserve.viewmodel.js"></script>
+<script src="./js/features/tools/reserve/reserve.view.js"></script>
+<script src="./js/features/tools/reserve/reserve.handlers.js"></script>
 <script src="./js/core/ui/sidebar-view/sidebar-view.model.js"></script>
 <script src="./js/core/ui/sidebar-view/sidebar-view.repository.js"></script>
 <script src="./js/core/ui/sidebar-view/sidebar-view.viewmodel.js"></script>

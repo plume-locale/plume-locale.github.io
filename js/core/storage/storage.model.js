@@ -4,11 +4,12 @@
  */
 class StorageModel {
     static DB_NAME = 'PlumeDB';
-    static DB_VERSION = 1;
+    static DB_VERSION = 3;
 
     static STORES = {
         PROJECTS: 'projects',
-        SETTINGS: 'settings'
+        SETTINGS: 'settings',
+        RESERVE: 'reserve'
     };
 
     static KEYS = {

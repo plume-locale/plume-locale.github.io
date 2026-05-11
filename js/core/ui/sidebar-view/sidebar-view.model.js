@@ -59,6 +59,15 @@ const SidebarViewModelData = {
             emptySubMessageKey: 'sidebar_view.front_matter.empty_sub_message',
             actionButton: '<button class="btn btn-primary" style="font-size: 1.2rem; padding: 1rem 2rem;" onclick="FrontMatterView.openAddModal()">${Localization.t("sidebar_view.front_matter.action_btn")}</button>',
             sidebarHintKey: 'sidebar_view.front_matter.hint'
+        },
+        reserve: {
+            icon: '📦',
+            titleKey: 'sidebar_view.reserve.title',
+            descriptionKey: 'sidebar_view.reserve.description',
+            emptyMessageKey: 'sidebar_view.reserve.empty_message',
+            emptySubMessageKey: 'sidebar_view.reserve.empty_sub_message',
+            actionButton: '',
+            sidebarHintKey: 'sidebar_view.reserve.hint'
         }
     }
 };

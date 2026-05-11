@@ -7,6 +7,24 @@
 window.CHANGELOG_I18N_DATA = {
   fr: [
     {
+      version: "1.1.6",
+      date: "2026-05-11",
+      type: "major",
+      summary: "Module \"La Réserve\" (Kill Your Darlings)",
+      content: `# Module "La Réserve" (Kill Your Darlings)
+
+**Date :** 11 mai 2026
+
+## ✨ Nouveautés
+
+- **Création du module "La Réserve"** : Un espace dédié pour archiver vos extraits de texte plutôt que de les supprimer. Idéal pour pratiquer le "Kill Your Darlings" en toute sérénité.
+- **Organisation avancée** : Chaque extrait peut désormais être doté d'un **titre**, d'un **commentaire** (notes de contexte) et de **tags** personnalisés.
+- **Lecture et Édition** : Une interface dédiée permet de relire vos extraits en plein écran et de modifier leurs métadonnées à tout moment.
+- **Recherche Puissante** : Filtrez instantanément votre réserve par contenu, titre, note ou tag pour retrouver l'idée parfaite.
+- **Accès Rapide** : Épinglez vos extraits favoris pour les garder sous les yeux dans le panneau latéral.
+- **Restauration en un clic** : Réintégrez n'importe quel extrait directement dans votre texte actuel à la position du curseur.`
+    },
+    {
       version: "1.1.5",
       date: "2026-05-05",
       type: "minor",
@@ -132,6 +150,24 @@ window.CHANGELOG_I18N_DATA = {
     }
   ],
   en: [
+    {
+      version: "1.1.6",
+      date: "2026-05-11",
+      type: "major",
+      summary: "\"The Reserve\" Module (Kill Your Darlings)",
+      content: `# "The Reserve" Module (Kill Your Darlings)
+
+**Date :** May 11, 2026
+
+## ✨ What's New
+
+- **Creation of "The Reserve" module**: A dedicated space to archive your text snippets instead of deleting them. Perfect for practicing "Kill Your Darlings" with peace of mind.
+- **Advanced Organization**: Each snippet can now have a **title**, a **comment** (context notes), and custom **tags**.
+- **Reading and Editing**: A dedicated interface allows you to re-read your snippets in full screen and edit their metadata at any time.
+- **Powerful Search**: Instantly filter your reserve by content, title, note, or tag to find the perfect idea.
+- **Quick Access**: Pin your favorite snippets to keep them visible in the sidebar.
+- **One-Click Restoration**: Reintegrate any snippet directly into your current text at the cursor position.`
+    },
     {
       version: "1.1.5",
       date: "2026-05-05",
@@ -259,6 +295,24 @@ window.CHANGELOG_I18N_DATA = {
   ],
   de: [
     {
+      version: "1.1.6",
+      date: "2026-05-11",
+      type: "major",
+      summary: "Modul \"Die Reserve\" (Kill Your Darlings)",
+      content: `# Modul "Die Reserve" (Kill Your Darlings)
+
+**Date :** 11. Mai 2026
+
+## ✨ Neuheiten
+
+- **Erstellung des Moduls "Die Reserve"**: Ein dedizierter Bereich zum Archivieren Ihrer Textausschnitte anstatt sie zu löschen. Ideal, um "Kill Your Darlings" in aller Ruhe zu praktizieren.
+- **Erweiterte Organisation**: Jeder Ausschnitt kann nun mit einem **Titel**, einem **Kommentar** (Kontextnotizen) und benutzerdefinierten **Tags** versehen werden.
+- **Lesen und Bearbeiten**: Eine dedizierte Benutzeroberfläche ermöglicht es Ihnen, Ihre Ausschnitte im Vollbildmodus zu lesen und ihre Metadaten jederzeit zu bearbeiten.
+- **Leistungsstarke Suche**: Filtern Sie Ihre Reserve sofort nach Inhalt, Titel, Notiz oder Tag, um die perfekte Idee wiederzufinden.
+- **Schnellzugriff**: Heften Sie Ihre Lieblingsausschnitte an, um sie in der Seitenleiste im Blick zu behalten.
+- **Wiederherstellung mit einem Klick**: Integrieren Sie jeden Ausschnitt direkt an der Cursorposition wieder in Ihren aktuellen Text.`
+    },
+    {
       version: "1.1.5",
       date: "2026-05-05",
       type: "minor",
@@ -384,6 +438,24 @@ window.CHANGELOG_I18N_DATA = {
     }
   ],
   es: [
+    {
+      version: "1.1.6",
+      date: "2026-05-11",
+      type: "major",
+      summary: "Módulo \"La Reserva\" (Kill Your Darlings)",
+      content: `# Módulo "La Reserva" (Kill Your Darlings)
+
+**Date :** 11 de mayo de 2026
+
+## ✨ Novedades
+
+- **Creación del módulo "La Reserva"**: Un espacio dedicado para archivar sus fragmentos de texto en lugar de eliminarlos. Ideal para practicar el "Kill Your Darlings" con tranquilidad.
+- **Organización Avanzada**: Cada fragmento ahora puede tener un **título**, un **comentario** (notas de contexto) y **etiquetas** personalizadas.
+- **Lectura y Edición**: Una interfaz dedicada permite releer sus fragmentos a pantalla completa y editar sus metadatos en cualquier momento.
+- **Búsqueda Potente**: Filtre instantáneamente su reserva por contenido, título, nota o etiqueta para encontrar la idea perfecta.
+- **Acceso Rápido**: Fije sus fragmentos favoritos para mantenerlos a la vista en el panel lateral.
+- **Restauración en un clic**: Reintegre cualquier fragmento directamente en su texto actual en la posición del cursor.`
+    },
     {
       version: "1.1.5",
       date: "2026-05-05",
