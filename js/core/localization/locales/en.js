@@ -3535,6 +3535,28 @@ window.LOCALE_EN = {
     "stats.days_off": "Days Off",
     "stats.words_remaining_per_day": "words / day left",
     "stats.history_chart": "Progress over Period",
+    "stats.heatmap.title": "Writing Habits",
+    "stats.heatmap.yearly": "Yearly Activity",
+    "stats.heatmap.monthly": "Months",
+    "stats.heatmap.weekly": "Weeks",
+    // Streak
+    "stats.streak.title": "Writing Streak",
+    "stats.streak.days": "consecutive days",
+    "stats.streak.best": "Best",
+    "stats.streak.active": "Streak on fire — keep going!",
+    "stats.streak.inactive": "Write today to keep your streak alive",
+    "stats.streak.hint": "Goal: write at least {0} words/day",
+    "stats.streak.current": "{0} consecutive writing day(s)",
+    // NaNoWriMo
+    "stats.nano.title": "50k Word Challenge",
+    "stats.nano.enable": "Enable",
+    "stats.nano.description": "Take on an intense writing challenge: 50,000 words in 30 days. Enable the mode to track your progress.",
+    "stats.nano.on_track": "On track",
+    "stats.nano.behind": "Behind pace",
+    "stats.nano.words_per_day": "words/day required",
+    "stats.nano.days_left": "days left",
+    "stats.nano.start_date": "Challenge start date",
+
 
     // --- Synchronized missing keys ---
     "investigation.mmo.characters_in_scene": "Personnages & MMO",

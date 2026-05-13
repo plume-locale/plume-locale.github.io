@@ -60,6 +60,62 @@ const StatsViewModel = {
     },
 
     /**
+     * Aggregates words by hour of the day across all sessions.
+     * @returns {Array} Array of 24 numbers (words written for each hour 0-23)
+     */
+    getHourlyHeatmap() {
+        const stats = StatsRepository.getStats();
+        const hours = new Array(24).fill(0);
+        stats.writingSessions.forEach(session => {
+            if (session.hourly) {
+                for (let i = 0; i < 24; i++) {
+                    if (session.hourly[i]) hours[i] += session.hourly[i];
+                }
+            }
+        });
+        return hours;
+    },
+
+    /**
+     * Aggregates words by day of the week.
+     * @returns {Array} Array of 7 numbers (Mon=0, Sun=6)
+     */
+    getWeekdayHeatmap() {
+        const stats = StatsRepository.getStats();
+        const days = new Array(7).fill(0);
+        stats.writingSessions.forEach(session => {
+            if (session.words && session.date) {
+                const d = new Date(session.date);
+                if (!isNaN(d)) {
+                    // getDay: 0=Sun, 1=Mon... -> We want 0=Mon, 6=Sun
+                    const jsDay = d.getDay();
+                    const index = (jsDay + 6) % 7; 
+                    days[index] += session.words;
+                }
+            }
+        });
+        return days;
+    },
+
+    /**
+     * Returns a year's worth of daily writing data.
+     */
+    getYearlyHeatmap() {
+        const stats = StatsRepository.getStats();
+        const data = {};
+        stats.writingSessions.forEach(s => {
+            if (s.date && s.words) {
+                const d = new Date(s.date);
+                if (!isNaN(d)) {
+                    const key = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+                    data[key] = (data[key] || 0) + s.words;
+                }
+            }
+        });
+        return data;
+    },
+
+    /**
      * Calcule la progression du jour.
      * @returns {Object}
      */
@@ -221,6 +277,100 @@ const StatsViewModel = {
      * FIX #2 : En cas de suppression de texte, on ajuste startWords proprement
      * en une seule opération saveSession pour éviter les doubles écritures.
      */
+    /**
+     * Retourne les données de streak pour l'affichage.
+     * @returns {Object} { current, longest, lastActiveDate, isActive }
+     */
+    getStreakData() {
+        const stats = StatsRepository.getStats();
+        const streak = StatsModel.calculateStreak(stats.writingSessions, stats.dailyGoal || 500);
+        
+        // isActive = streak > 0 ET (aujourd'hui ou hier est le dernier jour actif)
+        let isActive = false;
+        if (streak.lastActiveDate) {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const last = new Date(streak.lastActiveDate);
+            last.setHours(0, 0, 0, 0);
+            const diffDays = Math.round((today - last) / 86400000);
+            isActive = diffDays <= 1 && streak.current > 0;
+        }
+
+        return { ...streak, isActive };
+    },
+
+    /**
+     * Calcule les statistiques NaNoWriMo (50 000 mots en 30 jours).
+     * La date de début du NaNo est stockée dans stats.nanoStartDate.
+     * Si pas de date de début, on utilise aujourd'hui.
+     * @returns {Object} { 
+     *   targetWords, currentWords, wordsNeeded, daysElapsed, daysLeft,
+     *   requiredPerDay, writtenPerDay, onTrack, paceWords, progressPercent
+     * }
+     */
+    getNaNoStats() {
+        const NANO_TARGET = 50000;
+        const NANO_DAYS = 30;
+
+        const stats = StatsRepository.getStats();
+        const { totalWords } = this.getProjectStats();
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        // Date de début du challenge
+        let startDate;
+        if (stats.nanoStartDate) {
+            startDate = new Date(stats.nanoStartDate);
+            startDate.setHours(0, 0, 0, 0);
+        } else {
+            // Par défaut : 1er du mois courant si dans les 30 premiers jours, sinon aujourd'hui
+            startDate = new Date(today.getFullYear(), today.getMonth(), 1);
+        }
+
+        const endDate = new Date(startDate);
+        endDate.setDate(startDate.getDate() + NANO_DAYS - 1);
+
+        const daysElapsed = Math.max(1, Math.min(
+            Math.round((today - startDate) / 86400000) + 1,
+            NANO_DAYS
+        ));
+        const daysLeft = Math.max(0, NANO_DAYS - daysElapsed + 1);
+
+        // Mots écrits depuis le début du NaNo
+        const nanoWords = stats.writingSessions
+            .filter(s => {
+                const d = new Date(s.date);
+                return d >= startDate && d <= new Date();
+            })
+            .reduce((sum, s) => sum + (s.words || 0), 0);
+
+        // Mots requis par jour pour atteindre l'objectif
+        const requiredPerDay = Math.ceil(NANO_TARGET / NANO_DAYS); // 1 667
+        // Mots écrits en moyenne par jour depuis le début
+        const writtenPerDay = daysElapsed > 0 ? Math.round(nanoWords / daysElapsed) : 0;
+        // Mots nécessaires par jour pour finir à temps
+        const wordsNeeded = daysLeft > 0 ? Math.ceil(Math.max(0, NANO_TARGET - nanoWords) / daysLeft) : 0;
+        // Mots attendus à ce stade du challenge (pace)
+        const paceWords = requiredPerDay * daysElapsed;
+        const onTrack = nanoWords >= paceWords;
+        const progressPercent = Math.min((nanoWords / NANO_TARGET) * 100, 100);
+
+        return {
+            targetWords: NANO_TARGET,
+            currentWords: nanoWords,
+            wordsNeeded,
+            daysElapsed,
+            daysLeft,
+            requiredPerDay,
+            writtenPerDay,
+            onTrack,
+            paceWords,
+            progressPercent,
+            startDate,
+            endDate
+        };
+    },
+
     trackWritingSession() {
         // --- Garde : initTodaySession doit avoir tourné ---
         if (!window._todaySessionInitialized) {

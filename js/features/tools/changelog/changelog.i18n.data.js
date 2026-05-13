@@ -7,6 +7,22 @@
 window.CHANGELOG_I18N_DATA = {
   fr: [
     {
+      version: "1.1.7",
+      date: "2026-05-13",
+      type: "minor",
+      summary: "Refonte du module de statistiques",
+      content: `# Refonte du module de statistiques
+
+**Date :** 13 mai 2026
+
+## ✨ Nouveautés
+
+- **Heatmap des statistiques** : Ajout d'une vue "Heatmap" (carte de chaleur) annuelle et hebdomadaire pour suivre votre régularité d'écriture.
+- **Série d'écriture** : Suivez votre série d'écriture actuelle (streak) et maintenez votre cadence quotidienne.
+- **Challenge des 50 000 mots** : Participez au défi d'écriture et suivez votre progression vers l'objectif ultime des 50 000 mots.
+- **Internationalisation** : Localisation de la vue Heatmap des statistiques dans les 4 langues (Français, Anglais, Espagnol, Allemand).`
+    },
+    {
       version: "1.1.6",
       date: "2026-05-11",
       type: "major",
@@ -150,6 +166,22 @@ window.CHANGELOG_I18N_DATA = {
     }
   ],
   en: [
+    {
+      version: "1.1.7",
+      date: "2026-05-13",
+      type: "minor",
+      summary: "Stats module redesign",
+      content: `# Stats module redesign
+
+**Date :** May 13, 2026
+
+## ✨ What's New
+
+- **Stats Heatmap**: Added a yearly and weekly "Heatmap" view to track your writing consistency.
+- **Writing Streak**: Track your current writing streak and maintain your daily cadence.
+- **50,000 Word Challenge**: Participate in the writing challenge and track your progress toward the ultimate 50,000-word goal.
+- **Internationalization**: Localization of the Stats Heatmap view in all 4 languages (French, English, Spanish, German).`
+    },
     {
       version: "1.1.6",
       date: "2026-05-11",
@@ -295,6 +327,22 @@ window.CHANGELOG_I18N_DATA = {
   ],
   de: [
     {
+      version: "1.1.7",
+      date: "2026-05-13",
+      type: "minor",
+      summary: "Neugestaltung des Statistikmoduls",
+      content: `# Neugestaltung des Statistikmoduls
+
+**Date :** 13. Mai 2026
+
+## ✨ Neuheiten
+
+- **Statistik-Heatmap**: Jährliche und wöchentliche "Heatmap"-Ansicht hinzugefügt, um Ihre Schreibkonsistenz zu verfolgen.
+- **Schreibserie (Streak)**: Verfolgen Sie Ihre aktuelle Schreibserie und halten Sie Ihren täglichen Rhythmus aufrecht.
+- **50.000-Wörter-Herausforderung**: Nehmen Sie an der Schreibherausforderung teil und verfolgen Sie Ihren Fortschritt bis zum ultimativen 50.000-Wörter-Ziel.
+- **Internationalisierung**: Lokalisierung der Statistik-Heatmap-Ansicht in allen 4 Sprachen (Französisch, Englisch, Spanisch, Deutsch).`
+    },
+    {
       version: "1.1.6",
       date: "2026-05-11",
       type: "major",
@@ -438,6 +486,22 @@ window.CHANGELOG_I18N_DATA = {
     }
   ],
   es: [
+    {
+      version: "1.1.7",
+      date: "2026-05-13",
+      type: "minor",
+      summary: "Rediseño del módulo de estadísticas",
+      content: `# Rediseño del módulo de estadísticas
+
+**Date :** 13 de mayo de 2026
+
+## ✨ Novedades
+
+- **Heatmap de estadísticas**: Añadida una vista de "Heatmap" (mapa de calor) anual y semanal para realizar un seguimiento de su regularidad de escritura.
+- **Racha de escritura**: Siga su racha de escritura actual y mantenga su ritmo diario.
+- **Reto de 50.000 palabras**: Participe en el reto de escritura y siga su progreso hacia el objetivo final de 50.000 palabras.
+- **Internacionalización**: Localización de la vista Heatmap de estadísticas en los 4 idiomas (francés, inglés, español, alemán).`
+    },
     {
       version: "1.1.6",
       date: "2026-05-11",

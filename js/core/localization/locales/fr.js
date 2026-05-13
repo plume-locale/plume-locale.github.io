@@ -3291,6 +3291,28 @@ window.LOCALE_FR = {
     "stats.days_off": "Jours de repos",
     "stats.words_remaining_per_day": "mots / jour à écrire",
     "stats.history_chart": "Progression sur la période",
+    "stats.heatmap.title": "Habitudes d'écriture",
+    "stats.heatmap.yearly": "Activité sur l'année",
+    "stats.heatmap.monthly": "Mois",
+    "stats.heatmap.weekly": "Semaines",
+    // Streak
+    "stats.streak.title": "Série d'écriture",
+    "stats.streak.days": "jours consécutifs",
+    "stats.streak.best": "Record",
+    "stats.streak.active": "Série en cours — continuez !",
+    "stats.streak.inactive": "Reprenez pour relancer la série",
+    "stats.streak.hint": "Objectif : écrire au moins {0} mots/jour",
+    "stats.streak.current": "{0} jour(s) consécutif(s) d'écriture",
+    // NaNoWriMo
+    "stats.nano.title": "Challenge 50 000 mots",
+    "stats.nano.enable": "Activer",
+    "stats.nano.description": "Lancez un challenge d'écriture intensif : 50 000 mots en 30 jours. Activez le mode pour suivre votre progression.",
+    "stats.nano.on_track": "Dans les temps",
+    "stats.nano.behind": "En retard",
+    "stats.nano.words_per_day": "mots/jour requis",
+    "stats.nano.days_left": "jours restants",
+    "stats.nano.start_date": "Date de début du challenge",
+
     // --- Undo/Redo ---
     "undoredo.default_label": "Changement",
     "undoredo.label.edit": "Édition de texte",

@@ -1304,10 +1304,25 @@
             <!-- Actions à droite -->
             <div class="header-actions">
                 <div id="headerStatsContainer"
-                    style="font-size: 0.85rem; color: var(--text-muted); margin-right: 0.5rem">
+                    style="display: flex; align-items: center; gap: 0.75rem; font-size: 0.85rem; color: var(--text-muted); margin-right: 0.5rem;">
+
+                    <!-- Total mots & chapitres -->
                     <span id="headerTotalWords">0</span>
-                    <span id="headerStatsSeparator"> / </span>
+                    <span id="headerStatsSeparator" style="opacity: 0.4;">·</span>
                     <span id="headerTotalChapters">0</span>
+
+                    <!-- Progression quotidienne -->
+                    <div style="display: flex; align-items: center; gap: 0.4rem; border-left: 1px solid var(--border-color); padding-left: 0.75rem;">
+                        <div style="position: relative; width: 60px; height: 6px; background: var(--bg-primary, #2a2a2a); border-radius: 3px; overflow: hidden;" title="">
+                            <div id="headerDailyProgressFill" style="position: absolute; left: 0; top: 0; height: 100%; width: 0%; background: var(--accent-red, #ff6347); border-radius: 3px; transition: width 0.5s ease;"></div>
+                        </div>
+                        <span id="headerDailyProgressLabel" style="font-size: 0.75rem; opacity: 0.7; white-space: nowrap;">0/500</span>
+                    </div>
+
+                    <!-- Streak badge (masqué si 0) -->
+                    <div id="headerStreakContainer" style="display: none; align-items: center; border-left: 1px solid var(--border-color); padding-left: 0.75rem;">
+                        <span id="headerStreakCount" style="font-size: 0.8rem; font-weight: 600; color: #ff8c00;"></span>
+                    </div>
                 </div>
                 <!-- Split View Toggle -->
                 <button class="split-mode-toggle" onclick="toggleSplitView()" id="splitModeToggle"
@@ -4756,8 +4771,8 @@
 <script src="./js/features/tools/magic-importer/magic-importer.main.js"></script>
 <script src="./js/features/tools/changelog/changelog.i18n.data.js"></script>
 <script src="./js/features/tools/changelog/changelog.view.js"></script>
-<script src="./js/features/tools/import-export/import-export.structured-export.js"></script>
 <script src="./js/worldbuilding/atlas/atlas.schema.js"></script>
+<script src="./js/features/tools/import-export/import-export.structured-export.js"></script>
 
     </body>
 </html>

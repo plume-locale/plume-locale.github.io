@@ -29,6 +29,13 @@ const StatsRepository = {
         if (!Array.isArray(project.stats.writingSessions)) {
             project.stats.writingSessions = [];
         }
+        // Migration NaNoWriMo
+        if (project.stats.nanoMode === undefined) {
+            project.stats.nanoMode = false;
+        }
+        if (project.stats.nanoStartDate === undefined) {
+            project.stats.nanoStartDate = null;
+        }
 
         return project.stats;
     },
@@ -93,6 +100,7 @@ const StatsRepository = {
         if (!project.stats.writingSessions) project.stats.writingSessions = [];
 
         const today = new Date();
+        const currentHour = today.getHours();
         const todayStr = `${today.getFullYear()}-${(today.getMonth() + 1).toString().padStart(2, '0')}-${today.getDate().toString().padStart(2, '0')}`;
         const index = project.stats.writingSessions.findIndex(s => {
             const d = new Date(s.date);
@@ -101,20 +109,47 @@ const StatsRepository = {
         });
 
         if (index >= 0) {
+            const existingSession = project.stats.writingSessions[index];
+            const hourly = existingSession.hourly || {};
+            
+            // Diff calculation for heatmap tracking
+            if (session.words !== undefined && existingSession.words !== undefined) {
+                const diff = session.words - existingSession.words;
+                if (diff > 0) {
+                    hourly[currentHour] = (hourly[currentHour] || 0) + diff;
+                }
+            }
+
             // Merge : on ne remplace que les champs explicitement fournis
             project.stats.writingSessions[index] = {
-                ...project.stats.writingSessions[index],
-                ...session
+                ...existingSession,
+                ...session,
+                hourly: hourly
             };
         } else {
+            const hourly = {};
+            if (session.words) hourly[currentHour] = session.words;
+
             project.stats.writingSessions.push({
                 date: new Date().toISOString(),
                 words: 0,
                 startWords: null,
+                hourly: hourly,
                 ...session
             });
         }
 
+        this._save();
+    },
+
+    /**
+     * Met à jour la configuration NaNoWriMo.
+     * @param {Object} config - { nanoMode: boolean, nanoStartDate: string|null }
+     */
+    updateNanoConfig(config) {
+        const stats = this.getStats();
+        if (config.nanoMode !== undefined) stats.nanoMode = config.nanoMode;
+        if (config.nanoStartDate !== undefined) stats.nanoStartDate = config.nanoStartDate;
         this._save();
     }
 };
