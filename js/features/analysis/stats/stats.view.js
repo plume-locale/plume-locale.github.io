@@ -271,6 +271,8 @@ const StatsView = {
                                 <!-- Weekday Chart -->
                                 <div id="weekdayChartContainer" style="background: var(--bg-primary); padding: 1rem; border-radius: 12px; border: 1px solid var(--border-color);"></div>
                             </div>
+                            
+                            <div id="punchcardChartContainer" style="margin-top: 1.5rem; background: var(--bg-primary); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border-color); overflow-x: auto;"></div>
 
                             <div id="yearlyChartContainer" style="margin-top: 1.5rem; background: var(--bg-primary); padding: 1rem; border-radius: 12px; border: 1px solid var(--border-color); overflow-x: auto;"></div>
                         </div>
@@ -596,6 +598,61 @@ const StatsView = {
             weekdayContainer.innerHTML = html;
         }
         
+        // Render Punchcard Heatmap
+        const punchcardContainer = document.getElementById('punchcardChartContainer');
+        if (punchcardContainer && typeof StatsViewModel.getPunchcardHeatmap === 'function') {
+            const punchcardData = StatsViewModel.getPunchcardHeatmap(); // [7 days][24 hours]
+            
+            // Reorder to: Sun, Mon, Tue, Wed, Thu, Fri, Sat to match standard punchcards if needed, 
+            // but let's stick to Mon-Sun for consistency with Plume's other charts.
+            const days = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
+            
+            let maxPunchcard = 1;
+            punchcardData.forEach(dayArr => dayArr.forEach(val => { if (val > maxPunchcard) maxPunchcard = val; }));
+
+            const isFr = typeof Localization !== 'undefined' && Localization.getLocale() === 'fr';
+            const formatHourStr = (h) => isFr ? `${h}h` : (h===0 ? '12am' : h<12 ? h+'am' : h===12 ? '12pm' : (h-12)+'pm');
+
+            let html = `<div style="display: flex; justify-content: center; overflow-x: auto; width: 100%;">
+                <div style="display: flex; flex-direction: column; width: 100%; min-width: 600px;">
+                    
+                    <div style="display: flex; flex-direction: column; gap: 6px;">
+                        <!-- Top Header (Hours) -->
+                        <div style="display: flex; margin-left: 45px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px; margin-bottom: 4px;">
+                            ${Array.from({length: 24}).map((_, h) => `
+                                <div style="flex: 1; text-align: center; font-size: 0.65rem; color: var(--text-muted);">${h % 2 === 0 ? formatHourStr(h) : ''}</div>
+                            `).join('')}
+                        </div>
+                        
+                        <!-- Rows (Days) -->
+                        ${days.map((d, dayIndex) => `
+                            <div style="display: flex; align-items: center;">
+                                <!-- Day Label -->
+                                <div style="width: 45px; font-size: 0.75rem; font-weight: 600; color: var(--text-primary); text-align: right; padding-right: 12px;">${d}</div>
+                                
+                                <!-- Hours Columns -->
+                                <div style="display: flex; flex: 1;">
+                                    ${Array.from({length: 24}).map((_, h) => {
+                                        const val = punchcardData[dayIndex][h];
+                                        const sizeRatio = val > 0 ? 0.3 + (val / maxPunchcard) * 0.7 : 0;
+                                        const size = val > 0 ? Math.max(6, Math.min(20, sizeRatio * 20)) : 4;
+                                        const opacity = val > 0 ? Math.max(0.4, sizeRatio) : 0.05;
+                                        const color = val > 0 ? 'var(--accent-gold)' : 'var(--text-muted)';
+                                        return `
+                                        <div style="flex: 1; display: flex; align-items: center; justify-content: center; height: 24px;" title="${val} mots le ${d} à ${formatHourStr(h)}">
+                                            <div style="width: ${size}px; height: ${size}px; border-radius: 50%; background: ${color}; opacity: ${opacity}; transition: all 0.2s; cursor: pointer;"></div>
+                                        </div>
+                                        `;
+                                    }).join('')}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            </div>`;
+            punchcardContainer.innerHTML = html;
+        }
+
         // Render Yearly Heatmap — avec switch vue mois / vue semaines
         const yearlyContainer = document.getElementById('yearlyChartContainer');
         if (yearlyContainer) {

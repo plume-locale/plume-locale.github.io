@@ -98,6 +98,31 @@ const StatsViewModel = {
     },
 
     /**
+     * Aggregates words by day of the week and hour of the day.
+     * @returns {Array} Array of 7 arrays, each containing 24 numbers (Mon=0, Sun=6)
+     */
+    getPunchcardHeatmap() {
+        const stats = StatsRepository.getStats();
+        const punchcard = Array.from({ length: 7 }, () => new Array(24).fill(0));
+        
+        stats.writingSessions.forEach(session => {
+            if (session.date && session.hourly) {
+                const d = new Date(session.date);
+                if (!isNaN(d)) {
+                    const jsDay = d.getDay();
+                    const index = (jsDay + 6) % 7; 
+                    for (let i = 0; i < 24; i++) {
+                        if (session.hourly[i]) {
+                            punchcard[index][i] += session.hourly[i];
+                        }
+                    }
+                }
+            }
+        });
+        return punchcard;
+    },
+
+    /**
      * Returns a year's worth of daily writing data.
      */
     getYearlyHeatmap() {
